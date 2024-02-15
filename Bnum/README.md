@@ -63,15 +63,17 @@ Les espaces de travail permettent de faciliter le travail collaboratif entre les
 
 Le module documents se base sur Nextcloud et permet aux agents du MTECT d'accèder à un espace de stockage individuel en ligne. Cet espace est également complété par un espace de stockage lié aux espaces de travail du Bnum, ainsi qu'aux espaces d'entité (service de l'utilisateur). 
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/615ad98c-ccb2-4ec4-8176-6df8933e8eb3)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/a239cf87-8dd2-4e2c-bfdc-c756c9df364b)
 
 Une édition de documents en ligne est également disponible via Collabora
+
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/379fcaf2-5896-4728-ba2d-f532dbf1b8da)
 
 ### Annuaire
 
 L'annuaire permet de consulter l'arborescence des utilisateurs et service du MTECT.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/52f5764f-af3e-4335-8a4f-414f479ccd06)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/17a55827-2070-4bb3-b2d0-fd8d1dc91106)
 
 L'annuaire permet également d'accèder à son carnet d'adresses personnel ainsi que ceux sont partagés.
 
