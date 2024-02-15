@@ -1,4 +1,4 @@
-# La messagerie Mél du MTECT
+# Messagerie Mél
 
 La messagerie Mél est une intégration de plusieurs logiciels open-source, permettant d'avoir un ensemble de messagerie et d'outils collaboratifs performants et maitrisés.
 
