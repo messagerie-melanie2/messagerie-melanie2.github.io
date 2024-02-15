@@ -1,6 +1,5 @@
 # Bnum
 
-- [Bnum](#bnum)
   - [Présentation](#présentation)
     - [Messagerie Mél](#messagerie-mél)
     - [Agenda](#agenda)
@@ -17,17 +16,17 @@
 
 Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/2a37fa2e-2a7b-4262-8b3c-2b07a6bcd52e)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c)
 
 ### Messagerie Mél
 
 La messagerie Mél permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/4c50e6ae-35c2-47c1-9d3b-90154bff934f)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734)
 
 La rédaction de nouveaux message peut se faire de manière intégrée en mode "pop-up" ou en fenêtre externe
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1dafcf52-30b2-4c32-b53c-39e5215e0f3d)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/4e119016-8ecd-4834-b58c-4a9a555c102f)
 
 Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou marqués avec des étiquettes
 
@@ -37,7 +36,7 @@ Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou ma
 
 L'agenda du Bnum permet d'afficher son calendrier personnel ainsi que les calendriers personnels. Très prochainement le support d'agendas externes permettra également de synchroniser les agendas venant d'autres messageries ou outils collaboratifs.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/3d0b71c8-df58-4bb8-98f8-998efdfa1bee)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/0e9b4327-b3ee-4c06-b88b-b7c2d7377470)
 
 Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir les informations de présence sur son équipe.
 
