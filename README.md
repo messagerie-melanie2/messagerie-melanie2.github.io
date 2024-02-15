@@ -14,7 +14,7 @@ Plus d'informations disponibles sur [la page officielle du Bnum](https://message
 
 le Courrielleur, un client lourd de messagerie, est basé sur Thunderbird et permet d'afficher la messagerie Mél, les agendas individuels, partagés et d'équipes, l'annuaire et les contacts.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/0b0a2924-07e2-4be5-a6d1-208d9bee71bf)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/5a76f13f-f30b-476d-9549-8e49b0503ecd)
 
 ## La synchronisation des mobiles basée sur Z-Push
 
