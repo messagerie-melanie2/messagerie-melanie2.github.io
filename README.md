@@ -8,9 +8,13 @@ Le bureau numérique des agents du MTECT. Il permet d'afficher dans une seule pa
 
 Plus d'informations disponibles sur [la page officielle du Bnum](https://messagerie-melanie2.github.io/Bnum)
 
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/3ba370aa-eb46-44f3-9cb5-f8cb18366205)
+
 ## Le Courrielleur basé sur Thunderbird
 
 le Courrielleur, un client lourd de messagerie, est basé sur Thunderbird et permet d'afficher la messagerie Mél, les agendas individuels, partagés et d'équipes, l'annuaire et les contacts.
+
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/0b0a2924-07e2-4be5-a6d1-208d9bee71bf)
 
 ## La synchronisation des mobiles basée sur Z-Push
 
@@ -23,6 +27,8 @@ La synchronisation des agendas et contacts dans le Courrielleur est soutenue par
 ## Planifier des réunions avec Pégase
 
 Outil de planification de réunions et de prise de rendez-vous directement intégré à l'agenda de la messagerie Mél.
+
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b3130930-ed37-4bf0-b1d9-2662daa58ed4)
 
 ## Le backend de messagerie
 
