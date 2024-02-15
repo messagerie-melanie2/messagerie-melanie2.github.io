@@ -4,6 +4,7 @@
     - [Messagerie Mél](#messagerie-mél)
     - [Agenda](#agenda)
     - [Discussions](#discussions)
+      - [Tchap](#tchap)
     - [Espaces de travail](#espaces-de-travail)
     - [Documents](#documents)
     - [Annuaire](#annuaire)
@@ -48,10 +49,11 @@ Le module discussions se base sur Rocket.Chat et permet de d'échanger de maniè
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/27b034de-2703-4fd4-a137-c1a3e5c22dac)
 
+#### Tchap
+
 Une intégration similaire de Tchap est également prévue pour le mois de mars 2024.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/049fa6a3-3bc3-4ca3-a28c-c347250f1086)
-
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/f0ffdec1-1586-4e22-827b-7d48beb2b853)
 
 ### Espaces de travail
 
