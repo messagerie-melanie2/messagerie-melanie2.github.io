@@ -8,7 +8,7 @@ Le bureau numérique des agents du MTECT. Il permet d'afficher dans une seule pa
 
 Plus d'informations disponibles sur [la page officielle du Bnum](https://messagerie-melanie2.github.io/Bnum)
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/3ba370aa-eb46-44f3-9cb5-f8cb18366205)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/9eeb6891-01bd-490e-a2a7-2bb7800de567)
 
 ## Le Courrielleur basé sur Thunderbird
 
