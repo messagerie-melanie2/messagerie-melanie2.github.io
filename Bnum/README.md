@@ -30,7 +30,7 @@ La rédaction de nouveaux message peut se faire de manière intégrée en mode "
 
 Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou marqués avec des étiquettes
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8664bb64-b8f5-4200-aa35-bb5d84ddab98)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d94780b2-95c4-41e9-953c-9193f32778b6)
 
 ### Agenda
 
@@ -40,13 +40,13 @@ L'agenda du Bnum permet d'afficher son calendrier personnel ainsi que les calend
 
 Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir les informations de présence sur son équipe.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/6efe8b1e-ba1d-4580-b671-3e5c43ac3807)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d21fd843-97f9-4dff-bd7a-d928199142f3)
 
 ### Discussions
 
 Le module discussions se base sur Rocket.Chat et permet de d'échanger de manière instantanée avec les autres utilisateurs du Bnum. Les discussions peuvent se faire en individuel, à plusieurs ou via des salons privés et publics.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/31787b9f-59cf-44fd-9d90-e031b9c5c7e3)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/27b034de-2703-4fd4-a137-c1a3e5c22dac)
 
 Une intégration similaire de Tchap est également prévue pour le mois de mars 2024.
 
@@ -57,7 +57,7 @@ Une intégration similaire de Tchap est également prévue pour le mois de mars 
 
 Les espaces de travail permettent de faciliter le travail collaboratif entre les agents en réunissant une équipe et un ou plusieurs projets. Pour cela, un espace de travail est constitué d'un espace documentaire, d'un salon de discussion, d'une catégorie dédiée dans l'agenda, d'une liste de diffusion et d'un kanban.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d397a0ed-8e40-4045-a8cc-e0c0dc78922e)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/821bbe46-6232-45fe-ae73-c694fe75b3db)
 
 ### Documents
 
