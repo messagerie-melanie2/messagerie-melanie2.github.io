@@ -34,7 +34,7 @@ Plus d'informations disponibles sur [la page officielle de Sabre/DAV](https://sa
 
 Outil de planification de réunions et de prise de rendez-vous directement intégré à l'agenda de la messagerie Mél.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b3130930-ed37-4bf0-b1d9-2662daa58ed4)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d1f61a61-cfdb-435b-8956-b1cd86c4d345)
 
 Plus d'informations disponibles sur [la page officielle de Pégase](https://messagerie-melanie2.github.io/Pegase)
 
