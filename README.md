@@ -1,22 +1,29 @@
-# Le Bnum du MTECT
+# La messagerie Mél du MTECT
 
-## Présentation
+La messagerie Mél est une intégration de plusieurs logiciels open-source, permettant d'avoir un ensemble de messagerie et d'outils collaboratifs performants et maitrisés.
 
-Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement.
+## Le Bnum basé sur Roundcube
 
-## Sommaire
+Le bureau numérique des agents du MTECT. Il permet d'afficher dans une seule page web la messagerie Mél, les agendas individuels, partagés et d'équipes, des espaces de travail, la discussion instantanée (Rocket.Chat et bientôt Tchap), les documents via Nextcloud, l'annuaire et les contacts.
 
-TOC {:toc}
+Plus d'informations disponibles sur [la page officielle du Bnum](https://messagerie-melanie2.github.io/Bnum)
 
-## Messagerie Mél
+## Le Courrielleur basé sur Thunderbird
 
-La messagerie Mél permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail.
+le Courrielleur, un client lourd de messagerie, est basé sur Thunderbird et permet d'afficher la messagerie Mél, les agendas individuels, partagés et d'équipes, l'annuaire et les contacts.
 
+## La synchronisation des mobiles basée sur Z-Push
 
-La rédaction de nouveaux message peut se faire de manière intégrée en mode "pop-up" ou en fenêtre externe
+Synchronisation des courriels, agendas et contacts sur les smartphones en se basant sur le protocole ActiveSync (synchronisation Exchange).
 
+## La synchronisation CalDAV/CardDAV basée sur SabreDAV
 
-Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou marqués avec des étiquettes
+La synchronisation des agendas et contacts dans le Courrielleur est soutenue par un serveur SabreDAV.
 
+## Planifier des réunions avec Pégase
 
-Agenda
+Outil de planification de réunions et de prise de rendez-vous directement intégré à l'agenda de la messagerie Mél.
+
+## Le backend de messagerie
+
+Le backend est propulsé par des serveurs Cyrus IMAP, Postfix, OpenLDAP et PostgreSQL.
