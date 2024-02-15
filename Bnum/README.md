@@ -48,7 +48,7 @@ Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir 
 
 Le module discussions se base sur Rocket.Chat et permet de d'échanger de manière instantanée avec les autres utilisateurs du Bnum. Les discussions peuvent se faire en individuel, à plusieurs ou via des salons privés et publics.
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/27b034de-2703-4fd4-a137-c1a3e5c22dac)
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b1fbe346-5a84-4bb3-b0d5-db0b7df5302e)
 
 #### Tchap
 
