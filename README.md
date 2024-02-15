@@ -36,6 +36,8 @@ Outil de planification de réunions et de prise de rendez-vous directement inté
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b3130930-ed37-4bf0-b1d9-2662daa58ed4)
 
+Plus d'informations disponibles sur [la page officielle de Pégase](https://messagerie-melanie2.github.io/Pegase)
+
 ## Le backend de messagerie
 
 Le backend est propulsé par des serveurs [Cyrus IMAP](https://www.cyrusimap.org/), [Postfix](https://www.postfix.org/), [OpenLDAP](https://www.openldap.org/) et [PostgreSQL](https://www.postgresql.org/).
