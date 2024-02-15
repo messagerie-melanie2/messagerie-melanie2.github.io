@@ -79,6 +79,17 @@ L'annuaire permet de consulter l'arborescence des utilisateurs et service du MTE
 
 L'annuaire permet également d'accèder à son carnet d'adresses personnel ainsi que ceux sont partagés.
 
+### Intégration de la webconférence de l'état
+
+La webconférence de l'état est directement intégrée au Bnum et permet d'utiliser toutes les fonctionnalités collaboratives en parallèle d'une visioconférence avec les autres utilisateurs.
+
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b4571b44-bf32-4ec0-b182-f65c4529a41c)
+
+Cette webconférence est également intégrable automatiquement sur le coté droit de l'écran pour être associé avec un autre outil de communication. Par exemple, une discussion sur Tchap et une conférence pour simplifier les échanges de liens
+
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/aba7a6f7-eaba-4a10-9c2e-1cdb3c50e64e)
+
+
 ## Communautés
 
 Le principal contributeur au projet du Bnum est le MTECT. Mais le Bnum est en fait une intégration de plusieurs briques : Roundcube, Pégase, Nextcloud, Wekan, Rocket.Chat, Tchap. Une contribution à chacune de ces communautés contribut à l'amélioration du Bnum.
