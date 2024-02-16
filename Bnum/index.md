@@ -26,7 +26,7 @@ Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écolo
 
 ### Messagerie Mél
 
-La messagerie Mél permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail.
+La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) et permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail.
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734)
 
@@ -50,13 +50,13 @@ Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir 
 
 ### Discussions
 
-Le module discussions se base sur Rocket.Chat et permet de d'échanger de manière instantanée avec les autres utilisateurs du Bnum. Les discussions peuvent se faire en individuel, à plusieurs ou via des salons privés et publics.
+Le module discussions se base sur [Rocket.Chat](https://fr.rocket.chat/) et permet de d'échanger de manière instantanée avec les autres utilisateurs du Bnum. Les discussions peuvent se faire en individuel, à plusieurs ou via des salons privés et publics.
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b1fbe346-5a84-4bb3-b0d5-db0b7df5302e)
 
 #### Tchap
 
-Une intégration similaire de Tchap est également prévue pour le mois de mars 2024.
+Une intégration similaire de [Tchap](https://www.numerique.gouv.fr/outils-agents/tchap-messagerie-instantanee-etat/) est également prévue pour le mois de mars 2024.
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/f0ffdec1-1586-4e22-827b-7d48beb2b853)
 
@@ -68,11 +68,11 @@ Les espaces de travail permettent de faciliter le travail collaboratif entre les
 
 ### Documents
 
-Le module documents se base sur Nextcloud et permet aux agents du MTECT d'accèder à un espace de stockage individuel en ligne. Cet espace est également complété par un espace de stockage lié aux espaces de travail du Bnum, ainsi qu'aux espaces d'entité (service de l'utilisateur). 
+Le module documents se base sur [Nextcloud](https://nextcloud.com/fr/) et permet aux agents du MTECT d'accèder à un espace de stockage individuel en ligne. Cet espace est également complété par un espace de stockage lié aux espaces de travail du Bnum, ainsi qu'aux espaces d'entité (service de l'utilisateur). 
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/a239cf87-8dd2-4e2c-bfdc-c756c9df364b)
 
-Une édition de documents en ligne est également disponible via Collabora
+Une édition de documents en ligne est également disponible via [Collabora Office](https://www.collaboraoffice.com/)
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/379fcaf2-5896-4728-ba2d-f532dbf1b8da)
 
@@ -86,7 +86,7 @@ L'annuaire permet également d'accèder à son carnet d'adresses personnel ainsi
 
 ### Intégration de la webconférence de l'état
 
-La webconférence de l'état est directement intégrée au Bnum et permet d'utiliser toutes les fonctionnalités collaboratives en parallèle d'une visioconférence avec les autres utilisateurs.
+La webconférence de l'état basé sur [Jitsi Meet](https://meet.jit.si/) est directement intégrée au Bnum et permet d'utiliser toutes les fonctionnalités collaboratives en parallèle d'une visioconférence avec les autres utilisateurs.
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b4571b44-bf32-4ec0-b182-f65c4529a41c)
 
