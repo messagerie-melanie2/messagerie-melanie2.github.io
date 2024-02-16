@@ -20,6 +20,9 @@ Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écolo
   - [Installer le Bnum](#installer-le-bnum)
   - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
   - [Contribuer](#contribuer)
+- [Versions](#versions)
+  - [Février 2024](#février-2024)
+  - [Janvier 2024](#janvier-2024)
 
 
 ### Messagerie Mél
@@ -108,3 +111,13 @@ Le Bnum est un projet intégré à la MCE (Messagerie Collaborative de l'État).
 #### Contribuer
 
 Pour contribuer, il suffit de vous rendre sur les dépots Github [Roundcube-Mel](https://github.com/messagerie-melanie2/Roundcube-Mel) et [Roundcube-plugins-Mel](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel)
+
+### Versions
+
+#### Février 2024
+
+ - [Nouveautés de la version 24.1 disponible en février 2024](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-fevrier-2024)
+
+#### Janvier 2024
+
+ - [Nouveautés de la version 23.12 disponible en janvier 2024](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-janvier-2024)
