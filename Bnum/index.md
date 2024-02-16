@@ -4,25 +4,23 @@ title: Bnum
 repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
 ---
 
-- [Présentation](#présentation)
-  - [Messagerie Mél](#messagerie-mél)
-  - [Agenda](#agenda)
-  - [Discussions](#discussions)
-    - [Tchap](#tchap)
-  - [Espaces de travail](#espaces-de-travail)
-  - [Documents](#documents)
-  - [Annuaire](#annuaire)
-  - [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
+Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement.
+
+![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c)
+
+- [Messagerie Mél](#messagerie-mél)
+- [Agenda](#agenda)
+- [Discussions](#discussions)
+  - [Tchap](#tchap)
+- [Espaces de travail](#espaces-de-travail)
+- [Documents](#documents)
+- [Annuaire](#annuaire)
+- [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
 - [Communautés](#communautés)
   - [Installer le Bnum](#installer-le-bnum)
   - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
   - [Contribuer](#contribuer)
 
-## Présentation
-
-Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement.
-
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c)
 
 ### Messagerie Mél
 
@@ -95,18 +93,18 @@ Cette webconférence est également intégrable automatiquement sur le coté dro
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/aba7a6f7-eaba-4a10-9c2e-1cdb3c50e64e)
 
 
-## Communautés
+### Communautés
 
 Le principal contributeur au projet du Bnum est le MTECT. Mais le Bnum est en fait une intégration de plusieurs briques : Roundcube, Pégase, Nextcloud, Wekan, Rocket.Chat, Tchap. Une contribution à chacune de ces communautés contribut à l'amélioration du Bnum.
 
-### Installer le Bnum
+#### Installer le Bnum
 
 La dernière version du Bnum se trouve dans le dossier [releases](https://github.com/messagerie-melanie2/Roundcube-Mel/releases). Pour l'installation une documentation se trouve dans le document [INSTALL](https://github.com/messagerie-melanie2/Roundcube-Mel/blob/dwp/INSTALL), une documentation plus complète sur l'installation se trouve dans la forge MCE.
 
-### Messagerie Collaborative de l'État
+#### Messagerie Collaborative de l'État
 
 Le Bnum est un projet intégré à la MCE (Messagerie Collaborative de l'État). De ce fait il est également diffusé sur la forge officielle de la MCE. N'hésitez pas à nous contacter via les dépots si vous souhaitez être intégrés à la MCE.
 
-### Contribuer
+#### Contribuer
 
 Pour contribuer, il suffit de vous rendre sur les dépots Github [Roundcube-Mel](https://github.com/messagerie-melanie2/Roundcube-Mel) et [Roundcube-plugins-Mel](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel)
