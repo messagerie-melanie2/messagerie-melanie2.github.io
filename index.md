@@ -1,6 +1,15 @@
 ---
 layout: default
 title: Messagerie Mél
+carousels:
+  - images: 
+    - image: /uploads/slider/accueil.png
+    - image: /uploads/slider/mail.png
+    - image: /uploads/slider/agenda.png
+    - image: /uploads/slider/discussions.png
+    - image: /uploads/slider/espaces-de-travail.png
+    - image: /uploads/slider/documents.png
+    - image: /uploads/slider/annuaire.png
 ---
 
 La messagerie Mél est une intégration de plusieurs logiciels open-source, permettant d'avoir un ensemble de messagerie et d'outils collaboratifs performants et maitrisés.
@@ -15,6 +24,9 @@ La messagerie Mél est une intégration de plusieurs logiciels open-source, perm
 ## Le Bnum basé sur Roundcube
 
 Le bureau numérique des agents du MTECT. Il permet d'afficher dans une seule page web la messagerie Mél, les agendas individuels, partagés et d'équipes, des espaces de travail, la discussion instantanée (Rocket.Chat et bientôt Tchap), les documents via Nextcloud, l'annuaire et les contacts.
+
+{% include carousel.html height="50" unit="%" duration="7" number="1" %}
+
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/9eeb6891-01bd-490e-a2a7-2bb7800de567)
 
