@@ -1,10 +1,13 @@
-# Pégase
+---
+layout: default
+title: Pégase
+repository_url: https://github.com/messagerie-melanie2/Pegase
+---
 
-- [Pégase](#pégase)
-  - [Présentation](#présentation)
-  - [Sondages de date](#sondages-de-date)
-  - [Sondages libres](#sondages-libres)
-  - [Sondages de rendez-vous](#sondages-de-rendez-vous)
+- [Présentation](#présentation)
+- [Sondages de date](#sondages-de-date)
+- [Sondages libres](#sondages-libres)
+- [Sondages de rendez-vous](#sondages-de-rendez-vous)
 
 ## Présentation
 

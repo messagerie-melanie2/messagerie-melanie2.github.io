@@ -1,18 +1,22 @@
-# Bnum
+---
+layout: default
+title: Bnum
+repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
+---
 
-  - [Présentation](#présentation)
-    - [Messagerie Mél](#messagerie-mél)
-    - [Agenda](#agenda)
-    - [Discussions](#discussions)
-      - [Tchap](#tchap)
-    - [Espaces de travail](#espaces-de-travail)
-    - [Documents](#documents)
-    - [Annuaire](#annuaire)
-    - [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
-  - [Communautés](#communautés)
-    - [Installer le Bnum](#installer-le-bnum)
-    - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
-    - [Contribuer](#contribuer)
+- [Présentation](#présentation)
+  - [Messagerie Mél](#messagerie-mél)
+  - [Agenda](#agenda)
+  - [Discussions](#discussions)
+    - [Tchap](#tchap)
+  - [Espaces de travail](#espaces-de-travail)
+  - [Documents](#documents)
+  - [Annuaire](#annuaire)
+  - [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
+- [Communautés](#communautés)
+  - [Installer le Bnum](#installer-le-bnum)
+  - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
+  - [Contribuer](#contribuer)
 
 ## Présentation
 
