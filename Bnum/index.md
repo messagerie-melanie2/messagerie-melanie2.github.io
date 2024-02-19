@@ -31,13 +31,10 @@ La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) e
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734)
 
-La rédaction de nouveaux message peut se faire de manière intégrée en mode "pop-up" ou en fenêtre externe
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/4e119016-8ecd-4834-b58c-4a9a555c102f" image_alt="Présentation de la rédaction d'un nouveau message dans le Bnum" title="Rédaction" description="La rédaction de nouveaux message peut se faire de manière intégrée en mode "pop-up" ou en fenêtre externe." %}
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/4e119016-8ecd-4834-b58c-4a9a555c102f)
+{% include module_right.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d94780b2-95c4-41e9-953c-9193f32778b6" image_alt="Présentation de l'utilisation des filtres rapides dans le Bnum" title="Filtres rapides" description="Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou marqués avec des étiquettes." %}
 
-Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou marqués avec des étiquettes
-
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d94780b2-95c4-41e9-953c-9193f32778b6)
 
 ### Agenda
 
