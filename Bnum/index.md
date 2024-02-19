@@ -24,6 +24,7 @@ Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écolo
   - [Février 2024](#février-2024)
   - [Janvier 2024](#janvier-2024)
 
+{% include module.html image_path="[graph_two.jpg](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734)" title="Messagerie Mél" description="La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) et permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail." %}
 
 ### Messagerie Mél
 
