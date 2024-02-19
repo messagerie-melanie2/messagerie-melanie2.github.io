@@ -8,21 +8,7 @@ Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écolo
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c)
 
-- [Messagerie Mél](#messagerie-mél)
-- [Agenda](#agenda)
-- [Discussions](#discussions)
-  - [Tchap](#tchap)
-- [Espaces de travail](#espaces-de-travail)
-- [Documents](#documents)
-- [Annuaire](#annuaire)
-- [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
-- [Communautés](#communautés)
-  - [Installer le Bnum](#installer-le-bnum)
-  - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
-  - [Contribuer](#contribuer)
-- [Versions](#versions)
-  - [Février 2024](#février-2024)
-  - [Janvier 2024](#janvier-2024)
+{% include toc.html %}
 
 
 ### Messagerie Mél

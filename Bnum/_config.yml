@@ -4,3 +4,5 @@ plugins:
 github:
   is_project_page: true
   repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
+kramdown:
+  parse_block_html: true
