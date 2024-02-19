@@ -69,9 +69,7 @@ Le module documents se base sur [Nextcloud](https://nextcloud.com/fr/) et permet
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/a239cf87-8dd2-4e2c-bfdc-c756c9df364b)
 
-Une édition de documents en ligne est également disponible via [Collabora Office](https://www.collaboraoffice.com/)
-
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/379fcaf2-5896-4728-ba2d-f532dbf1b8da)
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/379fcaf2-5896-4728-ba2d-f532dbf1b8da" image_alt="Présentation de l'édition des documents dans le Bnum" title="Édition" description="Une édition de documents en ligne est également disponible via [Collabora Office](https://www.collaboraoffice.com/)" %}
 
 ### Annuaire
 
@@ -87,9 +85,7 @@ La webconférence de l'état basé sur [Jitsi Meet](https://meet.jit.si/) est di
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/b4571b44-bf32-4ec0-b182-f65c4529a41c)
 
-Cette webconférence est également intégrable automatiquement sur le coté droit de l'écran pour être associé avec un autre outil de communication. Par exemple, une discussion sur Tchap et une conférence pour simplifier les échanges de liens
-
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/aba7a6f7-eaba-4a10-9c2e-1cdb3c50e64e)
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/aba7a6f7-eaba-4a10-9c2e-1cdb3c50e64e" image_alt="Présentation de la webconférence de l'état intégrée en petit dans le Bnum" title="Picture in picture" description="Cette webconférence est également intégrable automatiquement sur le coté droit de l'écran pour être associé avec un autre outil de communication. Par exemple, une discussion sur Tchap et une conférence pour simplifier les échanges de liens" %}
 
 
 ### Communautés
