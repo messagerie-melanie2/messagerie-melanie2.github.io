@@ -8,29 +8,7 @@ Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écolo
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c)
 
-- [Messagerie Mél](#messagerie-mél)
-- [Agenda](#agenda)
-- [Discussions](#discussions)
-  - [Tchap](#tchap)
-- [Espaces de travail](#espaces-de-travail)
-- [Documents](#documents)
-- [Annuaire](#annuaire)
-- [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
-- [Communautés](#communautés)
-  - [Installer le Bnum](#installer-le-bnum)
-  - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
-  - [Contribuer](#contribuer)
-- [Versions](#versions)
-  - [Février 2024](#février-2024)
-  - [Janvier 2024](#janvier-2024)
-
-{% include module.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734" image_alt="Présentation de la Messagerie Mél dans le Bnum" title="Messagerie Mél" description="La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) et permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail." %}
-
-### Messagerie Mél
-
-La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) et permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail.
-
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734)
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/8fa94aea-e286-460b-9782-213ce4041734" image_alt="Présentation de la Messagerie Mél dans le Bnum" title="Messagerie Mél" description="La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) et permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail." %}
 
 La rédaction de nouveaux message peut se faire de manière intégrée en mode "pop-up" ou en fenêtre externe
 
@@ -40,11 +18,7 @@ Des filtres rapides permettent de retrouver rapidement les e-mails non lus ou ma
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d94780b2-95c4-41e9-953c-9193f32778b6)
 
-### Agenda
-
-L'agenda du Bnum permet d'afficher son calendrier personnel ainsi que les calendriers personnels. Très prochainement le support d'agendas externes permettra également de synchroniser les agendas venant d'autres messageries ou outils collaboratifs.
-
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/0e9b4327-b3ee-4c06-b88b-b7c2d7377470)
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/0e9b4327-b3ee-4c06-b88b-b7c2d7377470" image_alt="Présentation de l'agenda dans le Bnum" title="Agenda" description="L'agenda du Bnum permet d'afficher son calendrier personnel ainsi que les calendriers personnels. Très prochainement le support d'agendas externes permettra également de synchroniser les agendas venant d'autres messageries ou outils collaboratifs." %}
 
 Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir les informations de présence sur son équipe.
 
