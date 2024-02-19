@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: default
 title: Bnum
 repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
 ---
