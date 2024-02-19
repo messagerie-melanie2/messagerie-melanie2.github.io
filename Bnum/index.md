@@ -42,9 +42,8 @@ L'agenda du Bnum permet d'afficher son calendrier personnel ainsi que les calend
 
 ![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/0e9b4327-b3ee-4c06-b88b-b7c2d7377470)
 
-Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir les informations de présence sur son équipe.
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d21fd843-97f9-4dff-bd7a-d928199142f3" image_alt="Présentation de la vue planning de l'agenda dans le Bnum" title="Planning" description="Des vues planning ou agendas côte a côte permettent en un coup d'oeil d'avoir les informations de présence sur son équipe." %}
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/d21fd843-97f9-4dff-bd7a-d928199142f3)
 
 ### Discussions
 
