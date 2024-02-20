@@ -4,24 +4,9 @@ title: Bnum
 repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
 ---
 
-Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement.
+{% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c" image_alt="Présentation de la page d'accueil du Bnum" title="Qu'est ce que c'est ?" description="Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement." %}
 
-![image](https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c)
-
-- [Messagerie Mél](#messagerie-mél)
-- [Agenda](#agenda)
-- [Discussions](#discussions)
-  - [Tchap](#tchap)
-- [Espaces de travail](#espaces-de-travail)
-- [Documents](#documents)
-- [Annuaire](#annuaire)
-- [Intégration de la webconférence de l'état](#intégration-de-la-webconférence-de-létat)
-- [Communautés](#communautés)
-  - [Installer le Bnum](#installer-le-bnum)
-  - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
-  - [Contribuer](#contribuer)
-- [Historique des versions](#historique-des-versions)
-
+{% include bnum_nav.html %}
 
 ### Messagerie Mél
 
