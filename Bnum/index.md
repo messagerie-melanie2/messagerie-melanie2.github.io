@@ -4,7 +4,7 @@ title: Bnum
 repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
 ---
 
-{% include module_right_header.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c" image_alt="Présentation de la page d'accueil du Bnum" title="Qu'est ce que c'est ?" description="Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement." link="https://github.com/messagerie-melanie2/Roundcube-Mel/releases" %}
+{% include module_right_header.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/1a574401-550f-4d7d-89f6-2f14f213668c" image_alt="Présentation de la page d'accueil du Bnum" title="Qu'est ce que c'est ?" description="Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écologique et de la Cohésion des Territoires, est un environnement de travail collaboratif utilisable par les agents. Il permet de proposer tous les outils que vous connaissez, accessibles sur une seule page web, pour tout retrouver simplement." link="https://github.com/messagerie-melanie2/Roundcube-Mel/releases" link_label="Télécharger le Bnum" %}
 
 {% include bnum_nav.html %}
 
