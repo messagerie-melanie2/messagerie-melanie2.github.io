@@ -88,7 +88,7 @@ La webconférence de l'état basé sur [Jitsi Meet](https://meet.jit.si/) est di
 
 ### Communautés
 
-Le principal contributeur au projet du Bnum est le MTECT. Mais le Bnum est en fait une intégration de plusieurs briques : Roundcube, Pégase, Nextcloud, Wekan, Rocket.Chat, Tchap. Une contribution à chacune de ces communautés contribut à l'amélioration du Bnum.
+Le principal contributeur au projet du Bnum est le MTECT. Mais le Bnum est en fait une intégration de plusieurs briques : [Roundcube](https://roundcube.net/), [Nextcloud](https://nextcloud.com/fr/), [Pégase](https://messagerie-melanie2.github.io/Pegase/), [Wekan](https://wekan.github.io/), [Rocket.Chat](https://fr.rocket.chat/), [Tchap](https://www.numerique.gouv.fr/outils-agents/tchap-messagerie-instantanee-etat/), [Jitsi Meet](https://meet.jit.si/). Une contribution à chacune de ces communautés contribut à l'amélioration du Bnum.
 
 #### Installer le Bnum
 
