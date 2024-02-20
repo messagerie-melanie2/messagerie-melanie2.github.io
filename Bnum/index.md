@@ -20,9 +20,7 @@ Le Bnum, le bureau numérique imaginé par le Ministère de la Transition Écolo
   - [Installer le Bnum](#installer-le-bnum)
   - [Messagerie Collaborative de l'État](#messagerie-collaborative-de-létat)
   - [Contribuer](#contribuer)
-- [Versions](#versions)
-  - [Février 2024](#février-2024)
-  - [Janvier 2024](#janvier-2024)
+- [Historique des versions](#historique-des-versions)
 
 
 ### Messagerie Mél
@@ -104,12 +102,12 @@ Le Bnum est un projet intégré à la MCE (Messagerie Collaborative de l'État).
 
 Pour contribuer, il suffit de vous rendre sur les dépots Github [Roundcube-Mel](https://github.com/messagerie-melanie2/Roundcube-Mel) et [Roundcube-plugins-Mel](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel)
 
-### Versions
+### Historique des versions
 
-#### Février 2024
-
- - [Nouveautés de la version 24.1 disponible en février 2024](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-fevrier-2024)
-
-#### Janvier 2024
-
- - [Nouveautés de la version 23.12 disponible en janvier 2024](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-janvier-2024)
+| Versions | Changements |
+| -------- | ----------- |
+| Février 2024 | [Nouveautés de la version 24.1](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-fevrier-2024) |
+| Janvier 2024 | [Nouveautés de la version 23.12](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-janvier-2024) |
+| Décembre 2023 | [Nouveautés de la version 23.11](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-decembre-23) |
+| Novembre 2023 | [Nouveautés de la version 23.10](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-novembre-23) |
+| Octobre 2023 | [Nouveautés de la version 23.9](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-octobre-23) |
