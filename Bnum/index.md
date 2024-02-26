@@ -8,6 +8,35 @@ repository_url: https://github.com/messagerie-melanie2/Roundcube-Mel
 
 {% include bnum_nav.html %}
 
+
+### Communautés
+
+Le principal contributeur au projet du Bnum est le MTECT. Mais le Bnum est en fait une intégration de plusieurs briques : [Roundcube](https://roundcube.net/), [Nextcloud](https://nextcloud.com/fr/), [Pégase](https://messagerie-melanie2.github.io/Pegase/), [Wekan](https://wekan.github.io/), [Rocket.Chat](https://fr.rocket.chat/), [Tchap](https://www.numerique.gouv.fr/outils-agents/tchap-messagerie-instantanee-etat/), [Jitsi Meet](https://meet.jit.si/). Une contribution à chacune de ces communautés contribut à l'amélioration du Bnum.
+
+#### Installer le Bnum
+
+La dernière version du Bnum se trouve dans le dossier [releases](https://github.com/messagerie-melanie2/Roundcube-Mel/releases). Pour l'installation une documentation se trouve dans le document [INSTALL](https://github.com/messagerie-melanie2/Roundcube-Mel/blob/dwp/INSTALL), une documentation plus complète sur l'installation se trouve dans la forge MCE.
+
+#### Messagerie Collaborative de l'État
+
+Le Bnum est un projet intégré à la MCE (Messagerie Collaborative de l'État). De ce fait il est également diffusé sur la forge officielle de la MCE. N'hésitez pas à nous contacter via les dépots si vous souhaitez être intégrés à la MCE.
+
+#### Contribuer
+
+Pour contribuer, il suffit de vous rendre sur les dépots Github [Roundcube-Mel](https://github.com/messagerie-melanie2/Roundcube-Mel) et [Roundcube-plugins-Mel](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel)
+
+
+### Historique des versions
+
+| Versions | Changements |
+| -------- | ----------- |
+| Février 2024 | [Nouveautés de la version 24.1](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-fevrier-2024) |
+| Janvier 2024 | [Nouveautés de la version 23.12](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-janvier-2024) |
+| Décembre 2023 | [Nouveautés de la version 23.11](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-decembre-23) |
+| Novembre 2023 | [Nouveautés de la version 23.10](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-novembre-23) |
+| Octobre 2023 | [Nouveautés de la version 23.9](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-octobre-23) |
+
+
 ### Messagerie Mél
 
 La messagerie Mél s'appuie sur le webmail [Roundcube](https://roundcube.net/) et permet de consulter toutes les boites e-mail que ce soit la boite personnelle, les boites d'unités ou les autres boites de ressources. Une vue unifiée permet de centraliser l'affichage de toutes ces boites e-mail.
@@ -70,29 +99,3 @@ La webconférence de l'état basé sur [Jitsi Meet](https://meet.jit.si/) est di
 
 {% include module_left.html image_path="https://github.com/messagerie-melanie2/messagerie-melanie2.github.io/assets/3693239/aba7a6f7-eaba-4a10-9c2e-1cdb3c50e64e" image_alt="Présentation de la webconférence de l'état intégrée en petit dans le Bnum" title="Picture in picture" description="Cette webconférence est également intégrable automatiquement sur le coté droit de l'écran pour être associé avec un autre outil de communication. Par exemple, une discussion sur Tchap et une conférence pour simplifier les échanges de liens" %}
 
-
-### Communautés
-
-Le principal contributeur au projet du Bnum est le MTECT. Mais le Bnum est en fait une intégration de plusieurs briques : [Roundcube](https://roundcube.net/), [Nextcloud](https://nextcloud.com/fr/), [Pégase](https://messagerie-melanie2.github.io/Pegase/), [Wekan](https://wekan.github.io/), [Rocket.Chat](https://fr.rocket.chat/), [Tchap](https://www.numerique.gouv.fr/outils-agents/tchap-messagerie-instantanee-etat/), [Jitsi Meet](https://meet.jit.si/). Une contribution à chacune de ces communautés contribut à l'amélioration du Bnum.
-
-#### Installer le Bnum
-
-La dernière version du Bnum se trouve dans le dossier [releases](https://github.com/messagerie-melanie2/Roundcube-Mel/releases). Pour l'installation une documentation se trouve dans le document [INSTALL](https://github.com/messagerie-melanie2/Roundcube-Mel/blob/dwp/INSTALL), une documentation plus complète sur l'installation se trouve dans la forge MCE.
-
-#### Messagerie Collaborative de l'État
-
-Le Bnum est un projet intégré à la MCE (Messagerie Collaborative de l'État). De ce fait il est également diffusé sur la forge officielle de la MCE. N'hésitez pas à nous contacter via les dépots si vous souhaitez être intégrés à la MCE.
-
-#### Contribuer
-
-Pour contribuer, il suffit de vous rendre sur les dépots Github [Roundcube-Mel](https://github.com/messagerie-melanie2/Roundcube-Mel) et [Roundcube-plugins-Mel](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel)
-
-### Historique des versions
-
-| Versions | Changements |
-| -------- | ----------- |
-| Février 2024 | [Nouveautés de la version 24.1](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-fevrier-2024) |
-| Janvier 2024 | [Nouveautés de la version 23.12](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-janvier-2024) |
-| Décembre 2023 | [Nouveautés de la version 23.11](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-decembre-23) |
-| Novembre 2023 | [Nouveautés de la version 23.10](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-novembre-23) |
-| Octobre 2023 | [Nouveautés de la version 23.9](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-octobre-23) |
