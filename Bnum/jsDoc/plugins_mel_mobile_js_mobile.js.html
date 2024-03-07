@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: plugins/mel_mobile/js/mobile.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: plugins/mel_mobile/js/mobile.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Plugin Mobile for Roundcube
+ * 
+ * Add new skin mobile to Roundcube
+ * 
+ * Javascript mobile file
+ * 
+ * Copyright (C) 2015 PNE Annuaire et Messagerie/MEDDE
+ * 
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see &lt;http://www.gnu.org/licenses/>.
+ * 
+ * @author PNE Annuaire et Messagerie/MEDDE
+ * @license GNU GPLv3+
+ * 
+ */
+ // Fixed for jQuery 3.
+ 
+var page_loading;
+var current_page_scroll;
+var current_uid;
+var previous_page;
+var timer, show_timer, checkmail_timer, touchstart_timer;
+var storePosition = {
+  topCoordinate : null
+}
+
+$(document).on("pagecreate", ".jqm-calendar", function() {
+  // Swipe to remove list item
+  $(document).on("swipeleft swiperight", "#calendar", function(event) {
+    if (event.type === "swipeleft") {
+      $("#calendar").fullCalendar('next');
+    }
+    else {
+      $("#calendar").fullCalendar('prev');
+    }
+  });
+  // Use keydown for non touch screen
+  $('html').keydown(function(e) {
+    if (e.which == 37) {
+      // Arrow left
+      $("#calendar").fullCalendar('prev');
+    }
+    else if (e.which == 39) {
+      // Arrow right
+      $("#calendar").fullCalendar('next');
+    }
+  });
+  // Use arrow
+  $('.jqm_calendar_previous').click(function(evt) {
+    $("#calendar").fullCalendar('prev');
+  });
+  $('.jqm_calendar_next').click(function(evt) {
+    $("#calendar").fullCalendar('next');
+  });
+});
+
+$(document).on("pageshow", ".jqm-compose", function() {
+  $('#compose-subject').click(function() {
+    $('#compose-subject input').focus();
+  });
+});
+
+$(document).on("pageshow", '#page_mail_list', function() {
+  if (window.storePosition.topCoordinate !== null) {
+    $.mobile.silentScroll(window.storePosition.topCoordinate);
+  }
+  $('.jqm-mail-more-buttons-header a.move').click(function() {
+    setTimeout(function() {
+      $('#folder-selector').css({
+        left : ($(document).width() - $('#folder-selector').width()) / 2,
+        top : 50
+      });
+    }, 50)
+  });
+});
+
+$(document).on("click", '#messagelist a', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+$(document).on("pageshow", '#page_addressbook_list', function() {
+  if (window.storePosition.topCoordinate !== null) {
+    $.mobile.silentScroll(window.storePosition.topCoordinate);
+  }
+});
+
+$(document)
+    .on("pageshow", ".jqm-message", function() {
+      $('#buttons-right-panel a').click(function() {
+        setTimeout(function() {
+          $('#folder-selector').css({
+            left : ($(document).width() - $('#folder-selector').width()) / 2,
+            top : 50
+          });
+          $('#buttons-right-panel').panel('close');
+        }, 50)
+      });
+
+      if (!window.current_uid) {
+        return;
+      }
+      // Masquer le back list et le remplacer par le back jquery mobile
+      $('.jqm_message_list_group').show();
+      $('.rc_message_back').hide();
+
+      // Show/hide nav buttons
+      var next_row = rcmail.message_list.get_next_row();
+      var prev_row = rcmail.message_list.get_prev_row();
+      if (!next_row) {
+        $('.jqm_message_next').hide();
+        load_next_page();
+      }
+      else {
+        $('.jqm_message_next').show();
+      }
+      if (!prev_row) {
+        $('.jqm_message_previous').hide();
+      }
+      else {
+        $('.jqm_message_previous').show();
+      }
+
+      rcmail.env.uid = window.current_uid;
+      rcmail.env.action = 'show';
+
+      // Gestion des labels
+      if (rcmail.env.messages[window.current_uid].flags) {
+        jQuery
+            .each(rcmail.env.messages[window.current_uid].flags.tb_labels, function(
+                idx, val) {
+              rcm_tb_label_flag_msgs([ -1, ], val);
+            });
+      }          
+      
+      if (!$('#attachment-list li').length) {
+        $('div.rightcol').hide();
+        $('div.leftcol').css('margin-right', '0');
+      }
+      $('#messagebody img').each(function() {
+        if ($(this).attr('src') == 'program/resources/blocked.gif') {
+          $('#remote-objects-message').show();
+          rcmail.enable_command('load-images', 'always-load', true);
+          return;
+        }
+      });
+      
+      if (rcmail.env.isenigma) {
+        if (('#messagebody div.enigmaerror').length) {
+          $('#messagebody div.enigmaerror').html($('#messagebody div.enigmaerror').html() + ' ' + rcmail.gettext('mel_mobile.addenigmapass'));
+          $('#messagebody div.enigmaerror').click(function() {
+            if (rcmail.env.enigma_password_request) {
+              rcmail.enigma_password_request(rcmail.env.enigma_password_request);
+            }
+            else {
+              window.location.reload();
+            }
+          });
+        }  
+      }      
+
+      var message_commands = [ 'show', 'reply', 'reply-all', 'reply-list',
+          'move', 'copy', 'delete', 'open', 'mark', 'edit', 'viewsource',
+          'print', 'load-attachment', 'download-attachment', 'show-headers',
+          'hide-headers', 'download', 'forward', 'forward-inline',
+          'forward-attachment', 'change-format' ];
+
+      rcmail.enable_command(message_commands, rcmail.env.uid);
+      $('#countcontrols').hide();
+
+      rcmail.addEventListener('responseafterlist', function(evt) {
+        var next_row = rcmail.message_list.get_next_row();
+        if (next_row) {
+          $('.jqm_message_next').show();
+        }
+      });
+      rcmail
+          .addEventListener('actionafter', function(evt) {
+            if (evt.action == 'mark') {
+              if (evt.props == 'unread') {
+                // Passer le message en non lu
+                rcmail.set_message(rcmail.env.uid, 'unread', true);
+              }
+              else if (evt.props == 'read') {
+                // Passer le message en lu
+                rcmail.set_message(rcmail.env.uid, 'unread', false);
+              }
+              else {
+                return;
+              }
+              if ($.mobile.pageContainer.pagecontainer("getActivePage")[0].id != 'page_mail_list') {
+                $.mobile.pageContainer
+                    .pagecontainer("change", $("#page_mail_list"));
+              }
+            }
+          });
+      rcmail
+          .addEventListener('responseaftermove', function(evt) {
+            window.previous_page = 'current_page';
+            if ($.mobile.pageContainer.pagecontainer("getActivePage")[0].id != 'page_mail_list') {
+              if (window.previous_page == 'page_mail_list') {
+                $.mobile.back();
+              }
+              else {
+                $.mobile.pageContainer
+                    .pagecontainer("change", $("#page_mail_list"));
+              }
+            }
+          });
+      rcmail
+          .addEventListener('responseafterdelete', function(evt) {
+            window.previous_page = 'current_page';
+            if ($.mobile.pageContainer.pagecontainer("getActivePage")[0].id != 'page_mail_list') {
+              if (window.previous_page == 'page_mail_list') {
+                $.mobile.back();
+              }
+              else {
+                $.mobile.pageContainer
+                    .pagecontainer("change", $("#page_mail_list"));
+              }
+            }
+          });
+    });
+
+$(document).on("pagecreate", ".jqm-message", function() {
+  if (window.previous_page) {
+    $('.jqm_message_list').click(function(evt) {
+      if (window.previous_page == 'page_mail_list') {
+        window.previous_page = 'current_page';
+        $.mobile.back();
+      }
+      else {
+        window.previous_page = 'current_page';
+        $.mobile.pageContainer.pagecontainer("change", $("#page_mail_list"));
+      }
+      evt.preventDefault();
+    });
+    $('.jqm_message_previous').click(function(evt) {
+      var uid = rcmail.message_list.get_row_uid(rcmail.message_list
+          .get_prev_row());
+      window.current_uid = uid;
+      rcmail.message_list.last_selected = uid;
+      window.previous_page = 'current_page';
+      // Passer le message en lu
+      rcmail.set_message(uid, 'unread', false);
+      rcmail.show_message_mobile(uid, {});
+      window.storePosition.topCoordinate -= 76;
+      evt.preventDefault();
+    });
+    $('.jqm_message_next').click(function(evt) {
+      var uid = rcmail.message_list.get_row_uid(rcmail.message_list
+          .get_next_row());
+      window.current_uid = uid;
+      rcmail.message_list.last_selected = uid;
+      window.previous_page = 'current_page';
+      // Passer le message en lu
+      rcmail.set_message(uid, 'unread', false);
+      rcmail.show_message_mobile(uid, {});
+      window.storePosition.topCoordinate += 76;
+      evt.preventDefault();
+    });
+
+    $('#attachment-list li a').click(function() {
+      $(this).attr('target', '_blank');
+      $(this).attr('onlick', '');
+
+    });
+    $('.image-attachment a').click(function() {
+      $(this).attr('target', '_blank');
+      $(this).attr('onlick', '');
+
+    });
+    $('.zipdownload').hide();    
+  }
+});
+
+$(document)
+    .on("pageshow", ".jqm-contact", function() {
+      if (!window.current_uid) {
+        return;
+      }
+      // Masquer le back list et le remplacer par le back jquery mobile
+      $('.jqm_contact_list_group').show();
+      $('.rc_contact_back').hide();
+
+      rcmail.env.cid = window.current_uid;
+      rcmail.env.action = 'show';
+      rcmail.enable_command('show', 'edit', true);
+
+      $('input.groupmember')
+          .change(function() {
+            rcmail
+                .group_member_change(this.checked ? 'add' : 'del', rcmail.env.cid, rcmail.env.source, this.value);
+          });
+    });
+
+$(document)
+    .on("pagecreate", ".jqm-contact", function() {
+      if (window.previous_page) {
+        // Swipe to open panel
+        var swipe = true;
+        $(document).on("swipeleft swiperight", ".jqm-contact", function(event) {
+          if (!swipe) {
+            return;
+          }
+          swipe = false;
+          setTimeout(function() {
+            swipe = true;
+          }, 900);
+        });
+        $('.jqm_contact_list').click(function(evt) {
+          if (window.previous_page == 'page_addressbook_list') {
+            window.previous_page = 'current_page';
+            $.mobile.back();
+          }
+          else {
+            window.previous_page = 'current_page';
+            $.mobile.pageContainer
+                .pagecontainer("change", $("#page_addressbook_list"));
+          }
+          evt.preventDefault();
+        });
+        $('.contactcontrollerphone .contactfieldcontent.text').each(function() {
+          $(this).html('&lt;a href="tel:' + $(this).html() + '">' + $(this).html()
+              + '&lt;/a>')
+        });
+        // register command
+        rcmail
+            .register_command('delete_mobile', rcmail.delete_contact_mobile, !rcmail.env.readonly);
+      }
+    });
+
+$(document)
+  .on("pageshow", ".jqm-plugin", function() {
+     $('.ui-button-disabled').removeClass('ui-button-disabled').removeClass('ui-state-disabled');
+  });
+
+$(document)
+  .on("pageshow", ".jqm-enigma-key-import", function() {
+     $('.ui-button-disabled').removeClass('ui-button-disabled').removeClass('ui-state-disabled');
+  });
+
+$(document).on("pageloadfailed", function(event, data) {
+  event.preventDefault();
+});
+
+// Affichage jquery mobile
+$(document).ready(function() {
+  // Mailboxlist
+  $('#mailboxlist').attr('data-role', 'listview');
+  $('#mailboxlist ul').attr('data-role', 'listview');
+  $('#mailboxlist ul').show();
+  $('#mailboxlist li').attr('data-icon', 'false');
+  $('#mailboxlist div.treetoggle').hide();
+
+  // add roundcube events
+  rcmail.addEventListener('insertrow', function(event) {
+    add_mobile_class(event.uid, event.row);
+  });
+
+  // Quick search box
+  $('#quicksearchbox').attr('placeholder', 'Search...');
+  $('#quicksearchbox').attr('data-type', 'search');
+
+  // Directory contact list
+  $('#directorylist_mobile').attr('data-role', 'listview');
+  $('#directorylist_mobile ul').attr('data-role', 'listview');
+  $('#directorylist_mobile ul').show();
+  $('#directorylist_mobile > li').attr('data-icon', 'user');
+  $('#directorylist_mobile li li').attr('data-icon', 'false');
+  $('#directorylist_mobile div.treetoggle').hide();
+
+  // Calendar list
+  $('#calendarslist').attr('data-role', 'listview');
+  $('#calendarslist ul').attr('data-role', 'listview');
+  $('#calendarslist div.treetoggle').hide();
+
+  // Settings list
+  $('#settingslist_mobile').attr('data-role', 'listview');
+  $('#settingslist_mobile a').attr('data-ajax', 'false');
+  $('#settingslist_mobile ul').attr('data-role', 'listview');
+  $('#settingslist_mobile ul').show();
+  $('#settingslist_mobile > li').attr('data-icon', 'user');
+  $('#settingslist_mobile li li').attr('data-icon', 'false');
+  $('#settingslist_mobile div.treetoggle').hide();
+
+  // Folder subscription list
+  $('#subscription-table').attr('data-role', 'listview');
+  $('#subscription-table ul').attr('data-role', 'listview');
+  $('#subscription-table ul').show();
+  $('#subscription-table li').attr('data-icon', 'carat-r');
+  $('#subscription-table div.treetoggle').hide();
+
+  if ($("#eventedit").length) {
+    $("#eventedit .edit-alarm-type").selectmenu();
+    // $("#eventedit .edit-alarm-type").selectmenu("refresh", true);
+  }
+  
+  // Order icons
+  if ($('#apps-right-panel .button-switch_desktop').length) {
+    var html = $('#apps-right-panel .button-switch_desktop').get(0).outerHTML;
+    $('#apps-right-panel .button-switch_desktop').remove();
+    $('#apps-right-panel .button-logout').before(html);
+  }
+  if ($('#apps-right-panel .button-calendar').length) {
+    var html = $('#apps-right-panel .button-calendar').get(0).outerHTML;
+    $('#apps-right-panel .button-calendar').remove();
+    $('#apps-right-panel .button-settings').before(html);
+  }
+  if ($('#apps-right-panel .button-mel_moncompte').length) {
+    var html = $('#apps-right-panel .button-mel_moncompte').get(0).outerHTML;
+    $('#apps-right-panel .button-mel_moncompte').remove();
+    $('#apps-right-panel .button-settings').before(html);
+  }
+  if ($('#apps-right-panel .button-mel_sondage').length) {
+    var html = $('#apps-right-panel .button-mel_sondage').get(0).outerHTML;
+    $('#apps-right-panel .button-mel_sondage').remove();
+    $('#apps-right-panel .button-settings').before(html);
+  }
+  if ($('#apps-right-panel .button-mel_jabber').length) {
+    var html = $('#apps-right-panel .button-mel_jabber').get(0).outerHTML;
+    $('#apps-right-panel .button-mel_jabber').remove();
+    $('#apps-right-panel .button-settings').before(html);
+  }
+});
+
+/**
+ * Add mobile class to the row
+ * 
+ * @param uid
+ * @param row
+ */
+function add_mobile_class(uid, row) {
+  var span = $(document.createElement('span'));  
+  var rowobj = $(row.obj);
+  var span_mobile = rowobj.find('span.mobile_text');
+  span_mobile.addClass(rowobj.find('span.mobile_class')
+      .text());
+  span.text(span_mobile.text());
+  span_mobile.html('');
+  span_mobile.append(span);
+  if (rcmail.env.showcontactsphotos) {
+    var img = $(document.createElement('img'));
+    img
+      .hide()
+      .on('load', function() {
+        $(this).show();
+        span_mobile.find('span').hide();
+      })
+      .on( 'error', function() { //JSI
+        $(this).hide();
+      })
+      .attr('src', rcmail.env.contactphotourl + '&amp;_error=1&amp;_email=' + rowobj.find('span.rcmContactAddress').attr('title'));
+    span_mobile.append(img);
+  }
+}
+
+$(document).bind("mobileinit", function() {
+  // Mise en cache des données
+  $.mobile.page.prototype.options.domCache = false;
+  $.mobile.ajaxLinksEnabled = false;
+  // Disable history
+  // See https://github.com/jquery/jquery-mobile/issues/5465
+  // $.mobile.hashListeningEnabled = false;
+  // $.mobile.pushStateEnabled = false;
+  // $.mobile.changePage.defaults.changeHash = false;
+});
+
+/**
+ * Load the next messages list page
+ */
+function load_next_page() {
+  // Affichage de la page suivante au bas de la page
+  var page = window.current_page_scroll;
+  if (page > 0 &amp;&amp; page &lt;= rcmail.env.pagecount &amp;&amp; !window.page_loading[page]) {
+    window.page_loading[page] = true;
+    var lock = rcmail.set_busy(true, 'loading');
+    var post_data = {};
+    post_data._mbox = rcmail.env.mailbox;
+    post_data._page = page;
+    // also send search request to get the right records
+    if (rcmail.env.search_request)
+      post_data._search = rcmail.env.search_request;
+    rcmail.http_request('list', post_data, lock);
+  }
+}
+
+// Gestion des données de roundcube
+if (window.rcmail) {
+  rcmail
+      .addEventListener('init', function(evt) {
+        
+        if (rcmail.env.isenigma) {
+          rcmail.enigma_password_request = function(data)
+          {
+              if (!data || !data.keyid) {
+                  return;
+              }
+              
+              var ref = this,
+                  msg = this.get_label('enigma.enterkeypass'),
+                  popup = $('&lt;div>').attr({'data-role': 'popup', id: 'passwordrequestpopup', 'data-theme': 'f', 'class': 'ui-corner-all prompt'}),
+                  form = $('&lt;form>').appendTo(popup),
+                  div = $('&lt;div>').attr({style: 'padding:10px 20px;'}).appendTo(form),
+                  h3 = $('&lt;h3>').appendTo(div),        
+                  input = $('&lt;input>').attr({name: 'keypassword', id: 'enigmakeypassword', type: 'password'}).appendTo(div),
+                  submit = $('&lt;button>').attr({type: 'submit', 'data-theme': 'f', 'data-icon': 'check'}).text(this.get_label('save')).appendTo(div);
+              
+              data.key = data.keyid;
+              if (data.keyid.length > 8)
+                  data.keyid = data.keyid.substr(data.keyid.length - 8);
+
+              $.each(['keyid', 'user'], function() {
+                  msg = msg.replace('$' + this, data[this]);
+              });
+
+              h3.text(msg);
+              
+              form.submit(function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                data.password = $('#enigmakeypassword').val();
+
+                if (!data.password) {
+                  $('#enigmakeypassword').focus();
+                    return;
+                }
+
+                ref.enigma_password_submit(data);
+              });
+
+              setTimeout(function() {
+                popup.popup();
+                popup.trigger('create');
+                popup.popup('open');
+                input.focus();
+              }, 200);
+          };
+          
+          // submit entered password
+          rcmail.enigma_password_submit = function(data)
+          {
+              if (this.env.action == 'compose' &amp;&amp; !data['compose-init']) {
+                  return this.enigma_password_compose_submit(data);
+              }
+
+              var form = $('&lt;form>').attr({method: 'post', action: data.action || location.href, style: 'display:none'})
+                  .append($('&lt;input>').attr({type: 'hidden', name: '_keyid', value: data.key}))
+                  .append($('&lt;input>').attr({type: 'hidden', name: '_passwd', value: data.password}))
+                  .append($('&lt;input>').attr({type: 'hidden', name: '_token', value: this.env.request_token}));
+
+              // Additional form fields for request parameters
+              $.each(data, function(i, v) {
+                if (i.indexOf('input') == 0)
+                  form.append($('&lt;input>').attr({type: 'hidden', name: i.substring(5), value: v}))
+              });
+
+              if (data.iframe) {
+                var name = 'enigma_frame_' + (new Date()).getTime(),
+                  frame = $('&lt;iframe>').attr({style: 'display:none', name: name}).appendTo(document.body);
+                form.attr('target', name);
+              }
+
+              form.appendTo(document.body).submit();
+          }
+        }
+        
+        // Initialisation de la liste des pages chargées
+        window.page_loading = {};
+        window.current_page_scroll = 1;
+                
+        // Choix de la balp
+        $('#folderlistheader_mobile li.selected').click(function() {
+        	if ($(this).hasClass('deployed')) {
+        		$('#folderlistheader_mobile li:not(.selected)').hide();
+        		$('#mailboxlist').show();
+        		$('#folderlistheader_mobile li.selected a').addClass('ui-icon-arrow-d');
+        		$('#folderlistheader_mobile li.selected a').removeClass('ui-icon-arrow-u');
+        		$(this).removeClass('deployed')
+        	}
+        	else {
+        		$('#folderlistheader_mobile li:not(.selected)').show();
+        		$('#mailboxlist').hide();
+        		$('#folderlistheader_mobile li.selected a').removeClass('ui-icon-arrow-d');
+        		$('#folderlistheader_mobile li.selected a').addClass('ui-icon-arrow-u');
+        		$(this).addClass('deployed')
+        	}
+        });
+        
+        $('#messagessearchfilter').click(function(evt) {
+          evt.stopPropagation();
+          evt.preventDefault();
+        });
+        // Redirection automatique après la création d'un contact
+        // Problème lié au fait qu'en skin mobile on n'affiche pas le contact et
+        // la liste en même temps
+        if (window.location.href.indexOf('?_task=addressbook&amp;_orig_source=') != -1
+            &amp;&amp; !rcmail.env.cid) {
+          window.location = '?_task=addressbook&amp;_source='
+              + window.location.href.split('?_task=addressbook&amp;_orig_source=')
+                  .pop();
+        }
+        // Même problème pour l'édition des dossiers
+        // if
+        // (window.location.href.indexOf('?_task=settings&amp;_action=edit-folder&amp;_mbox=')
+        // != -1) {
+        // window.location = '?_task=settings&amp;_action=folders';
+        // }
+
+        if (rcmail.env.task == 'mail'
+            &amp;&amp; (!rcmail.env.action || rcmail.env.action == "")) {
+          var scroll = false;
+          $('.ui-title').html($('#mailboxlist li.selected a').first().clone()
+              .children().remove().end().text());
+
+          // Close panel on resize pour eviter les effets indésirables sur la
+          // largeur de la page
+          $(window).resize(function() {
+            // $('#mailview-left-panel').panel("refresh");
+            $('#mailview-left-panel').panel("close");
+          });
+
+          // On click on mailboxlist do some actions
+          $('#mailboxlist li a').click(function() {
+            $('#mailview-left-panel').panel("close");
+            $('.ui-title').html($(this).clone().children().remove().end()
+                .text())
+            $('#mailboxlist').listview('refresh');
+          });
+
+          // Rechercher dans les messages
+          $('.jqm-mail-cancel-searchbox').click(function() {
+            $('.jqm-mail-header').show();
+            $('.jqm-mail-search-header').hide();
+          });
+          $('.jqm-mail-open-searchbox').click(function() {
+            $('.jqm-mail-header').hide();
+            $('.jqm-mail-search-header').show();
+            $('.jqm-mail-search-header input').focus();
+          });
+
+          // Messages buttons
+          $('.jqm-mail-cancel-buttons').click(function() {
+            $('.jqm-mail-header').show();
+            $('.jqm-mail-buttons-header').hide();
+            $('.jqm-mail-buttons-showmore').addClass('ui-icon-caret-down');
+            $('.jqm-mail-buttons-showmore').removeClass('ui-icon-caret-up');
+            $('.jqm-mail-more-buttons-header').hide();
+            rcmail.message_list.clear_selection();
+          });
+          $('.jqm-mail-buttons-showmore').click(function() {
+            if ($(this).hasClass('ui-icon-caret-down')) {
+              $(this).removeClass('ui-icon-caret-down');
+              $(this).addClass('ui-icon-caret-up');
+              $('.jqm-mail-more-buttons-header').show();
+            }
+            else {
+              $(this).addClass('ui-icon-caret-down');
+              $(this).removeClass('ui-icon-caret-up');
+              $('.jqm-mail-more-buttons-header').hide();
+            }
+          });
+          
+          $('.jqm-mail-more-buttons-header li').each(function() {
+            if ($(this).find('a').hasClass('filterlink')) {
+              $(this).find('a').addClass('ui-link ui-btn ui-corner-all ui-icon-filter ui-btn-icon-notext');
+              $('.jqm-mail-more-buttons-header .ui-controlgroup-controls .move').before($(this).html());  
+            }
+            $(this).remove();
+          });
+          
+          $(document).on('click', '.jqm-mail-more-buttons-header a.filterlink', function() {
+            window.location.href = rcmail.env.comm_path+'&amp;_action=plugin.managesieve-action&amp;_framed=1';
+          });
+
+          // Récupérer le focus sur le search box
+          $('#quicksearchbox').click(function() {
+            $('#quicksearchbox').focus();
+          });          
+
+          $(document)
+              .scroll(function() {
+                if ($.mobile.pageContainer.pagecontainer("getActivePage")[0].id != 'page_mail_list') {
+                  return;
+                }
+                if (($(window).scrollTop() > 200 &amp;&amp; (($(window).scrollTop() + $(window)
+                    .height()) / $(document).height()) >= 0.95)
+                    &amp;&amp; window.current_page_scroll > 1) {
+                  load_next_page();
+                }
+              });
+          // Reinit the data with refreshing the list is over
+          rcmail.message_list.addEventListener('clear', function(evt) {
+            window.page_loading = {};
+            rcmail.env.current_page = 1;
+            window.current_page_scroll = 2;
+          });
+        }
+        else if (rcmail.env.task == 'mail' &amp;&amp; rcmail.env.action == 'compose') {          
+          // Close upload popup on click
+          $('.button_upload_photo').click(function() {
+            $("#upload-popup").popup('close');
+          });
+
+          rcmail.env.compose_commands = [ 'send-attachment',
+              'remove-attachment', 'send', 'cancel', 'toggle-editor',
+              'list-adresses', 'pushgroup', 'search', 'reset-search', 'extwin',
+              'insert-response', 'save-response' ];
+
+          if (rcmail.env.drafts_mailbox)
+            rcmail.env.compose_commands.push('savedraft');
+            
+          if (rcmail.env.isenigma)
+            rcmail.env.compose_commands.push('menu-open');
+
+          rcmail
+              .enable_command(rcmail.env.compose_commands, 'identities', 'responses', true);
+
+          rcmail.addEventListener('aftersend-attachment', show_uploadform)
+              .addEventListener('add-recipient', function(p) {
+                show_header_row(p.field, true);
+              });
+
+          // Show input elements with non-empty value
+          var f, v, field, fields = [ 'cc', 'bcc', 'replyto', 'followupto' ];
+          for (f = 0; f &lt; fields.length; f++) {
+            v = fields[f];
+            field = $('#_' + v);
+            if (field.length) {
+              field.on('change', {
+                v : v
+              }, function(e) {
+                if (this.value) show_header_row(e.data.v, true);
+              });
+              if (field.val() != '') show_header_row(v, true);
+            }
+          }
+        }
+        else if (rcmail.env.task == 'mail' &amp;&amp; rcmail.env.action == 'show') {
+          $('.mark_as_read').click(function() {
+            $('#buttons-right-panel').panel("close");
+          });
+          $('.mark_as_unread').click(function() {
+            $('#buttons-right-panel').panel("close");
+          });
+          $('#bounce_button_mobile').click(function() {
+            $('#buttons-right-panel').panel("close");
+          });          
+        }
+        else if (rcmail.env.task == 'addressbook'
+            &amp;&amp; (!rcmail.env.action || rcmail.env.action == "")) {
+          $('.ui-title').html($('#directorylist_mobile li.selected a').first()
+              .text());
+          $('#directorylist_mobile li.selected a').first()
+              .addClass('ui-btn ui-btn-icon-right ui-icon-check');
+
+          // Close panel on resize pour eviter les effets indésirables sur la
+          // largeur de la page
+          $(window).resize(function() {
+            $('#addressbook-left-panel').panel("close");
+          });
+
+          $('#directorylist_mobile li a').click(function() {
+            $('#addressbook-left-panel').panel("close");
+            $('#directorylist_mobile li a').removeClass('ui-btn-active');
+            window.page_loading = {};
+            rcmail.env.current_page = 1;
+            $('.ui-title').html($(this).clone().children().remove().end()
+                .text())
+            $('#directorylist_mobile').listview('refresh');
+          });
+
+          // Rechercher dans les messages
+          $('.jqm-addressbook-cancel-searchbox').click(function() {
+            $('.jqm-addressbook-header').show();
+            $('.jqm-addressbook-search-header').hide();
+          });
+          $('.jqm-addressbook-open-searchbox').click(function() {
+            $('.jqm-addressbook-header').hide();
+            $('.jqm-addressbook-search-header').show();
+            $('.jqm-addressbook-search-header input').focus();
+          });
+
+          // Récupérer le focus sur le search box
+          $('#quicksearchbox').click(function() {
+            $('#quicksearchbox').focus();
+          });
+
+          // Gestion du scroll infini
+          $(window)
+              .scroll(function() {
+                if (($(window).scrollTop() > 200 &amp;&amp; (($(window).scrollTop() + $(window)
+                    .height()) / $(document).height()) >= 0.95)) {
+                  var page = rcmail.env.current_page + 1;
+                  if (page > 0 &amp;&amp; page &lt;= rcmail.env.pagecount
+                      &amp;&amp; !window.page_loading[page]) {
+                    window.page_loading[page] = true;
+                    var lock = rcmail.set_busy(true, 'loading');
+                    var post_data = {};
+                    post_data._source = rcmail.env.source;
+                    if (rcmail.env.group) post_data._gid = rcmail.env.group;
+                    post_data._page = page;
+                    // also send search request to get the right records
+                    if (rcmail.env.search_request)
+                      post_data._search = rcmail.env.search_request;
+                    rcmail
+                        .http_request_mobile('list', post_data, lock, function() {
+                          rcmail.env.current_page = page;
+                        }, function() {
+                        });
+                  }
+                }
+              });
+          // Réinitialise les données une fois que la liste est rafraichie
+          rcmail.contact_list.addEventListener('clear', function(evt) {
+            window.page_loading = {};
+            rcmail.env.current_page = 1;
+          });
+        }
+        else if (rcmail.env.task == 'addressbook'
+            &amp;&amp; rcmail.env.action == 'show') {
+          $('.contactcontrollerphone .contactfieldcontent.text')
+              .each(function() {
+                $(this).html('&lt;a href="tel:' + $(this).html() + '">'
+                    + $(this).html() + '&lt;/a>')
+              });
+          // register command
+          rcmail
+              .register_command('delete_mobile', rcmail.delete_contact_mobile, !rcmail.env.readonly);
+
+        }
+        else if (rcmail.env.task == 'addressbook'
+            &amp;&amp; rcmail.env.action == 'edit') {
+          $("select.addfieldmenu").change(function() {
+            $('#contacttabs').trigger("create");
+          });
+          $('.button_upload_photo').click(function() {
+            $("#upload-popup").popup('close');
+          });
+        }
+        else if (rcmail.env.task == 'calendar') {
+          // Close panel on resize pour eviter les effets indésirables sur la
+          // largeur de la page
+          $(window).resize(function() {
+            $('#calendarview-left-panel').panel("close");
+          });
+          // Bind an event to window.onhashchange that, when the hash changes
+          $(window).hashchange(function(event) {
+            var hash = event.originalEvent.oldURL.split('#').pop();
+            if (hash) {
+              switch (hash) {
+              case 'event_show_dialog':
+                // close show dialog
+                $("#eventshow:ui-dialog").dialog('close');
+                break;
+              case 'event_edit_dialog':
+                // close show dialog
+                $("#eventeditdialog:ui-dialog").dialog('close');
+                break;
+              case 'eventeditpage':
+                // Close current page, switch to calendar page
+                // $.mobile.back();
+                $.mobile.pageContainer
+                    .pagecontainer("change", './?_task=calendar');
+                break;
+              }
+            }
+          });
+        }
+        else if (rcmail.env.task == 'settings'
+            &amp;&amp; rcmail.env.action == 'edit-folder') {
+          rcmail.env.mailbox = rcmail.env.folder;
+          rcmail.enable_command('delete-folder', true);
+        }
+        else if (rcmail.env.task == 'settings'
+            &amp;&amp; rcmail.env.action == 'plugin.managesieve-action') {
+          $('.boxcontent').trigger("create");
+          rcmail
+              .addEventListener('responseafterplugin.managesieve-action', function(
+                  evt) {
+                $('.boxcontent').trigger("create");
+              });
+        }
+        else if (rcmail.env.task == 'settings'
+            &amp;&amp; rcmail.env.action == 'plugin.managesieve') {
+          $(document).on('click', 'table#filterslist tr', function() {
+            var id = rcmail.filters_list.get_row_uid($(this).get(0));
+            window.location.href =  rcmail.env.comm_path + '&amp;_action=plugin.managesieve-action&amp;_framed=1&amp;_fid=' + id;
+          });
+        }
+        else if (rcmail.env.task == 'settings'
+            &amp;&amp; rcmail.env.action == 'plugin.enigmakeys') {
+          $(document).on('tap', 'table#keys-table td', function() {
+            var id = rcmail.keys_list.get_row_uid($(this).parent().get(0));
+            window.location.href =  rcmail.env.comm_path + '&amp;_action=plugin.enigmakeys&amp;_a=info&amp;_id=' + id;
+          });
+          $(document).on('click', '#page_keys_list a.enigma-key-import', function() {
+            window.location.href =  rcmail.env.comm_path + '&amp;_action=plugin.enigmakeys&amp;_a=import';
+          });
+          $(document).on('click', '#page_keys_list a.enigma-key-create', function() {
+            window.location.href =  rcmail.env.comm_path + '&amp;_action=plugin.enigmakeys&amp;_a=create';
+          });
+          $(document).on('click', '.jqm-enigma-key-create a.enigma-key-delete', function() {
+            var lock = rcmail.display_message(rcmail.get_label('enigma.keyremoving'), 'loading'),
+            post = {_a: 'delete', _keys: [ window.location.href.split('&amp;_id=').pop() ]};
+
+            // send request to server
+            rcmail.http_post('plugin.enigmakeys', post, lock);
+          });
+        }
+        // message list
+        if (rcmail.message_list) {
+          var p = window.rcmail;
+          rcmail.message_list.addEventListener('click', function(o) {
+            return false;
+          }).addEventListener('dblclick', function(o) {
+            return false;
+          }).addEventListener('keypress', function(o) {
+            return false;
+          }).addEventListener('select', function(o) {
+            return false;
+          }).addEventListener('dragstart', function(o) {
+            return false;
+          }).addEventListener('dragmove', function(e) {
+            return false;
+          }).addEventListener('dragend', function(e) {
+            return false;
+          }).addEventListener('expandcollapse', function(o) {
+            return false;
+          }).addEventListener('column_replace', function(o) {
+            return false;
+          })
+          if (rcmail &amp;&amp; rcube_list_widget) {
+            /**
+             * onmousedown-handler of message list row
+             */
+            rcube_list_widget.prototype.drag_row = function(e, id) {
+              // don't do anything (another action processed before)
+              if (!this.is_event_target(e)) return true;
+
+              this.drag_active = false;
+
+              this.in_selection_before = e &amp;&amp; e.istouch
+                  || this.in_selection(id) ? id : false;
+
+              // selects currently unselected row
+              if (!this.in_selection_before) {
+                var mod_key = rcube_event.get_modifier(e);
+                this.select_row(id, mod_key, true);
+              }
+
+              return false;
+            };
+
+            /**
+             * selects or unselects the proper row depending on the modifier key
+             * pressed
+             */
+            rcube_list_widget.prototype.select_row = function(id, mod_key,
+                with_mouse, single) {
+              var select_before = this.selection.join(','), in_selection_before = this
+                  .in_selection(id);
+
+              if (this.last_selected &amp;&amp; this.rows[this.last_selected]) {
+                $(this.rows[this.last_selected].obj).removeClass('focused')
+                    .find(this.col_tagname()).eq(this.subject_col)
+                    .removeAttr('tabindex');
+              }
+
+              // unselect if toggleselect is active and the same row was clicked
+              // again
+              if (this.toggleselect &amp;&amp; in_selection_before &amp;&amp; !mod_key) {
+                this.clear_selection();
+              }
+              // trigger event if selection changed
+              else if (this.selection.join(',') != select_before) {
+                this.triggerEvent('select');
+              }
+
+              if (this.rows[id]) {
+                $(this.rows[id].obj).addClass('focused');
+                // set cursor focus to link inside selected row
+                if (this.focused)
+                  this.focus_noscroll($(this.rows[id].obj).find(this
+                      .col_tagname()).eq(this.subject_col)
+                      .attr('tabindex', '0'));
+              }
+
+              if (!this.selection.length) this.shift_start = null;
+
+              this.last_selected = id;
+            };
+
+            /**
+             * onmouseup-handler of message list row
+             */
+            rcube_list_widget.prototype.click_row = function(e, id) {
+              // don't do anything (another action processed before)
+              //if (!this.is_event_target(e)) return true;
+
+              var m = rcube_event.get_mouse_pos(e), pos = $('#mailview-left-panel')
+                  .position();
+              var pos_left = pos.left + 272;
+              // Select or open message
+              var clicked = m.x - pos_left > 50;
+
+              // unselects currently selected row
+              if (clicked) {
+                this.highlight_row(id, false);
+                this.multi_selecting = false;
+                window.clearTimeout(window.show_timer);
+                window.storePosition.topCoordinate = $(window).scrollTop();
+                window.previous_page = 'page_mail_list';
+
+                this.clear_selection();
+
+                window.current_uid = id;
+                this.last_selected = id;
+
+                // Passer le message en lu
+                rcmail.set_message(id, 'unread', false);
+
+                if (id &amp;&amp; rcmail.env.mailbox == rcmail.env.drafts_mailbox)
+                  rcmail.open_compose_step({
+                    _draft_uid : id,
+                    _mbox : rcmail.env.mailbox
+                  });
+                else
+                  rcmail.show_message_mobile(id, {});
+              }
+              else {
+                if (!this.selection.length) {
+                  delete rcmail.env.uid;
+                }
+                this.highlight_row(id, true);
+                this.multi_selecting = true;
+
+                // Multi-message commands
+                rcmail
+                    .enable_command('delete', 'move', 'copy', 'mark', 'reply', 'forward', this.selection.length > 0);
+
+                if (this.selection.length) {
+                  $('.jqm-mail-header').hide();
+                  $('.jqm-mail-buttons-header').show();
+                  if (this.selection.length > 1) {
+                    $('.jqm-mail-buttons-header .reply').hide();
+                    $('.jqm-mail-buttons-header .forward').hide();
+                    $('.jqm-mail-more-buttons-header .filterlink').hide();
+                    $('.jqm-mail-more-buttons-header .reply-all').hide();
+                  }
+                  else {
+                    $('.jqm-mail-buttons-header .reply').show();
+                    $('.jqm-mail-buttons-header .forward').show();
+                    $('.jqm-mail-more-buttons-header .filterlink').show();
+                    $('.jqm-mail-more-buttons-header .reply-all').show();
+                  }
+                }
+                else {
+                  $('.jqm-mail-header').show();
+                  $('.jqm-mail-buttons-header').hide();
+                  $('.jqm-mail-buttons-showmore')
+                      .addClass('ui-icon-caret-down');
+                  $('.jqm-mail-buttons-showmore')
+                      .removeClass('ui-icon-caret-up');
+                  $('.jqm-mail-more-buttons-header').hide();
+                }
+              }
+
+              this.drag_start = false;
+              this.in_selection_before = false;
+
+              this.focus();
+
+              return false;
+            };
+          }
+
+        }
+        // contact list
+        if (rcmail.contact_list) {
+          var p = window.rcmail;
+          rcmail.contact_list.addEventListener('click', function(o) {
+            window.previous_page = 'page_addressbook_list';
+            window.storePosition.topCoordinate = $(window).scrollTop();
+            p.contactlist_select_mobile(o);
+          }).addEventListener('dragstart', function(o) {
+            return false;
+          }).addEventListener('dragmove', function(e) {
+            return false;
+          }).addEventListener('dragend', function(e) {
+            return false;
+          });
+        }
+      });
+  rcmail.addEventListener('responseafterlist', function(evt) {
+    window.current_page_scroll = rcmail.env.current_page + 1;
+    rcmail.env.current_page = 1;
+    rcmail.http_post('mel_mobile.set_current_page', {});
+  });
+}
+
+// Resources selection
+rcube_webmail.prototype.http_request_mobile = function(action, query, lock,
+    success_callback, error_callback) {
+  var url = this.url(action, query);
+  var ref = this;
+
+  // trigger plugin hook
+  var result = this.triggerEvent('request' + action, query);
+
+  if (result !== undefined) {
+    // abort if one the handlers returned false
+    if (result === false)
+      return false;
+    else
+      url = this.url(action, result);
+  }
+
+  url += '&amp;_remote=1';
+
+  // send request
+  this.log('HTTP GET: ' + url);
+
+  // reset keep-alive interval
+  this.start_keepalive();
+
+  return $.ajax({
+    type : 'GET',
+    url : url,
+    data : {
+      _unlock : (lock ? lock : 0)
+    },
+    dataType : 'json',
+    success : function(data) {
+      ref.http_response(data);
+      success_callback();
+    },
+    error : function(o, status, err) {
+      ref.http_error(o, status, err, lock, action);
+      error_callback();
+    }
+  });
+};
+
+rcube_webmail.prototype.delete_contact_mobile = function() {
+  if (rcmail.env.readonly || !confirm(rcmail.get_label('deletecontactconfirm')))
+    return;
+
+  var label = 'contactdeleting', action = 'delete';
+  post_data = {};
+  post_data._source = rcmail.env.source;
+  post_data._from = rcmail.env.action;
+  post_data._cid = rcmail.env.cid;
+
+  lock = rcmail.display_message(rcmail.get_label(label), 'loading');
+
+  if (rcmail.env.group) post_data._gid = rcmail.env.group;
+
+  // also send search request to get the right records from the next page
+  if (rcmail.env.search_request) post_data._search = rcmail.env.search_request;
+
+  // send request to server
+  rcmail.http_post(action, post_data, lock)
+
+  window.location = '?_task=' + rcmail.env.task + '&amp;_source='
+      + rcmail.env.source;
+  return true;
+};
+
+rcube_webmail.prototype.msglist_dbl_click_mobile = function(list) {
+  if (this.preview_timer) clearTimeout(this.preview_timer);
+  if (this.preview_read_timer) clearTimeout(this.preview_read_timer);
+
+  var uid = list.get_single_selection();
+  list.clear_selection();
+
+  window.current_uid = uid;
+
+  // Passer le message en lu
+  this.set_message(uid, 'unread', false);
+
+  if (uid &amp;&amp; this.env.mailbox == this.env.drafts_mailbox)
+    this.open_compose_step({
+      _draft_uid : uid,
+      _mbox : this.env.mailbox
+    });
+  else if (uid) this.show_message_mobile(uid, {});
+};
+
+rcube_webmail.prototype.show_message_mobile = function(id, params) {
+  if (!id) return;
+
+  // Ajout de la class selected
+  $('#messagelist li').removeClass('selected');
+  $('#messagelist li#rcmrow' + id).addClass('selected');
+
+  var win, target = window, action = 'show', url = '&amp;_action=' + action
+      + '&amp;_uid=' + id + '&amp;_mbox=' + urlencode(this.env.mailbox);
+
+  // also send search request to get the right messages
+  if (this.env.search_request) url += '&amp;_search=' + this.env.search_request;
+
+  // add browser capabilities, so we can properly handle attachments
+  url += '&amp;_caps=' + urlencode(this.browser_capabilities());
+
+  if (this.env.extwin) url += '&amp;_extwin=1';
+
+  $.mobile.pageContainer
+      .pagecontainer("change", this.env.comm_path + url, params);
+};
+
+rcube_webmail.prototype.contactlist_select_mobile = function(list) {
+  if (this.preview_timer) clearTimeout(this.preview_timer);
+
+  var n, id, sid, contact, ref = this, writable = false, source = this.env.source ? this.env.address_sources[this.env.source]
+      : null;
+
+  // we don't have dblclick handler here, so use 200 instead of
+  // this.dblclick_time
+  if (id = list.get_single_selection()) ref.load_contact_mobile(id, 'show');
+
+  window.current_uid = id;
+
+  // if a group is currently selected, and there is at least one contact
+  // selected
+  // thend we can enable the group-remove-selected command
+  this.enable_command('group-remove-selected', this.env.group
+      &amp;&amp; list.selection.length > 0 &amp;&amp; writable);
+  this.enable_command('compose', this.env.group || list.selection.length > 0);
+  this.enable_command('export-selected', 'copy', list.selection.length > 0);
+  this.enable_command('edit', id &amp;&amp; writable);
+  this.enable_command('delete', 'move', list.selection.length > 0 &amp;&amp; writable);
+
+  return false;
+};
+
+// load contact record
+rcube_webmail.prototype.load_contact_mobile = function(cid, action, framed) {
+  var win, url = "", target = window, rec = this.contact_list ? this.contact_list.data[cid]
+      : null;
+
+  if (action &amp;&amp; (cid || action == 'add') &amp;&amp; !this.drag_active) {
+
+    // Ajout de la class selected
+    $('#contacts-table tr').removeClass('selected');
+    $('#contacts-table tr#rcmrow' + cid).addClass('selected');
+
+    url = '&amp;_action=' + action;
+
+    // also send search request to get the right messages
+    if (this.env.search_request) url += '&amp;_search=' + this.env.search_request;
+
+    url += '&amp;_source=' + this.env.source;
+    url += '&amp;_cid=' + cid;
+
+    $.mobile.pageContainer
+        .pagecontainer("change", this.env.comm_path + url, {});
+  }
+
+  return true;
+};
+
+// Managesieve add rule
+rcube_webmail.prototype.managesieve_add = function() {
+  alert('managesieve_add');
+  this.load_managesieveframe();
+  this.filters_list.clear_selection();
+};
+
+// load filter frame
+rcube_webmail.prototype.load_managesieveframe = function(id) {
+  var has_id = typeof (id) != 'undefined' &amp;&amp; id != null;
+  this
+      .enable_command('plugin.managesieve-act', 'plugin.managesieve-del', has_id);
+  var msgid = this.set_busy(true, 'loading');
+
+  $.mobile.pageContainer.pagecontainer("change", this.env.comm_path
+      + '&amp;_action=plugin.managesieve-action&amp;_framed=1'
+      + (has_id ? '&amp;_fid=' + id : '') + '&amp;_unlock=' + msgid, {});
+};
+
+function show_uploadform() {
+  var $dialog = $('#upload-dialog');
+
+  // close the dialog
+  if ($dialog.is(':visible')) {
+    $dialog.dialog('close');
+    return;
+  }
+
+  // add icons to clone file input field
+  if (rcmail.env.action == 'compose' &amp;&amp; !$dialog.data('extended')) {
+    $('&lt;a>').addClass('iconlink add').attr('href', '#add').html('Add')
+        .appendTo($('input[type="file"]', $dialog).parent())
+        .click(add_uploadfile);
+    $dialog.data('extended', true);
+  }
+
+  $dialog.dialog({
+    modal : true,
+    resizable : false,
+    closeOnEscape : true,
+    title : $dialog.attr('title'),
+    close : function() {
+      try {
+        $('#upload-dialog form').get(0).reset();
+      }
+      catch (e) {
+      } // ignore errors
+
+      $dialog.dialog('destroy').hide();
+      $('div.addline', $dialog).remove();
+    },
+    width : 480
+  }).show();
+
+  if (!document.all) $('input[type=file]', $dialog).first().click();
+}
+
+function add_uploadfile(e) {
+  var div = $(this).parent();
+  var clone = div.clone().addClass('addline').insertAfter(div);
+  clone.children('.iconlink').click(add_uploadfile);
+  clone.children('input').val('');
+
+  if (!document.all) $('input[type=file]', clone).click();
+}
+
+var compose_headers = {};
+
+/**
+ * 
+ */
+function show_header_row(which, updated) {
+  var row = $('#compose-' + which);
+  if (row.is(':visible')) return; // nothing to be done here
+
+  if (compose_headers[which] &amp;&amp; !updated)
+    $('#_' + which).val(compose_headers[which]);
+
+  row.show();
+  $('#' + which + '-link').hide();
+  return false;
+}
+
+/**
+ * 
+ */
+function hide_header_row(which) {
+  // copy and clear field value
+  var field = $('#_' + which);
+  compose_headers[which] = field.val();
+  field.val('');
+
+  $('#compose-' + which).hide();
+  $('#' + which + '-link').show();
+  return false;
+}
+
+// Toggle to full screen
+function toggleFullScreen() {
+  var doc = window.document;
+  var docEl = doc.documentElement;
+
+  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen
+      || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen
+      || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+  if (!doc.fullscreenElement &amp;&amp; !doc.mozFullScreenElement
+      &amp;&amp; !doc.webkitFullscreenElement &amp;&amp; !doc.msFullscreenElement) {
+    requestFullScreen.call(docEl);
+    setTimeout(function() {
+      window.scrollTo(0, 1)
+    }, 100);
+  }
+  else {
+    cancelFullScreen.call(doc);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BaseStorage.html">BaseStorage</a></li><li><a href="module-Color.html">Color</a></li><li><a href="module-Log.html">Log</a></li><li><a href="module-MEL_ELASTIC_UI.html">MEL_ELASTIC_UI</a></li><li><a href="module-MelLinq.html">MelLinq</a></li></ul><h3>Namespaces</h3><ul><li><a href="MelMetapage.html">MelMetapage</a></li><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="Skins.html">Skins</a></li><li><a href="Utilities.html">Utilities</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="TEActiveMouse.html">TEActiveMouse</a></li><li><a href="TEContainerActiveClassCtrl.html">TEContainerActiveClassCtrl</a></li><li><a href="TEErrorHandler.html">TEErrorHandler</a></li><li><a href="TEHashCtrl.html">TEHashCtrl</a></li><li><a href="TEHideIfNotActiveCtrl.html">TEHideIfNotActiveCtrl</a></li><li><a href="TEOverflowCtrl.html">TEOverflowCtrl</a></li><li><a href="TEOverflowScrollCtrl.html">TEOverflowScrollCtrl</a></li><li><a href="TEOverflowTransformCtrl.html">TEOverflowTransformCtrl</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="module-BaseStorage.BaseStorage.html">BaseStorage</a></li><li><a href="module-Color-Color.html">Color</a></li><li><a href="module-Color-ColorRGBA.html">ColorRGBA</a></li><li><a href="module-Log.BnumLog.html">BnumLog</a></li><li><a href="module-MEL_ELASTIC_UI.Mel_Elastic_Storage.html">Mel_Elastic_Storage</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Advanced_Rule.html">Mel_CSS_Advanced_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Array_Rule.html">Mel_CSS_Array_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Rule.html">Mel_CSS_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Style_Sheet.html">Mel_CSS_Style_Sheet</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_Elastic.html">Mel_Elastic</a></li><li><a href="module-MelLinq-MelEnumerable.html">MelEnumerable</a></li><li><a href="module-MelLinq-MelKeyValuePair.html">MelKeyValuePair</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li><li><a href="window.TEPauseCtrl.html">TEPauseCtrl</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TEOnlyOnePlayingCtrl">TEOnlyOnePlayingCtrl</a></li><li><a href="global.html#TESessionCurrentSubtitle">TESessionCurrentSubtitle</a></li><li><a href="global.html#TESwipeCtrl">TESwipeCtrl</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#datetimepickerFactory">datetimepickerFactory</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#dkSiRuleResizeMnu">dkSiRuleResizeMnu</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#getTime">getTime</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#menuMgr">menuMgr</a></li><li><a href="global.html#menuScrollTiTask">menuScrollTiTask</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scImgMgr">scImgMgr</a></li><li><a href="global.html#scSiRuleEnsureVisible">scSiRuleEnsureVisible</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#treeMgr">treeMgr</a></li><li><a href="global.html#trigger">trigger</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#value">value</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Mar 07 2024 16:46:19 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

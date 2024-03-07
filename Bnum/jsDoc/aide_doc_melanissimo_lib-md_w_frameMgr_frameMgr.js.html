@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: aide/doc/melanissimo/lib-md/w_frameMgr/frameMgr.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: aide/doc/melanissimo/lib-md/w_frameMgr/frameMgr.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * LICENCE[[
+ * Version: MPL 2.0/GPL 3.0/LGPL 3.0/CeCILL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is kelis.fr code.
+ *
+ * The Initial Developer of the Original Code is 
+ * samuel.monsarrat@kelis.fr
+ *
+ * Portions created by the Initial Developer are Copyright (C) 2012-2017
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either of the GNU General Public License Version 3.0 or later (the "GPL"),
+ * or the GNU Lesser General Public License Version 3.0 or later (the "LGPL"),
+ * or the CeCILL Licence Version 2.1 (http://www.cecill.info/licences.en.html),
+ * in which case the provisions of the GPL, the LGPL or the CeCILL are applicable
+ * instead of those above. If you wish to allow use of your version of this file
+ * only under the terms of either the GPL, the LGPL or the CeCILL, and not to allow
+ * others to use your version of this file under the terms of the MPL, indicate
+ * your decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL, the LGPL or the CeCILL. If you do not
+ * delete the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL, the LGPL or the CeCILL.
+ * ]]LICENCE
+ */
+
+/* Dokiel frame manager */
+var frameMgr = {
+	fPathRoot : "des:div",
+	fPathContentFrame : "ide:content/des:iframe",
+	fPathNavBar : "ide:navigation",
+	fPathDocBtn : "ide:menu/des:li.toolHome/des:a",
+	fListeners : {loadPage:[],showSearch:[],resetSearch:[]},
+
+	init : function(){
+		this.fStore = new this.LocalStore();
+		this.fRoot = scPaLib.findNode(this.fPathRoot);
+		this.fFra = scPaLib.findNode(this.fPathContentFrame);
+		this.fFra.loadPage = function(pUrl, pTitle, pHash){frameMgr.xLoadPage(pUrl, pTitle, pHash)}
+		this.fFra.unloadPage = function(){frameMgr.xUnloadPage()}
+		this.fFra.fStore = this.fStore;
+		this.fRootTitle = document.title;
+
+		scOnLoads[scOnLoads.length] = this;
+	},
+	
+	onLoad : function(){
+
+		// init current page
+		// Process page URL
+		var vPageURL = null;
+		var vHash = null;
+		if(window.location.search.length > 0) {
+			var vCtxt = window.location.search.substring(1).split("&amp;");
+			for (var i = 0, n = vCtxt.length; i &lt; n; i++) {
+				var vCmd = vCtxt[i].split("=");
+				switch (vCmd[0]) {
+					case "p" : 
+						vPageURL = decodeURIComponent(vCmd[1]);
+						break;
+				}
+			}
+		}
+		if(window.location.hash.length > 0){
+			vHash = window.location.hash.substring(1).split(":");
+			vPageURL = outMgr.getPageUrlFromId(vHash[0]);
+			if (vPageURL &amp;&amp; vHash.length==2) vHash = vHash[1];
+			else vHash = null;
+		}
+
+		if(!vPageURL) vPageURL = outMgr.getFirstPage();
+		this.loadPage(vPageURL, vHash);
+	},
+	
+	loadSortKey : "Z",
+
+	registerListener : function(pListener, pFunc){
+		if (this.fListeners[pListener]) this.fListeners[pListener].push(pFunc);
+		else scCoLib.log("ERROR - frameMgr.registerListener - non-existent listener : " + pListener);
+	},
+
+	loadPage : function(pUrl, pHash){
+		if (pUrl &amp;&amp; pUrl.length>0) this.fFra.src = scServices.scLoad.getPathFromRoot(pUrl) + (pHash ? "#" + pHash : "");
+	},
+
+	reload : function(){
+		var vPageURL = this.fStore.get("lastPage")
+		if (vPageURL &amp;&amp; vPageURL.length>0) this.loadPage(vPageURL);
+	},
+
+	goToFirstPage : function(){
+		this.loadPage(outMgr.getFirstPage());
+	},
+
+	hasNextPage : function(){
+		return outMgr.hasNextPage(this.fPageCurrent);
+	},
+
+	hasPreviousPage : function(){
+		return outMgr.hasPreviousPage(this.fPageCurrent);
+	},
+
+	goToNextPage : function(){
+		if (this.hasNextPage()) this.loadPage(outMgr.getNextPage(this.fPageCurrent));
+	},
+
+	goToPreviousPage : function(){
+		if (this.hasPreviousPage()) this.loadPage(outMgr.getPreviousPage(this.fPageCurrent));
+	},
+
+	getPageRank : function(){
+		return outMgr.getPageRank(this.fPageCurrent);
+	},
+
+	getPageCount : function(){
+		return outMgr.getPageCount();
+	},
+
+	scrollTo : function(pId){
+		this.loadPage(this.fPageCurrent +"#" + pId);
+	},
+
+	fireEvent : function(pListener, pParam){
+		if (this.fListeners[pListener]) for (var i=0; i&lt; this.fListeners[pListener].length; i++) this.fListeners[pListener][i](pParam);
+		else scCoLib.log("ERROR - frameMgr.fireEvent - non-existent listener : " + pListener);
+	},
+
+	toggleMenu : function(pMnuClosed){
+		frameMgr.xToggleMenu(pMnuClosed);
+	},
+
+/* === Callback functions =================================================== */
+	sPrv: function(){
+		frameMgr.goToPreviousPage();
+		return false;
+	},
+
+	sNxt: function(){
+		frameMgr.goToNextPage();
+		return false;
+	},
+
+/* === Private functions ==================================================== */
+	xLoadPage : function (pUri, pTitle, pHash) {
+		document.title = pTitle + (this.fRootTitle!=pTitle ? " ["+this.fRootTitle+"]" : "");
+		this.fFra.title = pTitle;
+		var vDocBtn = scPaLib.findNode(this.fPathDocBtn);
+		if (outMgr.hasPage(pUri)) {
+			this.toggleMenu(false);
+			if (outMgr.hasPage(pUri, 1) &amp;&amp; pUri != vDocBtn.fSrc.url &amp;&amp; this.fLastMenuPage) {
+				vDocBtn.href = scServices.scLoad.getPathFromRoot(this.fLastMenuPage);
+				this.xSwitchClass(vDocBtn,"mnu_ret_no", "mnu_ret_yes", true);
+			} else {
+				vDocBtn.href = scServices.scLoad.getPathFromRoot(vDocBtn.fSrc.url);
+				this.xSwitchClass(vDocBtn,"mnu_ret_yes", "mnu_ret_no", true);
+			}
+			if (pUri == vDocBtn.fSrc.url) {
+				this.xSwitchClass(this.fRoot,"home_no", "home_yes", true);
+			} else{
+				this.xSwitchClass(this.fRoot,"home_yes", "home_no", true);
+			}
+			if (!outMgr.hasPage(pUri, 1)) {
+				this.xSwitchClass(this.fRoot,"documentation_no", "documentation_yes", true);
+			} else{
+				this.xSwitchClass(this.fRoot,"documentation_yes", "documentation_no", true);
+			}
+		} else {
+			this.toggleMenu(true);
+			if (this.fLastMenuPage){
+				vDocBtn.href = scServices.scLoad.getPathFromRoot(this.fLastMenuPage);
+				this.xSwitchClass(vDocBtn,"mnu_ret_no", "mnu_ret_yes", true);
+			}
+		}
+		this.fPageCurrent = pUri;
+		this.fireEvent("loadPage",pUri);
+		this.fStore.set("lastPage",pUri);
+		var vId = outMgr.getPageIdFromUrl(pUri);
+		if (vId) window.location.href = scCoLib.hrefBase() + "#" + vId + (pHash ? ":" + pHash : "");
+	},
+
+	xUnloadPage : function () {
+		if (this.fPageCurrent &amp;&amp; outMgr.hasPage(this.fPageCurrent) &amp;&amp; !outMgr.hasPage(this.fPageCurrent, 1)) this.fLastMenuPage = this.fPageCurrent;
+	},
+
+	xToggleMenu : function (pIsMnuClosed) {
+		if (pIsMnuClosed){
+			this.xSwitchClass(this.fRoot,"tplMnuCls_no", "tplMnuCls_yes", true);
+		} else {
+			this.xSwitchClass(this.fRoot,"tplMnuCls_yes", "tplMnuCls_no", true);
+		}
+	},
+
+
+/* === Utilities ============================================================ */
+	/** frameMgr.xAddBtn : Add a HTML button to a parent node. */
+	xAddBtn : function(pParent, pClassName, pCapt, pTitle, pNxtSib) {
+		var vBtn = pParent.ownerDocument.createElement("a");
+		vBtn.className = pClassName;
+		vBtn.fName = pClassName;
+		vBtn.href = "#";
+		vBtn.target = "_self";
+		if (pTitle) vBtn.setAttribute("title", pTitle);
+		if (pCapt) vBtn.innerHTML = "&lt;span>" + pCapt + "&lt;/span>"
+		if (pNxtSib) pParent.insertBefore(vBtn,pNxtSib)
+		else pParent.appendChild(vBtn);
+		return vBtn;
+	},
+
+	/** frameMgr.xSwitchClass - replace a class name. */
+	xSwitchClass : function(pNode, pClassOld, pClassNew, pAddIfAbsent, pMatchExact) {
+		var vAddIfAbsent = typeof pAddIfAbsent == "undefined" ? false : pAddIfAbsent;
+		var vMatchExact = typeof pMatchExact == "undefined" ? true : pMatchExact;
+		var vClassName = pNode.className;
+		var vReg = new RegExp("\\b"+pClassNew+"\\b");
+		if (vMatchExact &amp;&amp; vClassName.match(vReg)) return;
+		var vClassFound = false;
+		if (pClassOld &amp;&amp; pClassOld != "") {
+			if (vClassName.indexOf(pClassOld)==-1){
+				if (!vAddIfAbsent) return;
+				else if (pClassNew &amp;&amp; pClassNew != '') pNode.className = vClassName + " " + pClassNew;
+			} else {
+				var vCurrentClasses = vClassName.split(' ');
+				var vNewClasses = new Array();
+				for (var i = 0, n = vCurrentClasses.length; i &lt; n; i++) {
+					var vCurrentClass = vCurrentClasses[i];
+					if (vMatchExact &amp;&amp; vCurrentClass != pClassOld || !vMatchExact &amp;&amp; vCurrentClass.indexOf(pClassOld) != 0) {
+						vNewClasses.push(vCurrentClasses[i]);
+					} else {
+						if (pClassNew &amp;&amp; pClassNew != '') vNewClasses.push(pClassNew);
+						vClassFound = true;
+					}
+				}
+				pNode.className = vNewClasses.join(' ');
+			}
+		}
+		return vClassFound;
+	},
+
+	/** Local Storage API (localStorage/userData/cookie) */
+	LocalStore : function (pId){
+		if (pId &amp;&amp; !/^[a-z][a-z0-9]+$/.exec(pId)) throw new Error("Invalid store name");
+		this.fId = pId || "";
+		this.fRootKey = document.location.pathname.substring(0,document.location.pathname.lastIndexOf("/")) +"/";
+		if (typeof localStorage != "undefined") {
+			this.get = function(pKey) {var vRet = localStorage.getItem(this.fRootKey+this.xKey(pKey));return (typeof vRet == "string" ? unescape(vRet) : null)};
+			this.set = function(pKey, pVal) {localStorage.setItem(this.fRootKey+this.xKey(pKey), escape(pVal))};
+		} else if (window.ActiveXObject){
+			this.get = function(pKey) {this.xLoad();return this.fIE.getAttribute(this.xEsc(pKey))};
+			this.set = function(pKey, pVal) {this.fIE.setAttribute(this.xEsc(pKey), pVal);this.xSave()};
+			this.xLoad = function() {this.fIE.load(this.fRootKey+this.fId)};
+			this.xSave = function() {this.fIE.save(this.fRootKey+this.fId)};
+			this.fIE=document.createElement('div');
+			this.fIE.style.display='none';
+			this.fIE.addBehavior('#default#userData');
+			document.body.appendChild(this.fIE);
+		} else {
+			this.get = function(pKey){var vReg=new RegExp(this.xKey(pKey)+"=([^;]*)");var vArr=vReg.exec(document.cookie);if(vArr &amp;&amp; vArr.length==2) return(unescape(vArr[1]));else return null};
+			this.set = function(pKey,pVal){document.cookie = this.xKey(pKey)+"="+escape(pVal)};
+		}
+		this.xKey = function(pKey){return this.fId + this.xEsc(pKey)};
+		this.xEsc = function(pStr){return "LS" + pStr.replace(/ /g, "_")};
+	}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BaseStorage.html">BaseStorage</a></li><li><a href="module-Color.html">Color</a></li><li><a href="module-Log.html">Log</a></li><li><a href="module-MEL_ELASTIC_UI.html">MEL_ELASTIC_UI</a></li><li><a href="module-MelLinq.html">MelLinq</a></li></ul><h3>Namespaces</h3><ul><li><a href="MelMetapage.html">MelMetapage</a></li><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="Skins.html">Skins</a></li><li><a href="Utilities.html">Utilities</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="TEActiveMouse.html">TEActiveMouse</a></li><li><a href="TEContainerActiveClassCtrl.html">TEContainerActiveClassCtrl</a></li><li><a href="TEErrorHandler.html">TEErrorHandler</a></li><li><a href="TEHashCtrl.html">TEHashCtrl</a></li><li><a href="TEHideIfNotActiveCtrl.html">TEHideIfNotActiveCtrl</a></li><li><a href="TEOverflowCtrl.html">TEOverflowCtrl</a></li><li><a href="TEOverflowScrollCtrl.html">TEOverflowScrollCtrl</a></li><li><a href="TEOverflowTransformCtrl.html">TEOverflowTransformCtrl</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="module-BaseStorage.BaseStorage.html">BaseStorage</a></li><li><a href="module-Color-Color.html">Color</a></li><li><a href="module-Color-ColorRGBA.html">ColorRGBA</a></li><li><a href="module-Log.BnumLog.html">BnumLog</a></li><li><a href="module-MEL_ELASTIC_UI.Mel_Elastic_Storage.html">Mel_Elastic_Storage</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Advanced_Rule.html">Mel_CSS_Advanced_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Array_Rule.html">Mel_CSS_Array_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Rule.html">Mel_CSS_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Style_Sheet.html">Mel_CSS_Style_Sheet</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_Elastic.html">Mel_Elastic</a></li><li><a href="module-MelLinq-MelEnumerable.html">MelEnumerable</a></li><li><a href="module-MelLinq-MelKeyValuePair.html">MelKeyValuePair</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li><li><a href="window.TEPauseCtrl.html">TEPauseCtrl</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TEOnlyOnePlayingCtrl">TEOnlyOnePlayingCtrl</a></li><li><a href="global.html#TESessionCurrentSubtitle">TESessionCurrentSubtitle</a></li><li><a href="global.html#TESwipeCtrl">TESwipeCtrl</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#datetimepickerFactory">datetimepickerFactory</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#dkSiRuleResizeMnu">dkSiRuleResizeMnu</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#getTime">getTime</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#menuMgr">menuMgr</a></li><li><a href="global.html#menuScrollTiTask">menuScrollTiTask</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scImgMgr">scImgMgr</a></li><li><a href="global.html#scSiRuleEnsureVisible">scSiRuleEnsureVisible</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#treeMgr">treeMgr</a></li><li><a href="global.html#trigger">trigger</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#value">value</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Mar 07 2024 16:46:19 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
