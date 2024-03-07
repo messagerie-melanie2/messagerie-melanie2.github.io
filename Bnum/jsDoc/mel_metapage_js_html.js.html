@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mel_metapage/js/html.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mel_metapage/js/html.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>function html_helper(option, html, optional_classes = "", attribs = null){
+
+	if (!!attribs)
+	{
+		const tmp = attribs;
+		attribs = '';
+
+		for (const key in tmp) {
+			if (Object.hasOwnProperty.call(tmp, key)) {
+				const element = tmp[key];
+				attribs += `${key}="${element}" `;
+			}
+		}
+
+	}
+	else attribs = '';
+
+    switch (option) {
+        case html_helper.options["block"]:   
+            return  `&lt;div class="square_div ${optional_classes}" ${attribs}>&lt;div class=contents>&lt;div class=square-contents>${html}&lt;/div>&lt;/div>&lt;/div>`;
+        case html_helper.options.create_button:
+
+			let onclick = "";
+			let classes = 'mel-button create mel-before-remover btn btn-secondary';
+			let id = "";
+
+			if (typeof optional_classes !== "string" &amp;&amp; optional_classes !== null &amp;&amp; optional_classes !== undefined)
+			{
+				if (optional_classes.onclick !== undefined)
+					onclick = `onclick="${optional_classes.onclick}"`;
+
+				if (optional_classes.new_classes !== undefined)
+					classes = `${optional_classes.new_classes}`
+				
+				if (optional_classes.additional_classes !== undefined)
+					classes += `${optional_classes.additional_classes}`
+
+				if (optional_classes.id !== undefined)
+					id = `id="${optional_classes.id}"`;
+			}
+
+			if (classes !== "")
+				classes = `class="${classes}"`;
+
+			return `&lt;button ${id} ${classes} ${onclick} ${attribs} >${html}&lt;/button>`;
+		default:
+            return html;
+    }
+}
+
+html_helper.options = {
+    "block":Symbol("block"),
+	"create_button":Symbol("create_button")
+}
+
+/**
+ * Renvoie vrai si le string est vide ou vaut null
+ * @param {string} string String à tester
+ */
+html_helper.is_null_or_empty = function(string)
+{
+    return string === null || string == "";
+}
+
+html_helper.JSON = {
+	parse:(string) => {
+		if (string === null || string === undefined)
+			return string;
+		return JSON.parse(string.replaceAll('¤¤¤¤¤¤¤¤', '"'));
+	},
+	stringify:(item) => {
+		if (item === null)
+			item = "null";
+		else if (item === undefined)
+			item = "undefined";
+		return JSON.stringify(item).replaceAll('"', "¤¤¤¤¤¤¤¤");
+	}
+}
+
+/**
+ * Récupère le html pour la liste des tâches de l'utilisateur. Récupère les données depuis le stockage local.
+ * @param {*} e Element qui contiendra le html
+ * @param {*} e_news Element qui contiendra le nombre de tâches (facultatif)
+ * @param {JSON} tabs Liste des onglets
+ * @param {String} title Titre du block
+ */
+html_helper.TasksAsync = async function (tabs, e = null,  e_news = null,title = null)
+{
+    let storage = await mel_metapage.Storage.check(mel_metapage.Storage.tasks).wait();
+
+	if (html_helper.tasks_updates === undefined)
+	{
+		html_helper.tasks_updates = new Mel_Update(mel_metapage.EventListeners.tasks_updated.after, "tasks.update", async () => {
+			$('.html-tasks').each(async (i,e) => {
+				e = $(e);
+				const tabs = html_helper.JSON.parse(e.data('task-tabs'));
+				const title = e.data('task-title');
+				e[0].outerHTML = await html_helper.TasksAsync(tabs, null, null, title);
+			});
+		});
+	}
+
+    return html_helper.Tasks(storage, tabs, e, e_news, title);
+}
+
+/**
+ * Récupère le html pour la liste des tâches de l'utilisateur.
+ * @param {*} e Element qui contiendra le html
+ * @param {Array} datas Liste des tâches
+ * @param {*} e_news Element qui contiendra le nombre de tâches (facultatif)
+ * @param {JSON} tabs Liste des noms des onglets
+ * @param {String} title Titre du block
+ */
+html_helper.Tasks = function (datas, tabs, e = null,  e_news = null,title = null)
+{
+    let html = ''
+	html += '&lt;div class="html-tasks" data-task-tabs="'+html_helper.JSON.stringify(tabs)+'" data-task-title="'+title+'">';
+    if (!html_helper.is_null_or_empty(title))
+    {
+        html += "&lt;div class=task-title>";
+        html += "&lt;span>" + title + "&lt;/span>";
+        html += "&lt;/div>";
+    }
+	// html = '&lt;div id=dwp-tadk-urg class="tab-task-dwp mel-tab mel-tabheader">Tâches urgentes&lt;/div>';
+	//html += '&lt;center>&lt;div id=dwp-tadk-all class="tab-task-dwp mel-tab mel-tabheader active last">'+tabs["right"]+'&lt;/div>&lt;/center>';
+	
+    html += '&lt;div style="margin:10px 0;">&lt;div id="nb-waiting-task" class="nb-task wsp-task-classik tab-task mel-tab-content" style="">&lt;span class="icon-mel-time roundbadge large clear">&lt;/span>&lt;span>&lt;span class="waiting-task">&lt;/span>&lt;span class="nb-waiting-task nb font-size-large">'+datas.length+'&lt;/span> tâches en cours&lt;/span>&lt;/div>&lt;/div>';
+
+    datas = Enumerable.from(datas).orderBy((x) => x.order).thenBy((x) => (x._hasdate === 1 ? x.datetime : Number.MAX_VALUE )).toArray();
+	let date;
+
+    html += `&lt;ul class="ignore-bullet">`;
+
+    for (let index = 0; index &lt; datas.length; index++) {
+        const element = datas[index];
+		date = moment(parseInt(element.created + "000"));
+		html += "&lt;li>";
+        html += "&lt;div class=row style=margin-bottom:15px;margin-right:15px;>";
+
+		if (date._isValid)
+			html += `&lt;div class=col-md-10>&lt;a href=# class="element-block mel-not-link mel-focus" onclick="open_task('${element.id}')">&lt;span class="element-title default-text bold element-block">${element.title}&lt;/span>&lt;span class="element-desc secondary-text element-block">Créée le ${date.format("DD/MM/YYYY")} à ${date.format("hh:mm")}&lt;/span>&lt;/a>&lt;/div>`;//html += "&lt;div class=col-md-12>&lt;span class=element-title>" + element.title + "&lt;/span>&lt;br/>&lt;span class=element-desc>Créée le " + date.format("DD/MM/YYYY") + " à " + date.format("hh:mm") +"&lt;/span>&lt;/div>";
+        else
+			html += "&lt;div class=col-md-12>&lt;/div>";
+
+		//html += '&lt;div class=col-md-2>&lt;a style=display:none; onclick="add_task_to_completed(`'+element.id+'`)" class="roundbadge large hover tick ' + (element.mel_metapage.order == 0 ? "icon-mel-warning warning" : "icon-mel-time clear") + '">&lt;/a>&lt;/div>'
+        html += "&lt;/div>";
+		html += "&lt;/li>";
+    }
+	html += "&lt;/ul>";
+    html += "&lt;/div>";
+	
+    if (e !== null)
+	    e.html(html);
+
+    if (e_news !== null)
+    {
+        if (datas.length > 0)
+        {
+            e_news.html(datas.length);
+            e_news.removeClass("hidden");
+        }
+        else
+            e_news.addClass("hidden");
+    }
+
+    return html;
+}
+
+html_helper.CalendarsAsync = async function(config = {
+    add_day_navigation:false,
+    add_create:false,
+	create_function:null,
+    add_see_all:false, 
+	next_when_empty_today_function:null,
+}, e = null, e_number = null, _date = moment())
+{
+	const Loader = (await loadJsModule('mel_metapage', 'calendar_loader', '/js/lib/calendar/')).CalendarLoader.Instance;
+	let storage = Loader.get_next_events_day(_date, {}); 
+
+	const KEY = 'HTML_CALENDAR_TOP_FUNCTION';
+	const Top = (await loadJsModule('mel_metapage', 'top')).Top;
+
+	if (!Top.has(KEY)) {
+		Top.add(KEY, true);
+
+		Loader.add_event_listener(mel_metapage.EventListeners.calendar_updated.after, function() {
+
+			Loader.select('iframe.mm-frame').each((index, element) => {
+				if (!$(element).hasClass('discussion-frame')) {
+					element.contentWindow.$('.html-calendar').each(async (i, calendar) => {
+						calendar = $(calendar);
+
+						let config = html_helper.JSON.parse(calendar.data('config'));
+						const date = moment(calendar.data('date'));
+
+						if (config.add_create) delete config.add_create;
+
+						if (!(config.add_day_navigation &amp;&amp; moment(calendar.find(".mm-agenda-date").data("current-date")).startOf("day").format() !== date.startOf("day").format())) {
+							e[0].outerHTML = await html_helper.CalendarsAsync(config, null, null, date);
+						}
+					});
+				}
+			});
+
+		}, { callback_key:KEY});
+	}
+
+	if (moment().startOf('day').format() === moment(_date).startOf('day').format()) storage.where(x => moment(x.end) > moment());
+
+    return await html_helper.Calendars({datas:storage.toArray(), config:config, e:e, e_number:e_number, _date:_date});
+}
+
+html_helper.Calendars = async function ({datas, config = {
+    add_day_navigation:false,
+    add_create:false,
+	create_function:null,
+    add_see_all:false,
+	next_when_empty_today_function:null
+}, e = null, e_number = null, _date = moment(), get_only_body = false} = {})
+{
+	const Loader = (await loadJsModule('mel_metapage', 'calendar_loader', '/js/lib/calendar/')).CalendarLoader.Instance;
+	const html_events = (await loadJsModule('mel_metapage', 'html_events', '/js/lib/html/')).html_events;
+	const html_li = (await loadJsModule('mel_metapage', 'html', '/js/lib/html/')).html_li;
+
+	let html = ''
+	if (!get_only_body)
+		html += '&lt;div class="html-calendar" data-config="'+html_helper.JSON.stringify(config)+'"  data-date="'+_date.format()+'">';
+    if (config.add_day_navigation === true)
+    {
+		const count = Enumerable.from(datas).where(x => x.free_busy !== "free").count();
+        let nav_click = "rcube_calendar.change_calendar_date($('.mm-agenda-date'), ¤¤¤)";
+        html += '&lt;div class="row">';
+        html += '&lt;div class="col-2">&lt;span class="icon-mel-calendar mm-agenda-icon">&lt;span class="notif roundbadge lightgreen edited" '+(typeof datas === "string" || count === 0 ? "style=display:none;" : "")+'>'+count+'&lt;/span>&lt;/span>&lt;/div>';
+        html += '&lt;div class="col-6">&lt;span class="mm-agenda-date">'+rcube_calendar.mel_metapage_misc.GetDate(_date)+'&lt;/span>&lt;/div>';
+        html += '&lt;div class="col-4">&lt;div class="row">';
+        html += '&lt;div class="col-6">&lt;button class="btn-mel-invisible btn-arrow btn btn-secondary" onclick="'+nav_click.replace("¤¤¤", "-1")+'"> &lt;span class="icon-mel-arrow-left">&lt;span class="sr-only">'+rcmail.gettext("last_day", "mel_metapage")+'&lt;/span>&lt;/span> &lt;/button>&lt;/div>';
+        html += '&lt;div class="col-6">&lt;button class="btn-mel-invisible btn-arrow btn btn-secondary" onclick="'+nav_click.replace("¤¤¤", "1")+'"> &lt;span class="icon-mel-arrow-right">&lt;span class="sr-only">'+rcmail.gettext("next_day", "mel_metapage")+'&lt;/span>&lt;/span> &lt;/button>&lt;/div>';
+        html += "&lt;/div>&lt;/div>&lt;/div>"
+    }
+	if (!get_only_body)
+    	html += '&lt;ul class="block-body ignore-bullet">';
+
+	//let icon;
+	if (typeof datas === "string")
+		html += "&lt;div>" + datas + "&lt;/div>";
+	else {
+
+		if (datas.length > 0)
+		{
+			var $jquery_array = $('');
+			let li;
+			for (let index = 0; index &lt; datas.length; index++) {
+				const element = datas[index];
+
+				li = new html_li({});
+				new html_events(element, {'data-ignore-date':true}, _date).appendTo(li);
+				li = li.generate();
+				$jquery_array = $.merge($jquery_array, li);
+				html += html_events.$_toString(li);
+			}
+			html_helper.Calendars.$jquery_array = $jquery_array;
+			li = null;
+		}
+		else 
+		{
+			const now = moment();
+			const raw_storage = Loader.load_all_events();
+			const storage = Enumerable.from(config.next_when_empty_today_function !== null &amp;&amp; typeof config.next_when_empty_today_function === "function" ? config.next_when_empty_today_function(raw_storage) : raw_storage).where(x => moment(x.start) > now);
+			const storage_count = storage.count();
+			if (storage_count > 0)
+			{
+				const storage_first = storage.first();
+				const value = !!storage_first.value &amp;&amp; !!storage_first.value[0] ? storage_first.value[0] : storage_first;
+				const all_day = value.allDay ? "_all_day" : "";
+				html += `&lt;li>&lt;span class="element-title element-no default-text bold element-block">${rcmail.gettext('mel_portal.no_event_today')}&lt;/span>
+				&lt;a href=# class="element-block mel-not-link mel-focus" onclick="${html_helper.Calendars.generate_link(value)}">
+				&lt;span class="element-title default-text bold element-block">${rcmail.gettext(`mel_portal.next_agenda_event${all_day}`).replace('{date}', moment(value.start).format('DD/MM/YYYY')).replace('{horaire}', moment(value.start).format('HH:mm'))}&lt;/span>
+				&lt;span class="element-desc secondary-text element-block">${value.title}&lt;/span>
+				&lt;/a>
+				&lt;/li>`;
+			}
+			else html += `&lt;li>Pas d'évènements aujourd'hui ainsi que dans les 7 prochains jours !&lt;/li>`;
+		}
+	}
+
+	if (!get_only_body)
+	{
+		html += "&lt;/ul>";
+		html += "&lt;/div>";
+	}
+	else
+		html = `&lt;ul class="ignore-bullet">${html}&lt;/ul>`;
+
+	if (config.add_create === true)
+	{
+		const data_text = 'Créer &lt;span class="icon-mel-plus plus">&lt;/span>';
+		if (!html.includes(data_text))
+		html += html_helper(html_helper.options.create_button, data_text, {
+			onclick:config.create_function === undefined || config.create_function === null ? "html_helper.Calendars.create()" : config.create_function
+		});
+	}
+
+    if (e !== null) e.html(html);
+    if (e_number !== null)
+    {
+        if (datas.length > 0)
+        {
+            e_number.html(datas.length);
+            e_number.removeClass("hidden");
+        }
+        else
+        e_number.addClass("hidden");
+    }
+
+	if (!!e &amp;&amp; !!$jquery_array) {
+		e.find('ul').html($jquery_array);
+	}
+
+    return html;
+}
+
+html_helper.Calendars.create = function(config = {
+	date:moment(),
+	selector:null
+})
+{
+
+	let date;
+
+	if (config.selector !== undefined &amp;&amp; config.selector !== null)
+		date = $(config.selector).data("current-date");
+	else if (config.date !== undefined &amp;&amp; config.date !== null)
+		date = config.date;
+	else
+		date = moment();
+
+	const e = {
+		target:null
+	};
+
+	let event = {
+        start:moment(`${moment(date).format("YYYY-MM-DD")} ${moment().format("HH:mm")}`),
+        end:null//moment().add(1, "h")
+    };
+
+	event.end = moment(event.start).add(1, "h");
+    rcmail.local_storage_set_item("tmp_calendar_event", event);
+	//console.log("[html_helper.Calendars.create]", event, date, config);
+
+    return rcmail.commands['add-event-from-shortcut'] ? rcmail.command('add-event-from-shortcut', '', e.target, e) : rcmail.command('addevent', '', e.target, e);
+}
+
+html_helper.Calendars.generate_link = function(event)
+{
+	let link = "";
+
+	if (SearchResultCalendar &amp;&amp; SearchResultCalendar.CreateOrOpen)
+		link = `SearchResultCalendar.CreateOrOpen('${JSON.stringify(event).replaceAll('"', '£¤£').replaceAll("'", "µ¤¤µ")}')`;
+
+	return link;
+}
+
+/**
+ * Classe qui permet de générer du html
+ */
+class mel_html{
+	/**
+	 * Constructeur de la classe
+	 * @param {string} tag Balise (exemple : div, li, ul etc...)
+	 * @param {Object} attribs Attributs de la balise 
+	 * @param {string} content Contenu de la balise
+	 */
+	constructor(tag, attribs = {}, content = '')
+	{
+		this.tag = tag.toLowerCase();
+		this.attribs = attribs;
+		this.content = content;
+		this.onclick = new MelEvent();
+		this.onkeydown = new MelEvent();
+		this.onmouseover = new MelEvent();
+		this.onmouseout = new MelEvent();
+		this.aftergenerate = new MelEvent();
+	}
+
+	/**
+	 * Actions à faire avant de générer l'élément jquery
+	 * @abstract
+	 * @private Cette fonction est privée
+	 */
+	_before_generate() {}
+
+	/**
+	 * Récupère le jquery de ces données html
+	 * @param {Object} additionnal_attribs Attributs additionnels
+	 * @returns {$}
+	 */
+	generate(additionnal_attribs = {})
+	{
+		this._before_generate();
+
+		let multi_balise = true;
+
+		switch (this.tag) {
+			case CONST_HTML_IMG:
+			case CONST_HTML_INPUT:
+			case CONST_HTML_BR:
+				multi_balise = false;
+				break;
+		
+			default:
+				break;
+		}
+
+		if (multi_balise &amp;&amp; !!this.attribs[mel_html.ATTRIB_NO_MULTI_BALISE]) multi_balise = false;
+
+		let $html = $(`${CONST_BALISE_START}${this.tag} ${(!multi_balise ? CONST_BALISE_CLOSE_END : CONST_BALISE_END)}${(multi_balise ? `${CONST_BALISE_CLOSE_START}${this.tag}${CONST_BALISE_END}` : EMPTY_STRING)}`);
+
+		for (const iterator of Enumerable.from(this.attribs).concat(additionnal_attribs).where(x => 0 === x || !!(x || null))) {
+			switch (iterator.key) {
+				case CONST_ATTRIB_CLASS:
+					$html.addClass(Array.isArray(iterator.value) ? iterator.value.join(' ') : iterator.value);
+					break;
+				case mel_html.EVENT_ON:
+					for (const key in iterator.value) {
+						if (Object.hasOwnProperty.call(iterator.value, key)) {
+							const element = iterator.value[key];
+							$html.on(key, element);
+						}
+					}
+					break;
+				case 'style':
+					iterator.value = this._getStyle();
+				default:
+					$html.attr(iterator.key, iterator.value);
+					break;
+			}
+		}
+
+		let generated = this._generateContent($html, this.content);
+		generated = this.bind_events(generated);
+
+		if (this.aftergenerate.count() > 0) {
+			this.aftergenerate.call(generated);
+		}
+
+		return generated;
+	}
+
+	/**
+	 * Ajoute les évènements de l'objet à un élement jquery
+	 * @param {$} $element 
+	 * @returns {$} Elément avec les actions
+	 */
+	bind_events($element) {
+		if (this.onclick.haveEvents()) $element.on(CONST_EVENT_ACTION_CLICK, (event) => {
+			this.onclick.call(event);
+		});
+
+		if (this.onkeydown.haveEvents()) $element.on('keydown', (event) => {
+			this.onkeydown.call(event);
+		});
+
+		if (this.onmouseover.haveEvents()) $element.on('mouseover', (event) => {
+			this.onmouseover.call(event);
+		});
+
+		if (this.onmouseout.haveEvents()) $element.on('mouseout', (event) => {
+			this.onmouseout.call(event);
+		});
+
+		return $element;
+	}
+
+	/**
+	 * Ajoute une classe à la liste des classes de cet élément html
+	 * @param {string} classes Classe à ajouter
+	 * @returns Chaînage
+	 */
+	addClass(classes) {
+		if (!this.attribs) this.attribs = {};
+		if (!(this.attribs[CONST_ATTRIB_CLASS] || null)) this.attribs[CONST_ATTRIB_CLASS] = [];
+		else if (STRING === typeof this.attribs[CONST_ATTRIB_CLASS]) this.attribs[CONST_ATTRIB_CLASS] = [this.attribs[CONST_ATTRIB_CLASS]];
+
+		this.attribs[CONST_ATTRIB_CLASS].push(classes);
+		return this;
+	}
+
+	/**
+	 * Vérifie si l'élément possède une classe en particulier
+	 * @param {string} html_class Classe à vérifier
+	 * @returns {boolean}
+	 */
+	hasClass(html_class){
+		if (!!this.attribs &amp;&amp; !!this.attribs[CONST_ATTRIB_CLASS]) {
+			if (STRING === typeof this.attribs[CONST_ATTRIB_CLASS]) return html_class === this.attribs[CONST_ATTRIB_CLASS];
+			else return this.attribs[CONST_ATTRIB_CLASS].includes(html_class);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Ajoute du css initial à l'élément
+	 * @param {string} key Propriété css (ex: display)
+	 * @param {string} value Valeur css (ex : none)
+	 * @returns Chaînage
+	 */
+	css(key, value) {
+		if (!this.attribs) this.attribs = {};
+		if (!(this.attribs['style'] || null)) this.attribs['style'] = {};
+		else if (STRING === typeof this.attribs['style']) {
+			const splited = this.attribs['style'].split(CONST_CSS_SEPARATOR);
+			this.attribs['style'] = {};
+			for (let index = 0, len = splited.length; index &lt; len; ++index) {
+				const element = splited[index].split(CONST_CSS_ASSIGN);
+				this.attribs['style'][element[0]] = element[1];
+			}
+		}
+
+		this.attribs['style'][key] = value;
+		return this;
+	}
+
+	/**
+	 * Ajoute un attribut à l'élément
+	 * @param {string} key Nom de l'attribut 
+	 * @param {string | number | Boolean} value Valeur de l'attribut 
+	 * @returns Chaînage
+	 */
+	setAttr(key, value) {
+		if (!this.attribs) this.attribs = {};
+
+		this.attribs[key] = value;
+		return this;
+	}
+
+	/**
+	 * Met un id à l'élément
+	 * @param {string} id 
+	 * @returns Chaînage
+	 */
+	setId(id) {
+		return this.setAttr('id', id);
+	}
+
+	toString() {
+		return this.generate()[0].outerHTML;
+	}
+
+	_getStyle() {
+		if (!this.attribs['style'] || STRING === typeof this.attribs['style']) return this.attribs['style'] || EMPTY_STRING;
+		else {
+			let array = [];
+			for (let keys = Object.keys(this.attribs['style']), index = 0, len = keys.length; index &lt; len; ++index) {
+				const key = keys[index];
+				const value = this.attribs['style'][key];
+				array.push([key, value].join(CONST_CSS_ASSIGN));
+			}
+
+			array = array.join(CONST_CSS_SEPARATOR);
+
+			return (EMPTY_STRING === array ? EMPTY_STRING : (array + CONST_CSS_SEPARATOR));
+		}
+	}
+
+	/**
+	 * Génère un élément jquery à partir des données de cet élément.
+	 * 
+	 * L'ajoute ensuite à un élément parent.
+	 * @param {$} $parent Elément parent qui contiendra l'objet
+	 * @param {Object} additionnal_attribs Attributs additionnels
+	 * @returns {$}
+	 */
+	create($parent, additionnal_attribs = [])
+	{
+		return this.generate(additionnal_attribs).appendTo($parent);
+	}
+
+	/**
+	 * Ajoute le html à l'élément jquery générer
+	 * @param {$} $html Elément jquery 
+	 * @param {string} content html générer
+	 * @returns {$}
+	 * @private
+	 */
+	_generateContent($html, content) {
+		return $html.html(content);
+	}
+
+	/**
+	 * Récupère un mel_html div
+	 * @param {Object} attribs Attributs de l'élément
+	 * @param {string} content Contenue de l'élément
+	 * @returns {mel_html}
+	 */
+	static div(attribs = {}, content = '') {
+		return new mel_html(CONST_HTML_DIV, attribs, content);
+	}
+}
+
+Object.defineProperty(mel_html, 'EVENT_ON', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_EVENT_ON
+});
+
+Object.defineProperty(mel_html, 'ATTRIB_NO_MULTI_BALISE', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_ATTRIB_NO_MULTI_BALISE
+});
+
+Object.defineProperty(mel_html, 'select_html', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:() => $(CONST_HTML_HTML)
+});
+
+/**
+ * Classe qui permet de générer du html.
+ * 
+ * Accepte plusieurs mel_html enfants pour génrer son html
+ */
+class mel_html2 extends mel_html {
+	/**
+	 * Constructeur de la classe
+	 * @param {string} tag Balise de l'élément
+     * @param {Object} options - Les options du constructeur.
+     * @param {Object} options.attribs - Attributs de l'élément
+     * @param {[] | mel_html | string} options.contents - Eléments enfants
+	 */
+	constructor(tag, {attribs={}, contents=[]}) {
+		super(tag, attribs, EMPTY_STRING);
+		this._init()._setup(contents);
+	}
+
+	_init() {
+		this.jcontents = [];
+		return this;
+	}
+
+	_setup(contents = []) {
+		if (!Array.isArray(contents)) {
+			if ('string' === typeof contents) contents = [new mel_html('span', {}, contents)];
+			else contents = [contents];
+		}
+
+		this.jcontents = contents;
+		return this;
+	}
+
+	/**
+	 * Ajoute un élément enfant
+	 * @param {mel_html} mel_html Elément à ajouter
+	 * @returns Chaînage
+	 */
+	addContent(mel_html) {
+		this.jcontents.push(mel_html);
+		mel_html.parent = this;
+		return this;
+	}
+
+	_generateContent($html) {
+		for (let index = 0, len = this.jcontents.length; index &lt; len; ++index) {
+			const element = this.jcontents[index];
+			element.create($html);
+		}
+
+		return $html;
+	} 
+
+	/**
+	 * Ajoute cet élément à un html parent
+	 * @param {mel_html2} mel_html2 
+	 * @returns Chaînage
+	 */
+	appendTo(mel_html2) {
+		mel_html2.addContent(this);
+		return this;
+	}
+
+	/**
+	 * Taille des éléments enfants
+	 * @returns {number}
+	 */
+	count() {
+		return this.jcontents.length;
+	}
+
+	/**
+	 * Récupère un élément enfant par son id 
+	 * @param {string} id Id de l'élément à retrouver
+	 * @returns {mel_html | null}
+	 */
+	find_by_id(id) {
+		return Enumerable.from(this.jcontents).where(x => x.attribs['id'] === id).firstOrDefault();
+	}
+
+	/**
+	 * Récupère des éléments enfant par une classe 
+	 * @param {string} html_class Classe que l'on recherche
+	 * @returns {Enumerable&lt;mel_html>}
+	 */
+	find_by_class(html_class) {
+		return Enumerable.from(this.jcontents).where(x => x.hasClass(html_class));
+	}
+
+	/**
+	 * Récupère le premier élément enfant
+	 * @returns {mel_html}
+	 */
+	first() {
+		return this.jcontents[0];
+	}
+
+	/**
+	 * Récupère le premier élément enfant ou une valeur par défaut
+	 * @param {* | null} _default Renvoyer si first n'éxiste pas
+	 * @returns {mel_html | * | null}
+	 */
+	firstOrDefault(_default = null) {
+		try {
+			return this.first();
+		} catch (error) {
+			return _default;
+		}
+	}
+
+	/**
+	 * Créer un mel_html2 qui représente une div
+     * @param {Object} options - Les options du constructeur.
+     * @param {Object} options.attribs - Attributs de l'élément
+     * @param {[] | mel_html | string} options.contents - Eléments enfants
+	 * @returns {mel_html2}
+	 */
+	static div({attribs={}, contents=[]}) {
+		return new mel_html2('div', {attribs, contents});
+	}
+}
+
+class mel_option extends mel_html{
+	constructor(value, text, attribs = [])
+	{
+		super(CONST_HTML_SELECT, attribs, text);
+		this.attribs[CONST_ATTRIB_VALUE] = value;
+	}
+}
+
+class amel_form_item extends mel_html {
+	constructor(tag, attribs = {}, content = EMPTY_STRING)
+	{
+		super(tag, attribs, content);
+
+		if (!this.attribs[CONST_ATTRIB_CLASS]) this.attribs[CONST_ATTRIB_CLASS] = EMPTY_STRING;
+
+		if (!this.attribs[CONST_ATTRIB_VALUE]) {
+			this.attribs[CONST_ATTRIB_VALUE] = `${amel_form_item.CLASS_FORM_BASE} ${amel_form_item.CLASS_FORM_MEL}`;
+		}
+		
+		if (!this.attribs[CONST_ATTRIB_CLASS].includes(amel_form_item.CLASS_FORM_BASE))
+		{
+			this.attribs[CONST_ATTRIB_CLASS] += ` ${amel_form_item.CLASS_FORM_BASE}`;
+		}
+		
+		if (!this.attribs[CONST_ATTRIB_CLASS].includes(amel_form_item.CLASS_FORM_MEL)) this.attribs[CONST_ATTRIB_CLASS] += ` ${amel_form_item.CLASS_FORM_MEL}`;
+
+		this.onfocusout = new MelEvent();
+		this.onfocus = new MelEvent();
+		this.onchange = new MelEvent();
+		this.oninput = new MelEvent();
+	}
+
+	toFloatingLabel(label) {
+		let $label = new mel_html(CONST_HTML_DIV, {class:amel_form_item.CLASS_FORM_FLOATING}, this.generate({required:CONST_ATTRIB_REQUIRED})).generate();
+		return $label.append(new mel_html(CONST_HTML_LABEL, {for:this.attribs[CONST_ATTRIB_ID]}, label).generate());
+	}
+
+	generate(value, additionnal_attribs = {})
+	{
+		let generated = super.generate(additionnal_attribs).val(value);
+
+		if (this.onfocus.haveEvents()) {
+			generated.on(CONST_EVENT_ACTION_FOCUS, (event) => {
+				this.onfocus.call(event);
+			});
+		}
+
+		if (this.onfocusout.haveEvents()) {
+			generated.on(CONST_EVENT_ACTION_BLUR, (event) => {
+				this.onfocusout.call(event);
+			});
+		}
+
+		if (this.oninput.haveEvents()) {
+			generated.on(CONST_EVENT_ACTION_INPUT, (event) => {
+				this.oninput.call(event);
+			});
+		}
+		
+		if (this.onchange.haveEvents()) {
+			generated.on(CONST_EVENT_ACTION_CHANGE, (event) => {
+				this.onchange.call(event);
+			});
+		}
+
+		return generated;
+	}
+}
+
+Object.defineProperty(amel_form_item, 'CLASS_FORM_BASE', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_INPUT_FORM_BASE
+});
+
+Object.defineProperty(amel_form_item, 'CLASS_FORM_MEL', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_INPUT_FORM_MEL
+});
+
+Object.defineProperty(amel_form_item, 'CLASS_FORM_FLOATING', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_INPUT_FORM_FLOATING
+});
+
+Object.defineProperty(amel_form_item, 'CLASS_FORM_FLOATING_FOCUS', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_INPUT_FORM_FLOATING_FOCUS
+});
+
+Object.defineProperty(amel_form_item, 'CLASS_INPUT_FORM_FLOATING_NOT_EMPTY', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_INPUT_FORM_FLOATING_NOT_EMPTY
+});
+
+class mel_select extends amel_form_item{
+	constructor(attribs = {}, options = [])
+	{
+		super(CONST_HTML_SELECT, attribs, options);
+	}
+
+	_generateContent($html, content) {
+		for (const iterator of content) {
+			iterator.create($html);
+		}
+
+		return $html;
+	}
+}
+
+class mel_input extends amel_form_item
+{
+	constructor(attribs = {})
+	{
+		super(CONST_HTML_INPUT, attribs, EMPTY_STRING);
+	}
+
+	static togglePasswordShowed(element) {
+		const INPUT_DATA = CONST_ATTRIB_FOR;
+		const IS_SHOWED_DATA = 'isShowed';
+		const DATA_VALID = 'yes';
+		const DATA_INVALID = 'no';
+		const ATTR = CONST_ATTRIB_TYPE;
+		const ATTR_PASSWORD = CONST_ATTRIB_TYPE_PASSWORD;
+		const ATTR_TEXT = CONST_ATTRIB_TYPE_TEXT;
+		element = $(element);
+		let $input = $(`${CONST_JQUERY_SELECTOR_ID}${element.data(INPUT_DATA)}`);
+	
+		if (0 === $input.length) $input = top.$(`${CONST_JQUERY_SELECTOR_ID}${element.data(INPUT_DATA)}`);
+
+		if (0 &lt; $input.length)
+		{
+			if (DATA_VALID === $input.data(IS_SHOWED_DATA)) {
+				$input.attr(ATTR, ATTR_PASSWORD);
+				$input.data(IS_SHOWED_DATA, DATA_INVALID);
+			}
+			else {
+				$input.attr(ATTR, ATTR_TEXT);
+				$input.data(IS_SHOWED_DATA, DATA_VALID);
+			}
+		}
+
+		mel_input.togglePasswordShowed.updateButton(element);
+	}
+
+	static floatingSetFocusClass(element, isOut = false) {
+		const DIV = CONST_ATTRIB_FOR;
+		const CLASS = amel_form_item.CLASS_FORM_FLOATING_FOCUS;
+		element = $(element);
+		let $div = $(`${CONST_JQUERY_SELECTOR_ID}${element.data(DIV)}`);
+		
+		if (0 === $div.length) $div = top.$(`${CONST_JQUERY_SELECTOR_ID}${element.data(DIV)}`);
+
+		if ($div.length > 0) {
+			if (isOut) {
+				$div.removeClass(CLASS);
+			}
+			else {
+				$div.addClass(CLASS);
+			}
+		}
+	}
+
+	static floatingSetInput(element) {
+		const DIV = CONST_ATTRIB_FOR;
+		const CLASS = amel_form_item.CLASS_INPUT_FORM_FLOATING_NOT_EMPTY;
+		element = $(element);
+		let $div = $(`${CONST_JQUERY_SELECTOR_ID}${element.data(DIV)}`);
+
+		if ($div.length === 0) $div = top.$(`${CONST_JQUERY_SELECTOR_ID}${element.data(DIV)}`);
+
+		if ($div.length > 0) {
+			if (EMPTY_STRING !== element.val()) $div.addClass(CLASS);
+			else $div.removeClass(CLASS);
+		}
+	}
+}
+
+class mel_label_input extends mel_input {
+	constructor(id, type, label, attribs = {}) {
+		super(attribs);
+
+		this.id = id;
+		this.type = type;
+		this.label = label;
+	}
+
+	_before_generate() {
+		this.setId(this.id);
+		this.attribs.type = this.type;
+	}
+
+	generate(value, attribs = {}, parent_attribs = {}) {
+		let $generated = super.generate(value, attribs);
+
+		const html_label = new mel_html('label', {for:this.id}, this.label);
+		let $parent_div = new mel_html2('div', {
+			attribs:parent_attribs,
+			contents:html_label
+		}).generate();
+
+		$parent_div.append($generated);
+		$generated = null;
+
+		return $parent_div;
+	}
+}
+
+class mel_password extends mel_input {
+	constructor(attribs = {})
+	{
+		super(attribs);
+		this.attribs[CONST_ATTRIB_TYPE] = CONST_ATTRIB_TYPE_PASSWORD;
+	}
+}
+
+mel_input.togglePasswordShowed.updateButton = function ($event) {
+	const DATA_SHOW = 'icon-show';
+	const DATA_HIDE = 'icon-hide';
+	const BALISE = CONST_HTML_SPAN;
+	
+	const icon_show = $event.data(DATA_SHOW);
+	
+	if (!!icon_show) {
+		const icon_hide = $event.data(DATA_HIDE);
+
+		if (!!icon_hide) {
+			let $span = $event.find(BALISE);
+	
+			if ($span.hasClass(icon_show)) {
+				$span.removeClass(icon_show).addClass(icon_hide);
+			} else {
+				$span.removeClass(icon_hide).addClass(icon_show);
+			}
+		}
+	}
+
+
+}
+
+class mel_password_with_button extends mel_password{
+	constructor(id, input_id, attribs = {}, attribsOnParent = {}, attribsOnButton = {}) {
+		super(attribs);
+		this.id = id;
+		this._id = input_id;
+		this.main = new mel_html('div', attribsOnParent);
+		this.button = new mel_button(attribsOnButton);
+		this.button_span = new mel_html('span', {class:'icon-mel-eye'});
+
+		this.onfocus.push(function (event) {
+			mel_input.floatingSetFocusClass(event.currentTarget, false);
+		});
+
+		this.onfocusout.push(function (event) {
+			mel_input.floatingSetFocusClass(event.currentTarget, true);
+		});
+
+		this.oninput.push(function (event) {
+			mel_input.floatingSetInput(event.currentTarget);
+		});
+		
+		this.button.onclick.push(function (event) {
+			mel_input.togglePasswordShowed(event.currentTarget);
+		});
+	}
+
+	generate(value, label = 'Mot de passe', additionnal_attribs = {})
+	{
+		const DATA_FOR = 'data-for';
+		const CLASS_INPUT_GROUP = 'input-group';
+		const CLASS_RETURN = 'form-floating pixel-correction';
+		const ATTR_ID = 'id';
+		const ATTR_REQUIRED = 'required';
+		const BALISE_LABEL = 'label';
+		const BALISE_DIV = 'div';
+
+		const button_config = {
+			'data-for':this._id, 
+			'data-icon-show':mel_password_with_button.password_show_button, 
+			'data-icon-hide':mel_password_with_button.password_hide_button,
+		};
+		const main_config = {class:CLASS_INPUT_GROUP};
+		const return_config = {id:this.id, class:CLASS_RETURN};
+		const label_config = {for:button_config[DATA_FOR]};
+
+		additionnal_attribs[DATA_FOR] = return_config.id;
+		additionnal_attribs[ATTR_ID] = button_config[DATA_FOR];
+		additionnal_attribs[ATTR_REQUIRED] = ATTR_REQUIRED;
+		additionnal_attribs['class'] = 'input-mel';
+
+		let $input = super.generate(value, additionnal_attribs);
+		let $button = new mel_html(BALISE_DIV, {class:'input-group-append'}).generate().append(this.button.generate(button_config).append(this.button_span.generate()));
+		let $main = this.main.generate(main_config).append($input).append($button);
+		let $label = new mel_html(BALISE_LABEL, label_config, label);
+
+		return new mel_html(BALISE_DIV).generate(return_config).append($main).append($label.generate());
+	}
+}
+
+Object.defineProperty(mel_password_with_button, 'password_show_button', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_ICON_EYE
+});
+
+Object.defineProperty(mel_password_with_button, 'password_hide_button', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_ICON_EYE_CROSSED
+});
+
+class mel_button extends mel_html {
+	constructor(attribs = {}, content = EMPTY_STRING)
+	{
+		super(CONST_HTML_BUTTON, attribs, content);
+		this.attribs[CONST_ATTRIB_CLASS] = mel_button.html_base_class_full;//'mel-button btn btn-secondary no-button-margin'
+	}
+}
+
+{
+	let item = {};
+	let bootstrap = {};
+	Object.defineProperty(item, 'base', {
+		enumerable: false,
+		configurable: false,
+		writable: false,
+		value:CONST_CLASS_BUTTON_MEL
+	});
+
+	Object.defineProperty(bootstrap, 'base', {
+		enumerable: false,
+		configurable: false,
+		writable: false,
+		value:CONST_CLASS_BUTTON_BASE
+	});
+
+	Object.defineProperty(bootstrap, 'state', {
+		enumerable: false,
+		configurable: false,
+		writable: false,
+		value:CONST_CLASS_BUTTON_SECONDARY
+	});
+
+	Object.defineProperty(item, 'bootstrap', {
+		enumerable: false,
+		configurable: false,
+		writable: false,
+		value:bootstrap
+	});
+
+	Object.defineProperty(mel_button, 'html_base_class', {
+		enumerable: false,
+		configurable: false,
+		writable: false,
+		value:item
+	});
+}
+
+Object.defineProperty(mel_button, 'html_base_class_no_margin', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_BUTTON_MEL_NO_MARGIN
+});
+
+Object.defineProperty(mel_button, 'html_base_class_success', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_BUTTON_SUCCESS
+});
+
+Object.defineProperty(mel_button, 'html_base_class_danger', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:CONST_CLASS_BUTTON_DANGER
+});
+
+Object.defineProperty(mel_button, 'html_base_class_full', {
+	enumerable: false,
+	configurable: false,
+	writable: false,
+	value:`${mel_button.html_base_class.base} ${mel_button.html_base_class_no_margin} ${mel_button.html_base_class.bootstrap.base} ${mel_button.html_base_class.bootstrap.state}`
+});
+
+class mel_tab extends mel_button{
+	constructor(namespace, id, attribs={}, text) {
+		super(attribs, text);
+		this._init()._setup(id);
+	}
+
+	_init() {
+		this.namespace = EMPTY_STRING;
+		this.id = EMPTY_STRING;
+		/**
+		 * @type {mel_tabpanel}
+		 */
+		this.control = null;
+		return this;
+	}
+
+	_setup(namespace, id){
+		this.id = id;
+		this.namespace = namespace;
+		return this;
+	}
+
+	generate(attribs={}) {
+		attribs['id'] = id;
+		attribs['tabindex'] = -1;
+		attribs['aria-controls'] = this.control?.attribs?.['id'];
+		attribs['role'] = 'tab';
+		attribs['type'] = 'button';
+		attribs['aria-selected'] = attribs?.['aria-selected'] ?? false;
+		attribs['class'] = this.namespace + ' mel-html-tab';
+		attribs['data-tabnamespace'] = this.namespace;
+
+		this.onclick.push((e) => {
+			e = $(e.currentTarget);
+			MelAsync.forof($(`button.mel-html-tab.${e.data('tabnamespace')}`), async (iterator) => {
+				$(iterator).removeClass('selected').attr('aria-selected', false);
+			}, false).then(() => {
+				e.addClass('selected').attr('aria-selected', true);
+			});
+			
+			MelAsync.forof($(`mel-html-tabpanel.mel-html-tab.${e.data('tabnamespace')}`), async (iterator) => {
+				$(iterator).css('display', 'none');
+			}, false).then(() => {
+				$(`mel-html-tabpanel.mel-html-tab.${e.data('tabnamespace')}.${this.id}`);
+			});
+		});
+
+		this.onkeydown.push((event) => {
+			let tabs = $(`button.mel-html-tab.${e.data('tabnamespace')}`);
+			const key = event.keyCode;
+
+			let direction = 0;
+			switch (key) {
+				case this.keys.left:
+					direction = -1;
+					break;
+				case this.keys.right:
+					direction = 1;
+					break;
+
+				case this.keys.home:
+					$(tabs[0]).focus().click();
+					break;
+				case this.keys.end:
+					$(tabs[tabs.length-1]).focus().click();
+					break;
+			
+				default:
+					break;
+			}
+
+			if (direction !== 0)
+			{
+				for (let index = 0; index &lt; tabs.length; ++index) {
+					const element = $(tabs[index]);
+					
+					if (element.hasClass("selected") || element.hasClass("active"))
+					{
+						let id;
+						if (index + direction &lt; 0)
+							id = tabs.length - 1;
+						else if (index + direction >= tabs.length)
+							id = 0;
+						else
+							id = index + direction;
+
+						$(tabs[id]).focus().click();
+
+						break;
+					}
+				}
+			}
+		});
+
+		return super.generate(attribs);
+	}
+
+	select(selected) {
+		attribs['aria-selected'] = selected;
+		return this;
+	}
+
+	setControl(controler) {
+		this.control = controler;
+		return this;
+	}
+
+}
+class mel_tablist extends mel_html {
+	constructor(namespace, id, {
+		attribs={},
+		tabs=[],
+		label=EMPTY_STRING
+	}) {
+		super('div', attribs);
+		this._init()._setup(namespace, id, {tabs, label});
+	}
+
+	_init() {
+		/**
+		 * @type {mel_tab[]}
+		 */
+		this.tabs = [];
+		this.id = EMPTY_STRING;
+		this.label = EMPTY_STRING;
+		this.namespace = EMPTY_STRING;
+		return this;
+	}
+
+	_setup(namespace, id, {tabs=[], label=EMPTY_STRING})
+	{
+		this.id = id;
+		this.tabs = tabs;
+		this.label = label;
+		this.namespace = namespace;
+		return this;
+	}
+
+	generate(attribs={}){
+		attribs['role'] = 'tablist';
+		let $tablist = super.generate(attribs);
+
+		for (let index = 0, len = this.tabs.length; index &lt; len; ++index) {
+			this.tabs[index].generate().appendTo($tablist);
+		}
+
+		new mel_html('label', {for:this.id, class:'sr-only'}).generate().appendTo($tablist);
+
+		return $tablist;
+	}
+
+	/**
+	 * 
+	 * @returns {mel_tab}
+	 */
+	getSelectedTab() {
+		return Enumerable.from(this.tabs).where(x => x.attribs['aria-selected'] === true).firstOrDefault();
+	}
+
+	/**
+	 * 
+	 * @param {mel_tab} tab 
+	 */
+	addTab(tab) {
+		this.tabs.push(tab.setControl(this.pannel));
+		return this;
+	}
+}
+
+class mel_tabpanel extends mel_html {
+	constructor(namespace, tab, {attribs={}, contents=EMPTY_STRING, jquery_content = null}) {
+		super('div', attribs, contents);
+		this._init()._setup(tab, {jquery_content});
+	}
+
+	_init() {
+		this.namespace = EMPTY_STRING;
+		/**
+		 * @type {mel_tab}
+		 */
+		this.tab = null;
+		/**
+		 * @type {mel_html[]}
+		 */
+		this.pannels = [];
+		this.jcontent = null;
+		return this;
+	}
+
+	_setup(namespace, tab, {jquery_content = null}) {
+		this.tab = tab;
+		this.jcontent = jquery_content;
+		this.namespace = namespace;
+		return this;
+	}
+
+	generate(attribs={}){
+		attribs['aria-labelledby'] = this.tab.id;
+		attribs['tabindex'] = 0;
+		attribs['class'] = `${this.tab.id} ${this.namespace} mel-html-tabpanel`;
+		let $generated = super.generate(attribs);
+
+		if (!!this.jcontent) this.jcontent.appendTo($generated);
+
+		return $generated;
+	}
+}
+
+class mel_tabs extends mel_html {
+	constructor(id, label, {attribs={}, tablist_attribs={}}) {
+		super('div', attribs);
+		this._init()._setup(id, label, {tablist_attribs});
+	}
+
+	_init() {
+		/**
+		 * @type {mel_tablist}
+		 */
+		this.tabs = null;
+		/**
+		 * @type {mel_tabpanel[]}
+		 */
+		this.contents = null;
+		return this;
+	}
+
+	_setup(id, label, {tablist_attribs={}}) {
+		this.tabs = new mel_tablist(id, {label, attribs:tablist_attribs})
+		this.contents = [];
+		return this;
+	}
+
+	add(id, tabtext, pannel, selectedTab = false) {
+		let tab = new mel_tab(id, {}, tabtext);
+		let mel_pannel = new mel_tabpanel(tab, {jquery_content:pannel});
+		this.tabs.addTab(tab.select(selectedTab).setControl(mel_pannel));																																																					
+		this.contents.push(mel_pannel);
+		tab = (mel_pannel = null, null);
+		return this;
+	}
+
+	generate({attribs={}, tablist_attribs={}}) {
+		let $generated = super.generate(attribs);
+		this.tabs.generate(tablist_attribs).appendTo($generated);
+
+		const selected_tab = this.tabs.getSelectedTab();
+		
+		for (let index = 0, len = this.contents.length, content; index &lt; len; ++index) {
+			const element = this.contents[index];
+			content = this.contents.generate();
+
+			if (!!selected_tab &amp;&amp; selected_tab.id === element.tab.id) content.css('display', '');
+			else content.css('display', 'none');
+
+			content.appendTo($generated);
+		}
+
+		return $generated;
+
+	}
+
+}
+
+class mel_iframe extends mel_html {
+	constructor(src, attribs = {}) {
+		super('iframe', attribs);
+		this.src = src;
+		this.onload = new MelEvent();
+	}
+
+	generate(extra_attribs = {}) {
+		if (Array.isArray(extra_attribs)) extra_attribs = {};
+
+		extra_attribs[mel_html.ATTRIB_NO_MULTI_BALISE] = true;
+		extra_attribs.src = this.src;
+		return super.generate(extra_attribs).on('load', (e) => {
+			this.onload.call(e);
+		});
+	}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Color.html">Color</a></li><li><a href="ColorRGBA.html">ColorRGBA</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="RotomecaEnumerable.html">RotomecaEnumerable</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 17:26:58 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

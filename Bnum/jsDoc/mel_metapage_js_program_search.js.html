@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mel_metapage/js/program/search.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mel_metapage/js/program/search.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>$(document).ready(() => {
+
+    const original_search = rcmail.env.word_searched;
+    const replaced = rcmail.env.REPLACED_SEARCH;
+
+    /**
+     * Contient les données brut d'une recherche ainsi que son html associé
+     */
+    class searchBlock {
+        /**
+         * 
+         * @param {string} type Type de la données
+         * @param {JSON} data Données brut des résultats de la recherche
+         */
+        constructor(type, data)
+        {
+            this.init().setup(type, data);
+        }
+
+        init() {
+            this.raw = [];
+            this.$block = $();
+            this.type = '';
+            return this;
+        }
+
+        setup(type, data) {
+            this.type = type;
+            this.raw = data;
+            return this;
+        }
+
+        create()
+        {
+            this.$block = $(`&lt;div data-type="${this.type}">&lt;/div>`).html(this.raw.html);
+            return this;
+        }
+
+        setParent($parent)
+        {
+            this.$block = this.$block.appendTo($parent);
+            return this;
+        }
+    }
+
+    /**
+     * Gère la page de recherche
+     */
+    class search {
+        /**
+         * 
+         * @param {string} word Mot à rechercher
+         * @param {Array&lt;string>} config Liste des urls
+         * @param {{}} otherConfigs Obsolète
+         */
+        constructor(word, config, otherConfigs = {})
+        {
+            this.init().setup(word, config);
+        }
+
+        /**
+         * Initialise la classe
+         * @returns Chaînage
+         */
+        init() {
+            this.word = '';
+            this.config = [];
+            this.blocks = {};
+            this._count = 0;
+            this.settings = {
+                $resultNumber:$('#search-result-number'),
+                $searchWord:$('#mel-serach-word'),
+                $searchInput:$('#wsp-search-input'),
+                $globaSearchInput:top.$('#barup-search-input'),
+                $body:$('.body .results'),
+                buttons:{
+                    $params:$('#mel-search-parameter-button')
+                },
+                selects:{
+                    $filter:$('#search-filter'),
+                    $filterBal:$('#search-filter-balp'),
+                    $filterBaliFolder:$("#search-filter-folder"),
+                    $order:$('#search-order')
+                }
+            };
+            return this;
+        }
+
+        /**
+         * Implémente les variables de la classe
+         * @param {string} word Mot rechercher 
+         * @param {Array&lt;string>} config Liste des urls
+         * @param {Function} then Action à faire après l'éxécution de cette fonction
+         * @returns Chaînage
+         */
+        setup(word, config, then = null)
+        {
+            this.word = word;
+            this.config = config;
+            return this._search(word, config, then);
+        }
+
+        /**
+         * Lance l'animation d'affichage du nombre de résultats dans la requête
+         * @param {number} count Nombre de résultat
+         */
+        _launch_timeout(count)
+        {   
+            //debugger;
+            this._count += count;
+            if (this._text_timeout === undefined)
+            {
+                this._current_count = this._current_count ?? 0;
+                this._text_timeout = setInterval(() => {
+                    //debugger;
+                    if (this._current_count > this._count)
+                    {
+                        clearInterval(this._text_timeout);
+                        this._text_timeout = undefined;
+                    }
+                    else this.settings.$resultNumber.html(this._current_count++);
+                }, 25);
+            }
+        }
+
+        /**
+         * Relance une recherche
+         * @param {string} word Nouveau mot à rechercher 
+         * @param {Array&lt;string>} config Liste des urls
+         * @returns Chaînage
+         */
+        research(word, config)
+        {
+            for (const key in this.blocks) {
+                if (Object.hasOwnProperty.call(this.blocks, key)) {
+                    this.blocks[key].$block.remove();
+                }
+            }
+
+            this.blocks = {};
+            this._count = 0;
+            this._current_count = 0;
+            delete this._text_timeout;
+
+            this.settings.$resultNumber.html(0);
+            this.settings.$searchWord.html(`"${word}"`);
+            this.settings.$globaSearchInput.val(word).addClass('disabled').attr("disabled", 'disabled');
+            this.settings.$searchInput.val(word).addClass('disabled').attr("disabled", 'disabled');
+
+            for (const key in this.settings.selects) {
+                if (Object.hasOwnProperty.call(this.settings.selects, key)) {
+                    const element = this.settings.selects[key];
+                    element.addClass('disabled').attr("disabled", 'disabled')
+                }
+            }
+
+            for (const key in this.settings.buttons) {
+                if (Object.hasOwnProperty.call(this.settings.buttons, key)) {
+                    const element = this.settings.buttons[key];
+                    element.addClass('disabled').attr("disabled", 'disabled')
+                }
+            }
+
+            $('.body .loading').css('display', '').find('.spinner-grow').removeClass('text-success').removeClass('text-danger');
+            $('.body .results').css('display', 'none');
+
+            return this.setup(word, config, () => {this.order().filter();});
+        }
+
+        /**
+         * Lance une recherche
+         * @param {string} word Mot à rechercher
+         * @param {Array&lt;string>} config Liste des urls
+         * @param {Function} then Action à faire après la recherche
+         * @returns Chaînage
+         */
+        _search(word, config, then = null)
+        {
+            top.rcmail.set_busy(true, 'loading');
+            const settings = this.settings;
+            let _this = this;
+            let count = 0;
+            let howManyFinished = 0;
+            for (let index = 0; index &lt; config.length; ++index) {
+                const element = config[index];
+                $.ajax({ // fonction permettant de faire de l'ajax
+                type: "GET", // methode de transmission des données au fichier php
+                url: element.replace(replaced, word), // url du fichier php
+                dataType: 'json',
+                success: async function (data) {
+                    try {        
+                        if (Array.isArray(data) &amp;&amp; data.length > 0 &amp;&amp; data[0].calendar !== undefined)
+                        {
+                            data = await SearchResultCalendar.from_array(data);
+                        }
+        
+                        if (data.datas !== undefined &amp;&amp; data.datas.length > 0)
+                        {
+                            _this._launch_timeout(data.datas.length);
+                            console.log('result',data, data.datas);
+                            _this._addBlock(data.label, data.datas);
+
+                            if (!$('.body .loading .spinner-grow').hasClass('text-danger'))
+                            {
+                                $('.body .loading .spinner-grow').addClass('text-success');
+                            }
+
+                        }
+        
+                    } catch (error) {
+                        
+                    }
+
+                    if (++howManyFinished >= config.length)
+                    {
+                        _this._showDatas();
+
+                        if (!!then) then();
+
+                        top.rcmail.set_busy(false);
+                        top.rcmail.clear_messages();
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) { // Add these parameters to display the required response
+         
+                },
+             });//});
+        
+            }
+            return this;
+        }
+
+        /**
+         * Créer un block et l'ajoute à la liste des blocks
+         * @param {string} label Label de la recherche
+         * @param {JSON} datas Données de la recherche
+         */
+        _addBlock(label, datas)
+        {
+            for (let index = 0; index &lt; datas.length; ++index) {
+                const element = datas[index];
+                
+                this.blocks[`${label}/${index}`] = new searchBlock(label, element);
+            }
+        }
+
+        /**
+         * Affiche les données
+         * @param {Function} then Action à faire après avoir afficher les données
+         */
+        _showDatas(then = null)
+        {
+            for (const key in this.blocks) {
+                if (Object.hasOwnProperty.call(this.blocks, key)) {
+                    this.blocks[key].create().setParent(this.settings.$body);
+                    this.blocks[key].$block.data('id', key);
+                }
+            }
+
+            if (this._text_timeout !== undefined)
+            {
+                setTimeout(() => {
+                    if (this._text_timeout !== undefined)
+                    {
+                        clearInterval(this._text_timeout);
+                        this.settings.$resultNumber.html(this._count);
+                    }
+                    delete this._current_count;
+                    delete this._text_timeout;
+                }, 1000);
+            }
+            else {
+                delete this._current_count;
+                delete this._text_timeout;
+            }
+
+            this.settings.$globaSearchInput.removeClass('disabled').removeAttr("disabled");
+            $("#layout-content .disabled").removeClass('disabled').removeAttr("disabled");
+            $('.body .loading').css("display", 'none');
+            $('.body .results').css('display', '');
+        }
+
+        /**
+         * Récupère le nombre de résultats de la recherche
+         * @returns {number} Nombre de résultats
+         */
+        count() {
+            return this._count ?? 0;
+        }
+
+        /**
+         * Ordonne les résultats
+         * @returns CHaînage
+         */
+        order() {
+            let _enum = Enumerable.from(this.blocks);//.toJsonDictionnary(x => x.key, x => x.value);
+            let order;
+
+            if (this.settings.selects.$order.val() === 'asc') order = _enum.orderBy(x => moment(Enumerable.from(x.value.raw).where(w => w.key === 'datas').select(s => s.value.date).toArray()[0] || moment.max()));
+            else order = _enum.orderByDescending(x => moment(Enumerable.from(x.value.raw).where(w => w.key === 'datas').select(s => s.value.date).toArray()[0] || moment().subtract(moment().year(), 'y')));
+
+            const ordered = order.toJsonDictionnary(x => x.key, x => x.value);
+            for (const key in ordered) {
+                if (Object.hasOwnProperty.call(ordered, key)) {
+                    this.blocks[key].$block.remove();
+                    this.blocks[key].create().setParent(this.settings.$body);
+                    this.blocks[key].$block.data('id', key);
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Filtre les résultats
+         * @returns Chaînage
+         */
+        filter() {
+            const filter = this.settings.selects.$filter.val();
+            const filter_bal = this.settings.selects.$filterBal.val();
+            const filter_folder = this.settings.selects.$filterBaliFolder.val();
+            const mail = rcmail.gettext('mail', 'mel_metapage');
+            const isMail = filter === mail;
+            let count = 0;
+            
+            for (const key in this.blocks) {
+                if (Object.hasOwnProperty.call(this.blocks, key)) {
+                    const element = this.blocks[key];
+
+                    if (this._filter_action(element, key, filter, filter_bal, filter_folder, isMail)) ++count;
+                }
+            }
+
+            if (this._text_timeout === undefined)
+            {
+                this.settings.$resultNumber.html(count);
+            }
+            else {
+                let interval = setInterval(() => {
+                    if (this._text_timeout === undefined)
+                    {
+                        clearInterval(interval);
+                        this.settings.$resultNumber.html(count);
+                    }
+                }, 100);
+            }
+
+            switch (filter) {
+                case mail:
+                    $("#folder-balp").css('display', '');
+                    switch (filter_bal) {
+                        case 'bali':
+                            $("#folder-filter").css('display', '');
+                            break;
+                    
+                        default:
+                            $("#folder-filter").css('display', 'none');
+                            break;
+                    }
+                    break;
+            
+                default:
+                    $("#folder-filter").css('display', 'none');
+                    $("#folder-balp").css('display', 'none');
+                    break;
+            }
+
+            return this;
+        }
+
+        /**
+         * Gère si un block doit être affiché ou non.
+         * @param {searchBlock} element Block en cours 
+         * @param {string} key Clé du block 
+         * @param {string} filter Filtre en cous
+         * @param {string} filter_bal Filtre sur bal en cours
+         * @param {string} filter_bali_folder Filtre sur dossier de la bali en cours
+         * @param {Boolean} isMail Si on filtre sur les mails
+         * @param {boolean} include La vérification passe par une inclusion ou une égalitée ?
+         * @returns {boolean} Block affiché ou non
+         */
+        _filter_action(element, key, filter, filter_bal, filter_bali_folder, isMail, include = true)
+        {
+            let showed = false;
+
+            //Pas de recherche
+            if (filter === 'all') 
+            {
+                element.$block.css('display', '');
+                showed = true;
+            }
+            else //Recherche spécifique
+            {
+                if (isMail &amp;&amp; filter_bal !== 'all') { //Recherche sur la bali ou les balp
+                    if (filter_bal === 'bali') { //Recherche sur la bali
+                        if (filter_bali_folder === 'all') showed = this._filter_action(element, key, `${rcmail.gettext('mail', 'mel_metapage')}/INBOX`, 'all', 'all', false, true);
+                        else { //Recherche sur une dossier de la bali
+                            if (key.includes(`${rcmail.gettext('mail', 'mel_metapage')}/INBOX`) &amp;&amp; element.raw.datas.folder === filter_bali_folder) 
+                            {
+                                element.$block.css('display', '');
+                                showed = true;
+                            }
+                            else element.$block.css('display', 'none');
+                        }
+                    }
+                    //Recherche sur une balp
+                    else showed = this._filter_action(element, key, `${rcmail.gettext('mail', 'mel_metapage')}/Boite partag&amp;AOk-e/${filter_bal.split('.-.')[1]}`, 'all', 'all', false, true);
+                }
+                //Recherche tout les mails + autres
+                else if ((include ? !key.includes(filter) : key !== filter)) element.$block.css('display', 'none');
+                else 
+                {
+                    element.$block.css('display', '');
+                    showed = true;
+                }
+            }
+
+            return showed;
+        }
+
+        openParams() {
+
+            const paramUrl = mel_metapage.Functions.url('settings', 'edit-prefs', {_section:'globalsearch', _framed:1});
+            //'https://roundcube.ida.melanie2.i2/?_task=settings&amp;_action=edit-prefs&amp;_section=globalsearch&amp;_framed=1';
+
+            let modal;
+
+            let $html = $(`&lt;iframe style='width:100%;min-height:300px' src=${paramUrl}>&lt;/iframe>`).on('load', (e) => {
+                $('#search-param-loading').css('display', 'none');
+                console.log(e, 'e');
+                e = $(e.currentTarget);      
+                e[0].contentWindow.$('.formbuttons button').css('display', 'none');
+                if (rcmail.env.params_updated === true)
+                {
+                    delete rcmail.env.params_updated;
+                    this.settings.$globaSearchInput.addClass('disabled').attr("disabled", 'disabled');
+                    modal.close();
+                    rcmail.set_busy(true, 'loading');
+                    window.location.href = window.location.href.replace(original_search, this.settings.$searchInput.val());
+                }        
+            });
+
+            $html = $(`&lt;div>&lt;center id=search-param-loading>&lt;span class='spinner-grow'>&lt;/span>&lt;/center>&lt;/div>`).append($html);
+
+            const config = new GlobalModalConfig(rcmail.gettext('search_settings', 'mel_metapage'), 'default', $html);
+            modal = new GlobalModal('globalModal', config);
+            modal.footer.buttons.save.click(() => {
+                rcmail.env.params_updated = true;
+                modal.contents.find('iframe')[0].contentWindow.$('.formbuttons button').click();
+            });
+            modal.show();
+            console.log('modal', modal);
+        }
+    }
+
+    if (Enumerable.from(rcmail.env.mm_search_config).where(x => x.includes('search_mail')).any())
+    {
+        const base = Enumerable.from(rcmail.env.mm_search_config).where(x => x.includes('search_mail')).first();
+        for (const key in rcmail.env.shared_mailboxes) {
+            if (Object.hasOwnProperty.call(rcmail.env.shared_mailboxes, key)) {
+                const element = rcmail.env.shared_mailboxes[key];
+                rcmail.env.mm_search_config.push(`${base}&amp;_mbox=${encodeURIComponent(`Boite partag&amp;AOk-e/${key.split('.-.')[1]}`)}`);
+            }
+        }
+    }
+
+    search.search = new search(rcmail.env.word_searched, rcmail.env.mm_search_config);
+
+    search.search.settings.selects.$order.on('change', () => {
+        search.search.order().filter();
+    });
+
+    search.search.settings.selects.$filter.on('change', () => {
+        search.search.filter();
+    });
+
+    search.search.settings.selects.$filterBal.on('change', () => {
+        search.search.filter();
+    });
+
+    search.search.settings.selects.$filterBaliFolder.on('change', () => {
+        search.search.filter();
+    });
+
+    search.search.settings.$searchInput.on('change', () => {
+        rcmail.command('mel.search', {word:search.search.settings.$searchInput.val()});
+    });
+
+    search.search.settings.buttons.$params.click(() => {
+        search.search.openParams()
+    })
+
+    rcmail.register_command('mel.search', (datas) => {
+        const word = datas?.word ?? search.search.word;
+        const config = datas.config ?? search.search.config;
+
+        search.search.research(word, config);
+    }, true);
+
+    top._current_search = search.search;
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Color.html">Color</a></li><li><a href="ColorRGBA.html">ColorRGBA</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="RotomecaEnumerable.html">RotomecaEnumerable</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 17:26:58 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

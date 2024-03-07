@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mel_metapage/js/lib/calendar/event/parts/guestspart.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mel_metapage/js/lib/calendar/event/parts/guestspart.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { MelEnumerable } from "../../../classes/enum.js";
+import { EMPTY_STRING } from "../../../constants/constants.js";
+import { BnumException } from "../../../exceptions/bnum_base_exceptions.js";
+import { MelHtml } from "../../../html/JsHtml/MelHtml.js";
+import { BnumEvent } from "../../../mel_events.js";
+import { Mel_Promise } from "../../../mel_promise.js";
+import { FreeBusyGuests } from "./guestspart.free_busy.js";
+import { FakePart, Parts } from "./parts.js";
+import { TimePartManager } from "./timepart.js";
+
+class GuestPartFieldException extends BnumException {
+    constructor(part, $field) {
+        super(part, `Le champ ${$field.attr('id') || 'sans identifiant'} ne possède pas de parent !`);
+        this.$field = null;
+        Object.defineProperty(this, '$field', {
+            get() { return $field; }
+        });
+    }
+}
+
+class GuestButton extends Parts {
+    constructor($button) {
+        super($button, Parts.MODE.click);
+        this.clicked = new BnumEvent();
+        this._state = false;
+    }
+
+    onUpdate(){
+        this._state = !this._state;
+
+        if (this._state) this._$field.find('span').html('expand_less');
+        else this._$field.find('span').html('expand_more');
+    }
+
+    onClick(...args) {
+        this.clicked.call(!this._state);
+        this.onUpdate();
+    }
+
+    click() {
+        this.onClick();
+    }
+}
+
+class Guest {
+    constructor(name, email) {
+        this._init()._setup(name, email);
+    }
+
+    _init() {
+        this.name = EMPTY_STRING;
+        this.email = EMPTY_STRING;
+
+        return this;
+    }
+
+    _setup(name, email) {
+        Object.defineProperties(this, {
+            name: {
+                get() { return name.replaceAll('\"', EMPTY_STRING); }
+            },
+            email: {
+                get() { return email; }
+            }
+        });
+    }
+
+    async get_dispo(start, end, allDay = false) {
+        let dispo = EMPTY_STRING;
+        const date2servertime = cal.date2ISO8601;
+        const clone_date = function (date, adjust) {
+            var d = 'toDate' in date ? date.toDate() : new Date(date.getTime());
+        
+            // set time to 00:00
+            if (adjust == 1) {
+              d.setHours(0);
+              d.setMinutes(0);
+            }
+            // set time to 23:59
+            else if (adjust == 2) {
+              d.setHours(23);
+              d.setMinutes(59);
+            }
+        
+            return d;
+          };
+
+        await $.ajax({
+            type: 'GET',
+            dataType: 'html',
+            //Pamela - correction de l'url
+            url: rcmail.get_task_url("calendar&amp;_action=freebusy-status", window.location.origin + window.location.pathname),//rcmail.url('freebusy-status'),
+            data: { email: this.email, start: date2servertime(clone_date(start, allDay ? 1 : 0)), end: date2servertime(clone_date(end, allDay ? 2 : 0)), _remote: 1 },
+            success: function (status) {
+              var avail = String(status).toLowerCase();
+              //console.log('avail', avail);
+              dispo = avail;
+              //icon.removeClass('loading').addClass(avail).attr('title', rcmail.gettext('avail' + avail, 'calendar'));
+
+            },
+            error: function () {
+                dispo = 'unknown';
+              //icon.removeClass('loading').addClass('unknown').attr('title', rcmail.gettext('availunknown', 'calendar'));
+            }
+          });
+
+          return dispo;
+    }
+
+    _close_button_click(e) {
+        var $querry = $(`div.mel-attendee[data-email="${$(e.currentTarget).attr('data-parent')}"]`);
+        const add = true;
+        const attendee = this.toAttendee(Guest._GuestRole($querry.attr('data-parent'), GuestsPart.INSTANCE));
+        const attendee_list = cal.edit_update_current_event_attendee(attendee, !add);
+        $querry.remove();
+        $querry = null;
+        GuestsPart.SetAttendeesListOrganizer(attendee_list, attendee);
+        GuestsPart.UpdateFreeBusy(GuestsPart.INSTANCE._datePart);
+    }
+
+    _formated() {
+        if (!!(this.name || false)) return `${this.name} &lt;${this.email}>`;
+
+        else return this.email;
+    }
+
+    _dragStart(ev) {
+        ev = !!ev.dataTransfer ? ev : ev.originalEvent;
+        ev.dataTransfer.dropEffect = "move";
+        ev.dataTransfer.setData("text/plain", JSON.stringify({name:this.name, email:this.email, string:this.toString()}));
+
+        $('.mel-show-attendee-container, [data-linked="attendee-input"]').addClass('mel-guest-drag-started');
+    } 
+
+    _dragEnd(ev) {
+        $('.mel-show-attendee-container, [data-linked="attendee-input"]').removeClass('mel-guest-drag-started');
+    }
+
+    toHtml(event) {
+        let html = MelHtml.start
+        .div({class:'mel-attendee', title:this._formated(), 'data-email':this.email, 'data-name':this.name, draggable:true, ondragstart:this._dragStart.bind(this), ondragend:this._dragEnd.bind(this)})
+            .input({type:'hidden', class:'edit-attendee-reply', value:this.email, checked:'checked'})
+            .span({class:'availability'}).css({'margin-left':'5px', 'margin-right':'5px'})
+                .span({class:'availabilityicon loading'})
+                .end()
+            .end()
+            .span({class:'attendee-name'}).text(this.name || this.email).end()
+            .button({type:'button', class:'close-button btn btn-secondary for-attendee', 'data-parent':this.email, onclick:this._close_button_click.bind(this)}).removeClass('mel-button').removeClass('no-button-margin').removeClass('no-margin-button').icon('close').end().end()
+        .end().generate();
+
+        this.get_dispo(event.start, event.end, event.AllDay).then((dispo) => {
+            html.find('.availabilityicon').removeClass('loading').addClass(dispo).attr('title', rcmail.gettext('avail' + dispo, 'calendar'));
+        });
+
+        return html;
+    }
+
+    toString() {
+        return this._formated();
+    }
+
+    toAttendee(role = 'REQ-PARTICIPANT'){
+        return {
+            role,
+            name:this.name,
+            email:this.email
+        }
+    }
+
+    /**
+     * 
+     * @param {*} $attendee 
+     * @param {GuestsPart} parent 
+     */
+    static From($attendee, parent) {
+        return {name:$attendee.attr('data-name'), email:$attendee.attr('data-email'), role:Guest._GuestRole($attendee.attr('data-parent'), parent)};
+    }
+
+    static async GetDispo($attendee, start, end, allDay = false) {
+        const email = $attendee.attr('data-email');
+
+        return await (new Guest(EMPTY_STRING, email)).get_dispo(start, end, allDay);
+    }
+
+    static async UpdateDispo($attendee, start, end, allDay = false) {
+        let $avail = $attendee.find('.availabilityicon');
+        let tmp = MelEnumerable.from($avail[0].classList).toArray();
+        for (const iterator of tmp) {
+            console.log('it',$attendee.attr('data-email'), iterator, 'availabilityicon' !== iterator);
+            if (!['availabilityicon', 'loading'].includes(iterator)) $avail.removeClass(iterator);
+        }
+
+        $avail.attr('title', EMPTY_STRING).addClass('loading');
+
+        const dispo = await this.GetDispo($attendee, start, end, allDay);
+        console.log('it after', dispo);
+        $avail.addClass(dispo).removeClass('loading').attr('title', rcmail.gettext('avail' + dispo, 'calendar'));
+
+        return dispo;
+    }
+
+    static _GuestRole(id, parent) {
+        let role = EMPTY_STRING;
+
+        switch (id) {
+            case null:
+            case parent._$fakeField.attr('id'):
+                role = 'REQ-PARTICIPANT';
+                break;
+
+            default:
+                role = 'OPT-PARTICIPANT';
+                break;
+
+            case parent._$animators.attr('id'):
+                role = 'CHAIR';
+                break;
+        }
+
+        return role;
+    }
+
+}
+
+export class GuestsPart extends FakePart{
+    /**
+     * 
+     * @param {*} $addInput 
+     * @param {*} $neededInput 
+     * @param {*} $optionalInput 
+     * @param {*} $animatorsInput 
+     * @param {*} $switchButton 
+     * @param {TimePartManager} datePart 
+     */
+    constructor($addInput, $neededInput, $optionalInput, $animatorsInput, $switchButton, datePart){
+        super($addInput, $neededInput, Parts.MODE.change);
+        GuestsPart.stop = true;
+        this._$optionnals = $optionalInput;
+        this._$animators = $animatorsInput;
+        this._switchButton = new GuestButton($switchButton);
+        this._datePart = datePart;
+        this.cant_modify = false;
+
+        GuestsPart.INSTANCE = this;
+
+        const ids = {
+            start_date:this._datePart._$start_date.attr('id'),
+            end_date:this._datePart._$end_date.attr('id'),
+            start_time:this._datePart.start._$fakeField.attr('id'),
+            end_time:this._datePart.end._$fakeField.attr('id')
+        }
+
+        if (!rcmail.has_guest_dialog_attendees_save)
+        {
+            const fnc = function (date) {
+                const {start, end} = date;
+
+                let update_options = function update_options(select, value) {
+                    if ($(`#${select} [value="${value}"]`).length === 0) 
+                    {
+                        const current = moment(value, 'HH:mm');
+    
+                        for (const e of $(`#${select} option`)) {
+                            if (current &lt; moment($(e).val(), 'HH:mm')) {
+                                $(e).before($('&lt;option>').val(value).text(value));
+                                break;
+                            }
+                        }
+                    }
+                }
+    
+                GuestsPart.can = false;
+                $(`#${this.start_date}`).val(start.date).change();
+                //update_options(this.start_time, start.time);
+                TimePartManager.UpdateOption(this.start_time, start.time);
+                $(`#${this.start_time}`).val(start.time).change();
+                $(`#${this.end_date}`).val(end.date).change();
+                //update_options(this.end_time, end.time);
+                TimePartManager.UpdateOption(this.end_time, end.time);
+                $(`#${this.end_time}`).val(end.time).change();
+                update_options = null;
+                GuestsPart.can = true;
+
+                GuestsPart.INSTANCE.update_free_busy();
+            };
+
+            rcmail.addEventListener('dialog-attendees-save', fnc.bind(ids));
+
+            rcmail.has_guest_dialog_attendees_save = true;   
+        }
+
+        $('#edit-attendees-donotify').removeClass('manually-changed').off('change').on('change', (e) => {
+            //Lorsque cette checkbox à "manually-changed", le changement de cette checkbox ne pourra plus se faire automatiquement
+            if (!$('#edit-attendees-donotify').hasClass('manually-changed')) {
+                $('#edit-attendees-donotify').addClass('manually-changed');
+            }
+
+            //Désactiver les autres checkboxes
+            $('#edit-attendees-invite').prop('checked', $(e.currentTarget).prop('checked'));
+            $('input.edit-attendee-reply').prop('checked', $(e.currentTarget).prop('checked'));
+        });
+
+        if (!!rcmail.env['event_prop.mails']) {
+            $('#event-mail-add-member').off('click').on('click', (e) => {
+                const data = rcmail.env['event_prop.mails'];
+                
+                if (!!data.cc) this._$fakeField.val(`${data.cc},`).change();
+                
+                if (!!data.from) this._$fakeField.val(`${data.from},`).change();
+
+                if (!!data.to) this._$fakeField.val(`${data.to},`).change();
+            }).parent().css('display', '').addClass('d-flex');
+        } else $('#event-mail-add-member').off('click').parent().css('display', 'none').removeClass('d-flex');
+    }
+
+    init(event){
+        let it = 0;
+        const fields = [this._$fakeField, this._$optionnals, this._$animators];
+        const main_field_index = 0;
+        const cant_modify = (event?.attendees?.length || 0) > 0 &amp;&amp; !cal.is_internal_organizer(event);
+
+        $('.mel-attendee').remove();
+        $('#emel-free-busy').html('');
+
+        for (const $field of fields) {
+            if (0 === $(`[data-linked="${$field.attr('id')}"]`).length) throw new GuestPartFieldException(this, $field);
+
+            this._add_focus_if_not_exist($field);
+            rcmail.init_address_input_events($field);
+
+            if (it++ !== main_field_index) this._p_try_add_event($field, 'change', this.onChange.bind(this, $field));
+
+            this._p_try_add_event($field, 'input', this.onChange.bind(this, $field));
+
+            if (cant_modify) $field.attr('disabled', 'disabled').addClass('disabled');
+            else $field.removeAttr('disabled').removeClass('disabled');
+        }
+
+        if (0 === this._switchButton.clicked.count()) {
+            this._switchButton.clicked.push(this._on_switch.bind(this));
+        }
+
+        if ((event?.attendees?.length ?? 0) > 0) {
+            let $field;
+            for (const iterator of event.attendees) {
+                switch (iterator.role) {
+                    case 'REQ-PARTICIPANT':
+                        $field = this._$fakeField;
+                        break;
+
+                    case 'NON-PARTICIPANT':
+                    case 'OPT-PARTICIPANT':
+                        $field = this._$optionnals;
+                        break;
+
+                    case 'CHAIR':
+                        $field = this._$animators;
+                        break;
+                
+                    default:
+                        continue;
+                }
+
+                $field.before(new Guest(iterator.name, iterator.email).toHtml(event).attr('data-parent', $field.attr('id')));
+            }
+
+            $field = null;
+        }
+
+        this._switchButton._state = true;
+        this._switchButton.click();
+        $('#edit-attendees-donotify').prop('checked', false);
+
+        if (cant_modify) {
+            $('#showcontacts_attendee-input').attr('disabled', 'disabled').addClass('disabled');
+        }
+        else {
+            $('#showcontacts_attendee-input').removeAttr('disabled').removeClass('disabled');
+
+            if ((event?.attendees?.length ?? 0) > 0) {
+                $('#edit-attendees-donotify').prop('checked', true);
+                this.update_free_busy();
+            } 
+        }
+        
+        this.cant_modify = cant_modify;
+    }  
+
+    async update_free_busy() {
+        await GuestsPart.UpdateFreeBusy(this._datePart);
+    }
+
+    static async UpdateFreeBusy(timePart) {
+        if (GuestsPart.can === false) return;
+
+        if (GuestsPart.stop) GuestsPart.stop = false;
+
+        const CLASS_FULL_WIDTH = 'full-power';
+        const start = timePart.date_start;
+        const end = timePart.date_end;
+        const attendees = MelEnumerable.from($('.mel-attendee')).select(x => Guest.From($(x), GuestsPart.INSTANCE)).aggregate([
+            this.GetMe().toAttendee()
+        ]).toArray();
+
+        if (attendees.length > 1 &amp;&amp; !GuestsPart.INSTANCE.cant_modify) {
+            let $main_div = $('#emel-free-busy').addClass(CLASS_FULL_WIDTH).html($('&lt;div class="absolute-center">&lt;span class="spinner-border">&lt;span class="sr-only">Loading...&lt;/span>&lt;/span>&lt;/div>'));
+            let promise = new Mel_Promise(async () => await new FreeBusyGuests().load_freebusy_data({start, end, attendees}));
+
+            while (promise.isPending()) {
+                await Mel_Promise.Sleep(10);
+
+                if (GuestsPart.stop) {
+                    $('#emel-free-busy').removeClass(CLASS_FULL_WIDTH).html('');
+                    GuestsPart.stop = false;
+                    console.info('Stopped !');
+                    return;
+                }
+            }
+
+            const slots = await promise;
+            promise = null;
+            let $find_next = MelHtml.start        
+            .button({class:'slot', type:'button', onclick:() => $('#edit-attendee-schedule').click()}).css('height', '100%')
+                .text("Trouver d'autres disponibilités")
+            .end().generate();
+
+            if (slots.length > 0)
+            {
+                $('#emel-free-busy').find('.spinner-border').addClass('text-success');
+                let $div = $('&lt;div>').addClass('row');
+    
+                for (const slot of slots) {
+                    slot.generate(timePart).generate().appendTo($('&lt;div>').addClass('col-3').css('padding', '0 5px').appendTo($div));
+                }
+    
+                $find_next.appendTo($('&lt;div>').addClass('col-3').css('padding', '0 5px').appendTo($div));
+    
+                $main_div.html($div);
+            }
+            else $main_div.html($find_next.appendTo($('&lt;div>').addClass('col-3').css('padding', '0 5px')));
+    
+            $('&lt;div>').addClass('dispo-freebusy-text').text('Premières disponibilité commune').css('margin-bottom', '5px').prependTo($main_div);
+        }
+        else (GuestsPart.stop = true, $('#emel-free-busy').removeClass(CLASS_FULL_WIDTH).html(EMPTY_STRING));
+    }
+
+    static GetMe() {
+        const cal = rcmail.env.calendars[$('#edit-calendar').val()];
+
+        return new Guest((cal?.owner_name || EMPTY_STRING), cal.owner_email);
+    }
+
+    onUpdate(val, $field) {
+        if (val.includes(',')) {
+            const event = cal.selected_event;
+            val = val.split(',');
+            let has_invalid_email = false;
+            let invalids = [];
+
+            for (const iterator of MelEnumerable.from(val).where(x => x.trim() !== EMPTY_STRING).select(this._slice_user_datas.bind(this))) {
+                if (iterator.email === EMPTY_STRING) {
+                    has_invalid_email = true;
+                    invalids.push(iterator);
+                    continue;
+                }
+                    //throw new GuessPartAddException(this, iterator.email);
+                
+                if (iterator.email === GuestsPart.GetMe().email) continue;
+
+                if (0 === $(`div.mel-attendee[data-email="${iterator.email}"`).length) {
+                    var $attendee_field = $attendee_field || $(`.mel-show-attendee[data-linked="${$field.attr('id')}"]`);
+                    var guest = new Guest(iterator.name, iterator.email);
+                    var role = Guest._GuestRole($field.attr('id'), this);
+                    var attendees = cal.edit_update_current_event_attendee(guest.toAttendee(role));
+                    GuestsPart.SetAttendeesListOrganizer(attendees, guest.toAttendee(role));
+                    $field.before(guest.toHtml(event).attr('data-parent', $field.attr('id')));
+                    $attendee_field = null;
+                    guest = null;
+                }
+                else rcmail.display_message(`Le participant ${iterator.name || iterator.email} éxiste déjà !`, 'error');
+            }
+
+            if (has_invalid_email) {
+                rcmail.display_message('Impossible d\'ajouter certains participants !', 'warning');
+                console.warn('/!\\[onUpdate]', invalids);
+            }
+
+            if (!$('#edit-attendees-donotify').hasClass('manually-changed')) $('#edit-attendees-donotify').prop('checked', true);
+
+            $field.val(EMPTY_STRING);
+            $field.focus();
+
+            this.update_free_busy();
+        }
+    }
+
+    static SetAttendeesListOrganizer(list, current_guest) {
+        const add = true;
+        if (list.length === 1) {
+            if (!MelEnumerable.from(list).any(x => x.role === 'ORGANIZER'))
+            {
+                cal.edit_update_current_event_attendee(current_guest, !add);
+                cal.edit_update_current_event_attendee(this.GetMe().toAttendee('ORGANIZER'), add);
+                cal.edit_update_current_event_attendee(current_guest, add);
+            }
+            else cal.edit_clear_attendees();
+        }
+    }
+
+    _slice_user_datas(val) {
+        let data = {
+            name:EMPTY_STRING,
+            email:EMPTY_STRING
+        };
+
+        if (val.includes('&lt;')) {
+            val = val.split('&lt;');
+            data.name = val[0].trim();
+            data.email = val[1].replace('>', EMPTY_STRING).trim();
+        }
+        else if (val.includes('@')) data.email = val.trim();
+
+        return data;
+    }
+
+    onChange(...args) {
+        const [e, $field] = this._get_args(args);
+        this.onUpdate($(e.currentTarget).val(), ($field?.click ? $field : null) ?? this._$fakeField);
+    }
+
+    _get_args(args) {
+        let [event, $field] = args;
+
+        if (!!event.val) {
+            return [$field, event];
+        }
+
+        return args;
+    }
+
+    _add_focus_if_not_exist($field) {
+        if (!$._data($field[0], 'events' )?.focus) $field.on('focus', (e) => {
+            $(`[data-linked="${$(e.currentTarget).attr('id')}"]`).addClass('forced-focus');
+        });
+
+        if (!$._data($field[0], 'events' )?.focusout) $field.on('focusout', (e) => {
+            $(`[data-linked="${$(e.currentTarget).attr('id')}"]`).removeClass('forced-focus');
+        });
+        return this;
+    }
+
+    _on_switch(state) {
+        if (state) {
+            this._$fakeField.attr('placeholder', 'Participants obligatoires');
+            this._$optionnals.parent().css('display', EMPTY_STRING);
+            this._$animators.parent().css('display', EMPTY_STRING);
+
+            for (const iterator of this._$fakeField.parent().find('.mel-attendee')) {
+                $(`#${$(iterator).attr('data-parent')}`).before($(iterator));
+            }
+        }
+        else {
+            this._$fakeField.attr('placeholder', 'Ajoutez des participants');
+            this._$optionnals.parent().css('display', 'none');
+            this._$animators.parent().css('display', 'none');    
+
+            const fields = [this._$optionnals, this._$animators];
+
+            for (const $field of fields) {
+                for (const iterator of $field.parent().find('.mel-attendee')) {
+                    this._$fakeField.before($(iterator));
+                }
+            }
+        }
+    }
+
+    static async UpdateDispos(start, end, allDay = false) {
+        if (!!this.UpdateDispos.promises) {
+            if (this.UpdateDispos.promises.start.format() !== start.format() || 
+                this.UpdateDispos.promises.end.format() !== end.format()   ||
+                this.UpdateDispos.promises.allDay !== allDay) await this.UpdateDispos.promises.promises;
+            else return;
+        };
+
+        let promises = [];
+        for (const iterator of $('.mel-attendee')) {
+            promises.push(Guest.UpdateDispo($(iterator), start, end, allDay));
+        }
+
+        promises = Promise.allSettled(promises);
+
+        this.UpdateDispos.promises = {promises, start, end, allDay};
+        await this.UpdateDispos.promises.promises;
+
+        this.UpdateDispos.promises = null;
+    }
+}
+
+GuestsPart.can = true;
+GuestsPart.stop = false;
+GuestsPart.event = null;
+Object.defineProperty(GuestsPart, 'event', {
+    get() {return cal.selected_event;}
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Color.html">Color</a></li><li><a href="ColorRGBA.html">ColorRGBA</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="RotomecaEnumerable.html">RotomecaEnumerable</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 17:26:58 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

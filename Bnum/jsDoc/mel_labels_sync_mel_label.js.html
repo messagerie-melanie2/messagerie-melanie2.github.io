@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mel_labels_sync/mel_label.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mel_labels_sync/mel_label.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Version:
+ * $Revision: 26 $
+ * Author:
+ * Michael Kefeder
+ * http://code.google.com/p/rcmail-thunderbird-labels/
+ */
+
+// global variable for contextmenu actions
+rcmail.tb_label = '';
+
+rcmail.options_labels = {};
+
+if (window.rcmail) {
+	rcmail.addEventListener('init', function(evt) {
+		if (rcmail.task == 'mail') {
+			if (rcmail.env.action == 'show') {
+				$('#tb_label_popup .toolbarmenu li.labels').addClass('show');
+			}
+			
+			if (['', 'index'].includes(rcmail.env.action)) {
+				rcmail.addEventListener('quick-filter.labels', (args) => {
+					const {filter, target_event} = args;
+
+					rcmail.mel_label_show_tooltip(target_event);
+				});
+			}
+
+			rcmail.addEventListener('responseafterlist', function (evt) {
+				var key = '';
+				if (rcmail.env.balp_label) {
+					$('#tb_label_popup .toolbarmenu li.labels').removeClass('show');
+					$('#messagessearchfilter option.labels').removeClass('show');
+					if (rcmail.env.mailbox.indexOf(rcmail.env.balp_label) === 0) {
+						key = rcmail.env.mailbox.split(rcmail.env.delimiter)[1];
+						key = rcmail_tb_labels_key_to_css(key);
+					}
+					else {
+						key = rcmail_tb_labels_key_to_css(rcmail.env.username);
+					}
+				}
+				else {
+					key = rcmail_tb_labels_key_to_css(rcmail.env.username);
+				}
+
+				if (Enumerable.from(rcmail.options_labels).count() == 0)
+				{
+					$('#searchfilter option.labels').each((index, elem) => {
+							const labelKey = Enumerable.from(elem.classList).toArray().join("."); 
+
+							if (rcmail.options_labels[labelKey] === undefined)
+								rcmail.options_labels[labelKey] = [];
+
+							rcmail.options_labels[labelKey].push(elem.outerHTML);
+
+							if (!$(elem).hasClass(key))
+								$(elem).remove();
+					});
+				}
+				else {
+					let tmpQuerry = $('#searchfilter');//.html("");
+	
+					$('#searchfilter option.labels').remove();
+
+					if (rcmail.options_labels[`labels.${key}`] !== undefined &amp;&amp; rcmail.options_labels[`labels.${key}`])
+					{
+						for (const objectKey in rcmail.options_labels[`labels.${key}`]) {
+							if (Object.hasOwnProperty.call(rcmail.options_labels[`labels.${key}`], objectKey)) {
+								const element = rcmail.options_labels[`labels.${key}`][objectKey];
+								tmpQuerry.append(element);
+							}
+						}
+					}
+
+				}
+
+				$('#tb_label_popup .toolbarmenu li.labels.'+key).addClass('show');
+				$('#searchfilter option.labels.'+key).addClass('show');
+			});
+		}
+	});
+}
+
+function rcmail_tb_labels_key_to_css(key) {
+	return key
+		.replace(/\./g, '_-p-_')
+		.replace(/\$/g, '_-s-_')
+		.replace(/&amp;/g, '_-e-_')
+		.replace(/~/g, '_-t-_')
+		.replace(/\\/g, '_-q-_');
+}
+
+function rcmail_tb_label_menu(p)
+{
+	if (typeof rcmail_ui == "undefined")
+		rcmail_ui = UI;
+	if (!rcmail_ui.check_tb_popup())
+		rcmail_ui.tb_label_popup_add();
+	
+	// Show the popup menu with tags
+	// -- skin larry vs classic
+	if (typeof rcmail_ui.show_popupmenu == "undefined")
+		rcmail_ui.show_popup('tb_label_popup');
+	else
+		rcmail_ui.show_popupmenu('tb_label_popup');
+
+	return false;
+}
+
+/**
+* Shows the colors based on flag info like in Thunderbird
+*/
+function rcm_tb_label_insert(uid, row)
+{
+	var message = rcmail.env.messages[uid];
+	
+	if (message.flags &amp;&amp; message.flags.tb_labels)
+	{
+		var html = "";
+		var rowobj = $(row.obj);
+		for (idx in message.flags.tb_labels) {
+			rowobj.addClass('label_' + message.flags.tb_labels[idx].replace('~', ''));
+			html += `&lt;span class="text_${'label_' + message.flags.tb_labels[idx].replace('~', '')}">${rcmail.env.labels_translate[message.flags.tb_labels[idx].replace('~', '')]}&lt;/span>`;
+		}
+		if (html !== "")
+			rowobj.find("td.subject").prepend(`&lt;td class="labels">${html}&lt;/td>`);
+	}
+}
+
+/**
+* Shows the submenu of thunderbird labels
+*/
+function rcm_tb_label_submenu(p)
+{
+	if (typeof rcmail_ui == "undefined")
+		rcmail_ui = UI;
+	// setup onclick and active/non active classes
+	rcm_tb_label_create_popupmenu();
+	
+	// -- create sensible popup, using roundcubes internals
+	if (!rcmail_ui.check_tb_popup())
+		rcmail_ui.tb_label_popup_add();
+	// -- skin larry vs classic
+	if (typeof rcmail_ui.show_popupmenu == "undefined")
+		rcmail_ui.show_popup('tb_label_popup');
+	else
+		rcmail_ui.show_popupmenu('tb_label_popup');
+	return false;
+}
+
+function rcm_tb_label_flag_toggle(flag_uids, toggle_label, onoff)
+{
+	var headers_table = $('.message-partheaders table.headers-table');
+	var preview_frame = $('#messagecontframe');
+	var header_preview_all_table = $('.message-partheaders table.headers-table');
+	
+	// preview frame exists, simulate environment of single message view
+	if (preview_frame.length)
+	{
+		tb_labels_for_message = preview_frame.get(0).contentWindow.tb_labels_for_message;
+		headers_table = preview_frame.contents().find('.message-partheaders table.headers-table');
+		header_preview_all_table = preview_frame.contents().find('.message-partheaders table.headers-table');
+	}
+	
+	if (!rcmail.message_list
+		&amp;&amp; !headers_table)
+		return;
+	
+	if (rcmail.env.labels_translate[toggle_label]) {
+		var label_name = rcmail.env.labels_translate[toggle_label];
+	} else {
+		var label_name = toggle_label;
+	}
+	// for single message view
+	if (headers_table.length &amp;&amp; flag_uids.length)
+	{
+		if (onoff == true)
+		{
+			// adcolor
+			headers_table.addClass('label_' + toggle_label.replace('~', ''));
+			// add to flag list
+			tb_labels_for_message.push(toggle_label);
+			
+			if (header_preview_all_table.find('tr td.label').length > 0) {
+				header_preview_all_table.find('tr td.label').html(header_preview_all_table.find('tr td.label').html() + ', &lt;span class="label_' + toggle_label + '">' + label_name + '&lt;/span>'); 
+			} else {
+				if (header_preview_all_table.length > 0) {
+					header_preview_all_table.append('&lt;tr>&lt;td class="header-title">'+rcmail.gettext('mel_labels_sync.labels')+'&lt;/td>&lt;td class="header label">&lt;span class="label_' + toggle_label.replace('~', '') + '">' + label_name + '&lt;/span>&lt;/td>&lt;/tr>');
+				}
+			}
+		}
+		else
+		{
+			// remove color
+			headers_table.removeClass('label_' + toggle_label);
+			var pos = jQuery.inArray(toggle_label, tb_labels_for_message);
+			if (pos > -1)
+				tb_labels_for_message.splice(pos, 1);
+			
+			if (header_preview_all_table.find('tr td.label').length > 0) {
+				header_preview_all_table.find('tr td.label').html(header_preview_all_table.find('tr td.label').html().replace('&lt;span class="label_' + toggle_label.replace('~','') + '">' + label_name + '&lt;/span>' + ', ','').replace(', ' + '&lt;span class="label_' + toggle_label.replace('~','') + '">' + label_name + '&lt;/span>','').replace('&lt;span class="label_' + toggle_label.replace('~','') + '">' + label_name + '&lt;/span>',''));
+				if (header_preview_all_table.find('tr td.label').html() == "") {
+					header_preview_all_table.find('tr td.label').parent().remove();
+				}
+			}
+		}
+		// exit function when in detail mode. when preview is active keep going
+		if (!rcmail.env.messages)
+			return;
+	}
+	jQuery.each(flag_uids, function (idx, uid) {
+		if (uid == -1) {
+			return;
+		}
+		var message = rcmail.env.messages[uid];
+		var row = rcmail.message_list.rows[uid];
+		if (onoff == true)
+		{				
+			// add colors
+			var rowobj = $(row.obj);
+			rowobj.addClass('label_' + toggle_label.replace('~',''));
+			// add to flag list
+			message.flags.tb_labels.push(toggle_label);
+
+			if (rowobj.find('td.labels').length === 0 &amp;&amp; rowobj.find('span.labels').length === 0)
+				rowobj.find("td.subject").prepend(`&lt;td class="labels">&lt;/td>`)
+			
+			if (rowobj.find('td.labels').length > 0) {
+				if (rowobj.find('td.labels').html() == "") {
+					rowobj.find('td.labels').html(`&lt;span class="text_${'label_' + toggle_label.replace('~','')}">${label_name}&lt;/span>`);
+				} else {
+					rowobj.find('td.labels').append(`&lt;span class="text_${'label_' + toggle_label.replace('~','')}">${label_name}&lt;/span>`);
+				}
+			}
+			else if (rowobj.find('span.labels').length > 0) {
+				if (rowobj.find('span.labels').html() == "") {
+					rowobj.find('span.labels').html(label_name);
+				} else {
+					rowobj.find('span.labels').html(rowobj.find('span.labels').html() + ', ' + label_name);
+				}
+			}
+		}
+		else
+		{
+			// remove colors
+			var rowobj = $(row.obj);
+			rowobj.removeClass('label_' + toggle_label.replace('~',''));
+			// remove from flag list
+			var pos = jQuery.inArray(toggle_label, message.flags.tb_labels);
+			if (pos > -1)
+				message.flags.tb_labels.splice(pos, 1);
+			
+			if (rowobj.find('td.labels').length > 0) {
+				rowobj.find('td.labels').html(rowobj.find('td.labels').html().replace(`&lt;span class="text_${'label_' + toggle_label.replace('~','')}">${label_name}&lt;/span>`, ''));
+			}
+			else if (rowobj.find('span.labels').length > 0) {
+				rowobj.find('span.labels').text(rowobj.find('span.labels').text().replace(label_name + ', ','').replace(', ' + label_name,'').replace(label_name,''));
+			}
+
+			if (rowobj.find('td.labels').children().length === 0)
+				rowobj.find('td.labels').remove();
+		}
+	});
+}
+
+function rcm_tb_label_flag_msgs(flag_uids, toggle_label)
+{
+	rcm_tb_label_flag_toggle(flag_uids, toggle_label, true);
+}
+
+function rcm_tb_label_unflag_msgs(unflag_uids, toggle_label)
+{
+	rcm_tb_label_flag_toggle(unflag_uids, toggle_label, false);
+}
+
+// helper function to get selected/active messages
+function rcm_tb_label_get_selection()
+{
+	var selection = rcmail.message_list ? rcmail.message_list.get_selection() : [];
+
+	if (selection.length === 0 &amp;&amp; !!rcmail.env.itip_current_mail_selected)
+	{
+		selection = rcmail.env.itip_current_mail_selected;
+		delete rcmail.env.itip_current_mail_selected;
+	}
+
+	if (selection.length == 0 &amp;&amp; rcmail.env.uid) selection = [rcmail.env.uid, ];
+	
+	return selection;
+}
+
+function rcm_tb_label_create_popupmenu()
+{
+	if ($('div#tb_label_popup').length > 0
+			&amp;&amp; !$('div#tb_label_popup').is(":visible")) {
+		$('div#tb_label_popup').attr('data-sticky', 'true');
+		if ($('div#tb_label_popup ul').length === 0) {
+			rcmail.http_request('plugin.thunderbird_labels.update_list_labels');
+		}
+	}	
+}
+
+function rcm_tb_label_init_onclick(selector = '#tb_label_popup li a', closeAction = () => rcmail.hide_menu('tb_label_popup'))
+{
+	if ($(selector).length) {
+		$(selector).each(function() {
+			var cur_a = $(this);
+			
+			// TODO check if click event is defined instead of unbinding?
+			$(this).unbind('click');
+			$(this).click(function() {
+				var toggle_label;// = $(this).parent().attr('id').split('_b_')[0];
+				try {
+					toggle_label = $(this).parent().attr('id').split('_b_')[0];
+				} catch (error) {
+					toggle_label = Enumerable.from(this.classList).where(x => x.includes("label_")).first().replace("label_", "");
+				}
+				rcmail.mel_label_toggle(toggle_label);
+			});
+		});
+	}
+}
+
+function rcmail_ctxm_label(command, el, pos)
+{
+	// my code works only on selected rows, contextmenu also on unselected
+	// so if no selection is available, use the uid set by contextmenu plugin
+	var selection = rcmail.message_list ? rcmail.message_list.get_selection() : [];
+	
+	if (!selection.length &amp;&amp; !rcmail.env.uid)
+		return;
+	if (!selection.length &amp;&amp; rcmail.env.uid)
+		rcmail.message_list.select_row(rcmail.env.uid);
+	
+	var cur_a = $('#tb_label_popup li.' + rcmail.tb_label +' a');
+	if (cur_a)
+	{
+		cur_a.click();
+	}
+	
+	return;
+}
+
+function rcmail_ctxm_label_set(which)
+{
+	// hack for my contextmenu submenu hack to propagate the selected label-no
+	rcmail.tb_label = which;
+}
+
+/**
+ * Show manage labels page as jquery UI dialog
+ */
+function show_rcube_manage_labels()
+{
+  var frame = $('&lt;iframe>').attr('id', 'managelabelsframe')
+    .attr('src', rcmail.url('settings/edit-prefs') + '&amp;_section=labels&amp;_framed=1')
+    .attr('frameborder', '0')
+    .appendTo(document.body);
+
+  var buttons = {};
+
+  frame.dialog({
+    modal: true,
+    resizable: false,
+    closeOnEscape: true,
+    title: '',
+    close: function() {
+      frame.dialog('destroy').remove();
+      window.location.reload();
+    },
+    buttons: buttons,
+    width: 660,
+    height: 500,
+    rcmail: rcmail
+  }).width(640);
+
+  // Fermer le pop up au click
+  rcmail.hide_menu('tb_label_popup');
+}
+
+// Toggle label for selection
+rcube_webmail.prototype.mel_label_toggle = function(toggle_label) {
+	var selection = rcm_tb_label_get_selection();
+	var unset_all = false;
+	var labels_list = [];
+
+	// special case flag 0 means remove all flags
+	if (toggle_label == 'label0') {
+		unset_all = true;
+		$('#tb_label_popup li.show a').each(function() {
+			if ($(this).parent().attr('id') != 'label0' 
+					&amp;&amp; $(this).attr('id') != 'rcube_manage_labels') {
+				labels_list.push($(this).parent().attr('id').split('_b_')[0]);
+			}
+		});
+	} else {
+		labels_list.push(toggle_label);
+	}
+
+	var _this = this;
+	
+	jQuery.each(labels_list, function(index, value) {
+		if (value) {
+			var toggle_label = value.toLowerCase();
+			// compile list of unflag and flag msgs and then send command
+			// Thunderbird modifies multiple message flags like it did the first in the selection
+			// e.g. first message has flag1, you click flag1, every message select loses flag1, the ones not having flag1 don't get it!
+			var first_toggle_mode = 'on';
+			if (_this.env.messages)
+			{
+				var first_message = _this.env.messages[selection[0]];
+				if (first_message.flags &amp;&amp; jQuery.inArray(toggle_label, first_message.flags.tb_labels) >= 0)
+					first_toggle_mode = 'off';
+				else
+					first_toggle_mode = 'on';
+			}
+			else // single message display
+			{
+				// flag already set?
+				if (jQuery.inArray(toggle_label, tb_labels_for_message) >= 0)
+					first_toggle_mode = 'off';
+			}
+			
+			var flag_uids = [];
+			var unflag_uids = [];
+			jQuery.each(selection, function (idx, uid) {
+					// message list not available (example: in detailview)
+					if (!_this.env.messages)
+					{
+						if (first_toggle_mode == 'on')
+							flag_uids.push(uid);
+						else
+							unflag_uids.push(uid);
+						// make sure for unset all there is the single message id
+						if (unset_all &amp;&amp; unflag_uids.length == 0)
+							unflag_uids.push(uid);
+						return;
+					}
+					var message = _this.env.messages[uid];
+					if (message.flags &amp;&amp; jQuery.inArray(toggle_label, message.flags.tb_labels) >= 0)
+					{
+						if (first_toggle_mode == 'off')
+							unflag_uids.push(uid);
+					}
+					else
+					{
+						if (first_toggle_mode == 'on')
+							flag_uids.push(uid);
+					}
+			});
+			
+			if (unset_all)
+				flag_uids = [];
+			
+			// skip sending flags to backend that are not set anywhere
+			if (flag_uids.length > 0
+					|| unflag_uids.length > 0) {
+				var str_flag_uids = flag_uids.join(',');
+				var str_unflag_uids = unflag_uids.join(',');
+				
+				var lock = _this.set_busy(true, 'loading');
+				_this.http_request('plugin.thunderbird_labels.set_flags', '_flag_uids=' + str_flag_uids + '&amp;_unflag_uids=' + str_unflag_uids + '&amp;_mbox=' + urlencode(rcmail.env.mailbox) + "&amp;_toggle_label=" + urlencode(toggle_label), lock);
+				
+				// remove/add classes and tb labels from messages in JS
+				rcm_tb_label_flag_msgs(flag_uids, toggle_label);
+				rcm_tb_label_unflag_msgs(unflag_uids, toggle_label);
+			}
+		}
+	});
+	// Fermer le pop up au click
+	try {
+		closeAction();
+	} catch (error) {
+		
+	}
+	//rcmail.hide_menu('tb_label_popup');
+};
+
+rcube_webmail.prototype.mel_label_show_tooltip = async function($parent) {
+//debugger;
+//	window.loadJsModule = window.loadJsModule ?? (top ?? parent).loadJsModule;
+
+	//const mel_tooltip_js = await loadJsModule('mel_metapage', 'mel_tooltip.js', '/js/lib/classes/');
+
+	let $body = $('body');
+	let $tooltip = $('body .label-tooltip');
+
+	if (0 === $tooltip.length) {
+		let $ul;
+		let tooltips = Object.keys(rcmail.env.labels_translate);
+		$tooltip = $('&lt;div id="mel-label-tooltip-dropdown" class="">&lt;/div>');
+
+		$ul = $('&lt;div class="ignore-bullet btn-group-vertical">&lt;/div>');
+		
+		for (let index = 0, len = tooltips.length, key = null, element = null; index &lt; len; ++index) {
+			key = tooltips[index];
+			element = rcmail.env.labels_translate[key];
+			
+			$ul.append(
+				$('&lt;button type="button" class="btn mel-button no-button-margin no-margin-button bckg true">&lt;/button>').data('value', key.replace('_-s-_', '$').replace('_-t-_', '~').toUpperCase()).text(element).click((e) => {
+					let $target = $(e.target);
+
+					if ($target.is('.active')) {
+						$target.removeClass('active').removeClass('background').addClass('txt');
+					}
+					else {
+						$target.addClass('active').addClass('background').removeClass('txt');
+					}
+
+					const key = $target.data('mel-label');
+					$target.addClass(`label_${key}`);
+
+					rcmail.triggerEvent('label.tooltip.click', {state:$target.is('.active'), $caller:$parent, $target});
+				}).data('mel-label', key).addClass(`label_${key} txt important`)
+				.on('mouseover', (e) => {
+					let $target = $(e.target);
+					const key = $target.data('mel-label');
+					$target.removeClass(`label_${key}`);
+				}).on('mouseout', (e) => {
+					let $target = $(e.target);
+					const key = $target.data('mel-label');
+					$target.addClass(`label_${key}`);
+				})
+			);
+		}
+		$ul.appendTo($tooltip);
+
+		$tooltip.appendTo($body);
+
+
+		$parent.addClass('label-tooltip').data('popup', 'mel-label-tooltip-dropdown');
+		UI.popup_init($parent[0]);
+
+		$parent.click();
+	}
+}
+	
+	//kMel_LuminanceRatioAAA(kMel_extractRGB('#1A2F34'), kMel_extractRGB('rgb(230, 199, 66)')) 
+
+$(document).ready(function() {
+	rcm_tb_label_init_onclick();
+	
+	// add keyboard shortcuts for normal keyboard and keypad
+	$(document).keyup(function(e) {
+		if (!($("input").is(":focus")) &amp;&amp; !($("textarea").is(":focus"))) {
+			
+			var k = e.which;
+			if ((k > 47 &amp;&amp; k &lt; 58) || (k > 95 &amp;&amp; k &lt; 106))
+			{
+				var label_no = k % 48;
+				var cur_a = $('#tb_label_popup').find('li.show.click' + label_no + ' a').click();
+			}
+		}
+	});
+	
+	// Add labels to mail template
+	if ($('#listoptions').length > 0) {
+		$('#listoptions fieldset#listoptions-columns ul.proplist').append('&lt;li>&lt;label>&lt;input type="checkbox" name="list_col[]" value="labels" /> &lt;span>'+rcmail.gettext('mel_labels_sync.labels')+'&lt;/span>&lt;/label>&lt;/li>');
+	}
+	if ($('th#rcmlabels').length > 0) {
+		$('th#rcmlabels span.labels').text(rcmail.gettext('mel_labels_sync.labels'));
+	}	
+	
+	// Add custom css
+	var css = "";
+	if (rcmail.env.ismobile) {
+		$.each(rcmail.env.labels_color, function(id, val) {
+			id = id.replace('~', '').replace(/\./g,'\\.');
+			css += "#messagelist li.label_" + id + " span.labels,\n";
+			css += "table span.label_" + id + ",\n";
+			css += ".toolbarmenu li.label_" + id + ",\n";
+			css += ".toolbarmenu li.label_" + id + " a.active\n";
+			css += "{\n";
+			css += "  color: " + val + ";\n";
+			css += "}\n";
+		});
+	} 
+	else {
+		$.each(rcmail.env.labels_color, function(id, val) {
+
+			if (val === null) val = "#737373";
+
+			const default_h = "#FFFFFF";
+			let textcolor = default_h;
+
+			try {
+				if (!mel_metapage.Functions.colors.kMel_LuminanceRatioAAA(mel_metapage.Functions.colors.kMel_extractRGB(val), mel_metapage.Functions.colors.kMel_extractRGB(textcolor)))	textcolor = 'black'; 
+			} catch (error) {
+				
+			}
+
+			id = id.replace('~', '').replace(/\./g,'\\.');
+			css += "#messagelist tr.label_" + id + " td,\n";
+			// css += "#messagelist tr.label_" + id + " td a,\n";
+			css += ".toolbarmenu li.label_" + id + ",\n";
+			css += ".toolbarmenu li.label_" + id + " a.active,\n";
+			css += "table span.label_" + id + "\n";
+			css += "{\n";
+			css += "  color: " + val + ";\n";
+			css += "}\n";
+			css += `#messagelist tr.label_${id} td.labels span.text_label_${id} {
+				color:${textcolor};
+				background-color:${val};
+				border:thin solid ${textcolor};
+			}
+
+			#messagelist tr.label_${id} td{
+				background-color:${val}20;
+				--message-list-content-selected-mail-address-color: ${textcolor};
+				--message-list-content-selected-row-background-color: ${val};
+				--message-list-content-selected-mail-subject-color: var(--message-list-content-selected-mail-address-color);
+			}
+
+			#messagelist tr.label_${id}:hover td{
+				/*--message-list-content-selected-mail-address-hover-color: ${textcolor};
+				--message-list-content-row-background-hover-color: ${val};
+				--message-list-content-selected-mail-subject-hover-color: ${textcolor};*/
+			}
+
+			.label_${id}.background {
+				color:${textcolor};
+				background-color:${val};
+			}
+
+			.label_${id}.txt {
+				color:${val};
+			}
+
+			.label_${id}.background.important {
+				color:${textcolor}!important;
+				background-color:${val}!important;
+			}
+
+			.label_${id}.txt.important {
+				color:${val}!important;
+			}
+			
+			#messagelist tr.label_${id} td.labels::before
+			{
+				text-shadow: ${textcolor} 1px 0px 0px, ${textcolor} 0.540302px 0.841471px 0px, ${textcolor} -0.416147px 0.909297px 0px, ${textcolor} -0.989993px 0.14112px 0px, ${textcolor} -0.653644px -0.756803px 0px, ${textcolor} 0.283662px -0.958924px 0px, ${textcolor} 0.96017px -0.279416px 0px;
+			}
+			`;
+			css += "#messagelist tr.selected.label_" + id + " td,\n";
+			css += "#messagelist tr.selected.label_" + id + " td a\n";
+			css += "{\n";
+			css += "  /*color: #FFFFFF;\n";
+			css += "  background-color: "+val+";\n*/";
+			css += "}\n";
+			css += `
+				html.dark-mode #messagelist tr.label_${id} td,
+				html.dark-mode #messagelist tr.selected.label_${id} td
+				{
+						color: ${val}!important;
+				}
+			`;
+		});
+
+	}
+
+	$("&lt;style type='text/css'>"+css+"&lt;/style>").appendTo("head");
+	
+	// if exists add contextmenu entries
+	if (window.rcm_contextmenu_register_command) {
+		rcm_contextmenu_register_command('ctxm_tb_label', rcmail_ctxm_label, $('#tb_label_ctxm_mainmenu'), 'moreacts', 'after', true);
+	}
+	
+	// single message displayed?
+	if (window.tb_labels_for_message)
+	{
+		jQuery.each(tb_labels_for_message, function(idx, val)
+			{
+				rcm_tb_label_flag_msgs([-1,], val);
+			}
+		);
+	}
+	
+	// add roundcube events
+	rcmail.addEventListener('insertrow', function(event) { 
+		rcm_tb_label_insert(event.uid, event.row); 
+	});
+	
+	rcmail.addEventListener('init', function(evt) {
+		rcmail.register_command('plugin.thunderbird_labels.rcm_tb_label_submenu', rcm_tb_label_submenu, true);
+		if (rcmail.message_list) {
+			rcmail.message_list.addEventListener('select', function(list) {
+				// Ne récupérer la selection qu'une seule fois (problème de perf)
+				var selection = list.get_selection();
+				$('div#tb_label_popup li a').each(function() {
+					if ($(this).attr('id') != "rcube_manage_labels") {
+						// add/remove active class
+						if (selection.length == 0)
+							$(this).removeClass('active');
+						else
+							$(this).addClass('active');
+					}
+				});
+			});
+		}
+		if (rcmail.env.action == 'show') {
+			// Ne récupérer la selection qu'une seule fois (problème de perf)
+			var selection = rcm_tb_label_get_selection();
+			$('div#tb_label_popup li a').each(function() {
+				if ($(this).attr('id') != "rcube_manage_labels") {
+					// add/remove active class
+					if (selection.length == 0)
+						$(this).removeClass('active');
+					else
+						$(this).addClass('active');
+				}
+			});
+		}
+	});
+	rcmail.addEventListener('listupdate', function() {
+		if ($('td#rcmlabels').length > 0) {
+			$('td#rcmlabels span.labels').text(rcmail.gettext('mel_labels_sync.labels'));
+		}
+	});
+	rcmail.addEventListener('responseafterplugin.thunderbird_labels.update_list_labels', function(evt) {
+		if ($('div#tb_label_popup').length > 0) {
+			// Ne récupérer la selection qu'une seule fois (problème de perf)
+			var selection = rcm_tb_label_get_selection();
+			
+			$('div#tb_label_popup').html(evt.response.html);
+			$('div#tb_label_popup li a').each(function() {
+				if ($(this).attr('id') != "rcube_manage_labels") {
+					// add/remove active class
+					if (selection.length == 0)
+						$(this).removeClass('active');
+					else
+						$(this).addClass('active');
+				}
+			});
+			rcm_tb_label_init_onclick();
+		}			
+	});
+	
+	
+	// -- add my submenu to roundcubes UI (for roundcube classic only?)
+	if (window.rcube_mail_ui) {
+		rcube_mail_ui.prototype.tb_label_popup_add = function() {
+			add = {
+				tb_label_popup:     {id:'tb_label_popup'}
+			};
+			this.popups = $.extend(this.popups, add);
+			var obj = $('#'+this.popups.tb_label_popup.id);
+			if (obj.length)
+				this.popups.tb_label_popup.obj = obj;
+			else
+				delete this.popups.tb_label_popup;
+		};
+	}
+	
+	if (window.rcube_mail_ui) {
+		rcube_mail_ui.prototype.check_tb_popup = function() {
+			// larry skin doesn't have that variable, popup works automagically, return true
+			if (typeof this.popups == 'undefined')
+				return true;
+			if (this.popups.tb_label_popup)
+				return true;
+			else
+				return false;
+		};
+	}
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Color.html">Color</a></li><li><a href="ColorRGBA.html">ColorRGBA</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="RotomecaEnumerable.html">RotomecaEnumerable</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 17:26:58 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
