@@ -5,6 +5,14 @@ title: Anatomie d'un module javascript
 
 [Retour](https://messagerie-melanie2.github.io/Bnum/Documentation/)
 
+- [Hérite de MelObject](#hérite-de-melobject)
+- [Structure ou classe utile](#structure-ou-classe-utile)
+- [Bonne pratiques](#bonne-pratiques)
+- [JsDoc](#jsdoc)
+    - [Structure](#structure)
+    - [Callback](#callback)
+    - [Lien vers JSDoc](https://jsdoc.app/)
+
 # Hérite de MelObject
 
 ```
@@ -182,15 +190,15 @@ Object.defineProperty(MaStruct, 'CONSTANT', {
 
 # Bonne pratiques
 
-On initialise les variables membres dans `_init()`.
-On assigne dans `_setup(...args)`
-et on code dans `_main(...args)`.
-La variable se nomme `main(...args)` si on hérite de `MelObject`, dans ce cas, `_init` et `_setup` seront appelé dans `main`.
+On initialise les variables membres dans `_init()`.    
+On assigne dans `_setup(...args)`.    
+et on code dans `_main(...args)`.    
+La variable se nomme `main(...args)` si on hérite de `MelObject`, dans ce cas, `_init` et `_setup` seront appelé dans `main`.     
 
 On met d'abord se qui est protéger, ensuite ce qui est privé, puis ce qui est public et enfin ce qui est constant.
 
-## JsDoc
-### Structure
+# JsDoc
+## Structure
 A la racine du plugin, définir un fichier `jsdoc.definitions.js` et y mettre : 
 
 ```
@@ -210,7 +218,7 @@ Donc, à chaque fois que l'on ajoute un module javascript, on ajoute : `@propert
 */
 ```
 
-### Callback
+## Callback
 
 ```
 /*
@@ -233,3 +241,6 @@ function where(array, callback) {
     }
 }
 ```
+
+## Lien vers JSDoc
+C'est [ici](https://jsdoc.app/)
