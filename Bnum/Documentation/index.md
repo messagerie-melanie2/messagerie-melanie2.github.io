@@ -7,7 +7,7 @@ La messagerie Mél est une intégration de plusieurs logiciels open-source, perm
 
 Voici les différentes documentations.   
 
-- [La documentation Javascript](#le-bnum-basé-sur-roundcube)
+- [La documentation Javascript](https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/)
 - [Anatomie d'un plugin php](#le-courrielleur-basé-sur-thunderbird)
 - [Anatomie d'un module javascript](#la-synchronisation-des-mobiles-basée-sur-z-push)
 - [Fonctions utiles](#la-synchronisation-caldavcarddav-basée-sur-sabredav)
