@@ -5,7 +5,7 @@ title: Anatomie d'un module javascript
 
 [Retour](https://messagerie-melanie2.github.io/Bnum/Documentation/)
 
-#Hérite de MelObject
+# Hérite de MelObject
 
 ```
 /**
@@ -83,6 +83,7 @@ MaClass extends MelObject {
     update_data(data) {
         this._data = MelEnumerable.from(data).toJsonDictionary(x => x.index, x => x.convert());
         this.rcmail().triggerEvent('MaClass.Updated', {obj:this});
+        this.trigger_event('MaClass.Updated', {obj, this});
     }
 
     /**
@@ -96,6 +97,139 @@ MaClass extends MelObject {
         //Do something
 
         return id;
+    }
+}
+```
+
+# Structure ou classe utile
+```
+/*
+* @module MaStruct
+*/
+export { MaStruct }
+
+/**
+* @class
+* @classdesc Description de la classe
+class MaStruct {
+    /**
+    * @param {...any} args Description des paramètres
+    */ 
+    constructor(...args) {
+
+    }
+
+    /**
+    * Initialise les membres de la classe
+    * @private
+    * @return {MaStruct} Chaînage
+    */
+    _init() {
+        //[...]
+        //protected
+        //private
+        //public
+        //const
+
+        return this;
+    }
+
+    /**
+    * Assigne les variables
+    * @private
+    * @param {...any} args Description des paramètres
+    * @return {MaStruct} Chaînage
+    */
+    _setup(...args) {
+        //[...]
+        return this;
+    }
+
+    /**
+    * Code principale de la classe, optionnel si inutile
+    * @param {...any} args Description des paramètres
+    * @return {MaStruct} Chaînage
+    */
+    _main(...args) {
+        //[...]
+        return this;
+    }
+
+    _p_protected_function() {}
+
+    _private_function() {}
+
+    public_function() {}
+
+    static _PrivateStaticFunction() {}
+
+    static PublicStaticFunction() {}
+}
+
+/**
+* Description de la donnée constante
+* @type {string}
+* @constant
+*/
+MaStruct.CONSTANT = 'SOMETHING';
+
+Object.defineProperty(MaStruct, 'CONSTANT', {
+    value:MaStruct.CONSTANT,
+    writable:false,
+    configurable:false
+});
+```
+
+# Bonne pratiques
+
+On initialise les variables membres dans `_init()`.
+On assigne dans `_setup(...args)`
+et on code dans `_main(...args)`.
+La variable se nomme `main(...args)` si on hérite de `MelObject`, dans ce cas, `_init` et `_setup` seront appelé dans `main`.
+
+On met d'abord se qui est protéger, ensuite ce qui est privé, puis ce qui est public et enfin ce qui est constant.
+
+## JsDoc
+### Structure
+A la racine du plugin, définir un fichier `jsdoc.definitions.js` et y mettre : 
+
+```
+/*
+* @namespace NomDuPlugin
+*/
+```
+
+Dans ce fichier, on va y définir le namespace de la documentation et les modules membres qui lui apartiennent.
+
+Donc, à chaque fois que l'on ajoute un module javascript, on ajoute : `@property {module:monmodule} monmodule`, exemple : 
+
+```
+/*
+* @namespace NomDuPlugin
+* @property {module:Main} Main
+*/
+```
+
+### Callback
+
+```
+/*
+* @callback Where
+* @param {!any} item
+* @param {!number} index
+* @return {boolean}
+*/
+
+/**
+* Description
+* @param {Array} array
+* @param {Where} callback
+* @yield {!any}
+* @generator
+function where(array, callback) {
+    let i = -1;
+    for (const item of array) {
+        if (callback(item, ++i)) yield item;
     }
 }
 ```
