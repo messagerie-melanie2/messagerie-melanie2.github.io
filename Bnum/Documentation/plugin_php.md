@@ -34,6 +34,7 @@ class MonPlugin extends bnum_plugin {
     }
 
     public function index() {
+        //Charge les données de la config pour la clé 'data'
         $data = this->rc->config->get('data', []);
         //Envoie la donnée au javascript dans rcmail.env
         $this->rc->output->set_env('data', data);
