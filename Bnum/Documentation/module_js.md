@@ -253,7 +253,7 @@ Concernant les boucles, on peut créer une variable `len` pour éviter d'avoir �
 On évite les try/catch dans une boucle.    
 `for (var i = 0, len = arrayNumbers.length; i < len; ++i) `    
 
-Les opérations basiques sont plus rapide qu'un appelle de fonction ! 
+Les opérations basiques sont plus rapide qu'un appelle de fonction !     
 `var min = Math.min(a,b);` est moins bien que `a < b ? a : b;` 
 
 Utilise ++i au lieu de i++ dans une boucle, c'est mieux  
