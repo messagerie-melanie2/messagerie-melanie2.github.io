@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: InternalWebconfScreenManager</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: InternalWebconfScreenManager</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>InternalWebconfScreenManager<span class="signature">(chat, $frame_webconf, minimise_and_maximise_buttons, ariane_size, is_framed, modes)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Gère la disposition de la visio avec le chat</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="InternalWebconfScreenManager"><span class="type-signature"></span>new InternalWebconfScreenManager<span class="signature">(chat, $frame_webconf, minimise_and_maximise_buttons, ariane_size, is_framed, modes)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Constructeur de la classe
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="WebconfChat.html">WebconfChat</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Chat de la visio</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$frame_webconf</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">$</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Frame de la visio</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minimise_and_maximise_buttons</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Boutons minimiser et maximiser</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ariane_size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Taille du chat en pixel</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>is_framed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">[DEPRECATED]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>modes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Modes additionnels</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line933">line 933</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Faire en sorte que ariane size soit une fonction et que ariane size s'adapte au menu bienvenue (Avec une width minimum)</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="AMelScreenManager.html">AMelScreenManager</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="$button_maximize"><span class="type-signature"></span>$button_maximize<span class="type-signature"> :$</span></h4>
+
+
+
+
+<div class="description">
+    Bouton "Maximiser"
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">$</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line974">line 974</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="$button_minimize"><span class="type-signature"></span>$button_minimize<span class="type-signature"> :$</span></h4>
+
+
+
+
+<div class="description">
+    Bouton "Minimiser"
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">$</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line969">line 969</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="$frame_webconf"><span class="type-signature"></span>$frame_webconf<span class="type-signature"> :$</span></h4>
+
+
+
+
+<div class="description">
+    Frame de la visio
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">$</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line964">line 964</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="chat"><span class="type-signature"></span>chat<span class="type-signature"> :<a href="WebconfChat.html">WebconfChat</a></span></h4>
+
+
+
+
+<div class="description">
+    Chat de la visio
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="WebconfChat.html">WebconfChat</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line959">line 959</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="current_mode"><span class="type-signature"></span>current_mode<span class="type-signature"> :MelEnum</span></h4>
+
+
+
+
+<div class="description">
+    Mode en cours
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">MelEnum</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AMelScreenManager.html#current_mode">AMelScreenManager#current_mode</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line986">line 986</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="ignore_correction"><span class="type-signature"></span>ignore_correction<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    Si vrai, ignore les corrections de "_button_size_correction"
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1004">line 1004</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="modes"><span class="type-signature"></span>modes<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Modes de configuration d'écrans disponible
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AMelScreenManager.html#modes">AMelScreenManager#modes</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line120">line 120</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="button_size_correction"><span class="type-signature"></span>button_size_correction<span class="signature">(key, add)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Ajout un nouveau positionnement pour le bouton "Minimiser"
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Clé de la position</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>add</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">format css (ex: XXpx, XX% etc...)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1198">line 1198</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="delete_button_size_correction"><span class="type-signature"></span>delete_button_size_correction<span class="signature">(key)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Supprime un positionnement pour le bouton "Minimiser"
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Clé à supprimer</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1206">line 1206</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="dispose"><span class="type-signature"></span>dispose<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Libère les variables
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1248">line 1248</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    /
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fullscreen"><span class="type-signature"></span>fullscreen<span class="signature">(chat_enabled)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Passe la visio en plein écran : Visio en plein + le chat
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chat_enabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Pousse un peu la visio pour que le chat soit visible.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1136">line 1136</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fullscreen_chat"><span class="type-signature"></span>fullscreen_chat<span class="signature">(chat_enabled)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Passe le chat en plein écran, avec la visio à côté
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chat_enabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">true</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">[DEPRECATED]</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1169">line 1169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getChatElement"><span class="type-signature"></span>getChatElement<span class="signature">()</span><span class="type-signature"> &rarr; {$}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Récupère la frame de chat si elle est chargée, sinon, la div de chargement
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1068">line 1068</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">$</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="get_button_size_correction"><span class="type-signature"></span>get_button_size_correction<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Récupère la position additionnel du bouton "Minimiser"
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1239">line 1239</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="minimise"><span class="type-signature"></span>minimise<span class="signature">(chat_enabled)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Passe la visio à droite. Si la visio est active, elle sera en haut, à droite
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chat_enabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Pousse un peu la visio pour que le chat soit visible.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1151">line 1151</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pixel_correction"><span class="type-signature"></span>pixel_correction<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    [DEPRECATED]Permet de prendre en compte la taille de la barre de navigation.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>Cette fonction est dépréciée évitez de l'utiliser</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1108">line 1108</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="reinit"><span class="type-signature"></span>reinit<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Réinitialise le css des différents éléments.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AMelScreenManager.html#reinit">AMelScreenManager#reinit</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1118">line 1118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="switchMode"><span class="type-signature"></span>switchMode<span class="signature">(mode)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Change le mode de disposition de l'écran
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MelEnum</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Utilisez ewsmode</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AMelScreenManager.html#switchMode">AMelScreenManager#switchMode</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1035">line 1035</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Chaîne
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateMode"><span class="type-signature"></span>updateMode<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Met à jours le mode en fonction si le chat est actif ou non
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1077">line 1077</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Chaîne
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="update_button_size"><span class="type-signature"></span>update_button_size<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Met à jour la position du bouton "Minimiser"
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="plugins_mel_metapage_js_program_webconf.js.html">plugins/mel_metapage/js/program/webconf.js</a>, <a href="plugins_mel_metapage_js_program_webconf.js.html#line1186">line 1186</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Chaîne
+</div>
+
+
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BaseStorage.html">BaseStorage</a></li><li><a href="module-Color.html">Color</a></li><li><a href="module-Log.html">Log</a></li><li><a href="module-MEL_ELASTIC_UI.html">MEL_ELASTIC_UI</a></li><li><a href="module-MelLinq.html">MelLinq</a></li></ul><h3>Namespaces</h3><ul><li><a href="MelMetapage.html">MelMetapage</a></li><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="Skins.html">Skins</a></li><li><a href="Utilities.html">Utilities</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="TEActiveMouse.html">TEActiveMouse</a></li><li><a href="TEContainerActiveClassCtrl.html">TEContainerActiveClassCtrl</a></li><li><a href="TEErrorHandler.html">TEErrorHandler</a></li><li><a href="TEHashCtrl.html">TEHashCtrl</a></li><li><a href="TEHideIfNotActiveCtrl.html">TEHideIfNotActiveCtrl</a></li><li><a href="TEOverflowCtrl.html">TEOverflowCtrl</a></li><li><a href="TEOverflowScrollCtrl.html">TEOverflowScrollCtrl</a></li><li><a href="TEOverflowTransformCtrl.html">TEOverflowTransformCtrl</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="module-BaseStorage.BaseStorage.html">BaseStorage</a></li><li><a href="module-Color-Color.html">Color</a></li><li><a href="module-Color-ColorRGBA.html">ColorRGBA</a></li><li><a href="module-Log.BnumLog.html">BnumLog</a></li><li><a href="module-MEL_ELASTIC_UI.Mel_Elastic_Storage.html">Mel_Elastic_Storage</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Advanced_Rule.html">Mel_CSS_Advanced_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Array_Rule.html">Mel_CSS_Array_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Rule.html">Mel_CSS_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Style_Sheet.html">Mel_CSS_Style_Sheet</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_Elastic.html">Mel_Elastic</a></li><li><a href="module-MelLinq-MelEnumerable.html">MelEnumerable</a></li><li><a href="module-MelLinq-MelKeyValuePair.html">MelKeyValuePair</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li><li><a href="window.TEPauseCtrl.html">TEPauseCtrl</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TEOnlyOnePlayingCtrl">TEOnlyOnePlayingCtrl</a></li><li><a href="global.html#TESessionCurrentSubtitle">TESessionCurrentSubtitle</a></li><li><a href="global.html#TESwipeCtrl">TESwipeCtrl</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#datetimepickerFactory">datetimepickerFactory</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#dkSiRuleResizeMnu">dkSiRuleResizeMnu</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#getTime">getTime</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#menuMgr">menuMgr</a></li><li><a href="global.html#menuScrollTiTask">menuScrollTiTask</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scImgMgr">scImgMgr</a></li><li><a href="global.html#scSiRuleEnsureVisible">scSiRuleEnsureVisible</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#treeMgr">treeMgr</a></li><li><a href="global.html#trigger">trigger</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#value">value</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Mar 07 2024 16:46:19 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

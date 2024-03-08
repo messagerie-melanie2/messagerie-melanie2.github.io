@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: aide/doc/stockage/lib-md/w_teMgr/teSubControllers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: aide/doc/stockage/lib-md/w_teMgr/teSubControllers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Cache ou rend visible des éléments en fonciton de leur état d'activation
+ *
+ * @param selector { string } Éléments temporels à traiter
+ * @constructor
+ */
+TEHideIfNotActiveCtrl = function (selector) {
+	this.selector = selector;
+};
+
+TEHideIfNotActiveCtrl.prototype = {
+	handle: function (element) {
+		return teMgr.matches(element, this.selector);
+	},
+
+	active: function (element) {
+		element.hidden = false;
+	},
+
+	idle: function (element) {
+		this.done(element);
+	},
+
+	done: function (element) {
+		element.hidden = true;
+	},
+};
+
+
+/**
+ * Ajoute ou enlève une classe en fonction des éléments actifs
+ *
+ * @param classesBySelector { object } Map des classes à ajouter
+ * @constructor
+ */
+TEContainerActiveClassCtrl = function (classesBySelector) {
+	this.classesBySelector = classesBySelector;
+};
+
+TEContainerActiveClassCtrl.prototype = {
+	afterUpdateState: function(ctrl) {
+		if (Array.isArray(this.classesBySelector)) {
+			var activeGroup = false;
+			for (var i=0; i&lt;this.classesBySelector.length; i++) {
+				var group = this.classesBySelector[i];
+				if (activeGroup) {
+					for (var selector in group) {
+						var klass = group[selector];
+						if (ctrl.container.classList.contains(klass)) ctrl.container.classList.remove(klass);
+					}
+				} else {
+					for (var selector in group) {
+						if (this.testClass(ctrl, selector, group[selector])) activeGroup = true;
+					}
+				}
+			}
+		} else {
+			for (var selector in this.classesBySelector) {
+				this.testClass(ctrl, selector, this.classesBySelector[selector]);
+			}
+		}
+	},
+
+	testClass: function(ctrl, selector, klass) {
+		var hasActive = ctrl.currentActives.some(function(element) { return teMgr.matches(element, selector); });
+		if (ctrl.container.classList.contains(klass)) {
+			if (!hasActive) ctrl.container.classList.remove(klass);
+		} else {
+			if (hasActive) ctrl.container.classList.add(klass);
+		}
+		return hasActive;
+	}
+};
+
+/**
+ * Gère la mise en pause du média lors de l'arrivé sur un point.
+ * Les pauses sont décomposés en étapes (les enfants)
+ *
+ * @param selector { string } Éléments temporels de type point sur lequel appliquer la pause
+ * @param hideSteps { boolean? } Permet de placer l'attribut hidden sur les étapes de la pause
+ * @constructor
+ */
+window.TEPauseCtrl = function (selector, hideSteps, exitFullscreen) {
+	this.selector = selector;
+	this.hideSteps = hideSteps || true;
+	this.exitFullscreen = exitFullscreen;
+	this.currentStep = null;
+};
+
+TEPauseCtrl.prototype = {
+	handle: function (element) {
+		return teMgr.matches(element, this.selector);
+	},
+
+	active: function (element, ctrl) {
+		if (!ctrl.media.paused &amp;&amp; document.fullscreenElement &amp;&amp; this.exitFullscreen) document.exitFullscreen();
+		ctrl.media.pause();
+		this.currentStep = element.firstElementChild;
+		if (this.currentStep) {
+			this.currentStep.classList.add('teActive');
+			if (this.hideSteps) this.currentStep.hidden = false;
+		}
+	},
+
+	idle: function (element) {
+		this.done(element);
+	},
+
+	done: function (element) {
+		for (var child = element.firstElementChild; child; child = child.nextElementSibling) {
+			child.classList.remove('teActive');
+			if (this.hideSteps) child.hidden = true;
+		}
+		this.currentStep = null;
+	},
+
+	nextStep: function () {
+		if (this.currentStep) {
+			this.currentStep.classList.remove('teActive');
+			if (this.hideSteps) this.currentStep.hidden = true;
+			var ctrl = teMgr.getController(this.currentStep);
+			this.updateOverflow(this.currentStep.parentNode, ctrl);
+
+			var next = this.currentStep.nextElementSibling;
+			if (next) {
+				next.classList.add('teActive');
+				if (this.hideSteps) next.hidden = false;
+				this.currentStep = next;
+				this.updateOverflow(this.currentStep.parentNode, ctrl);
+			}
+		}
+	},
+
+	previousStep: function () {
+		if (this.currentStep) {
+			this.currentStep.classList.remove('teActive');
+			if (this.hideSteps) this.currentStep.hidden = true;
+			var ctrl = teMgr.getController(this.currentStep);
+			this.updateOverflow(this.currentStep.parentNode, ctrl);
+			var previous = this.currentStep.previousElementSibling;
+			if (previous) {
+				previous.classList.add('teActive');
+				if (this.hideSteps) previous.hidden = false;
+				this.currentStep = previous;
+				this.updateOverflow(this.currentStep.parentNode, ctrl);
+			}
+		}
+	},
+
+	updateOverflow: function (element, ctrl) {
+		for (var i = 0; i &lt; ctrl.subControllers.length; i++) {
+			var subCtrl = ctrl.subControllers[i];
+			if (subCtrl instanceof TEOverflowCtrl &amp;&amp; subCtrl.handle(element)) {
+				subCtrl.done(element, ctrl);
+				subCtrl.active(element, ctrl);
+			}
+		}
+	},
+
+	resume: function (element) {
+		if (this.currentStep) this.currentStep.classList.remove('teActive');
+		teMgr.getController(element).media.play();
+	}
+};
+
+/**
+ *
+ * Classe de base pour la gestion de l'overflow
+ *
+ * Expose la détection de l'overflow et la gestion des transitions
+ * Attention :
+ *  - part du principe que les mutations (microtask) arrivent avant un requestAnimationFrame (macrotask)
+ *    (https://stackoverflow.com/a/25933985)
+ *  - ne gère que la première transition de la cible :
+ *    filtrer par propriété est difficile, les noms diffèrent entre les navigateurs (flex-basis sur Chrome, flex sur Safari)
+ *
+ * @param selector { string } Éléments temporels sur lequel appliquer l'overflow
+ * @param update { object? } Paramètre de gestion des transitions
+ * @param update.target { string } Éléments sur lequel observer les changements
+ * @param update.transition { boolean } Doit-on calculer les dimensions après les transitions
+ * @param update.classes { string[] } Classe sur lesquelles observer les changements
+ * @param update.disabledClasses { string[] } Classe sur lesquelles ne plus observer les changements
+ * @constructor
+ * @abstract
+ */
+TEOverflowCtrl = function (selector, update) {
+	this.selector = selector;
+	this.currentActives = new Set();
+	this.update = update;
+	// Compatibilité ascendante
+	if (update &amp;&amp; !('transition' in update)) this.update.transition = true;
+};
+
+TEOverflowCtrl.prototype = {
+	init: function(ctrl) {
+		var self = this;
+
+		if (this.update) {
+			var iE = navigator.userAgent.match("Trident");
+			self.updateDisabled = this.update.disabledClasses &amp;&amp; this.update.disabledClasses.some(function(classNames) {
+				return ctrl.container.classList.contains(classNames);
+			});
+
+			this.prevClassList = Array.prototype.slice.call(ctrl.container.classList);
+
+			if (this.update.classes) this.prevClassList = this.prevClassList.filter(function(classNames) {
+				return self.update.classes.indexOf(classNames) != -1;
+			});
+
+			this.update.target = document.querySelector(this.update.target);
+			this.transitionStarted = false;
+
+			// Ajout d'un mutation observer qui va détecté les changements de classe lié à une transition sur le container
+			this.observer = new MutationObserver(function () {
+				self.updateDisabled = self.update.disabledClasses &amp;&amp; self.update.disabledClasses.some(function(classNames) {
+					return ctrl.container.classList.contains(classNames);
+				});
+
+				var newClassList = Array.prototype.slice.call(ctrl.container.classList);
+				if (self.update.classes) newClassList = newClassList.filter(function(classNames) {
+					return self.update.classes.indexOf(classNames) != -1;
+				});
+				newClassList.sort();
+				// Comparaison de l'ancienne liste de classe avec la nouvelle
+				var classListDiff = self.prevClassList.length != newClassList.length || newClassList.some(function (classNames, i) {
+					return classNames != self.prevClassList[i];
+				});
+
+				if (classListDiff &amp;&amp; !self.updateDisabled) {
+					if (self.update.transition &amp;&amp; !iE) {
+						// Début d'une transition
+						self.transitionStarted = true;
+						self.currentActives.forEach(function (active) {
+							active.style.visibility = 'hidden';
+						});
+					} else {
+						self.testActivesOverflow();
+					}
+					self.prevClassList = newClassList;
+				}
+			});
+			this.observer.observe(ctrl.container, {"attributes": true, "attributeFilter": ["class"]});
+
+			if (self.update.transition &amp;&amp; !iE) ctrl.container.addEventListener('transitionend', function (event) {
+				if (self.transitionStarted &amp;&amp; event.target == self.update.target) {
+					// Fin d'une transition
+					self.transitionStarted = false;
+					self.testActivesOverflow(true);
+				}
+			});
+		}
+
+		this.resizeTimeout = null;
+		window.addEventListener('resize', function () {
+			if (!self.resizeTimeout) {
+				self.currentActives.forEach(function (active) {
+					active.style.visibility = 'hidden';
+				});
+			}
+			clearTimeout(self.resizeTimeout);
+			self.resizeTimeout = setTimeout(function () {
+				self.testActivesOverflow(true);
+				self.resizeTimeout = null;
+			}, 200);
+		});
+	},
+
+	handle: function (element) {
+		return teMgr.matches(element, this.selector);
+	},
+
+	active: function (element, ctrl) {
+		var self = this;
+		this.currentActives.add(element);
+
+		requestAnimationFrame(function() {
+			if (!self.transitionStarted) self.testOverflow(element);
+		})
+	},
+
+	idle: function (element, ctrl) {
+		this.done(element, ctrl);
+	},
+
+	done: function (element) {
+		this.endOverflow(element);
+		element.style.visibility = '';
+		this.currentActives.delete(element);
+	},
+
+	testOverflow: function (element) {
+		var self = this;
+
+		var style = getComputedStyle(element);
+		// IE11 can return invalid value on clientWidth and clientHeight, the calculated style is used instead
+		if (!parseInt(style.width) &amp;&amp; !parseInt(style.height)) return;
+
+		element.style.alignSelf = 'center';
+		var height = element.scrollHeight + parseInt(style.marginTop) + parseInt(style.marginBottom);
+		var width = element.scrollWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
+		var scale = Math.min(element.parentNode.clientHeight / height, element.parentNode.clientWidth / width);
+		if (scale &lt; 1) {
+			self.onOverflow(element, scale);
+		} else {
+			element.style.alignSelf = '';
+		}
+	},
+
+	testActivesOverflow: function(unhide) {
+		var self = this;
+		this.currentActives.forEach(function (active) {
+			self.endOverflow(active);
+			self.testOverflow(active);
+			if (unhide) active.style.visibility = '';
+		});
+	},
+
+	onOverflow: function (element, scale) {
+		element.classList.add('teOverflow');
+	},
+	endOverflow: function (element) {
+		element.classList.remove('teOverflow');
+	}
+};
+
+/**
+ * Gère l'overflow en redimensionnement par transformation l'élément actif
+ *
+ * Remarques : suppose que l'élément soit en flex
+ * @param selector { string } Éléments temporels sur lequel appliquer l'overflow
+ * @param transition { object? } Paramètre de gestion des transitions
+ * @param transition.target { string } Éléments sur lequel observer les transitions
+ * @constructor
+ * @extends TEOverflowCtrl
+ */
+TEOverflowTransformCtrl = function (selector, scrollThreshold, transition) {
+	TEOverflowCtrl.call(this, selector, transition);
+	this.scrollThreshold = scrollThreshold;
+};
+TEOverflowTransformCtrl.prototype = Object.create(TEOverflowCtrl.prototype);
+
+TEOverflowTransformCtrl.prototype.onOverflow = function (element, scale) {
+	if (scale &lt;= this.scrollThreshold) TEOverflowScrollCtrl.prototype.onOverflow.call(this, element, scale);
+	else {
+		element.classList.add('teOverflowTransform');
+		element.style.transform = 'scale(' + scale + ')';
+		element.style.transformOrigin = '50% 0';
+		element.style.alignSelf = 'flex-start';
+		element.style.overflow = 'visible';
+	}
+};
+
+TEOverflowTransformCtrl.prototype.endOverflow = function (element) {
+	element.classList.remove('teOverflowTransform');
+	TEOverflowScrollCtrl.prototype.endOverflow.call(this, element);
+	element.style.transform = element.style.transformOrigin = element.style.overflow = element.style.alignSelf = '';
+};
+
+/**
+ * Gère l'overflow par la mise en scroll de l'élément actif
+ *
+ * Remarques : suppose que l'élément soit en flex
+ *
+ * Remarques : suppose que l'élément soit en flex
+ * @param selector { string } Éléments temporels sur lequel appliquer l'overflow
+ * @param transition { object? } Paramètre de gestion des transitions
+ * @param transition.target { string } Éléments sur lequel observer les transitions
+ * @constructor
+ * @extends TEOverflowCtrl
+ */
+TEOverflowScrollCtrl = function (selector, transition) {
+	TEOverflowCtrl.call(this, selector, transition);
+};
+TEOverflowScrollCtrl.prototype = Object.create(TEOverflowCtrl.prototype);
+
+TEOverflowScrollCtrl.prototype.onOverflow = function (element, scale) {
+	element.classList.add('teOverflowScroll');
+	element.style.overflow = 'auto';
+	element.style.alignSelf = 'stretch';
+};
+
+TEOverflowScrollCtrl.prototype.endOverflow = function (element) {
+	element.classList.remove('teOverflowScroll');
+	element.style.overflow = element.style.alignSelf = '';
+};
+
+/**
+ * Gère la navigation par fragment
+ *
+ * @param selector { string } Éléments temporels cible ou à l'origine d'un changement de fragment
+ * @constructor
+ */
+TEHashCtrl = function (selector) {
+	this.selector = selector;
+	this.selfHashChanged = false;
+};
+
+TEHashCtrl.prototype = {
+	handle: function (element) {
+		return teMgr.matches(element, this.selector);
+	},
+
+	init: function (ctrl) {
+		var self = this;
+		window.addEventListener('hashchange', function (event) {
+			if (!self.selfHashChange) self.hashChanged(ctrl);
+		}, true);
+
+		var target = window.location.hash.substr(1);
+		this.init = true;
+		if (target) {
+			this.init = false;
+			if (ctrl.media.readyState) this.hashChanged(ctrl);
+			else ctrl.media.addEventListener('loadedmetadata', function (event) {
+				self.hashChanged(ctrl)
+			}, false);
+		}
+	},
+
+	active: function (element) {
+		if (!this.init) return;
+		var self = this;
+		this.selfHashChange = true;
+		window.location.hash = '#' + element.id;
+		window.setTimeout(function () {
+			self.selfHashChange = false;
+		}, 200)
+	},
+
+	hashChanged: function (ctrl) {
+		var target = window.location.hash.substr(1);
+		this.init = true;
+		if (target) {
+			var targetParts = target.split(',');
+			var state = null;
+			var time = null;
+			targetParts.forEach(function (targetPart) {
+				if (targetPart.indexOf('=') > 0) {
+					var param = targetPart.split('=');
+					if (param[0] == 'state') {
+						state = param[1];
+					} else if (param[0] == 't') {
+						var timeParts = param[1].split(':');
+						time = parseFloat(timeParts[timeParts.length - 1]);
+						if (timeParts.length > 1) {
+							time += parseInt(timeParts[timeParts.length - 2]) * 60;
+							if (targetParts.length > 2) {
+								time += parseInt(timeParts[0]) * 3600;
+							}
+						}
+					}
+				} else {
+					var targetElt = document.getElementById(targetPart);
+					ctrl.points.some(function (point) {
+						if (point == targetElt || point.contains(targetElt)) {
+							time = ctrl.pointsData.get(point).position;
+							return true;
+						}
+					});
+
+					if (time === null) ctrl.segments.some(function (segment) {
+						if (segment == targetElt || segment.contains(targetElt)) {
+							time = ctrl.segmentsData.get(segment).start;
+							return true;
+						}
+					});
+				}
+			});
+
+			if (time !== null &amp;&amp; time != ctrl.media.currentTime) ctrl.media.currentTime = time;
+
+			if (state == 'play') ctrl.media.play();
+			else if (state == 'pause') ctrl.media.pause();
+		}
+	}
+};
+
+/**
+ * Ajoute temporairement une classe au conteneur ou à un de ses éléments si la souris
+ * est active (survol ou clic)
+ *
+ * @param delay { number } Délai au bout duquel l'état d'activation est enlevé
+ * @param rootSelector { string? } Élément sur lequel appliqué l'état, peut servir à filtrer l'activation
+ * @constructor
+ */
+TEActiveMouse = function (delay, rootSelector) {
+	this.delay = delay;
+	this.rootSelector = rootSelector;
+};
+TEActiveMouse.prototype = {
+	init: function (ctrl) {
+		var root = null;
+		if (this.rootSelector) {
+			if (teMgr.matches(ctrl.container, this.rootSelector)) root = ctrl.container;
+			else root = ctrl.container.querySelector(this.rootSelector);
+		} else {
+			root = ctrl.container;
+		}
+		if (!root) return;
+		this.root = root;
+		var self = this;
+
+		var timeout = 0;
+
+		function inactive() {
+			clearTimeout(timeout);
+			if (root.classList.contains('teActiveMouse')) root.classList.remove('teActiveMouse');
+		}
+		function active(event) {
+			clearTimeout(timeout);
+			if (validTarget(event) &amp;&amp; !root.classList.contains('teActiveMouse')) root.classList.add('teActiveMouse');
+			timeout = setTimeout(inactive, self.delay);
+		}
+		function validTarget(event) {
+			if (event.type == "focus") return true;
+			var targetName = event.target.localName;
+			if (targetName == 'a' || targetName == 'button' || targetName == 'input') return false;
+			return true;
+		}
+
+		root.addEventListener('mousemove', active, false);
+		root.addEventListener('mousedown', active, false);
+		root.addEventListener('focus', active, true);
+		root.addEventListener('keydown', active, true);
+
+		// https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
+		var supportsPassive = false;
+		try {
+			var opts = Object.defineProperty({}, 'passive', {
+				get: function() {
+					supportsPassive = true;
+				}
+			});
+			window.addEventListener("test", null, opts);
+		} catch (e) {}
+
+		var touchStart;
+		root.addEventListener('touchstart', function(event) {
+			touchStart = event.changedTouches[0];
+			touchStart.time = Date.now();
+		}, supportsPassive ? { passive: true } : false);
+		root.addEventListener('touchend', function(event) {
+			var touchEnd = event.changedTouches[0],
+				distanceX = touchEnd.pageX - touchStart.pageX,
+				distanceY = touchEnd.pageY - touchStart.pageY,
+				targetName = event.target.localName;
+
+			if (Math.abs(distanceX) &lt; 50 &amp;&amp; Math.abs(distanceY) &lt; 50) active(event);
+		});
+	}
+};
+
+
+/**
+ * Gère le déplacement dans les segments par swipe sur mobile
+ *
+ */
+TESwipeCtrl = function(selector) {
+	this.selector = selector;
+};
+
+TESwipeCtrl.prototype = {
+	init: function(ctrl) {
+		var swipeArea = this.selector ? ctrl.container.querySelector(this.selector) : ctrl.container;
+		var touchStart;
+		swipeArea.addEventListener('touchstart', function(event) {
+			touchStart = event.changedTouches[0];
+			touchStart.time = Date.now();
+		}, false);
+
+		swipeArea.addEventListener('touchend', function(event) {
+			var touchEnd = event.changedTouches[0],
+				distanceX = touchEnd.pageX - touchStart.pageX,
+				distanceY = touchEnd.pageY - touchStart.pageY,
+				elapsedTime = Date.now() - touchStart.time;
+			if (Math.abs(distanceX) >= 150 &amp;&amp; elapsedTime &lt;= 500 &amp;&amp; Math.abs(distanceY) &lt;= 100) {
+				// Swipe
+				if (distanceX > 0) ctrl.previousTime();
+				else ctrl.nextTime();
+			}
+		}, false);
+	}
+};
+
+/**
+ * Permet de restreindre la lecture à un seul controller à la fois.
+ *
+ * Fonctionne avec les iframes en stockant le controller courant dans window.top
+ *
+ * TODO vérifier le comportement sur une iframe avec sécurité restreinte
+ *
+ */
+TEOnlyOnePlayingCtrl = function() { };
+TEOnlyOnePlayingCtrl.prototype = {
+	init: function (ctrl) {
+		ctrl.media.addEventListener('play', function() {
+			if (top.teCurrentCtrl &amp;&amp; top.teCurrentCtrl != ctrl &amp;&amp; !top.teCurrentCtrl.media.paused) {
+				top.teCurrentCtrl.playPause();
+			}
+			top.teCurrentCtrl = ctrl;
+		});
+	}
+};
+
+TEFullscreenCtrl = function(button, exits) {
+	this.buttons = button || '.teFullscreen';
+	this.exits = exits;
+};
+
+TEFullscreenCtrl.prototype = {
+	init: function (ctrl) {
+		var self = this;
+		this.container = ctrl.container;
+
+		this.buttons = ctrl.container.querySelectorAll(this.buttons);
+
+		if (!document.fullscreenEnabled) {
+			Array.prototype.forEach.call(this.buttons, function(btn) {
+				btn.hidden = true;
+			});
+			return;
+		}
+
+		ctrl.media.addEventListener('dblclick', function(event) {
+			if (document.fullscreenElement) self.exit();
+			else self.enter();
+			event.stopPropagation();
+			event.preventDefault();
+		}, true);
+
+		Array.prototype.forEach.call(this.buttons, function(btn) {
+			btn.addEventListener('click', function(event) {
+				var fullscreen = document.fullscreenElement != null;
+				if (!fullscreen) self.enter();
+				else self.exit(ctrl.container);
+				event.stopPropagation();
+			});
+		});
+
+		this.exits = ctrl.container.querySelectorAll(this.exits);
+		Array.prototype.forEach.call(this.exits, function(exit) {
+			exit.addEventListener('click', function(event) {
+				if (document.fullscreenElement != null) {
+					self.exit();
+					event.stopPropagation();
+					event.preventDefault();
+				}
+			}, true)
+		});
+
+		document.addEventListener('fullscreenchange', function() {
+			var fullscreen = document.fullscreenElement != null;
+			Array.prototype.forEach.call(self.buttons, function(btn) {
+				if (btn.localName == 'input') btn.checked = fullscreen;
+				else btn.setAttribute('aria-pressed', fullscreen ? 'true' : 'false');
+			});
+
+			if (fullscreen) {
+				document.body.classList.add('teFullscreen');
+				var activeMouseCtrl = ctrl.getSubController(TEActiveMouse);
+				var activeMouseRoot = activeMouseCtrl &amp;&amp; activeMouseCtrl.root;
+				if (activeMouseRoot &amp;&amp; activeMouseRoot.classList.contains('teActiveMouse')) activeMouseRoot.classList.remove('teActiveMouse');
+			} else {
+				document.body.classList.remove('teFullscreen');
+			}
+		});
+	},
+
+	enter: function () {
+		this.container.requestFullscreen();
+	},
+
+	exit: function () {
+		document.exitFullscreen();
+	}
+};
+
+/**
+ * Gestionnaire de message d'erreur
+ *
+ * S'attend à ce qu'un élément teErrorArea soit présent contenant optionnelement teErrorSrc et teErrorReload
+ * qui seront défini respectivement à un lien vers le vidéo et à l'action de le recharger
+ *
+ * @constructor
+ */
+TEErrorHandler = function () {
+};
+
+TEErrorHandler.prototype = {
+	init: function(ctrl) {
+		var errorArea = ctrl.container.querySelector(ctrl.selector('errorArea'));
+		var errorSrc = errorArea.querySelector(ctrl.selector('errorSrc'));
+		var errorReload = errorArea.querySelector(ctrl.selector('errorReload'));
+
+		ctrl.media.addEventListener('error', function () {
+			ctrl.container.classList.remove('teAudioType', 'teVideoType');
+			ctrl.container.classList.add('teError');
+			var originalSrc = ctrl.media.originalNode ? ctrl.media.originalNode.src : ctrl.media.src;
+			if (errorSrc) {
+				errorSrc.href = originalSrc;
+				errorSrc.textContent = originalSrc;
+			}
+			if (errorReload) {
+				errorReload.onclick = function(event) {
+					errorArea.hidden = true;
+					ctrl.container.classList.remove('teError');
+					ctrl.media.load();
+					event.preventDefault();
+				}
+			}
+
+			errorArea.hidden = false;
+
+		});
+
+		ctrl.media.addEventListener('loadedmetadata', function() {
+			errorArea.hidden = true;
+			ctrl.container.classList.remove('teError');
+		})
+	}
+};
+
+/**
+ * Restore le sous-titre courant sur le chargement de la page
+ */
+TESessionCurrentSubtitle = function(inputsRoot) {
+	this.inputsRoot = inputsRoot;
+};
+TESessionCurrentSubtitle.prototype = {
+	ready: function (ctrl) {
+		var inputsRoot = ctrl.container.querySelector(this.inputsRoot);
+		if (!inputsRoot) return;
+		var inputs = inputsRoot.querySelectorAll('input');
+
+		var vSrc = ctrl.media.originalNode ? ctrl.media.originalNode.src : ctrl.media.src;
+		var currentSubtitles = sessionStorage.getItem('teCurrentSubtitles');
+		currentSubtitles = currentSubtitles ? JSON.parse(currentSubtitles) : {};
+
+		var currentSubtitle = currentSubtitles[vSrc] || "";
+		for (var i=0; i&lt;inputs.length; i++) {
+			var input = inputs.item(i);
+			if (input.value == currentSubtitle) {
+				input.click();
+			}
+			input.addEventListener('change', function() {
+				currentSubtitle = currentSubtitles[vSrc] = this.value;
+				sessionStorage.setItem('teCurrentSubtitles', JSON.stringify(currentSubtitles));
+			});
+		}
+	}
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BaseStorage.html">BaseStorage</a></li><li><a href="module-Color.html">Color</a></li><li><a href="module-Log.html">Log</a></li><li><a href="module-MEL_ELASTIC_UI.html">MEL_ELASTIC_UI</a></li><li><a href="module-MelLinq.html">MelLinq</a></li></ul><h3>Namespaces</h3><ul><li><a href="MelMetapage.html">MelMetapage</a></li><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="Skins.html">Skins</a></li><li><a href="Utilities.html">Utilities</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="TEActiveMouse.html">TEActiveMouse</a></li><li><a href="TEContainerActiveClassCtrl.html">TEContainerActiveClassCtrl</a></li><li><a href="TEErrorHandler.html">TEErrorHandler</a></li><li><a href="TEHashCtrl.html">TEHashCtrl</a></li><li><a href="TEHideIfNotActiveCtrl.html">TEHideIfNotActiveCtrl</a></li><li><a href="TEOverflowCtrl.html">TEOverflowCtrl</a></li><li><a href="TEOverflowScrollCtrl.html">TEOverflowScrollCtrl</a></li><li><a href="TEOverflowTransformCtrl.html">TEOverflowTransformCtrl</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="module-BaseStorage.BaseStorage.html">BaseStorage</a></li><li><a href="module-Color-Color.html">Color</a></li><li><a href="module-Color-ColorRGBA.html">ColorRGBA</a></li><li><a href="module-Log.BnumLog.html">BnumLog</a></li><li><a href="module-MEL_ELASTIC_UI.Mel_Elastic_Storage.html">Mel_Elastic_Storage</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Advanced_Rule.html">Mel_CSS_Advanced_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Array_Rule.html">Mel_CSS_Array_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Rule.html">Mel_CSS_Rule</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_CSS_Style_Sheet.html">Mel_CSS_Style_Sheet</a></li><li><a href="module-MEL_ELASTIC_UI-Mel_Elastic.html">Mel_Elastic</a></li><li><a href="module-MelLinq-MelEnumerable.html">MelEnumerable</a></li><li><a href="module-MelLinq-MelKeyValuePair.html">MelKeyValuePair</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li><li><a href="window.TEPauseCtrl.html">TEPauseCtrl</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TEOnlyOnePlayingCtrl">TEOnlyOnePlayingCtrl</a></li><li><a href="global.html#TESessionCurrentSubtitle">TESessionCurrentSubtitle</a></li><li><a href="global.html#TESwipeCtrl">TESwipeCtrl</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#datetimepickerFactory">datetimepickerFactory</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#dkSiRuleResizeMnu">dkSiRuleResizeMnu</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#getTime">getTime</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#menuMgr">menuMgr</a></li><li><a href="global.html#menuScrollTiTask">menuScrollTiTask</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scImgMgr">scImgMgr</a></li><li><a href="global.html#scSiRuleEnsureVisible">scSiRuleEnsureVisible</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#treeMgr">treeMgr</a></li><li><a href="global.html#trigger">trigger</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#value">value</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Mar 07 2024 16:46:19 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

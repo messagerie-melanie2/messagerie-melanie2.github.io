@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mel_metapage/js/lib/metapages_actions/notes/sticker.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mel_metapage/js/lib/metapages_actions/notes/sticker.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { MelHtml } from "../../html/JsHtml/MelHtml.js";
+import { MaterialSymbolHtml } from "../../html/html_icon.js";
+import { MelObject } from "../../mel_object.js";
+
+function find_parent(node, cond) {
+    while ((!cond(node)) || node[0].nodeName === 'BODY') {
+        node = node.parent();
+    }
+
+    return node[0].nodeName === 'BODY' ? false : node;
+}
+
+function string_rgb_to_hex(rgb){
+    if (rgb.includes('(')) {
+        rgb = rgb.split('(');
+        rgb = rgb[1].replace(')', '');
+        rgb = rgb.split(',');
+
+        let hex = '#';
+
+        for (const iterator of rgb) {
+            hex += componentToHex(+iterator);
+        }
+
+        rgb = hex;
+    }
+
+    return rgb;
+}
+
+MelHtml.extend('button_note', function (attribs = {}) {
+    return this.button(attribs)
+    .addClass(MaterialSymbolHtml.get_class_fill_on_hover())
+    .addClass('bckg')
+    .addClass('true')
+    .css({
+        border:'none!important',
+        'border-radius':'0px!important',
+        transition:'none'
+    })
+    .attr('onmouseenter', function (e) {
+        e = $(e.currentTarget);
+
+        let parent = find_parent(e, (x) => x.hasClass('mel-note'));
+
+        if (!parent) throw new Error('Unable to found parent !');
+
+        const note_color = string_rgb_to_hex(parent.attr('data-textcolor'));
+
+        console.log('color', note_color, parent.attr('data-textcolor'));
+
+        const bckg_color = string_rgb_to_hex(e.css('background-color'));
+        const color = mel_metapage.Functions.colors.kMel_extractRGB(note_color);
+        const background = mel_metapage.Functions.colors.kMel_extractRGB(bckg_color);
+
+        console.log('ratio', mel_metapage.Functions.colors.kMel_CompareLuminance(color, background), color, background);
+
+        if (!mel_metapage.Functions.colors.kMel_LuminanceRatioAAA(color, background)) {
+            e.css('color', invertColor(note_color, true));
+        }
+
+    })
+    .attr('onmouseleave', function (e) {
+        e = $(e.currentTarget);
+        let parent = find_parent(e, (x) => x.hasClass('mel-note'));
+
+        if (!parent) throw new Error('Unable to found parent !');
+
+        const note_color = string_rgb_to_hex(parent.attr('data-textcolor'));
+
+        e.css('color', note_color);
+    });
+});
+
+/**
+ * Plugin qui contient la localization pour rcmail.gettext
+ */
+const plugin_text = 'mel_metapage';
+
+/**
+ * Couleur d'arrière plan de base
+ */
+const base_color = "#E6B905";
+/**
+ * Couleur du texte de base
+ */
+const base_text_color = "#000000";
+/**
+ * Id par défaut lorsqu'il n'y a pas de notes
+ */
+export const default_note_uid = 'create';
+
+/**
+ * Change une valeur en hexadécimal
+ * @param {number} c Valeur décimale
+ * @returns Valeur hexadécimal
+ */
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+    
+/**
+ * Récupère la valeur hexadécimal d'un rgb.
+ * @param {number} r Valeur rouge
+ * @param {number} g Valeur vert
+ * @param {number} b Valeur bleu
+ * @returns Hexadécimal
+ */
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function padZero(str, len) {
+    len = len || 2;
+    var zeros = new Array(len).join('0');
+    return (zeros + str).slice(-len);
+}
+
+function invertColor(hex, bw) {
+    if (hex.indexOf('#') === 0) {
+        hex = hex.slice(1);
+    }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    if (hex.length !== 6) {
+        throw new Error('Invalid HEX color.');
+    }
+    var r = parseInt(hex.slice(0, 2), 16),
+        g = parseInt(hex.slice(2, 4), 16),
+        b = parseInt(hex.slice(4, 6), 16);
+    if (bw) {
+        // https://stackoverflow.com/a/3943023/112731
+        return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+            ? '#000000'
+            : '#FFFFFF';
+    }
+    // invert color components
+    r = (255 - r).toString(16);
+    g = (255 - g).toString(16);
+    b = (255 - b).toString(16);
+    // pad each with zeros and return
+    return "#" + padZero(r) + padZero(g) + padZero(b);
+}
+
+/**
+ * Représentation et fonctions utile d'une note
+ */
+export class Sticker
+{
+    /**
+     * 
+     * @param {string} uid Id de la note
+     * @param {number} order Ordre de la note 
+     * @param {string} title Titre de la note
+     * @param {string} text Contenu de la note 
+     * @param {string} color Couleur de la note 
+     * @param {string} text_color Couleur du texte de la note
+     */
+    constructor(uid, order, title, text, color = base_color, text_color = base_text_color, tak = false)
+    {
+        this.uid = uid;
+        this.order = +(order);
+        this.title = title;
+        this.text = text;
+        this.color = color;
+        this.textcolor = text_color;
+        this.pin = tak;
+
+        if (typeof this.pin === 'string') this.pin = this.pin === 'true';
+    }
+
+    /**
+     * Convertit la classe en html
+     * @returns html
+     */
+    html(hidden = false)
+    {
+        const generate_style = () => {
+            let html = `background-color:${this.color};color:${this.textcolor};`;
+
+            if (hidden) html += 'display:none;';
+
+            return html;
+        };
+
+        const html_js = MelHtml.start
+        .div({class:"mel-note", style:generate_style(), id:`note-${this.uid}`}).attrs(this.get_datas())
+            .div({class:"note-header"})
+                .table()
+                    .tr()
+                        .td()
+                            .button_note(this._generate_buttons_attributes('takb', 'Afficher sur le Bnum', {})).css('border-radius', '5px 0 0 0!important')
+                                .icon('push_pin').end()
+                                .sr()
+                                    .text('Afficher sur le Bnum - Affiche la note en avant plan sur le bureau numérique. Cela permet d\'avoir toujours la note en visu.')
+                                .end('sr')
+                            .end('epingler')
+                        .end('td')
+                        .td().css('width', '100%')
+                            .input_text({class:'change mel-focus', title: 'Titre de la note', 'aria-describedby': this.uid, value: this.title}).css({width: '100%', 'background-color': this.color, 'color': this.textcolor})
+                        .end('td 100%')
+                        .td()
+                            .button_note(this._generate_buttons_attributes('pb', rcmail.gettext('settings', plugin_text), {}))
+                                .icon('more_horiz').end()
+                                .sr()
+                                    .text(`${plugin_text}.settings`)
+                                .end('sr')
+                            .end('paramètres')
+                        .end('td')
+                        .td()
+                            .button_note(this._generate_buttons_attributes('db danger', rcmail.gettext('delete'), {})).css('border-radius', '0 5px 0 0!important')
+                                .icon('delete_forever').end()
+                                .sr()
+                                    .text('delete')
+                                .end('sr')
+                            .end('Supprimer')
+                        .end('td')
+                    .end('tr')
+                .end('table')
+            .end('div')
+            .div({class:'note-header-params'}).css('display', 'none')
+                .input_color(`title="${rcmail.gettext('change_background_color', plugin_text)}" aria-describedby="${this.uid}" class="change bcgcolor" value="${this.color === base_color ? this.color : rgbToHex(...Enumerable.from(this.color.replace('!important', '').replace('rgb', "").replace('a', '').replace('(', '').replace(')', '').split(',')).select(x => parseInt(x)).toArray())}"`).removeClass('form-control').removeClass('input-mel')
+                .input_color(`title="${rcmail.gettext('change_text_color', plugin_text)}" aria-describedby="${this.uid}" class="change txtcolor" value="${this.textcolor === base_text_color ? this.textcolor : rgbToHex(...Enumerable.from(this.textcolor.replace('rgb', "").replace('a', '').replace('(', '').replace(')', '').split(',')).select(x => parseInt(x)).toArray())}"`).removeClass('form-control').removeClass('input-mel')
+                .button_note(this._generate_buttons_attributes('bb', rcmail.gettext('quit_settings', plugin_text), {})).css('float', 'right').css('border-radius', '0 5px 0 0!important')
+                    .icon('arrow_back').end()
+                    .sr()
+                        .text(`${plugin_text}.quit_settings`)
+                    .end('sr')
+                .end('retour')
+                .button_note(this._generate_buttons_attributes('downb', rcmail.gettext('move', plugin_text), {})).css('float', 'right')
+                    .icon('drag_pan').end()
+                    .sr()
+                        .text(`${plugin_text}.move`)
+                    .end('sr')
+                .end('Déplacer')
+                .button_note(this._generate_buttons_attributes('rsb', 'Réinitialiser la taille de la note', {})).css('float', 'right')
+                    .icon('fullscreen_exit').end()
+                    .sr()
+                        .text('Réinitialiser la taille de la note')
+                    .end('sr')
+                .end('Taille')
+            .end('params')
+            .div({class:'note-body'})
+                .textarea({rows:5, title:'Ecrivez vos notes dans ce champ', class:'change', style:`width:100%;background-color:${this.color};color:${this.textcolor};${(!!this.height ? `height:${this.height}px;` : '')}`})
+                    .text(this.text)
+                .end()
+            .end()
+        .end()
+        ;
+   
+        return html_js.generate();
+    }
+
+    _generate_buttons_attributes(button_class, title, {additionnal_style = ''}){
+        return {
+            title,
+            'aria-describedby':this.uid,
+            class:`${MaterialSymbolHtml.get_class_fill_on_hover()} mel-button no-button-margin bckg true ${button_class}`,
+            style:`color:${this.textcolor};${additionnal_style}`
+        };
+    }
+
+    /**
+     * Récupère l'élément lié à la note
+     * @returns Jquery
+     */
+    get_html()
+    {
+        return $(`.mel-note#note-${this.uid}`);
+    }
+
+    /**
+     * Défini le bon comportement de la note.
+     * @returns Chaînage
+     */
+    set_handlers()
+    {
+        let $element = this.get_html();
+
+        $element.on('mousedown', () => {
+            this._tmp_height = $element.find('textarea').height();
+        })
+        .on('mouseup', () => {
+            const th = $element.find('textarea').height();
+            if (th !== this._tmp_height)
+            {
+                this.post_height_updated(th);
+            }
+
+            delete this._tmp_height;
+        }); 
+
+        $element.find('button.rsb').click(() => {
+            $element.find('textarea').css('height', '');
+            if (this.uid !== default_note_uid) this.post_height_updated(-1);
+        });
+
+        //Handler pour le bouton créer
+        $element.find("button.nb").click(async () => {
+
+            if (rcmail.busy === true) return;
+
+            rcmail.set_busy(true, "loading");
+            $element.find(".change").addClass("disabled").attr("disabled", "disabled");
+            //$element.find("textarea").addClass("disabled").attr("disabled", "disabled");
+
+            if (this.uid === default_note_uid) await this.post_add();
+
+            let sticker = Sticker.fromHtml(this.uid);
+            sticker.text = "";
+            sticker.title = "";
+            await sticker.post_add();
+
+            rcmail.set_busy(false);
+            $element.find(".change").removeClass("disabled").removeAttr("disabled");
+            //$element.find("textarea").removeClass("disabled").removeAttr("disabled");
+            rcmail.clear_messages();
+            rcmail.display_message(rcmail.gettext('note_created_success', plugin_text), "confirmation");
+        });
+
+        if (this.pin) $element.find('.takb').find('.material-symbols-outlined').css('font-variation-settings', "'FILL' 1");
+
+        $element.find('.takb').click(async () => {
+            let $item = this.uid.includes('pin-') ? Sticker.fromHtml(this.uid.replace('pin-', '')).get_html() : [];
+
+            this.pin = !this.pin;
+            rcmail.env.mel_metapages_notes[this.uid.replace('pin-', '')].pin = this.pin;
+
+            if (this.pin) 
+            {
+                $element.find('.takb').find('.material-symbols-outlined').css('font-variation-settings', "'FILL' 1");
+                if ($item.length  > 0)  $item.find('.takb').find('.material-symbols-outlined').css('font-variation-settings', "'FILL' 1");
+            }
+            else {
+                $element.find('.takb').find('.material-symbols-outlined').css('font-variation-settings', '');
+                if ($item.length  > 0) $item.find('.takb').find('.material-symbols-outlined').css('font-variation-settings', '');
+            }
+
+            await this.post('pin', {
+                _uid:this.uid.replace('pin-', ''),
+                _pin:this.pin
+            });
+
+            Sticker.helper.trigger_event('notes.apps.tak', this);
+            
+        })
+
+        $element.find('button.eye').click((e) => {
+            e = $(e.currentTarget);
+            if (!e.hasClass('crossed'))
+            {
+                $('.mel-note').css('display', 'none');
+                $element.css('display', '');
+                $('.mm-shortcuts.apps .square_div').css('display', 'none');
+                $('.shortcut-notes').css('display', '').css('max-width', '100%').css('width', '100%').css('margin','0 20%');
+                $('.fullscreen-item-flex').css('display', 'block');
+                $('.nb').addClass('disabled').attr('disabled', 'disabled');
+                $('.downb').css('display', 'none');
+                $('.upb').css('display', 'none');
+                e.addClass('crossed').find(`.material-symbols-outlined`).html('visibility_off');
+                this.get_html().addClass('eye-focus');
+            }
+            else {
+                $('.mel-note').css('display', '');
+                $('.mm-shortcuts.apps .square_div').css('display', '');
+                $('.shortcut-notes').css('display', '').css('max-width', '').css('width', '').css('margin', '');
+                $('.fullscreen-item-flex').css('display', 'flex');
+                $('.nb').removeClass('disabled').removeAttr('disabled');
+                $('.downb').css('display', '');
+                $('.upb').css('display', '');
+                e.removeClass('crossed').find(`.material-symbols-outlined`).html('visibility');//.find('.icon-mel-eye-crossed').addClass('icon-mel-eye').removeClass('icon-mel-eye-crossed');
+                this.get_html().removeClass('eye-focus');
+            }
+
+
+        });
+
+        //Handler pour le bouton paramètre
+        $element.find("button.pb").click(() => {
+            $element.css("width", $element.width() + "px");
+            $element.find(".note-header").css("display", "none");
+            $element.find(".note-header-params").css("display", "");
+        })
+
+        //Handler pour le bouton retour
+        $element.find("button.bb").click(() => {
+            $element.find(".note-header").css("display", "");
+            $element.find(".note-header-params").css("display", "none");
+            $element.css("width", '');
+        })
+
+        //Handler pour le bouton supprimer
+        $element.find("button.db").click(async () => {
+
+            if (rcmail.busy === true) return;
+
+            if (this.uid === default_note_uid)
+            {
+                rcmail.display_message(rcmail.gettext('note_reinit_success', plugin_text), "confirmation");
+                return;
+            }
+
+            rcmail.set_busy(true, "loading");
+            $element.find(".change").addClass("disabled").attr("disabled", "disabled");
+            //$element.find("textarea").addClass("disabled").attr("disabled", "disabled");
+
+            await this.post_delete();
+
+            rcmail.set_busy(false);
+            $element.find(".change").removeClass("disabled").removeAttr("disabled");
+            //$element.find("textarea").removeClass("disabled").removeAttr("disabled");
+            rcmail.clear_messages();
+            rcmail.display_message(rcmail.gettext('note_deleted_success', plugin_text), "confirmation");
+        });
+
+        //Handler pour les modifications
+        $element.find(".change").on('change', async () => {
+
+            const isCreate = this.uid === default_note_uid;
+            if (isCreate)
+            {
+                if (rcmail.busy === true) return;
+
+                rcmail.set_busy(true, "loading");
+                $element.find(".change").addClass("disabled").attr("disabled", "disabled");
+            }
+
+            $element.css("color", $element.find("input.txtcolor").val());//bcgcolor
+            $element.css("background-color", $element.find("input.bcgcolor").val());
+
+            $element.find(".note-header input")
+            .css("color", $element.find("input.txtcolor").val())
+            .css("background-color", $element.find("input.bcgcolor").val());
+
+            $element.find("textarea")
+            .css("color", $element.find("input.txtcolor").val())
+            .css("background-color", $element.find("input.bcgcolor").val());
+
+            $element.find("button").css("color", $element.find("input.txtcolor").val());
+
+            this.title = $element.find(".note-header input").val();
+            this.text = $element.find("textarea").val();
+            this.color =  $element.css("background-color");
+            this.textcolor = $element.css("color");
+
+            $element.attr('data-textcolor', this.textcolor);
+
+            await this.post_update();
+
+            if (isCreate)
+            {
+                rcmail.set_busy(false);
+                $element.find(".change").removeClass("disabled").removeAttr("disabled");
+                rcmail.clear_messages();
+                rcmail.display_message(rcmail.gettext('note_created_success', plugin_text), "confirmation");
+            }
+            else {
+                Sticker.helper.rcmail().display_message('Note sauvegardée avec succès !', 'confirmation');
+            }
+        });
+        
+        let $down = $element.find('.downb');
+
+        //Handler pour le bouton "descendre"
+        if ($down.length > 0)
+        {
+            $down.attr('draggable', true)[0].addEventListener("dragstart", (ev) => {
+                if (!!Sticker.lock) {
+                    ev.preventDefault();
+                    rcmail.display_message('Une action est déjà en cours !');
+                    return;
+                }
+                ev.dataTransfer.dropEffect = "move";
+
+                var img = new Image();
+                img.src = window.location.origin + window.location.pathname + 'plugins/mel_metapage/skins/sticker.png';
+                ev.dataTransfer.setDragImage(img, 10, 10);
+                
+                ev.dataTransfer.setData("text/plain", this.uid);
+                //console.log('drag&amp;drop', ev);
+            });
+
+            $down[0].addEventListener("dragend", (ev) => {
+                $('.mel-note.dragover').removeClass('dragover')
+                                       .removeClass('dragover-right')
+                                       .removeClass('dragover-left');
+            });
+        }
+
+        // //Handler pour le bouton "monter"
+        // if (hasUp)
+        // {
+        //     $element.find('.upb').click(async () => {
+        //         if (rcmail.busy === true) return;
+
+        //         rcmail.set_busy(true, "loading");
+        //         $(".shortcut-notes .change").addClass("disabled").attr("disabled", "disabled");
+        //         //$element.find("textarea").addClass("disabled").attr("disabled", "disabled");
+        //         await this.post_move_up(Sticker.findByOrder(this.order - 1).uid);
+
+        //         rcmail.set_busy(false);
+        //         $(".shortcut-notes .change").removeClass("disabled").removeAttr("disabled");
+        //         //$element.find("textarea").removeClass("disabled").removeAttr("disabled");
+        //         rcmail.clear_messages();
+        //         rcmail.display_message(rcmail.gettext('note_move_success', plugin_text), "confirmation");
+        //     });
+        // }
+        // else $element.find('.upb').addClass("disabled").attr("disabled", "disabled");
+
+        // $element[0].addEventListener("dragstart", (ev) => {
+        //     if (!!Sticker.lock) {
+        //         ev.preventDefault();
+        //         rcmail.display_message('Une action est déjà en cours !');
+        //         return;
+        //     }
+        //     ev.dataTransfer.dropEffect = "move";
+        //     ev.dataTransfer.setData("text/plain", this.uid);
+        //     console.log('drag&amp;drop', ev);
+        // });
+
+        // $element.on('drop', (ev) => {
+        //     ev.dataTransfer.dropEffect = "move";
+        //     console.log('drop', ev);
+        // });
+
+        // $element.on('dragover', (ev) => {
+        //     console.log('dragover', ev);
+        // });
+
+        return this;
+    }
+
+    /**
+     * Affiche sous forme de string certaines données pour le html
+     * @returns id &amp; data-order
+     */
+    get_datas(){
+        return {
+            id:`note-${this.uid}`,
+            'data-textcolor': this.textcolor,
+            'data-order': this.order,
+            'data-pin': this.pin
+        }
+    }
+
+    /**
+     * Créer une note
+     * @returns Ajax
+     */
+    post_add()
+    {
+        return this.post("add", {_raw:this})
+    }
+
+    async drop(uid, new_order) {
+        await this.post('drag_move', {_uid:uid, _order:new_order});
+    }
+
+    /**
+     * Change l'ordre de la note par rapport à une autre note
+     * @param {string} uid Id de la note
+     * @param {number} order Nouvel ordre de la note
+     * @param {Sticker} other Autre note
+     */
+    async _post_move(uid, order, other)
+    {
+        //On change l'ordre de la note
+        await this.post("move", {_uid:uid, _order:order});
+        //puis de l'autre note
+        await other.post("move", {_uid:other.uid, _order:other.order});
+        //Puis on récupère tout pour éviter les bugs
+        await this.post("get");/*.done((e) => {
+
+                rcmail.env.mel_metapages_notes = JSON.parse(e);
+
+                if (Enumerable.from(rcmail.env.mel_metapages_notes).count() === 0)
+                {
+                    rcmail.env.mel_metapages_notes = {
+                        "create":new Sticker("create", 0, "", "")
+                    };
+                }
+
+                // const html = this.html();
+                // other = Sticker.fromHtml(other.uid);
+                // const other_html = other.html();
+                // let $other = other.get_html();
+                // let $this = this.get_html();
+                // $this[0].outerHTML = other_html;
+                // $other[0].outerHTML = html;
+                // other.set_handlers();
+                // this.set_handlers();
+
+                this.trigger_event('notes.apps.updated', rcmail.env.mel_metapages_notes);
+        });*/
+    }
+
+    /**
+     * Descend la note
+     * @param {string} $uid Id de l'autre note
+     * @returns Ajax
+     */
+    post_move_down($uid)
+    {
+        this.order += 1;
+        let other = Sticker.fromHtml($uid);
+        other.order -= 1;
+        return this._post_move(this.uid, this.order, other);
+    }
+    /**
+     * Monte la note
+     * @param {string} $uid Id de l'autre note
+     * @returns Ajax
+     */
+    post_move_up($uid)
+    {
+        this.order -= 1;
+        let other = Sticker.fromHtml($uid);
+        other.order += 1;
+        return this._post_move(this.uid, this.order, other);
+    }
+
+    /**
+     * Supprime la note
+     * @returns {Promise&lt;any>|null} Ajax
+     */
+    async post_delete()
+    {
+        if (this.uid === default_note_uid) return;
+
+        if (this.get_html().find('.icon-mel-eye-crossed').length > 0)
+        {
+            this.get_html().find('.eye').click();
+        }
+
+        await this.post('pin', {
+            _uid:this.uid,
+            _pin:false
+        });
+
+        this.pin = false;
+
+        Sticker.helper.trigger_event('notes.apps.tak', this);
+
+        return await this.post('del', {_uid:this.uid});
+    }
+
+    post_height_updated(newHeight)
+    {
+        if (this.uid === default_note_uid) return;
+
+        return this.post('update_height', {
+            _uid:this.uid,
+            _height:newHeight
+        });
+    }
+
+    /**
+     * @async Met à jours la note
+     */
+    async post_update()
+    {
+        if (this.uid === default_note_uid) {
+            await this.post_add();
+        }
+        else {      
+            await this.post('update', {
+                _uid:this.uid,
+                _raw:this
+            }, true, false);
+            rcmail.env.mel_metapages_notes[this.uid.replace('pin-', '')].text = this.text;
+            //Sticker.helper.trigger_event('notes.apps.updated', rcmail.env.mel_metapages_notes)
+        }
+    }
+
+    /**
+     * Effectue une action sur le serveur
+     * @param {string} action Nom de l'action
+     * @param {JSON} params Paramètres de l'action 
+     * @param {boolean} doAction Si faux, la fonction de réussite ne sera pas appelé
+     * @returns {Promise&lt;any>} Appel ajax
+     */
+    async post(action, params = {}, doAction = true, lock = true)
+    {
+        //const on_eye = this.get_html().find('.icon-mel-eye-crossed').length > 0;
+        if (lock &amp;&amp; !!Sticker.lock) {
+            rcmail.display_message('Une action est déjà en cours !');
+            return;
+        }
+
+        if (lock) Sticker.lock = rcmail.set_busy(true, 'loading');
+        params["_a"] = action;
+
+        const pin = !!params["_uid"] &amp;&amp; (params["_uid"].includes('pin-') || this.uid.includes('pin-'));
+
+        if (!!params["_uid"] &amp;&amp; params["_uid"].includes('pin-')) params["_uid"] = params["_uid"].replace('pin-', '');
+
+        if (action === 'pin') {
+            Sticker.helper.trigger_event('notes.apps.start-pin', true);
+        }
+
+        await Sticker.helper.http_internal_post({
+            params,
+            task:"mel_metapage",
+            action:'notes',
+            on_success:(datas) => {
+                if (datas !== "break" &amp;&amp; doAction)
+                {
+                    rcmail.env.mel_metapages_notes = JSON.parse(datas);
+
+                    if (Enumerable.from(rcmail.env.mel_metapages_notes).count() === 0)
+                    {
+                        rcmail.env.mel_metapages_notes = {};
+                        rcmail.env.mel_metapages_notes[default_note_uid] = new Sticker("create", 0, "", "");
+                    }
+
+                    Sticker.helper.trigger_event('notes.apps.updated', rcmail.env.mel_metapages_notes)
+
+                    if (action !== 'get' &amp;&amp; action !== 'add') Sticker.helper.rcmail().display_message('Note sauvegardée avec succès !', 'confirmation');
+                }
+                else {
+                    rcmail.env.mel_metapages_notes[this.uid.replace('pin-', '')].text = this.text;   
+                    rcmail.env.mel_metapages_notes[this.uid.replace('pin-', '')].title = this.title; 
+                    
+                    if (pin) {
+                            Sticker.helper.trigger_event('notes.apps.updated', rcmail.env.mel_metapages_notes);
+                    }
+                    else {    
+                        for (const key in this) {
+                            if (Object.hasOwnProperty.call(this, key)) {
+                                const element = this[key];
+                                rcmail.env.mel_metapages_notes[this.uid][key] = element;
+                            }
+                        }
+                        Sticker.helper.trigger_event('notes.apps.updated.breaked', rcmail.env.mel_metapages_notes)
+                    }
+                }
+
+
+            }
+        });
+
+        if (lock) {
+            rcmail.set_busy(false, 'loading', Sticker.lock);
+            Sticker.lock = null;
+        }
+    }
+
+    /**
+     * Créer une note à partir d'une autre note
+     * @param {Sticker} element Sticker ou objet ayant les même props.
+     * @returns Nouvelle note
+     */
+    static from(element)
+    {
+        let s = new Sticker(element.uid, element.order, element.title, element.text, element.color, element.textcolor, (element.pin ?? false));
+        
+        if (!!element.height) s.height = element.height;
+
+        return s;
+    }
+
+    /**
+     * Créer une note depuis les données d'un block html
+     * @param {string} uid Id de la div
+     * @returns Nouvelle note
+     */
+    static fromHtml(uid)
+    {
+        let $element = $(`.mel-note#note-${uid}`);
+        return new Sticker(uid, $element.data("order"), $element.find("input").val(), $element.find("textarea").val(), $element.css("background-color"), $element.css("color"), $element.data("pin"));
+    }
+
+    /**
+     * Récupère une note via son ordre
+     * @param {number} order Ordre de la note cherchée
+     * @returns Nouvelle note
+     */
+    static findByOrder(order)
+    {
+        let id = $(`.mel-note[data-order=${order}]`).attr("id");
+        return Sticker.fromHtml(id === undefined ? undefined : id.replace('note-', ''));
+    }
+
+    static async new() {
+        await new Sticker("", -1, "", "").post_add()
+    }
+
+
+}  
+
+let helper = null;
+let timeout = null;
+Object.defineProperties(Sticker, {
+    helper: {
+        get: () => {
+
+            if (!helper) helper =  MelObject.Empty();
+
+            if (!!timeout) clearTimeout(timeout);
+
+            timeout = setTimeout(() => {
+                helper = null;
+                timeout = null;
+            }, 5000);
+
+            return helper;
+        },
+        configurable: true
+    },          
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Color.html">Color</a></li><li><a href="ColorRGBA.html">ColorRGBA</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="RotomecaEnumerable.html">RotomecaEnumerable</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 17:26:58 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

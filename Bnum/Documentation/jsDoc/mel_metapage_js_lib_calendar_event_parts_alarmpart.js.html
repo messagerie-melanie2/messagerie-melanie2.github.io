@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mel_metapage/js/lib/calendar/event/parts/alarmpart.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mel_metapage/js/lib/calendar/event/parts/alarmpart.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { custom_alarm_dialog } from "../../../../../skins/mel_elastic/js_templates/custom_alarm.js";
+import { MelEnumerable } from "../../../classes/enum.js";
+import { RcmailDialog, RcmailDialogButton } from "../../../classes/modal.js";
+import { EMPTY_STRING } from "../../../constants/constants.js";
+import { MelHtml } from "../../../html/JsHtml/MelHtml.js";
+import { isDecimal } from "../../../mel.js";
+import { Alarm } from "../../alarms.js";
+import { FakePart, Parts } from "./parts.js";
+
+/**
+ * Contient les données d'un rappel
+ * @class
+ * @classdesc Contient les données d'un rappel. Sa valeur et son "unitée" (minutes, heures, jours etc....) 
+ */
+class AlarmData {
+    /**
+     * 
+     * @param {number} value Durée en minutes
+     */
+    constructor(value) {
+        /**
+         * Durée en minutes
+         * @member
+         * @type {number}
+         */
+        this.value = value;
+        /**
+         * Unitée de la durée 
+         * 
+         * Peut être : ``-W`` pour semaine, ``-D`` pour jour, ``-H`` pour heure, ``-M`` pour minute
+         * @member
+         * @readonly
+         * @type {string}
+         */
+        this.offset = EMPTY_STRING;
+
+        Object.defineProperty(this, 'offset', {
+            get:() => {
+                if (this.value >= (60*24*7)) {
+                    return AlarmData.OFFSETS.WEEK;
+                }
+                else if (this.value >= (60*24)) {
+                    return  AlarmData.OFFSETS.DAY;
+                }
+                else if (this.value >= 60) {
+                    return  AlarmData.OFFSETS.HOUR;
+                }
+                else {
+                    return  AlarmData.OFFSETS.MINUTE;
+                }
+            }
+        });
+    }
+
+    /**
+     * Récupère le texte d'une valeur sous format : x unite et x sous unités.
+     * 
+     * Prend en compte les pluriels.
+     * 
+     * Dans la localization du plugin, il doit y avoir les clés suivantes : `text_key`, `text_key_plurial`, `text_key_after`, `text_key_after_plurial`.
+     * 
+     * (Remplacez ``text_key`` par le nom de la clé que vous voulez utiliser, exemple : ``week`` pour la semaine, ``day`` pour la journée etc...)
+     * 
+     * `_plurial` signifie le pluriel
+     * 
+     * `_after` signifie l'affichage de la deuxième unitée de temps. Celle ci doit contenir `%0`.
+     * 
+     * example : `hour` => heure, `hour_plurial` => heures, `hour_after` =>  et %0 minute, `hour_after_plurial` =>  et %0 minutes
+     * 
+     * @private
+     * @param {number} multiplier Le multiplier qui permet de déduire le nombre de sous unitées sous forme entière (ex: 7 pour les semaines, 24 pour les jours etc...)
+     * @param {number} val Valeur du rappel en minute
+     * @param {string} text_key Clé qui sera utiliser par `rcmail.gettext()`
+     * @returns {{text:string, value:number}}
+     */
+    _getText(val, multiplier, text_key) {
+        let has_s = val > 1;
+        let offset = rcmail.gettext(`${text_key}${has_s ? '_plurial' : EMPTY_STRING}`, 'mel_metapage');
+
+        if (isDecimal(val)) {
+            const tmp = Math.round((val - (~~val)) * multiplier);
+            val = ~~val;
+            has_s = tmp > 1;
+
+            if (1 === val) offset = offset.slice(0, offset.length - 1);
+
+            offset += rcmail.gettext(`${text_key}_after${has_s ? '_plurial' : EMPTY_STRING}`, 'mel_metapage').replaceAll('%0', tmp);
+        }
+
+        return {text:offset, value:val};
+    }
+
+    /**
+     * Récupère le temps convertit à partir de l'unitée.
+     * @param {boolean} include_week Par défaut : ``false``. Si ``true``, inclut les semaines dans le calcul. 
+     * @returns {number}
+     */
+    getTime(include_week = false) {
+        let val;
+        switch (this.offset) {
+            case AlarmData.OFFSETS.WEEK:
+                if (include_week) {
+                    val = this.value/60/24/7;
+                    break;
+                }
+            case AlarmData.OFFSETS.DAY:
+                val = this.value/60/24;
+                break;
+        
+            case AlarmData.OFFSETS.HOUR:
+                val = this.value/60;
+                break;
+
+            case AlarmData.OFFSETS.MINUTE:
+                val = this.value;
+                break;
+
+            default:
+                val = 0;
+                break;
+        }
+
+        return val;
+    }
+
+    /**
+     * Affiche la donnée en texte lisible et compréhensible pour un être humain.
+     * @returns {string}
+     */
+    toString() {
+        let val = this.getTime(true);
+        let text_key = EMPTY_STRING;
+        let multiplier = 0;
+
+        switch (this.offset) {
+            case AlarmData.OFFSETS.WEEK:
+                text_key = 'week';
+                multiplier = 7;
+
+                break;
+            case AlarmData.OFFSETS.DAY:
+                text_key = 'day';
+                multiplier = 24;
+                break;
+            case AlarmData.OFFSETS.HOUR:
+                text_key = 'hour';
+                multiplier = 60;
+                break;
+        
+            default:
+                text_key = 'minutes';
+                break;
+        }
+
+        const {text, value} = this._getText(val, multiplier, text_key);
+        const offset = text;
+        val = value;
+
+        return `${val} ${offset}`;
+    }
+
+    /**
+     * Créer une instance de ``AlarmData`` à partir d'une durée et d'une unitée.
+     * @static
+     * @param {number} val Durée en minutes 
+     * @param {string} offset Unitée de la durée. Peut être : ``-W`` pour semaine, ``-D`` pour jour, ``-H`` pour heure, ``-M`` pour minute
+     * @returns {AlarmData}
+     * @see {@link AlarmData.OFFSETS}
+     */
+    static From(val, offset) {
+        switch (offset) {
+            case AlarmData.OFFSETS.WEEK:
+                val *= 7;
+            case AlarmData.OFFSETS.DAY:
+                val *= 24;
+            case AlarmData.OFFSETS.HOUR:
+                val *= 60;
+
+            default:
+                break;
+        }
+
+        return new AlarmData(val);
+    }
+}
+
+/**
+ * Enumerable des unitées
+ * @static
+ * @readonly
+ * @enum {string}
+ * @see {@link AlarmData.From}
+ */
+AlarmData.OFFSETS = {
+    WEEK:'-W',
+    DAY:'-D',
+    HOUR:'-H',
+    MINUTE:'-M'
+}
+
+/**
+ * Partie de la vue qui gère les rappels
+ * @class
+ * @classdesc Partie de la vue qui gère les rappels, elle fait le lien entre le champs de base qui est un ensemble de 3 champs et le champ visuel qui est un `select`
+ * @extends FakePart
+ */
+export class AlarmPart extends FakePart {
+    /**
+     * 
+     * @param {$} $alarm_type Champ qui gère le type d'alarme
+     * @param {$} $alarm_offset Champ qui gère la durée de l'alarme
+     * @param {$} $alarf_offset_type Champ qui gère l'unitée de l'alarme
+     * @param {$} $alarm Champ visuel qui sera afficher à la place du champ de base
+     */
+    constructor($alarm_type, $alarm_offset, $alarf_offset_type, $alarm) {
+        super($alarm_offset, $alarm, Parts.MODE.change);
+        /**
+         * Champ qui gère le type d'alarme
+         * @type {$}
+         */
+        this._$fieldAlarmType = $alarm_type;
+        /**
+         * Champ qui gère l'unitée de l'alarme
+         * @type {$}
+         */
+        this._$fieldAlarmOffsetType = $alarf_offset_type;
+
+        //Génère le tooltip du champs
+        this._$fakeField.tooltip({
+            title:() => {
+                const val = this._$fakeField.val();
+                
+                if (!!(val || false) &amp;&amp; 0 !== val &amp;&amp; '0' !== val) return rcmail.gettext('rappel_of', 'mel_metapage').replaceAll('%0', this._$fakeField.find('option:selected').text());
+                else return rcmail.gettext('no_rappel', 'mel_metapage');
+            },
+            trigger:'hover'
+        });
+    }
+
+    /**
+     * Initialise la classe par rapport à l'évènement
+     * @param {*} event Evènement de plugin `calendar` 
+     * @returns {AlarmPart} Chaînage
+     */
+    init(event) {
+        this._$fakeField.html(EMPTY_STRING);
+        let options_alarms = AlarmPart.PREDEFINED
+        let val = 0;
+
+        // Ajoute une option si une alarm existe déjà
+        if (!!event.alarms)
+        {
+            const alarm = new Alarm(event.alarms);
+
+            if (0 !== alarm.getTime()) {
+                const time = alarm.getTime()/1000/60;
+                val = time;
+
+                if (!MelEnumerable.from(AlarmPart.PREDEFINED).where(x => x.value === time).any()) {
+                    const data = new AlarmData(time);
+                    const str = data.toString();
+                    options_alarms = MelEnumerable.from(options_alarms).aggregate({
+                        value:data.value,
+                        label:str
+                    }).orderBy(x => -1 === x.value ? Number.POSITIVE_INFINITY : x.value);
+                }
+            } 
+
+        }
+        else if (!!rcmail.env.calendar_default_alarm_offset) {
+            //Si il y a un rappel par défaut et pas de rappel dans l'évènement, on le rajoute
+            event.alarms = rcmail.env.calendar_default_alarm_offset;
+            event.alarms = `${event.alarms[0]}PT${event.alarms.slice(1)}:DISPLAY`;
+            return this.init(event);
+        }
+
+        //Génère les options du select
+        let $option;
+        for (const alarm of options_alarms) {
+            $option = MelHtml.start.option({value:alarm.value}).text(alarm.label).end().generate().appendTo(this._$fakeField);
+
+            if (alarm.value === val) {
+                $option.attr('selected', 'selected');
+            }
+        }
+
+        $option = null;
+
+
+        return this;
+    }
+
+    /**
+     * Action qui sera effectué lors de la mise à jour du champ visuel
+     * @param {string} val Valeur du select
+     * @override
+     */
+    onUpdate(val) {
+        switch (val) {
+            case undefined:
+            case null:
+            case 0:
+                this._$field.val(0);
+                this._$fieldAlarmType.val(EMPTY_STRING).change();
+                this._$fieldAlarmOffsetType.val(AlarmData.OFFSETS.MINUTE).change();         
+                break;
+
+            case -1:
+                this._startModalCustomAlarm(val);
+                break;
+        
+            default:
+                const alarm = new AlarmData(val);
+                this._$fieldAlarmType.val('DISPLAY').change();
+                this._$field.val(alarm.getTime());
+                this._$fieldAlarmOffsetType.val(AlarmData.OFFSETS.WEEK === alarm.offset ? AlarmData.OFFSETS.DAY : alarm.offset).change();
+                break;
+        }
+    }
+
+    /**
+     * Action qui sera appelé lors de la mise à jour du champ visuel
+     * 
+     * Appele la fonction @see {@link AlarmPart~onUpdate}
+     * @param  {...any} args 
+     * @event
+     * @override
+     */
+    onChange(...args) {
+        let $e = $(args[0].currentTarget);
+
+        this.onUpdate(+($e.val()));
+    }
+
+    /**
+     * Ouvre une boîte de dialogue pour choisir une alarme personnalisée
+     * @private
+     */
+    _startModalCustomAlarm() {
+        let $dialog = new RcmailDialog(custom_alarm_dialog, {
+            title:rcmail.gettext('custom_alarm_title', 'mel_metapage'),
+            'buttons':[
+                new RcmailDialogButton(rcmail.gettext('validate'), {
+                    click:() => {
+                        let offset = $dialog._$dialog.find('select').attr('disabled', 'disabled').addClass('disabled').val();
+                        let value = +($dialog._$dialog.find('input').attr('disabled', 'disabled').addClass('disabled').val());
+
+                        if (AlarmData.OFFSETS.WEEK === offset) {
+                            offset = AlarmData.OFFSETS.DAY;
+                            value *= 7;
+                        }
+
+                        const alarm = AlarmData.From(value, offset);
+                        this.onUpdate(alarm.value);
+                        if (!MelEnumerable.from(AlarmPart.PREDEFINED).where(x => x.value === alarm.value).any()) {
+                            this._$fakeField.html(EMPTY_STRING);
+                            let enu = MelEnumerable.from(AlarmPart.PREDEFINED).aggregate([{
+                                value:alarm.value,
+                                label:alarm.toString()
+                            }]).orderBy(x => -1 === x.value ? Number.POSITIVE_INFINITY : x.value).toArray();
+    
+                            for (const iterator of enu) {
+                                MelHtml.start.option({value:iterator.value}).text(iterator.label).end().generate().appendTo(this._$fakeField);
+                            }
+                        }
+
+                        setTimeout(() => {
+                            this._$fakeField.val(alarm.value);
+                            $dialog.destroy();
+                        }, 10);
+                    }
+                })
+            ]
+        });
+
+        $($dialog._$dialog).on( "dialogbeforeclose", ( event, ui ) => {
+            this._$fakeField.val(0);
+        });
+    }
+}
+
+/**
+ * Liste des rappels prédéfinis
+ * @type {Array&lt;{label:string, value:number}>}
+ */
+AlarmPart.PREDEFINED = [
+    {label:'Aucune', value:0},
+    {label:'5 minutes', value:5},
+    {label:'10 minutes', value:10},
+    {label:'15 minutes', value:15},
+    {label:'30 minutes', value:30},
+    {label:'1 heure', value:60},
+    {label:'2 heures', value:120},
+    {label:'12 heures', value:(60*12)},
+    {label:'1 jour', value:(60*24)},
+    {label:'1 semaine', value:(60*24*7)},
+    {label:'Personnalisé', value:-1}
+];
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="OCA.Bnum.html">Bnum</a></li><li><a href="OCA.Bnum.App.html">App</a></li><li><a href="animation.html">animation</a></li><li><a href="aria.html">aria</a></li></ul><h3>Classes</h3><ul><li><a href="AMelScreenManager.html">AMelScreenManager</a></li><li><a href="Alarm.html">Alarm</a></li><li><a href="AlarmData.html">AlarmData</a></li><li><a href="AlarmPart.html">AlarmPart</a></li><li><a href="AudioVisualizer.html">AudioVisualizer</a></li><li><a href="BnumConnector.html">BnumConnector</a></li><li><a href="CalendarEvent.html">CalendarEvent</a></li><li><a href="CalendarLoader.html">CalendarLoader</a></li><li><a href="Calendar_Alarm.html">Calendar_Alarm</a></li><li><a href="CategoryData.html">CategoryData</a></li><li><a href="CategoryPart.html">CategoryPart</a></li><li><a href="ChatManager.html">ChatManager</a></li><li><a href="Color.html">Color</a></li><li><a href="ColorRGBA.html">ColorRGBA</a></li><li><a href="Connector.html">Connector</a></li><li><a href="EventField.html">EventField</a></li><li><a href="EventListenerDatas.html">EventListenerDatas</a></li><li><a href="EventManager.html">EventManager</a></li><li><a href="EventParts.html">EventParts</a></li><li><a href="EventView.html">EventView</a></li><li><a href="FreeBusyGuests.html">FreeBusyGuests</a></li><li><a href="GlobalModal.html">GlobalModal</a></li><li><a href="GlobalModalConfig.html">GlobalModalConfig</a></li><li><a href="GuestsPart_GuestsPart.html">GuestsPart</a></li><li><a href="IExt.html">IExt</a></li><li><a href="IntegratedVisio.html">IntegratedVisio</a></li><li><a href="InternalWebconfScreenManager.html">InternalWebconfScreenManager</a></li><li><a href="ListenerWebConfBar.html">ListenerWebConfBar</a></li><li><a href="MasterWebconfBar.html">MasterWebconfBar</a></li><li><a href="MasterWebconfBarItem.html">MasterWebconfBarItem</a></li><li><a href="MasterWebconfBarPopup.html">MasterWebconfBarPopup</a></li><li><a href="MelAudioManager.html">MelAudioManager</a></li><li><a href="MelAudioStruct.html">MelAudioStruct</a></li><li><a href="MelDataStore.html">MelDataStore</a></li><li><a href="MelIconPrevisualiser.html">MelIconPrevisualiser</a></li><li><a href="MelListingPrevisualiser.html">MelListingPrevisualiser</a></li><li><a href="MelNews.html">MelNews</a></li><li><a href="MelObject.html">MelObject</a></li><li><a href="MelPrevisualiser.html">MelPrevisualiser</a></li><li><a href="Mel_Promise.html">Mel_Promise</a></li><li><a href="MetapageModule.html">MetapageModule</a></li><li><a href="NewsPopup.html">NewsPopup</a></li><li><a href="Nextcloud_Document.html">Nextcloud_Document</a></li><li><a href="Nextcloud_Document_Config.html">Nextcloud_Document_Config</a></li><li><a href="Nextcloud_File.html">Nextcloud_File</a></li><li><a href="Nextcloud_Icon.html">Nextcloud_Icon</a></li><li><a href="Nextcloud_Response.html">Nextcloud_Response</a></li><li><a href="NotifierObject.html">NotifierObject</a></li><li><a href="OCA.Bnum.FileList.html">FileList</a></li><li><a href="ParapheurAction.html">ParapheurAction</a></li><li><a href="ParapheurMailAction.html">ParapheurMailAction</a></li><li><a href="RcmailDialog.html">RcmailDialog</a></li><li><a href="RcmailDialogButton.html">RcmailDialogButton</a></li><li><a href="RcmailDialogChoiceButton.html">RcmailDialogChoiceButton</a></li><li><a href="RightPannel.html">RightPannel</a></li><li><a href="RotomecaEnumerable.html">RotomecaEnumerable</a></li><li><a href="SearchResult.html">SearchResult</a></li><li><a href="SearchResultCalendar.html">SearchResultCalendar</a></li><li><a href="Slot.html">Slot</a></li><li><a href="Slots.html">Slots</a></li><li><a href="SplittedDate.html">SplittedDate</a></li><li><a href="Sticker.html">Sticker</a></li><li><a href="Title.html">Title</a></li><li><a href="VisioManager.html">VisioManager</a></li><li><a href="VisualiserObject.html">VisualiserObject</a></li><li><a href="VisualiserObjectEx_VisualiserObjectEx.html">VisualiserObjectEx</a></li><li><a href="WarningPanel.html">WarningPanel</a></li><li><a href="Webconf.html">Webconf</a></li><li><a href="WebconfChat.html">WebconfChat</a></li><li><a href="WebconfPageCreator.html">WebconfPageCreator</a></li><li><a href="WebconfScreenManager.html">WebconfScreenManager</a></li><li><a href="WebconfWorkspaceManager.html">WebconfWorkspaceManager</a></li><li><a href="aria.Dialog.html">Dialog</a></li><li><a href="html_events.html">html_events</a></li><li><a href="html_li.html">html_li</a></li><li><a href="html_ul.html">html_ul</a></li><li><a href="mail_html_mail_html.html">mail_html</a></li><li><a href="mel_cancellable_html_timer.html">mel_cancellable_html_timer</a></li><li><a href="mel_filter.html">mel_filter</a></li><li><a href="mel_html.html">mel_html</a></li><li><a href="mel_html2.html">mel_html2</a></li><li><a href="mel_html_timer.html">mel_html_timer</a></li><li><a href="rcube_splitter.html">rcube_splitter</a></li><li><a href="search.html">search</a></li><li><a href="searchBlock.html">searchBlock</a></li></ul><h3>Events</h3><ul><li><a href="AlarmPart.html#event:onChange">onChange</a></li><li><a href="CategoryPart.html#event:onChange">onChange</a></li><li><a href="EventView.html#event:before_save">before_save</a></li><li><a href="EventView.html#event:on_dialog_before_close">on_dialog_before_close</a></li><li><a href="EventView.html#event:on_drop">on_drop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Cette">Cette</a></li><li><a href="global.html#DAY_MS">DAY_MS</a></li><li><a href="global.html#DeleteLink">DeleteLink</a></li><li><a href="global.html#End">End</a></li><li><a href="global.html#Enum%25C3%25A9ration">Enumération</a></li><li><a href="global.html#GetLinkPopUp">GetLinkPopUp</a></li><li><a href="global.html#HOUR_MS">HOUR_MS</a></li><li><a href="global.html#Middle">Middle</a></li><li><a href="global.html#Mode">Mode</a></li><li><a href="global.html#Nextcloud">Nextcloud</a></li><li><a href="global.html#Nombres">Nombres</a></li><li><a href="global.html#PDFFindBar">PDFFindBar</a></li><li><a href="global.html#PDFFindController">PDFFindController</a></li><li><a href="global.html#Plugin">Plugin</a></li><li><a href="global.html#Portail">Portail</a></li><li><a href="global.html#RoundriveCreate">RoundriveCreate</a></li><li><a href="global.html#SELECTOR_CLASS_ROUND_CALENDAR">SELECTOR_CLASS_ROUND_CALENDAR</a></li><li><a href="global.html#Start">Start</a></li><li><a href="global.html#TextLayerBuilder">TextLayerBuilder</a></li><li><a href="global.html#Tri">Tri</a></li><li><a href="global.html#URL">URL</a></li><li><a href="global.html#Update">Update</a></li><li><a href="global.html#ViewHistory">ViewHistory</a></li><li><a href="global.html#WSPReady">WSPReady</a></li><li><a href="global.html#_on_mention_update">_on_mention_update</a></li><li><a href="global.html#add_mobile_class">add_mobile_class</a></li><li><a href="global.html#api_notifications">api_notifications</a></li><li><a href="global.html#audio_alarms">audio_alarms</a></li><li><a href="global.html#audiourltotest">audiourltotest</a></li><li><a href="global.html#base_color">base_color</a></li><li><a href="global.html#base_text_color">base_text_color</a></li><li><a href="global.html#changeType">changeType</a></li><li><a href="global.html#checkAllIdentities">checkAllIdentities</a></li><li><a href="global.html#checkOneIdentity">checkOneIdentity</a></li><li><a href="global.html#check_workspace_integrity">check_workspace_integrity</a></li><li><a href="global.html#command_parapheur">command_parapheur</a></li><li><a href="global.html#componentToHex">componentToHex</a></li><li><a href="global.html#copy_signature">copy_signature</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createLogo">createLogo</a></li><li><a href="global.html#createLogoType">createLogoType</a></li><li><a href="global.html#current_desktop_notification">current_desktop_notification</a></li><li><a href="global.html#date2ISO8601">date2ISO8601</a></li><li><a href="global.html#date2unixtime">date2unixtime</a></li><li><a href="global.html#default_note_uid">default_note_uid</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dialog">dialog</a></li><li><a href="global.html#dismiss_alarm">dismiss_alarm</a></li><li><a href="global.html#display_alarms">display_alarms</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#download_signature_outlook_htm">download_signature_outlook_htm</a></li><li><a href="global.html#download_signature_outlook_zip">download_signature_outlook_zip</a></li><li><a href="global.html#download_signature_thunderbird">download_signature_thunderbird</a></li><li><a href="global.html#enum_tooltip_mode">enum_tooltip_mode</a></li><li><a href="global.html#enum_tooltip_position">enum_tooltip_position</a></li><li><a href="global.html#ev_calendar_url">ev_calendar_url</a></li><li><a href="global.html#event_date_text">event_date_text</a></li><li><a href="global.html#fluxhtml">fluxhtml</a></li><li><a href="global.html#fluxrss">fluxrss</a></li><li><a href="global.html#folder_collapse">folder_collapse</a></li><li><a href="global.html#folder_collapse_unified">folder_collapse_unified</a></li><li><a href="global.html#folder_count">folder_count</a></li><li><a href="global.html#folder_count_unified">folder_count_unified</a></li><li><a href="global.html#folder_expand">folder_expand</a></li><li><a href="global.html#formatPhoneNumber">formatPhoneNumber</a></li><li><a href="global.html#format_datetime">format_datetime</a></li><li><a href="global.html#format_time">format_time</a></li><li><a href="global.html#fromunixtime">fromunixtime</a></li><li><a href="global.html#generate_canvas">generate_canvas</a></li><li><a href="global.html#getOutputScale">getOutputScale</a></li><li><a href="global.html#getPDFFileNameFromURL">getPDFFileNameFromURL</a></li><li><a href="global.html#getSignatureHTML">getSignatureHTML</a></li><li><a href="global.html#get_organizer">get_organizer</a></li><li><a href="global.html#has_attendees">has_attendees</a></li><li><a href="global.html#has_permission">has_permission</a></li><li><a href="global.html#hide_header_row">hide_header_row</a></li><li><a href="global.html#init_recurrence_edit">init_recurrence_edit</a></li><li><a href="global.html#init_time_autocomplete">init_time_autocomplete</a></li><li><a href="global.html#isArrayLike">isArrayLike</a></li><li><a href="global.html#isAsync">isAsync</a></li><li><a href="global.html#isNullOrUndefined">isNullOrUndefined</a></li><li><a href="global.html#is_attendee">is_attendee</a></li><li><a href="global.html#is_internal_organizer">is_internal_organizer</a></li><li><a href="global.html#is_organizer">is_organizer</a></li><li><a href="global.html#libkolab_audittrail">libkolab_audittrail</a></li><li><a href="global.html#load_next_page">load_next_page</a></li><li><a href="global.html#loader">loader</a></li><li><a href="global.html#m_mp_Create">m_mp_Create</a></li><li><a href="global.html#m_mp_CreateDocumentIconContract">m_mp_CreateDocumentIconContract</a></li><li><a href="global.html#m_mp_CreateEvent">m_mp_CreateEvent</a></li><li><a href="global.html#m_mp_CreateEvent_inpage">m_mp_CreateEvent_inpage</a></li><li><a href="global.html#m_mp_CreateOrOpenFrame">m_mp_CreateOrOpenFrame</a></li><li><a href="global.html#m_mp_Help">m_mp_Help</a></li><li><a href="global.html#m_mp_InitializeDocument">m_mp_InitializeDocument</a></li><li><a href="global.html#m_mp_NotificationFilter">m_mp_NotificationFilter</a></li><li><a href="global.html#m_mp_NotificationGetDate">m_mp_NotificationGetDate</a></li><li><a href="global.html#m_mp_NotificationGetElement">m_mp_NotificationGetElement</a></li><li><a href="global.html#m_mp_NotificationProcess">m_mp_NotificationProcess</a></li><li><a href="global.html#m_mp_NotificationProcessAfterAction">m_mp_NotificationProcessAfterAction</a></li><li><a href="global.html#m_mp_NotificationRefresh">m_mp_NotificationRefresh</a></li><li><a href="global.html#m_mp_NotificationRun">m_mp_NotificationRun</a></li><li><a href="global.html#m_mp_NotificationSettings">m_mp_NotificationSettings</a></li><li><a href="global.html#m_mp_NotificationStartup">m_mp_NotificationStartup</a></li><li><a href="global.html#m_mp_NotificationsAction">m_mp_NotificationsAction</a></li><li><a href="global.html#m_mp_NotificationsAppendFilters">m_mp_NotificationsAppendFilters</a></li><li><a href="global.html#m_mp_NotificationsAppendToPanel">m_mp_NotificationsAppendToPanel</a></li><li><a href="global.html#m_mp_NotificationsClean">m_mp_NotificationsClean</a></li><li><a href="global.html#m_mp_NotificationsDelete">m_mp_NotificationsDelete</a></li><li><a href="global.html#m_mp_NotificationsGet">m_mp_NotificationsGet</a></li><li><a href="global.html#m_mp_NotificationsMerge">m_mp_NotificationsMerge</a></li><li><a href="global.html#m_mp_NotificationsRefreshUnread">m_mp_NotificationsRefreshUnread</a></li><li><a href="global.html#m_mp_NotificationsSet">m_mp_NotificationsSet</a></li><li><a href="global.html#m_mp_NotificationsShowUnread">m_mp_NotificationsShowUnread</a></li><li><a href="global.html#m_mp_NotificationsSort">m_mp_NotificationsSort</a></li><li><a href="global.html#m_mp_OpenTask">m_mp_OpenTask</a></li><li><a href="global.html#m_mp_RizomoRefreshNotifications">m_mp_RizomoRefreshNotifications</a></li><li><a href="global.html#m_mp_ShowDesktopNotification">m_mp_ShowDesktopNotification</a></li><li><a href="global.html#m_mp_ShowNotification">m_mp_ShowNotification</a></li><li><a href="global.html#m_mp_ToggleGroupOptionsUser">m_mp_ToggleGroupOptionsUser</a></li><li><a href="global.html#m_mp_UpdateCreateDoc">m_mp_UpdateCreateDoc</a></li><li><a href="global.html#m_mp_action_from_storage">m_mp_action_from_storage</a></li><li><a href="global.html#m_mp_anchor_ariane">m_mp_anchor_ariane</a></li><li><a href="global.html#m_mp_close_ariane">m_mp_close_ariane</a></li><li><a href="global.html#m_mp_full_screen_ariane">m_mp_full_screen_ariane</a></li><li><a href="global.html#m_mp_get_all_hashtag">m_mp_get_all_hashtag</a></li><li><a href="global.html#m_mp_help_video">m_mp_help_video</a></li><li><a href="global.html#m_mp_set_storage">m_mp_set_storage</a></li><li><a href="global.html#mel_metapage">mel_metapage</a></li><li><a href="global.html#mel_shortcuts_press">mel_shortcuts_press</a></li><li><a href="global.html#meteo">meteo</a></li><li><a href="global.html#mm_s_Action">mm_s_Action</a></li><li><a href="global.html#mm_s_AfficheResults">mm_s_AfficheResults</a></li><li><a href="global.html#mm_s_CreateOrUpdateFrame">mm_s_CreateOrUpdateFrame</a></li><li><a href="global.html#mm_s_OnClick">mm_s_OnClick</a></li><li><a href="global.html#mm_s_bodyClick">mm_s_bodyClick</a></li><li><a href="global.html#mm_s_extend">mm_s_extend</a></li><li><a href="global.html#modify_signature">modify_signature</a></li><li><a href="global.html#noContextMenuHandler">noContextMenuHandler</a></li><li><a href="global.html#onInputChange">onInputChange</a></li><li><a href="global.html#open_dialog">open_dialog</a></li><li><a href="global.html#parseISO8601">parseISO8601</a></li><li><a href="global.html#parse_datetime">parse_datetime</a></li><li><a href="global.html#plugin_text">plugin_text</a></li><li><a href="global.html#rcm_tb_label_insert">rcm_tb_label_insert</a></li><li><a href="global.html#rcm_tb_label_submenu">rcm_tb_label_submenu</a></li><li><a href="global.html#rcube_libcalendaring">rcube_libcalendaring</a></li><li><a href="global.html#rcube_mail_ui">rcube_mail_ui</a></li><li><a href="global.html#rcube_scroller">rcube_scroller</a></li><li><a href="global.html#rcube_tasklist">rcube_tasklist</a></li><li><a href="global.html#rcube_tasklist_ui">rcube_tasklist_ui</a></li><li><a href="global.html#rgbToHex">rgbToHex</a></li><li><a href="global.html#save_option">save_option</a></li><li><a href="global.html#saving_lock">saving_lock</a></li><li><a href="global.html#scrollIntoView">scrollIntoView</a></li><li><a href="global.html#send_francetransfert_message">send_francetransfert_message</a></li><li><a href="global.html#send_melanissimo_message">send_melanissimo_message</a></li><li><a href="global.html#send_with_francetransfert">send_with_francetransfert</a></li><li><a href="global.html#send_with_melanissimo">send_with_melanissimo</a></li><li><a href="global.html#serialize_recurrence">serialize_recurrence</a></li><li><a href="global.html#set_recurrence_edit">set_recurrence_edit</a></li><li><a href="global.html#set_title">set_title</a></li><li><a href="global.html#set_toolbar_item_valid">set_toolbar_item_valid</a></li><li><a href="global.html#settings_da_set_email_recup">settings_da_set_email_recup</a></li><li><a href="global.html#setup_calendar">setup_calendar</a></li><li><a href="global.html#show_header_row">show_header_row</a></li><li><a href="global.html#show_password_change">show_password_change</a></li><li><a href="global.html#show_rcube_manage_labels">show_rcube_manage_labels</a></li><li><a href="global.html#snooze_dropdown">snooze_dropdown</a></li><li><a href="global.html#startX">startX</a></li><li><a href="global.html#stockage">stockage</a></li><li><a href="global.html#tasklist_options_menu">tasklist_options_menu</a></li><li><a href="global.html#text2html">text2html</a></li><li><a href="global.html#text_color">text_color</a></li><li><a href="global.html#toHex">toHex</a></li><li><a href="global.html#unlock_saving">unlock_saving</a></li><li><a href="global.html#use_signature">use_signature</a></li><li><a href="global.html#validate_message">validate_message</a></li><li><a href="global.html#visualValueCount">visualValueCount</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 17:26:58 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
