@@ -18,7 +18,8 @@ class MonPlugin extends bnum_plugin {
     {
         //Charge les configs de config.inc.php
         $this->load_config();
-        //Charge les textes du plugins, le premier argument est le dossier qui contient les textes, le second indique si les textes doivent être envoyé au js ou non
+        //Charge les textes du plugins, le premier argument est le dossier qui contient les textes, 
+        //le second indique si les textes doivent être envoyé au js ou non
         $this->add_texts('localization/', true);
 
         if ('monplugin' === $this->rc()->task) {
