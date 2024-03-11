@@ -3,7 +3,7 @@ layout: default
 title: Tips Javascripts
 ---
 
-[Retour](https://messagerie-melanie2.github.io/Bnum/Documentation/)
+[Retour](https://messagerie-melanie2.github.io/Bnum/Documentation/module_js#bonne-pratiques)
 
 Il est possible de vérifier si une variable qui est censé contenir une fonction est `null` et ne pas l'appeller si c'est le cas : 
 ```
