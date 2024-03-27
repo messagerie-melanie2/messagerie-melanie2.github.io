@@ -196,7 +196,7 @@ On assigne dans `_setup(...args)`.
 et on code dans `_main(...args)`.    
 La variable se nomme `main(...args)` si on hérite de `MelObject`, dans ce cas, `_init` et `_setup` seront appelé dans `main`.     
 
-On met d'abord se qui est protéger, ensuite ce qui est privé, puis ce qui est public et enfin ce qui est constant.
+On met d'abord ce qui est protégé, ensuite ce qui est privé, puis ce qui est public et enfin ce qui est constant.
 
 [Les tips javascript, c'est ici !](https://messagerie-melanie2.github.io/Bnum/Documentation/tips_js)
 

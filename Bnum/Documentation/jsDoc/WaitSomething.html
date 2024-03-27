@@ -1,10 +1,8 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: Roundcube-plugins-Mel/plugins/mel_portail/modules/fluxrss/rss.js | Source: Roundcube-plugins-Mel/plugins/mel_portail/modules/fluxrss/rss.js</title>
+    <title>Class: WaitSomething | Class: WaitSomething</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -26,7 +24,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Source: Roundcube-plugins-Mel/plugins/mel_portail/modules/fluxrss/rss.js</a></h1>
+        <h1><a href="index.html" class="link">Class: WaitSomething</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -43,79 +41,215 @@
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Class fluxrss
- * 
- * @returns
- */
-function fluxrss(id, feedUrl) {
-	this.id = id;
-	this.feedUrl = feedUrl;
-	this.rssTimeouts = {};
-}
+        <h2><span class="attribs"><span class="type-signature"></span></span>WaitSomething<span class="signature">(whatIWait, timeout)</span><span class="type-signature"></span></h2>
+        
+    
+</header>
 
-/**
- * Methode d'initialisation des flux rss
- */
-fluxrss.prototype.init = function() {
-	window.clearTimeout(this.rssTimeouts[this.id]);
-	this.rssTimeouts[this.id] = setTimeout(() => {
-		fetch(this.feedUrl, {credentials: "include", cache: "no-cache"}).then((res) => {
-		  res.text().then((xmlTxt) => {
-		    var domParser = new DOMParser()
-		    let doc = domParser.parseFromString(xmlTxt, 'text/xml')
-		    var items = doc.querySelectorAll('item');
-		    if (items.length === 0) {
-		    	items = doc.querySelectorAll('entry');
-		    }
-		    if (rcmail.env.portail_items[this.id].flip) {
-		    	var referenceNode = document.querySelector('#' + this.id + ' .back ul.news > li') !== null ? document.querySelector('#' + this.id + ' .back ul.news > li:first-child') : false;
-			}
-			var maxItems = rcmail.env.portail_items[this.id].maxItems ? rcmail.env.portail_items[this.id].maxItems : 6;
-		    for (let i = 0; i &lt; Math.min(items.length, maxItems); i++) {
-				let item = items[i];
-				let url = item.querySelector('link').textContent;
-				if (rcmail.env.portail_items[this.id].feedOldUrl) {
-					url = url.replace(rcmail.env.portail_items[this.id].feedOldUrl, rcmail.env.portail_items[this.id].feedNewUrl);
-				}
-		    	let news = {
-		    			url: url, 
-		    			title: item.querySelector('title').textContent, 
-		    			description: item.querySelector('description') ? item.querySelector('description').textContent : '',
-    					date: item.querySelector('date') ? item.querySelector('date').textContent.replace(/-/g, '/') : '',
-    			};
-		    	if (i === 0 &amp;&amp; !rcmail.env.portail_items[this.id].buttons) {
-					portail.addNews(this.id, news, false, rcmail.env.portail_items[this.id].newtab);
-					if (!rcmail.env.portail_items[this.id].flip 
-							&amp;&amp; !rcmail.env.portail_items[this.id].multiNews) {
-						break;
-					}
-		    	}
-		    	if (rcmail.env.portail_items[this.id].flip) {
-		    		portail.addNews(this.id, news, true, rcmail.env.portail_items[this.id].newtab, referenceNode);
-				}
-				else if (rcmail.env.portail_items[this.id].multiNews &amp;&amp; i > 0) {
-					portail.addNews(this.id, news, false, rcmail.env.portail_items[this.id].newtab);
-				}
-		    }
-		  });
-		});
-	}, 500);
-};
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-/**
- * Methode de refresh des flux rss
- */
-fluxrss.prototype.refresh = function() {
-	// Pas de refresh prévu pour l'instant, on le fait au F5
-	return;
-};
-</code></pre>
-        </article>
-    </section>
+<dt>
+    
+        <h4 class="name" id="WaitSomething">
+            
+                new <span class="type-signature"></span>WaitSomething<span class="signature">(whatIWait, timeout)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Roundcube-plugins-Mel_plugins_mel_metapage_js_lib_mel_promise.js.html">Roundcube-plugins-Mel/plugins/mel_metapage/js/lib/mel_promise.js</a></code>,
+                <code><a href="Roundcube-plugins-Mel_plugins_mel_metapage_js_lib_mel_promise.js.html#line329">line 329</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>whatIWait</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#WaitCallback">WaitCallback</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    5
+                
+                </td>
+            
+
+            <td class="description last">en secondes</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -132,7 +266,7 @@ fluxrss.prototype.refresh = function() {
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = '_sub'.replace(/"/g, '_');
+        var id = 'WaitSomething_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 
