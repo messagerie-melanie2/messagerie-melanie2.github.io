@@ -12,3 +12,4 @@ Voici les différentes documentations.
 - [Anatomie d'un module javascript](https://messagerie-melanie2.github.io/Bnum/Documentation/module_js)
 - [Fonctions utiles](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel/wiki/Fonctions-utiles-Javascript)
 - [Documentation de JSDoc](https://jsdoc.app/)
+- [Configurations des Modules](https://messagerie-melanie2.github.io/Bnum/Documentation/configuration_modules)
