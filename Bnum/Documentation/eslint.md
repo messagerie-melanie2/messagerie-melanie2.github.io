@@ -20,7 +20,7 @@ title: Configuration ESLINT
 	"rules": {
 		"no-unsafe-optional-chaining": "off",
 		"no-debugger": 1,
-		"no-undef":"warn",
+		"no-undef": "warn",
 		"no-shadow": "error",
 		"yoda": ["error", "never"],
 		"eqeqeq": ["error", "always"],
@@ -28,7 +28,6 @@ title: Configuration ESLINT
 		"quotes": ["error", "single"],
 		"no-console": "off",
 		"object-curly-spacing": ["error", "always"],
-		"single-line-condition": ["error", "always"],
 		"func-name-matching": [
 			"error",
 			"always",
@@ -41,5 +40,4 @@ title: Configuration ESLINT
 		"new-cap": ["error", { "capIsNewExceptionPattern": "\\.[A-Z]" }]
 	}
 }
-
 ```
