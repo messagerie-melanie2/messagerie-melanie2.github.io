@@ -6,6 +6,7 @@ title: Configurations
     
 - [JsDoc](https://messagerie-melanie2.github.io/Bnum/Documentation/jsdoc_config)
     - [Plugin JsDoc](https://gist.github.com/Rotomeca/296f86056a2327ac2066bf467e5e72b9)
+    - [Ptach JsDoc (tui)](https://messagerie-melanie2.github.io/Bnum/Documentation/configuration_modules)
 - [EsLint](https://messagerie-melanie2.github.io/Bnum/Documentation/eslint)
 - [Prettier](https://messagerie-melanie2.github.io/Bnum/Documentation/prettier)
 
