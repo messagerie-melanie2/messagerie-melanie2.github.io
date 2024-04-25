@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MelIconPrevisualiser</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link href="css/colors.css" rel="stylesheet" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/constants.min.js"></script>
+    <script src="js/html.js"></script>
+    <script src="js/icon_previsualiser.js" type="module">
+      window.MelIconPrevisualiser = MelIconPrevisualiser;
+    </script>
+  </head>
+  <body>
+    <style>
+      ul.ignore-bullet {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #bnum-folder-icon button {
+        transition: all 0.1s ease-in;
+        color: var(--secondary-text-color);
+        background-color: var(--main-bckg-color);
+        border-color: var(--mel-button-border-color);
+        display: inline-block;
+        width: -moz-fit-content;
+        width: fit-content;
+        border-radius: 50px;
+        padding: 5px 10px;
+        margin-top: 15px;
+        cursor: pointer;
+      }
+
+      #bnum-folder-icon button:hover,
+      .invite-button.create:hover {
+        background-color: var(--mel-button-hover-background-color);
+        border-color: var(--mel-button-hover-border-color);
+        color: var(--mel-button-hover-text-color);
+      }
+
+      #bnum-folder-icon button.selected-item {
+        background-color: var(--mel-button-active-background-color);
+        color: var(--mel-button-active-text-color);
+        pointer-events: none;
+      }
+
+      #bnum-folder-icon .square-item {
+        border: solid thin var(--main-border-color);
+        border-radius: 5px;
+      }
+
+      #bnum-folder-icon .square-item.px25 {
+        width: 25px;
+        height: 25px;
+      }
+
+      #bnum-folder-icon {
+        max-width: 500px;
+        background-color: var(--card-background-color);
+        padding: 15px;
+        border-radius: 5px;
+      }
+
+      #bnum-folder-icon-div {
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+
+    <div class="code-html">
+      <h2>
+        Utilisation de
+        <a
+          href="https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/module-MelIconPrevisualiser-MelIconPrevisualiser.html"
+          >MelIconPrevisualiser</a
+        >
+      </h2>
+      <div id="bnum-folder-icon-div"></div>
+    </div>
+
+    <script type="module" class="code-js">
+      import { MelHtml } from './js/MelHtml.js';
+      import { MelIconPrevisualiser } from './js/icon_previsualiser.js';
+
+      const DEFAULT_ICON = 'close';
+      let previsualiser = new MelIconPrevisualiser({
+        add_default_action_default_buttons: true,
+        add_defaults_actions: true,
+        generate_defaults_icons: true,
+      });
+
+      previsualiser.addCustomIcon('price_change');
+
+      previsualiser.on_create_default_items.push(() => {
+        return MelHtml.start
+          .li({ class: 'mel-button no-button-margin no-margin-button' })
+          .button({
+            class: 'selected-item mel-button no-button-margin no-margin-button',
+          })
+          .css({
+            'border-radius': '5px',
+            'margin-right': '5px',
+            'margin-bottom': '5px',
+            'line-height': 'initial',
+            padding: '5px 10px',
+          })
+          .attr(
+            'onmouseenter',
+            previsualiser._on_default_hover.bind(previsualiser),
+          )
+          .attr(
+            'onmouseleave',
+            previsualiser._on_default_leave.bind(previsualiser),
+          )
+          .attr('onclick', previsualiser._on_default_click.bind(previsualiser))
+          .icon(DEFAULT_ICON)
+          .end()
+          .end()
+          .end();
+      });
+
+      previsualiser.on_create_show_selected.push(() => {
+        return DEFAULT_ICON;
+      });
+
+      previsualiser.create_popup('Ma popup');
+    </script>
+  </body>
+</html>
