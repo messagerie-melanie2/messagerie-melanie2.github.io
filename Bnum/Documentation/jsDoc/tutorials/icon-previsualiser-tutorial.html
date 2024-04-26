@@ -140,31 +140,27 @@
       previsualiser.addCustomIcon('price_change');
 
       previsualiser.on_create_default_items.push(() => {
-        //Mise en forme par prettier :'(
         return MelHtml.start
           .li({ class: 'mel-button no-button-margin no-margin-button' })
-          .button({
-            class: `${$('#item-to-modify').text() === DEFAULT_ICON ? 'selected-item' : ''} mel-button no-button-margin no-margin-button`,
-          })
-          .css({
-            'border-radius': '5px',
-            'margin-right': '5px',
-            'margin-bottom': '5px',
-            'line-height': 'initial',
-            padding: '5px 10px',
-          })
-          .attr(
-            'onmouseenter',
-            previsualiser._on_default_hover.bind(previsualiser),
-          )
-          .attr(
-            'onmouseleave',
-            previsualiser._on_default_leave.bind(previsualiser),
-          )
-          .attr('onclick', previsualiser._on_default_click.bind(previsualiser))
-          .icon(DEFAULT_ICON)
-          .end()
-          .end()
+            .button({class: `${$('#item-to-modify').text() === DEFAULT_ICON ? 'selected-item' : ''} mel-button no-button-margin no-margin-button`})
+            .css({
+              'border-radius': '5px',
+              'margin-right': '5px',
+              'margin-bottom': '5px',
+              'line-height': 'initial',
+              padding: '5px 10px',
+            })
+            .attr(
+              'onmouseenter',
+              previsualiser._on_default_hover.bind(previsualiser),
+            )
+            .attr(
+              'onmouseleave',
+              previsualiser._on_default_leave.bind(previsualiser),
+            )
+            .attr('onclick', previsualiser._on_default_click.bind(previsualiser))
+              .icon(DEFAULT_ICON).end()
+            .end()
           .end();
       });
 
@@ -181,7 +177,7 @@
       });
 
       previsualiser.on_create_show_selected.push(() => {
-        return DEFAULT_ICON;
+        return $('#item-to-modify').text();
       });
 
       $('#button-item').click(() => {
