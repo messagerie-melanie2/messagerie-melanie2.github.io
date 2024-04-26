@@ -171,7 +171,39 @@ export class MelPrevisualiser extends MelObject {
       );
     }
 
-    $(`#${this.id}-div`).html($jquery_generated_from_js_html);
+    $('#bnum-folder-icon-div')
+      .dialog({
+        width: 500,
+        title,
+        position: { my: 'center', at: 'top', of: window },
+        buttons: [
+          {
+            text: 'Annuler',
+            class: 'mel-button no-margin-button no-button-margin',
+            click() {
+              self.on_cancel.call(self, this);
+              $(this).html('');
+              $('.black-screen').hide();
+              $(this).dialog('destroy');
+            },
+          },
+          {
+            text: 'Sauvegarder',
+            class: 'mel-button no-margin-button no-button-margin',
+            click() {
+              self.on_save.call(self, $('#bnum-folder-icon-div'));
+            },
+          },
+        ],
+        close() {
+          self.on_close.call(self, this);
+          $(this).html('');
+          $('.black-screen').hide();
+          $(this).dialog('destroy');
+        },
+      })
+      .html($jquery_generated_from_js_html);
+    //$(`#${this.id}-div`).html($jquery_generated_from_js_html);
   }
 
   _p_show_defaut_previsu(html) {

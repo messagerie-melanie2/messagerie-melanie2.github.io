@@ -67,7 +67,7 @@
       import { MelHtml } from './js/MelHtml.js';
       import { MelIconPrevisualiser } from './js/icon_previsualiser.js';
 
-      const DEFAULT_ICON = 'close';
+      const DEFAULT_ICON = $('#item-to-modify').text();
       let previsualiser = new MelIconPrevisualiser({
         add_default_action_default_buttons: true,
         add_defaults_actions: true,
@@ -77,10 +77,11 @@
       previsualiser.addCustomIcon('price_change');
 
       previsualiser.on_create_default_items.push(() => {
+        //Mise en forme par prettier :'(
         return MelHtml.start
           .li({ class: 'mel-button no-button-margin no-margin-button' })
           .button({
-            class: 'selected-item mel-button no-button-margin no-margin-button',
+            class: `${$('#item-to-modify').text() === DEFAULT_ICON ? 'selected-item' : ''} mel-button no-button-margin no-margin-button`,
           })
           .css({
             'border-radius': '5px',
@@ -104,18 +105,31 @@
           .end();
       });
 
+      previsualiser.on_save.push((popup, $dialog) => {
+        $('#item-to-modify').text(popup.get_selected_icon());
+        $dialog.dialog('close');
+      });
+
+      previsualiser.on_create_set_selected.push((html, icon, popup) => {
+        if (icon === $('#item-to-modify').text())
+          html = popup.select_item(html);
+        else html = popup.unselect_item(html);
+        return html;
+      });
+
       previsualiser.on_create_show_selected.push(() => {
         return DEFAULT_ICON;
       });
 
-      previsualiser.create_popup('Ma popup');
+      $('#button-item').click(() => {
+        previsualiser.create_popup('Ma popup');
+      });
     </pre></div>
             <div id="example-html" class="hidden"><pre class="prettyprint source">
-      &lt;h2>
-        Utilisation de
-        &lt;a href="https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/module-MelIconPrevisualiser-MelIconPrevisualiser.html">MelIconPrevisualiser&lt;/a>
-      &lt;/h2>
-      &lt;div id="bnum-folder-icon-div">&lt;/div>
+      &lt;h3>Test :&lt;/h3>
+      &lt;button id="button-item" class="btn btn-primary">
+        &lt;span class="material-symbols-outlined" id="item-to-modify">ads_click&lt;/span>
+      &lt;/button>
     </pre></div>
         </article>
     
