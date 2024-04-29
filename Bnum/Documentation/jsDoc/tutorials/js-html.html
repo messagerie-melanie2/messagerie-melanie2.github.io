@@ -109,13 +109,15 @@
         parent.location.href =
           'https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/module-JsHtml-____JsHtml.html';
       });
+
+      $('#parent').css('height', '400px').css('overflow', 'auto');
     </script>
 
     <script type="module" class="code-js">
       import { JsHtml } from './js/JsHtml.js';
 
       JsHtml.start
-        .table({class:'table table-striped table-hover table-bordered'}).css('max-height', '400px')
+        .table({class:'table table-striped table-hover table-bordered'}).css('height', '400px')
             .tag('thead')
                 .tr()
                     .th().text('Nom').end()
@@ -147,7 +149,7 @@
                     .end().generate().appendTo($('tbody'));
             }})
                 .text('Ajouter un élément')
-            .end().generate().appendTo($('#parent'));
+            .end().generate().appendTo($('#parent').parent());
                 
 
     </script>
