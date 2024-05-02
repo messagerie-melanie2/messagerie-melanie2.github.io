@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MelIconPrevisualiser</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link href="css/colors.css" rel="stylesheet" />
+    <link href="css/jquery-ui.min.css" rel="stylesheet" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/lib/jquery-ui.min.js"></script>
+    <script src="js/constants.min.js"></script>
+    <script src="js/html.js"></script>
+    <script src="js/icon_previsualiser.js" type="module">
+      window.MelIconPrevisualiser = MelIconPrevisualiser;
+    </script>
+  </head>
+  <body>
+    <style>
+      ul.ignore-bullet {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .mel-button {
+        transition: all 0.1s ease-in;
+        color: var(--secondary-text-color);
+        background-color: var(--main-bckg-color);
+        border-color: var(--mel-button-border-color);
+        display: inline-block;
+        width: -moz-fit-content;
+        width: fit-content;
+        border-radius: 50px;
+        padding: 5px 10px;
+        margin-top: 15px;
+        cursor: pointer;
+      }
+
+      .mel-button:hover,
+      .invite-button.create:hover {
+        background-color: var(--mel-button-hover-background-color);
+        border-color: var(--mel-button-hover-border-color);
+        color: var(--mel-button-hover-text-color);
+      }
+
+      .mel-button.selected-item {
+        background-color: var(--mel-button-active-background-color);
+        color: var(--mel-button-active-text-color);
+        pointer-events: none;
+      }
+
+      #bnum-folder-icon .square-item {
+        border: solid thin var(--main-border-color);
+        border-radius: 5px;
+      }
+
+      #bnum-folder-icon .square-item.px25 {
+        width: 25px;
+        height: 25px;
+      }
+
+      #bnum-folder-icon {
+        max-width: 500px;
+        background-color: var(--card-background-color);
+        padding: 15px;
+        border-radius: 5px;
+      }
+
+      #bnum-folder-icon-div {
+        display: flex;
+        justify-content: center;
+      }
+
+      .black-screen {
+        width: 100%;
+        height: 100%;
+        background-color: #00000063;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .mel-button.no-button-margin.no-margin-button.btn.btn-block-mel.btn-secondary.btn-mel {
+        min-height: 160px;
+        width: 100%;
+        margin-right: 15px;
+        border-radius: 5px;
+      }
+
+      .mel-button.no-button-margin.no-margin-button.btn.btn-block-mel.btn-secondary.btn-mel:first-of-type {
+        margin-left: 15px;
+      }
+
+      .mel-button.no-button-margin.no-margin-button.btn.btn-block-mel.btn-secondary.btn-mel bnum-icon {
+        margin-right: 0px;
+        font-size: 60px;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .mel-button.no-button-margin.no-margin-button.btn.btn-block-mel.btn-secondary.btn-mel .btn-txt {
+        display: block;
+      }
+    </style>
+
+    <div id="body">
+      <h2 style="text-align: center">
+        Utilisation de
+        <a href="#">RcmailDialog</a>
+      </h2>
+      <div class="black-screen" style="display: none"></div>
+      <div id="dialog"></div>
+    </div>
+    <div class="code-html">
+      <button id="button-item" class="btn btn-primary">
+        Ouvrir la modale
+        <span class="material-symbols-outlined" id="item-to-modify"
+          >ads_click</span
+        >
+      </button>
+      <div id="item-to-add"></div>
+    </div>
+
+    <script>
+      $('h2 a').click(() => {
+        parent.location.href =
+          'https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/RcmailDialog.html';
+      });
+
+      $('#button-item').click(() => {
+        $('.black-screen').show();
+      });
+    </script>
+
+    <script type="module" class="code-js">
+      import {RcmailDialog, RcmailDialogButton, RcmailDialogChoiceButton} from './js/modal.js';
+      import { MelHtml } from './js/MelHtml.js';
+
+      $('#button-item').click(page_1);
+
+      function page_1() {
+        var dialog;
+
+        const button_add = new RcmailDialogChoiceButton('Ajouter', 'add', {
+          click: (e) => {
+            page_2(dialog);
+          }
+        });
+        const button_clear = new RcmailDialogChoiceButton('Vider', 'clear', {click: (e) => {
+          $('#item-to-add').text('');
+          dialog._$dialog.html('');
+          dialog.hide();
+          $('.black-screen').hide();
+        }});
+
+        dialog = RcmailDialog.DrawChoice('Que faire', button_add, button_clear);
+        dialog.update_config('close', () => {
+          dialog._$dialog.html('');
+          $('.black-screen').hide();
+        });
+      }
+
+      function page_2(dialog) {
+            const button_save = new RcmailDialogButton('Sauvegarder', {
+              click: (e) => {
+                $('#item-to-add').append($('<div>').text($('#txttoadd').val()));
+                dialog._$dialog.html('');
+                dialog.hide();
+                $('.black-screen').css('display', 'none');
+              }
+            });
+            const button_cancel = new RcmailDialogButton('Annuler', {
+              click: (e) => {
+                dialog.hide();
+                $('#button-item').click();
+              }
+            });
+            
+            const html = MelHtml.start
+            .div({class:'mel'})
+              .input_text({placeholder:'Texte à ajouter', id:'txttoadd', class:'form-control'})
+            .end();
+
+            dialog.hide();
+            dialog = new RcmailDialog(html, {
+              title: 'Ajouter un élément',
+              buttons: [button_save, button_cancel],
+              options: {
+                close() {
+                    $('.black-screen').hide();
+                }
+              }
+            });
+         
+      }
+
+    </script>
+  </body>
+</html>
+
+<!-- By Rotomeca -->
