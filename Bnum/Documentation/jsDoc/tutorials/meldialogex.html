@@ -215,7 +215,7 @@
         console.log('Redémarrer le chrono....');
 
         if (!inter) {
-          //Détruit la dialog pour libérer de la mémoire au bout de 5 minutes de non utilisation
+          //Détruit la dialog pour libérer de la mémoire au bout de 2 minutes de non utilisation
           inter = setInterval(() => {
             console.log('Vérification....');
             if (new Date() - last_date > 60*1000*2) {
