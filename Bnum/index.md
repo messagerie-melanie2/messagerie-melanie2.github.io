@@ -30,11 +30,11 @@ Pour contribuer, il suffit de vous rendre sur les dépots Github [Roundcube-Mel]
 
 | Versions | Changements |
 | -------- | ----------- |
-| Mai 2024 | [Nouveautés de la version 24.4](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-mars-2024) |
+| Septembre 2024 | [Nouveautés de la version 24.7](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/version-en-cours) |
+| Juillet 2024 | [Nouveautés de la version 24.5](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-juillet-2024) |
+| Mai 2024 | [Nouveautés de la version 24.4](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-mai-2024) |
 | Avril 2024 | [Nouveautés de la version 24.3](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-avril-2024) |
 | Mars 2024 | [Nouveautés de la version 24.2](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-mars-2024) |
-| Février 2024 | [Nouveautés de la version 24.1](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-fevrier-2024) |
-| Janvier 2024 | [Nouveautés de la version 23.12](https://fabrique-numerique.gitbook.io/bnum/dernieres-fonctionnalites/et-avant-.../version-janvier-2024) |
 
 
 ### Messagerie Mél
