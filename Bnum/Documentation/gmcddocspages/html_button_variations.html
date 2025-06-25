@@ -1,0 +1,2354 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemple</title>
+
+    <script>
+
+/**
+ * Enumération qui contient le mode de CustomTag
+ * @enum {Symbol}
+ */
+const EWebComponentMode = {
+  /**
+   * Le composant sera mis en `display:block`
+   * @type {Symbol}
+   */
+  div: Symbol('div'),
+  /**
+   * Comportement standard.
+   * @type {Symbol}
+   */
+  span: Symbol('span'),
+  /**
+   * Le composant sera mis en `display:inline-block`
+   * @type {Symbol}
+   */
+  inline_block: Symbol('inline-block'),
+  /**
+   * Le composant sera mis en `display:flex`
+   * @type {Symbol}
+   */
+  flex: Symbol('flex'),
+};
+
+class BnumEvent {
+  constructor() {
+    /**
+     * Liste des évènements à appeler
+     * @type {Object<string, T>}
+     * @member
+     */
+    this.events = {};
+    /**
+     *	Compteur d'évènements
+     * @type {number}
+     * @private
+     */
+    this._count = 0;
+  }
+
+  /**
+   * Ajoute un callback
+   * @param {T} event Callback qui sera appelé lors de l'appel de l'évènement
+   * @param  {...any} args Liste des arguments qui seront passé aux callback
+   * @returns {string} Clé créée
+   */
+  push(event, ...args) {
+    const key = this._generateKey();
+    this.events[key] = { args, callback: event };
+    ++this._count;
+    return key;
+  }
+
+  /**
+   * Ajoute un callback avec un clé qui permet de le retrouver plus tard
+   * @param {string} key Clé de l'évènement
+   * @param {T} event Callback qui sera appelé lors de l'appel de l'évènement
+   * @param  {...any} args Liste des arguments qui seront passé aux callback
+   */
+  add(key, event, ...args) {
+    if (!this.events[key]) ++this._count;
+
+    this.events[key] = { args, callback: event };
+  }
+
+  /**
+   * Vérifie si une clé éxiste
+   * @param {string} key
+   * @returns {boolean}
+   */
+  has(key) {
+    return !!this.events[key];
+  }
+
+  /**
+   * Supprime un callback
+   * @param {string} key Clé
+   */
+  remove(key) {
+    this.events[key] = null;
+
+    --this._count;
+  }
+
+  /**
+   * Met les count à jours si il y a des modification directement via `events`
+   * @returns {RotomecaEvent<T>}
+   */
+  rebase() {
+    let rebased = MelEnumerable.from(this.events).where((x) => !!x?.value);
+
+    this.events = rebased.toJsonDictionnary(
+      (x) => x.key,
+      (x) => x.value,
+    );
+    this._count = rebased.count();
+
+    rebased = null;
+    return this;
+  }
+
+  /**
+   * Renvoie si il y a des évènements ou non.
+   * @returns {boolean}
+   */
+  haveEvents() {
+    return this.count() > 0;
+  }
+
+  /**
+   * Affiche le nombre d'évènements
+   * @returns {number}
+   */
+  count() {
+    return this._count;
+  }
+
+  /**
+   * Génère une clé pour l'évènement
+   * @private
+   * @returns {string}
+   */
+  _generateKey() {
+    const g_key =
+      window?.mel_metapage?.Functions?.generateWebconfRoomName?.() ||
+      Math.random() * (this._count + 10);
+
+    let ae = false;
+    for (const key in this.events) {
+      if (Object.hasOwnProperty.call(this.events, key)) {
+        if (key === g_key) {
+          ae = true;
+          break;
+        }
+      }
+    }
+
+    if (ae) return this._generateKey();
+    else return g_key;
+  }
+
+  /**
+   * Appèle les callbacks
+   * @param  {...any} params Paramètres à envoyer aux callbacks
+   * @returns {null | any | Array}
+   */
+  call(...params) {
+    let results = {};
+    const keys = Object.keys(this.events);
+
+    if (keys.length !== 0) {
+      for (let index = 0, len = keys.length; index < len; ++index) {
+        const key = keys[index];
+
+        if (this.events[key]) {
+          const { args, callback } = this.events[key];
+
+          if (callback)
+            results[key] = this._call_callback(
+              callback,
+              ...[...args, ...params],
+            );
+        }
+      }
+    }
+
+    switch (Object.keys(results).length) {
+      case 0:
+        return null;
+      case 1:
+        return results[Object.keys(results)[0]];
+      default:
+        return results;
+    }
+  }
+
+  /**
+   * Lance un callback
+   * @param {T} callback Callback à appeler
+   * @param  {...any} args Paramètres à envoyer aux callbacks
+   * @returns {*}
+   */
+  _call_callback(callback, ...args) {
+    return callback(...args);
+  }
+
+  /**
+   * Appèle les callbacks
+   * @param  {...any} params Paramètres à envoyer aux callbacks
+   * @returns {Promise<null | any | Array>}
+   * @async
+   */
+  async asyncCall(...params) {
+    let asyncs = [];
+    for (const key in this.events) {
+      if (Object.hasOwnProperty.call(this.events, key)) {
+        const { args, callback } = this.events[key];
+        if (callback)
+          asyncs.push(this._call_callback(callback, ...[...args, ...params]));
+      }
+    }
+
+    const results = (await Promise.allSettled(asyncs)).map((x) => x.value);
+
+    switch (results.length) {
+      case 0:
+        return null;
+      case 1:
+        return results[Object.keys(results)[0]];
+      default:
+        return results;
+    }
+  }
+
+  /**
+   * Vide la classe
+   */
+  clear() {
+    this.events = {};
+    this._count = 0;
+  }
+}
+
+class BaseStorage {
+  constructor() {
+    let storage = {};
+
+    /**
+     * Ajoute un item sous une clé précise
+     * @param {string} key
+     * @param {T} item
+     * @returns {BaseStorage<T>} Chaînage
+     */
+    this.add = (key, item) => {
+      storage[key] = item;
+      return this;
+    };
+
+    /**
+     * Récupère une valeur à partir d'une clé.
+     * @param {string} key
+     * @param {?T} default_value
+     * @returns {?T}
+     */
+    this.get = (key, default_value = null) => storage[key] ?? default_value;
+    /**
+     * Supprime un item à partir d'une clé
+     * @param {string} key
+     * @returns {BaseStorage<T>} Chaînage
+     */
+    this.remove = (key) => {
+      storage[key] = null;
+      return this;
+    };
+
+    /**
+     * Vérifie si une clé est associé à un objet
+     * @param {string} key
+     * @returns {Boolean}
+     */
+    this.has = (key) =>
+      !!storage[key] || storage[key] === false || storage[key] === 0;
+
+    /**
+     * Vide le dictionnaire
+     * @returns {BaseStorage<T>} Chaînage
+     */
+    this.clear = () => {
+      storage = {};
+      return this;
+    };
+
+    /**
+     * Taille du dictionnaire
+     * @readonly
+     * @type {Number}
+     */
+    this.length = null;
+    this.keys = null;
+
+    Object.defineProperty(this, 'length', {
+      get() {
+        return Object.keys(storage).length;
+      },
+    });
+
+    Object.defineProperty(this, 'keys', {
+      get() {
+        return Object.keys(storage);
+      },
+    });
+
+    /**
+     * Itérateur sur le dictionnaire
+     * @generator
+     * @yields {{key: string, value: T}}
+     */
+    this[Symbol.iterator] = function* () {
+      for (const key in storage) {
+        if (Object.hasOwnProperty.call(storage, key)) {
+          const value = storage[key];
+          yield { key, value };
+        }
+      }
+    };
+  }
+}
+
+const EMPTY_STRING = '';
+const REG_XSS_SAFE = /^[-.\w\s%()]+$/;
+/**
+ * @callback BnumHTMLElementAttributeChangedCallback
+ * @param {string} name - Nom de l'attribut modifié.
+ * @param {?string} oldVal - Ancienne valeur de l'attribut.
+ * @param {?string} newVal - Nouvelle valeur de l'attribut.
+ * @returns {void}
+ */
+
+/**
+ * Classe de base pour les composants bnum personnalisés.
+ *
+ * Fournit les méthodes de cycle de vie et de gestion des attributs pour les webcomponents.
+ * @class
+ * @extends HTMLElement
+ * @abstract
+ */
+class ABnumHTMLElement extends HTMLElement {
+  /**
+   * Données mises en mémoire
+   * @type {BaseStorage<any>}
+   * @private
+   */
+  #_data = new BaseStorage();
+  static #_NoItem = Symbol();
+  /**
+   * Retourne la liste des attributs observés par le composant.
+   * @readonly
+   * @returns {string[]} Liste des noms d'attributs à observer.
+   */
+  static get observedAttributes() {
+    return this._p_observedAttributes();
+  }
+
+  /**
+   * Méthode interne pour définir les attributs observés.
+   *
+   * Peut être surchargée par les classes dérivées.
+   * @protected
+   * @returns {string[]} Liste des attributs à observer.
+   */
+  static _p_observedAttributes() {
+    return [];
+  }
+
+  /**
+   * Constructeur du composant.
+   *
+   * Initialise le shadow DOM et l'événement de changement d'attribut.
+   */
+  constructor() {
+    super();
+
+    if (this._p_isShadowElement()) this.attachShadow({ mode: 'open' });
+    /**
+     * Événement déclenché lors d'un changement d'attribut.
+     * @protected
+     * @type {BnumEvent<BnumHTMLElementAttributeChangedCallback>}
+     */
+    this._p_on_attribute_changed = new BnumEvent();
+
+    const script = this.querySelector('script');
+    if (script) script.remove();
+  }
+
+  /**
+   * Callback appelée lors d'un changement d'attribut observé.
+   * @param {string} name - Nom de l'attribut modifié.
+   * @param {string|null} oldVal - Ancienne valeur de l'attribut.
+   * @param {string|null} newVal - Nouvelle valeur de l'attribut.
+   */
+  attributeChangedCallback(name, oldVal, newVal) {
+    this._p_on_attribute_changed.call(name, oldVal, newVal);
+  }
+
+  /**
+   * Callback appelée lorsque le composant est ajouté au DOM.
+   * Gère le préchargement, le rendu et l'attachement des événements.
+   */
+  connectedCallback() {
+    this.render();
+  }
+
+  /**
+   * Callback appelée lorsque le composant est retiré du DOM.
+   * Gère le pré-déchargement et le détachement des événements.
+   */
+  disconnectedCallback() {
+    this._p_preunload();
+    this._p_detach();
+  }
+
+  render() {
+    this._p_preload();
+    {
+      const rendered = this._p_render();
+      if (typeof rendered === 'string') {
+        (this._p_isShadowElement() ? this.shadowRoot : this).innerHTML =
+          `${this._p_style() || EMPTY_STRING}${rendered}`;
+      }
+    }
+    this._p_attach();
+  }
+
+  //#region Public
+  /**
+   * Récupère une donnée ou la définit pour le composant.
+   *
+   * Si `value` est fourni, la donnée est définie et le composant est retourné.
+   *
+   * Si `value` n'est pas fourni, la donnée est récupérée.
+   *
+   * Si `fromAttribute` est `true`, la donnée est récupérée depuis l'attribut `data-{name}` ou stockée dans l'attribut `data-{name}`.
+   *
+   * Sinon, elle est récupérée ou stockée dans les données en mémoire.
+   * @param {*} name
+   * @param {Object} [param1={}]
+   * @param {T | symbol} [param1.value=ABnumHTMLElement.#_NoItem]
+   * @param {boolean} [param1.fromAttribute=false]
+   * @returns {T | this}
+   * @template T
+   */
+  data(
+    name,
+    { value = ABnumHTMLElement.#_NoItem, fromAttribute = false } = {},
+  ) {
+    var returnValue = null;
+
+    if (value === ABnumHTMLElement.#_NoItem)
+      returnValue = this.#_getData(name, fromAttribute);
+    else {
+      this.#_setData(name, value, fromAttribute);
+      returnValue = this;
+    }
+
+    return returnValue;
+  }
+
+  // --- jQuery-like methods ---
+
+  /**
+   * Ajoute une ou plusieurs classes à l'élément.
+   * @param {...string} classNames
+   * @returns {this}
+   */
+  addClass(...classNames) {
+    this.classList.add(...classNames.flatMap((c) => c.split(' ')));
+    return this;
+  }
+
+  /**
+   * Retire une ou plusieurs classes à l'élément.
+   * @param {...string} classNames
+   * @returns {this}
+   */
+  removeClass(...classNames) {
+    this.classList.remove(...classNames.flatMap((c) => c.split(' ')));
+    return this;
+  }
+
+  /**
+   * Bascule une classe sur l'élément.
+   * @param {string} className
+   * @param {boolean} [force]
+   * @returns {this}
+   */
+  toggleClass(className, force) {
+    this.classList.toggle(className, force);
+    return this;
+  }
+
+  /**
+   * Vérifie si l'élément possède une classe.
+   * @param {string} className
+   * @returns {boolean}
+   */
+  hasClass(className) {
+    return this.classList.contains(className);
+  }
+
+  /**
+   * Obtient ou définit un attribut.
+   * @param {string} name
+   * @param {string} [value]
+   * @returns {string|this}
+   */
+  attr(name, value) {
+    if (arguments.length === 1) return this.getAttribute(name);
+    this.setAttribute(name, value);
+    return this;
+  }
+
+  /**
+   * Obtient ou définit le style CSS.
+   * @param {string|Object} prop
+   * @param {string} [value]
+   * @returns {string|this}
+   */
+  css(prop, value) {
+    if (typeof prop === 'string') {
+      if (arguments.length === 1) return this.style[prop];
+      this.style[prop] = value;
+    } else if (typeof prop === 'object') {
+      for (const [k, v] of Object.entries(prop)) {
+        this.style[k] = v;
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Obtient ou définit le HTML de l'élément.
+   * @param {string} [value]
+   * @returns {string|this}
+   */
+  html(value) {
+    if (arguments.length === 0) return this.innerHTML;
+    this.innerHTML = value;
+    return this;
+  }
+
+  /**
+   * Obtient ou définit le texte de l'élément.
+   * @param {string} [value]
+   * @returns {string|this}
+   */
+  text(value) {
+    if (arguments.length === 0) return this.textContent;
+    this.textContent = value;
+    return this;
+  }
+
+  /**
+   * Obtient ou définit la valeur de l'élément (pour input, select, textarea).
+   * @param {string} [value]
+   * @returns {string|this}
+   */
+  val(value) {
+    if ('value' in this) {
+      if (arguments.length === 0) return this.value;
+      this.value = value;
+      return this;
+    }
+    return undefined;
+  }
+
+  /**
+   * Ajoute un écouteur d'événement.
+   * @param {string} type
+   * @param {Function} listener
+   * @param {Object|boolean} [options]
+   * @returns {this}
+   */
+  on(type, listener, options) {
+    this.addEventListener(type, listener, options);
+    return this;
+  }
+
+  /**
+   * Retire un écouteur d'événement.
+   * @param {string} type
+   * @param {Function} listener
+   * @param {Object|boolean} [options]
+   * @returns {this}
+   */
+  off(type, listener, options) {
+    this.removeEventListener(type, listener, options);
+    return this;
+  }
+
+  /**
+   * Déclenche un événement.
+   * @param {string} type
+   * @param {Object} [detail]
+   * @returns {this}
+   */
+  trigger(type, detail) {
+    this.dispatchEvent(new CustomEvent(type, { detail }));
+    return this;
+  }
+
+  /**
+   * Ajoute du contenu ou des éléments à la fin de l'élément courant.
+   * @param {...(Node|string)} nodes
+   * @returns {this}
+   */
+  append(...nodes) {
+    for (const node of nodes) {
+      if (typeof node === 'string') {
+        this.insertAdjacentHTML('beforeend', node);
+      } else {
+        this.appendChild(node);
+      }
+    }
+
+    return this;
+  }
+
+  /**
+   * Ajoute l'élément courant à la fin de la cible.
+   * @param {Element} target
+   * @returns {this}
+   */
+  appendTo(target) {
+    if (target && typeof target.appendChild === 'function') {
+      target.appendChild(this);
+    }
+    return this;
+  }
+
+  /**
+   * Ajoute du contenu ou des éléments au début de l'élément courant.
+   * @param {...(Node|string)} nodes
+   * @returns {this}
+   */
+  prepend(...nodes) {
+    for (let len = nodes.length, index = len; index > 0; --index) {
+      const node = nodes[index];
+      if (typeof node === 'string') {
+        this.insertAdjacentHTML('afterbegin', node);
+      } else {
+        this.insertBefore(node, this.firstChild);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Ajoute l'élément courant au début de la cible.
+   * @param {Element} target
+   * @returns {this}
+   */
+  prependTo(target) {
+    if (target && typeof target.insertBefore === 'function') {
+      target.insertBefore(this, target.firstChild);
+    }
+    return this;
+  }
+
+  /**
+   * Insère du contenu ou des éléments juste avant l'élément courant.
+   * @param {...(Node|string)} nodes
+   * @returns {this}
+   */
+  before(...nodes) {
+    for (const node of nodes) {
+      if (typeof node === 'string') {
+        this.insertAdjacentHTML('beforebegin', node);
+      } else if (this.parentNode) {
+        this.parentNode.insertBefore(node, this);
+      }
+    }
+
+    return this;
+  }
+
+  /**
+   * Insère du contenu ou des éléments juste après l'élément courant.
+   * @param {...(Node|string)} nodes
+   * @returns {this}
+   */
+  after(...nodes) {
+    for (let len = nodes.length, index = len; index > 0; --index) {
+      const node = nodes[index];
+
+      if (typeof node === 'string') {
+        this.insertAdjacentHTML('afterend', node);
+      } else if (this.parentNode) {
+        if (this.nextSibling) {
+          this.parentNode.insertBefore(node, this.nextSibling);
+        } else {
+          this.parentNode.appendChild(node);
+        }
+      }
+    }
+
+    return this;
+  }
+  //#endregion
+
+  //#region Private
+  #_getData(name, fromAttribute) {
+    var data = EMPTY_STRING;
+
+    if (fromAttribute) data = this.getAttribute(`data-${name}`);
+    else {
+      if (this.hasAttribute(`data-${name}`)) {
+        data = this.#_getData(name, true);
+        this.removeAttribute(`data-${name}`);
+        this._p_setData(name, data);
+      } else data = this._p_getData(name);
+    }
+
+    return data;
+  }
+
+  #_setData(name, value, fromAttribute) {
+    if (fromAttribute) this.setAttribute(`data-${name}`, value);
+    else this._p_setData(name, value);
+
+    return this;
+  }
+  //#endregion
+
+  //#region Protected
+  /**
+   * Recupère une donnée depuis les données en mémoire
+   * @param {string} name Nom de la donnée à récupérée
+   * @returns {T}
+   * @template T
+   * @protected
+   */
+  _p_getData(name) {
+    return this.#_data.get(name);
+  }
+
+  /**
+   * Met une donnée dans les données en mémoire
+   * @param {string} name Nom de la donnée à récupérée
+   * @param {T} value Valeur à mettre en mémoire
+   * @returns {this}
+   * @template T
+   * @protected
+   */
+  _p_setData(name, value) {
+    this.#_data.add(name, value);
+    return this;
+  }
+
+  _p_hasData(name) {
+    return this.#_data.has(name);
+  }
+  //#endregion
+
+  //#region Virtual
+
+  /**
+   * Méthode interne pour fournir le style du composant.
+   * Peut être surchargée.
+   * @protected
+   * @returns {string} Le style CSS à appliquer.
+   */
+  _p_style() {
+    return EMPTY_STRING;
+  }
+
+  /**
+   * Méthode appelée avant le rendu du composant.
+   * Peut être surchargée.
+   * @protected
+   */
+  _p_preload() {}
+
+  /**
+   * Méthode interne pour générer le HTML du composant.
+   * Peut être surchargée.
+   * @protected
+   * @returns {string} Le HTML à afficher dans le shadow DOM.
+   */
+  _p_render() {
+    return EMPTY_STRING;
+  }
+
+  /**
+   * Méthode appelée après le rendu pour attacher des événements ou des comportements.
+   * Peut être surchargée.
+   * @protected
+   */
+  _p_attach() {}
+
+  /**
+   * Méthode appelée avant le retrait du composant du DOM.
+   * Peut être surchargée.
+   * @protected
+   */
+  _p_preunload() {}
+
+  /**
+   * Méthode appelée pour détacher les événements ou comportements lors du retrait du composant.
+   * Peut être surchargée.
+   * @protected
+   */
+  _p_detach() {}
+  /**
+   * Indique si l'élément est un élément de type Shadow DOM.
+   * @returns {boolean}
+   * @protected
+   */
+  _p_isShadowElement() {
+    return true;
+  }
+
+  //#endregion
+
+  /**
+   * Crée une instance de l'élément.
+   *
+   * Doit être implémentée dans les classes dérivées.
+   * @returns {ABnumHTMLElement} Instance de l'élément créé.
+   * @throws {Error} Si la méthode n'est pas implémentée dans la classe dérivée.
+   * @static
+   * @abstract
+   */
+  static Create() {
+    throw new Error('Create method must be implemented in derived class.');
+  }
+
+  /**
+   * Retourne le nom de la balise HTML associée à ce composant.
+   *
+   * Doit être implémentée dans les classes dérivées.
+   * @type {string}
+   * @throws {Error} Si la propriété n'est pas implémentée dans la classe dérivée.
+   * @static
+   * @abstract
+   * @readonly
+   */
+  static get TAG() {
+    throw new Error('TAG getter must be implemented in derived class.');
+  }
+
+  /**
+   * Défini un élément si il n'a pas été défini.
+   */
+  static TryDefine() {
+    this.TryDefineElement(this.TAG, this);
+  }
+
+  /**
+   * Défini un élément si il n'a pas été défini.
+   * @template {ABnumHTMLElement} T
+   * @param {string} tag Tag de l'élément custom
+   * @param {new (...args: any[]) => T} constructor Constructeur de l'élément (doit hériter de ABnumHTMLElement)
+   */
+  static TryDefineElement(tag, constructor) {
+    if (!customElements.get(tag)) customElements.define(tag, constructor);
+  }
+}
+
+
+/**
+ * @class
+ * @classdesc Classse de base pour les Webcomposants.
+ * @extends HTMLElement
+ * @abstract
+ * @see {@link https://developer.mozilla.org/fr/docs/Web/API/Web_components/Using_shadow_DOM}
+ */
+class HtmlCustomTag extends HTMLElement {
+  /**
+   * Mode du composant, cad, son type de display par défaut.
+   * @private
+   * @type {EWebComponentMode}
+   * @default eMode.span
+   */
+  #mode = EWebComponentMode.span;
+  #loaded = false;
+  /**
+   * Le shadow-dom est complètement optionnel et doit être voulu par "data-shadow=true".
+   *
+   * Si le shadow dom est activé, c'est le composant qui doit gérer son style et son affichage.
+   *
+   * Contient diverses fonctions utiles, les webcomposants doivent hériter de cette classe.
+   * @param {Object} [param={}] Paramètres optionnes pour les enfants de cette classe.
+   * @param {EWebComponentMode} [param.mode=EWebComponentMode.span] Mode du composant, cad son type d'affichage par défaut.
+   */
+  constructor({ mode = EWebComponentMode.span } = {}) {
+    super();
+
+    this.#mode = mode ?? EWebComponentMode.span;
+  }
+
+  /**
+   * Element sur lequel on doit ajouter des nodes enfants.
+   *
+   * Si le shadow dom est activé, ils seront ajoutés au shadow root, sinon à ce composant.
+   * @readonly
+   * @type {ShadowRoot | this}
+   * @see {@link https://developer.mozilla.org/fr/docs/Web/API/Web_components/Using_shadow_DOM}
+   */
+  get navigator() {
+    return this.shadowEnabled() ? (this.shadowRoot ?? this) : this;
+  }
+
+  /**
+   * Cet element en jQuery
+   * @readonly
+   * @type {external:jQuery}
+   */
+  get $() {
+    return $(this);
+  }
+
+  /**
+   * Si l'élément est chargé ou non
+   * @type {string}
+   * @readonly
+   */
+  get elementLoaded() {
+    return this.#loaded;
+  }
+
+  /**
+   * Est appelé par le navigateur lorsque le composant est affiché.
+   *
+   * Gère dans un premier temps le mode puis appèle le setup enfant.
+   * @see {@link _p_main}
+   */
+  connectedCallback() {
+    if (!this.#loaded) {
+      this.setMode(this.#mode, { ignoreLoad: true });
+
+      if (this._p_main) this._p_main();
+
+      this.#loaded = true;
+      this._p_setLoaded();
+    }
+  }
+
+  /**
+   * Est appelé lorsque le composant est détruit.
+   *
+   * Permet de libérer des données.
+   * @see {@link destroy}
+   */
+  disconnectedCallback() {
+    if (this.destroy) this.destroy();
+  }
+
+  /**
+   * Doit être surchargée par les classe fille.
+   *
+   * C'est ici que les instructions de setup doivent être mises.
+   * @protected
+   * @returns {this} Chaîne
+   */
+  _p_main() {
+    return this;
+  }
+
+  /**
+   * Créer un shadoroot si le shadow dom est activé. Sinon, renvoie `this`.
+   * @protected
+   * @returns {ShadowRoot | this}
+   */
+  _p_start_construct({ shadowConfig = {} } = {}) {
+    shadowConfig['mode'] = 'open';
+    return this.shadowEnabled()
+      ? (this.shadowRoot ?? this.attachShadow(shadowConfig))
+      : this;
+  }
+
+  /**
+   * Marque l'élément comme chargé, ce qui permet de gérer sa visibilitée pour améliorer son affichage.
+   *
+   * @protected
+   */
+  _p_setLoaded() {
+    this.setAttribute('data-loaded', 'true');
+  }
+
+  /**
+   * Vérifie si le shadow-dom est activé ou non.
+   * @returns {boolean}
+   */
+  shadowEnabled() {
+    return this.data('shadow') === 'true';
+  }
+
+  /**
+   *
+   * @param {EWebComponentMode} mode
+   * @returns {this}
+   */
+  setMode(mode, { ignoreLoad = false } = {}) {
+    this.#mode = mode;
+
+    if (this.#loaded || ignoreLoad) {
+      switch (this.#mode) {
+        case EWebComponentMode.div:
+          this.setAttribute('component-mode', 'div');
+          break;
+
+        case EWebComponentMode.flex:
+          this.setAttribute('component-mode', 'flex');
+          break;
+
+        case EWebComponentMode.inline_block:
+          this.setAttribute('component-mode', 'inline-block');
+          break;
+
+        default:
+          this.removeAttribute('component-mode');
+          break;
+      }
+    }
+
+    return this;
+  }
+
+  /**
+   * Récupère une donnée "data" de l'élement.
+   *
+   * Si la valeur n'est pas défini, retourne la valeur du "data".
+   * @param {string} key Clé de la data
+   * @param {?any} [value=null] Valeur de la donnée. Si null, retourne la donnée.
+   * @returns {HtmlCustomTag | any}
+   */
+  data(key, value = null) {
+    if (value !== null && value !== undefined) {
+      this.setAttribute(`data-${key}`, value);
+      return this;
+    } else return this.dataset[key] || this.getAttribute(`data-${key}`);
+  }
+
+  /**
+   * Vérfie si l'élement à une certaine classe.
+   * @param {string} className Classe à tester
+   * @returns {boolean}
+   */
+  hasClass(className) {
+    return this.classList.contains(className);
+  }
+
+  /**
+   * Ajoute une ou plusieurs classe(s).
+   * @param  {...string} classes Classe(s) à ajouter.
+   * @returns {this} Chaîne
+   */
+  addClass(...classes) {
+    this.classList.add(...classes);
+    return this;
+  }
+
+  /**
+   * Supprime une classe de l'élément
+   * @param {string} className Classe à supprimer
+   * @returns {this} Chaîne
+   */
+  removeClass(className) {
+    if (this.hasClass(className)) this.classList.remove(className);
+
+    return this;
+  }
+
+  /**
+   * @overload
+   * Récupère la valeur d'un attribut
+   * @param {string} key Clé de l'attribut
+   * @returns {string} Valeur de l'attribut
+   * //**
+   * @overload
+   * Change la valeur d'un attribut.
+   * @param {string} key Clé de l'attribut
+   * @param {*} value Valeur à mettre
+   * @returns {this}
+   */
+  attr(key, value = null) {
+    if (isNullOrUndefined(value)) return this.getAttribute(key);
+    else {
+      this.setAttribute(key, value);
+      return this;
+    }
+  }
+
+  /**
+   * Ajoute plusieurs attributs à l'élément.
+   * @param {Object<string, string | number | boolean>} config
+   * @returns {this} Chaîne
+   */
+  attrs(config) {
+    for (const key in config) {
+      this.attr(key, config[key]);
+    }
+
+    return this;
+  }
+
+  /**
+   * Récupère un texte via une fonction de localisation, si elle existe.
+   * @param {string} text Texte à afficher/à traduire
+   * @returns {string} Si la fonction de localisation n'existe pas, le texte initial sera renvoyé.
+   */
+  text(text) {
+    if (HtmlCustomTag._p_text_callback)
+      return HtmlCustomTag._p_text_callback(text);
+    else return text;
+  }
+
+  /**
+   * Créer une node de texte
+   * @param {string} text Texte à mettre dans la node.
+   * @returns {Text}
+   */
+  createText(text) {
+    return document.createTextNode(this.text(text));
+  }
+
+  /**
+   *
+   * @param {Object} [param0={}]
+   * @param {?HTMLElement} [param0.node=null]
+   * @returns
+   */
+  disable({ node = null } = {}) {
+    node ??= this;
+
+    return HtmlCustomTag.Disable(node);
+  }
+
+  enable({ node = null } = {}) {
+    node ??= this;
+
+    return HtmlCustomTag.Enable(node);
+  }
+
+  /**
+   *
+   * @param {HTMLElement} node
+   */
+  toButton(node) {
+    node.setAttribute('role', 'button');
+    node.setAttribute('tabindex', 0);
+    node.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case ' ':
+        case 'Enter':
+          e.target.click();
+          break;
+
+        default:
+          break;
+      }
+    });
+
+    return node;
+  }
+
+  generateId(namespace = 'htmlcustom') {
+    let id;
+
+    do {
+      id = `${namespace}-${Random.random_string(Random.intRange(2, 10))}`;
+    } while (document.querySelector(`#${id}`));
+
+    return id;
+  }
+
+  /**
+   * Libère les données.
+   * @returns {this} Chaîne
+   */
+  destroy() {
+    return this;
+  }
+
+  /**
+   * Active un élément html, cad, supprime l'attribut `disabled` et la classe `disabled`.
+   * @param {TNode} node Node à activer
+   * @returns {TNode} Node activée
+   * @template {HTMLElement} TNode
+   */
+  static Enable(node) {
+    node.removeAttribute('disabled');
+    node.classList.remove('disabled');
+
+    return node;
+  }
+
+  /**
+   * Désactive un élément html, cad, ajoute l'attribut `disabled` et la classe `disabled`.
+   * @param {TNode} node Node à désactiver
+   * @returns {TNode} Node désactivée
+   * @template {HTMLElement} TNode
+   */
+  static Disable(node) {
+    node.setAttribute('disabled', 'disabled');
+    node.classList.add('disabled');
+
+    return node;
+  }
+
+  /**
+   * Assigne la fonction de callback pour l'application.
+   * @param {LocalizationCallback} callback Fonction qui sert à traduire un texte, le texte peut être un mot clé.
+   */
+  static SetTextCallback(callback) {
+    this._p_text_callback = callback;
+  }
+
+  /**
+   * D�fini un �l�ment si il n'a pas �t� d�fini.
+   * @static
+   * @param {string} tag Tag de l'�l�ment custom
+   * @param {typeof HtmlCustomTag} constructor Element d�riv� de HTMLCustomElement
+   */
+  static TryDefine(tag, constructor) {
+    if (!customElements.get(tag)) customElements.define(tag, constructor);
+  }
+}
+
+/**
+ * @class
+ * @classdesc Représente une icone material symbol. Balise : bnum-icon
+ * @extends HtmlCustomTag
+ */
+class BnumHtmlIcon extends HtmlCustomTag {
+  #icon = null;
+
+  /**
+   * data-icon => icone à afficher.
+   * <br/>
+   *
+   * Le data-icon ne doit pas être mis si l'icône est mise à l'intérieur de la balise.
+   * <br/>
+   *
+   * Le shadow-dom n'est pas supporté.
+   */
+  constructor(icon = null) {
+    super({ mode: EWebComponentMode.span });
+
+    this.#icon = icon;
+  }
+
+  get icon() {
+    let icon = this.innerText || this.data('icon') || this.#icon;
+
+    if (this.hasAttribute('data-icon')) this.removeAttribute('data-icon');
+
+    return icon;
+  }
+
+  set icon(value) {
+    this.#_update_icon(value);
+  }
+
+  /**
+   * Génère le comportement de la classe.
+   *
+   * Ajoute la bonne classe et l'icône si elle à été définie.
+   * @protected
+   */
+  _p_main() {
+    if (this._p_override_main() === false) {
+      if (!this.classList.contains(BnumHtmlIcon.HTML_CLASS))
+        this.classList.add(BnumHtmlIcon.HTML_CLASS);
+
+      this.#_update_icon(this.icon);
+    }
+  }
+
+  _p_override_main() {
+    return false;
+  }
+
+  #_update_icon(icon) {
+    this.innerText = icon;
+  }
+
+  /**
+   * Génère un élément HTML de type BnumHtmlIcon
+   * @param {Object} [param0={}]
+   * @param {?string} [param0.icon=null]
+   * @param {Document} [param0.context=document]
+   * @returns {BnumHtmlIcon}
+   */
+  static Create({ icon = null, context = document } = {}) {
+    let node = context.createElement(this.TAG);
+
+    if (icon) node.setAttribute('data-icon', icon);
+
+    return node;
+  }
+
+  /**
+   * @type {BnumHtmlIcon}
+   * @readonly
+   * @static
+   */
+  static get Close() {
+    return this.Create({ icon: 'close' });
+  }
+
+  /**
+   * @type {BnumHtmlIcon}
+   * @readonly
+   * @static
+   */
+  static get CalendarMonth() {
+    return this.Create({ icon: 'calendar_month' });
+  }
+
+  /**
+   * @type {{right:Readonly<BnumHtmlIcon>, left:Readonly<BnumHtmlIcon>, down:Readonly<BnumHtmlIcon>}}
+   * @readonly
+   * @static
+   */
+  static get Chevron() {
+    let obj = {};
+
+    Object.defineProperties(obj, {
+      right: {
+        get: () => this.Create({ icon: 'chevron-right' }),
+      },
+      left: {
+        get: () => this.Create({ icon: 'chevron-left' }),
+      },
+      down: {
+        get: () => this.Create({ icon: 'keyboard_arrow_down' }),
+      },
+    });
+
+    return obj;
+  }
+
+  /**
+   * @type {{right:Readonly<BnumHtmlIcon>, left:Readonly<BnumHtmlIcon>, down:Readonly<BnumHtmlIcon>}}
+   * @readonly
+   * @static
+   */
+  static get Arrow() {
+    let obj = {};
+
+    Object.defineProperties(obj, {
+      right: {
+        get: () => this.Create({ icon: 'arrow_right_alt' }),
+      },
+      left: {
+        get: () => this.Create({ icon: 'arrow_left_alt' }),
+      },
+      down: {
+        get: () => this.Create({ icon: 'keyboard_arrow_down' }),
+      },
+    });
+
+    return obj;
+  }
+
+  /**
+   * @type {BnumHtmlIcon}
+   * @readonly
+   * @static
+   */
+  static get Refresh() {
+    return this.Create({ icon: 'refresh' });
+  }
+}
+
+class BnumHtmlShadowIcon extends BnumHtmlIcon {
+  #_icon;
+  constructor() {
+    super();
+  }
+
+  /**
+   * @type {BnumHtmlIcon}
+   * @readonly
+   * @private
+   */
+  get #_shadowIcon() {
+    return this.navigator.querySelector('bnum-icon');
+  }
+
+  get icon() {
+    const icon = this.data('icon') || this.#_icon;
+
+    if (!this.#_icon) this.#_icon = icon;
+
+    if (this.hasAttribute('data-icon')) this.removeAttribute('data-icon');
+
+    return icon;
+  }
+
+  set icon(value) {
+    this.#_shadowIcon.icon = value;
+    this.#_icon = value;
+  }
+
+  /**
+   * @readonly
+   * @type {?string}
+   */
+  get align() {
+    const align = this.data('align') ?? EMPTY_STRING;
+
+    if (align === EMPTY_STRING || REG_XSS_SAFE.test(align)) return align;
+    else {
+      console.error(
+        '###[BnumHtmlShadowIcon]: align is not a valid value, must be empty or alphanumeric.',
+      );
+      throw new Error(
+        'BnumHtmlShadowIcon: align is not a valid value, must be empty or alphanumeric.',
+      );
+    }
+  }
+
+  _p_main() {
+    super._p_main();
+    let root = this._p_start_construct();
+
+    root.append(this.#_loadStyle(), BnumHtmlIcon.Create({ icon: this.icon }));
+
+    if (this.align !== EMPTY_STRING) {
+      let style = document.createElement('style');
+      style.appendChild(
+        document.createTextNode(`
+            :host bnum-icon {
+                justify-content: ${this.align};
+            }
+        `),
+      );
+      root.appendChild(style);
+      style = null;
+    }
+
+    root = null;
+  }
+
+  async #_saveStyle() {
+
+    // if (BnumHtmlShadowIcon._style_in_save) return;
+
+    // BnumHtmlShadowIcon._style_in_save = true;
+    // // await ABaseMelObject.Empty().http_call({
+    // //   url: `${window.location.origin + window.location.pathname}/material-symbols.css?v=0.0.1`,
+    // //   on_success: (loaded) => {
+    // //     ABaseMelObject.Empty().save(
+    // //       'shadow-icon-material-symbol-version',
+    // //       BnumModules.VERSION,
+    // //     );
+    // //     ABaseMelObject.Empty().save('shadow-icon-material-symbol', loaded);
+    // //   },
+    // // });
+
+    // BnumHtmlShadowIcon._style_in_save = false;
+  }
+
+  #_loadStyle() {
+    let style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.href = `material-symbols.css?v=0.0.1`;
+
+    return style;
+  }
+
+  shadowEnabled() {
+    return true;
+  }
+
+  _p_override_main() {
+    return true;
+  }
+
+  /**
+   * @readonly
+   * @type {string}
+   */
+  static get TAG() {
+    return 'bnum-shadow-icon';
+  }
+}
+
+/**
+ * Classe de la balise bnum-icon
+ * @static
+ * @constant
+ * @type {string}
+ * @default 'material-symbols-outlined'
+ */
+BnumHtmlIcon.HTML_CLASS = 'material-symbols-outlined';
+BnumHtmlIcon.TAG = 'bnum-icon';
+
+HtmlCustomTag.TryDefine(BnumHtmlIcon.TAG, BnumHtmlIcon);
+HtmlCustomTag.TryDefine(
+  BnumHtmlShadowIcon.TAG,
+  BnumHtmlShadowIcon,
+);
+
+class ElementChangedEvent extends CustomEvent {
+  #_new;
+  #_old;
+  #_caller;
+
+  /**
+   * Crée une nouvelle instance d'ElementChangedEvent.
+   *
+   * @param {string} type Le type de changement.
+   * @param {T} newElement Le nouvel élément.
+   * @param {Y} oldElement L'ancien élément.
+   * @param {TCaller} caller L'élément ayant déclenché l'événement.
+   * @param {CustomEventInit} [initDict={}] Options d'initialisation de l'événement.
+   */
+  constructor(type, newElement, oldElement, caller, initDict = {}) {
+    super(`custom:element-changed.${type}`, initDict);
+
+    this.#_new = newElement;
+    this.#_old = oldElement;
+    this.#_caller = caller;
+  }
+
+  /**
+   * Retourne le nouvel élément.
+   * @type {T}
+   * @readonly
+   */
+  get newElement() {
+    return this.#_new;
+  }
+
+  /**
+   * Retourne l'ancien élément.
+   * @type {Y}
+   * @readonly
+   */
+  get oldElement() {
+    return this.#_old;
+  }
+
+  /**
+   * Retourne l'élément qui a déclenché l'événement.
+   * @type {TCaller}
+   * @readonly
+   */
+  get caller() {
+    return this.#_caller;
+  }
+}
+
+const btn_style = `
+:host {
+    display: var(--bnum-button-display, inline-block);
+    padding: var(--bnum-button-padding, 6px 10px);
+    border-radius: var(--bnum-button-border-radius, 200px);
+    cursor: var(--bnum-button-cursor, pointer);
+}
+
+:host(:state(square)) {
+    border-radius: var(--bnum-button-square-border-radius, 10px);
+}
+
+:host(:state(without-icon)) {
+    padding-top: var(--bnum-button-without-icon-padding-top, 7.5px);
+    padding-bottom: var(--bnum-button-without-icon-padding-bottom, 7.5px);
+}
+
+:host(:state(primary)) {
+    background-color: var(--bnum-button-background-color, #363a5b);
+    color: var(--bnum-button-text-color, white);
+    border: var(--bnum-button-border, solid thin var(--bnum-button-border-color, var(--bnum-button-background-color, #363a5b)));
+}
+
+:host(:state(primary):hover) {
+    background-color: var(--bnum-button-hover-background-color, #484d7a);
+    color: var(--bnum-button-hover-text-color, white);
+    border: var(--bnum-button-hover-border, solid thin var(--bnum-button-hover-border-color, var(--bnum-button-hover-background-color, #484d7a)));
+}
+
+:host(:state(primary):active) {
+    background-color: var(--bnum-button-active-background-color, #2b2e49);
+    color: var(--bnum-button-active-text-color, white);
+    border: var(--bnum-button-active-border, solid thin var(--bnum-button-active-border-color, var(--bnum-button-active-background-color, #2b2e49)));
+}
+
+:host(:state(secondary)) {
+    background-color: var(--bnum-button-secondary-background-color, #f6f6f6);
+    color: var(--bnum-button-secondary-text-color, #363a5b);
+    border: var(--bnum-button-secondary-border, solid thin var(--bnum-button-secondary-border-color, #363a5b));
+}
+
+:host(:state(secondary):hover) {
+    background-color: var(--bnum-button-secondary-hover-background-color,white);
+    color: var(--bnum-button-secondary-hover-text-color, #363a5b);
+    border: var(--bnum-button-secondary-hover-border, solid thin var(--bnum-button-secondary-hover-border-color, #363a5b));
+}
+
+:host(:state(secondary):active) {
+    background-color: var(--bnum-button-secondary-active-background-color, #d9d9d9);
+    color: var(--bnum-button-secondary-active-text-color, #363a5b);
+    border: var(--bnum-button-secondary-active-border, solid thin var(--bnum-button-secondary-active-border-color, #363a5b));
+}
+
+:host(:state(danger)) {
+    background-color: var(--bnum-button-danger-background-color, #fc945a);
+    color: var(--bnum-button-danger-text-color, white);
+    border: var(--bnum-button-danger-border, solid thin var(--bnum-button-danger-border-color, var(--bnum-button-danger-background-color, #fc945a)));
+}
+
+:host(:state(danger):hover) {
+    background-color: var(--bnum-button-danger-hover-background-color, #f7ab82);
+    color: var(--bnum-button-danger-hover-text-color, white);
+    border: var(--bnum-button-danger-hover-border, solid thin var(--bnum-button-danger-hover-border-color, var(--bnum-button-danger-hover-background-color, #f7ab82)));
+}
+
+:host(:state(danger):active) {
+    background-color: var(--bnum-button-danger-active-background-color, #fb6817);
+    color: var(--bnum-button-danger-active-text-color, white);
+    border: var(--bnum-button-danger-active-border, solid thin var(--bnum-button-danger-active-border-color, var(--bnum-button-danger-active-background-color, #fb6817)));
+}
+
+:host(:state(loading):state(without-icon-loading)) slot {
+    display: none;
+}
+
+:host(:state(disabled)) {
+    cursor: not-allowed;
+    opacity: var(--button-disabled-opacity, 0.6);
+    pointer-events: var(--bnum-button-disabled-pointer-events, none);
+}
+
+:host(:state(disabled):state(loading)) {
+    cursor: progress;
+}
+
+:host > .wrapper {
+    display: var(--bnum-button-wrapper-display, flex);
+    align-items: var(--bnum-button-wrapper-align-items, center);
+}
+
+:host bnum-shadow-icon.icon {
+    display: var(--bnum-button-icon-display, flex);
+    margin-%0: var(--bnum-button-icon-margin-%0, 20px);
+}
+
+:host bnum-shadow-icon.loader {
+    display: var(--bnum-button-loader-display, flex);
+}
+
+:host .spin,
+:host .loader,
+:host(:state(loading)) .icon {
+    animation: spin var(--bnum-button-spin-duration, 0.75s) var(--bnum-button-spin-timing, linear) var(--bnum-button-spin-iteration, infinite);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+`;
+
+/**
+ * Icône de chargement par défaut.
+ * @constant
+ * @type {string}
+ * @default 'progress_activity'
+ * @see {@link https://fonts.google.com/icons?selected=Material+Symbols+Outlined:progress_activity:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=progress_activity&icon.size=24&icon.color=%231f1f1f}
+ */
+const ICON_LOADER = 'progress_activity';
+
+/**
+ * Classe représentant un bouton personnalisé Bnum.
+ * Gère les variations, l'affichage d'icônes, l'état de chargement, etc.
+ * @class
+ * @extends ABnumHTMLElement
+ */
+class BnumHTMLButton extends ABnumHTMLElement {
+  /**
+   * Internals pour la gestion des états du composant.
+   * @type {ElementInternals}
+   * @private
+   */
+  #_internals = this.attachInternals();
+
+  /**
+   * Indique si la recherche d'icônes doit être ignorée.
+   * @type {boolean}
+   * @private
+   */
+  #_ignoreFindingIcons = false;
+
+  /**
+   * Indique si c'est le premier rendu du composant.
+   * @type {boolean}
+   * @private
+   */
+  #_firstRender = true;
+
+  /**
+   * Retourne la liste des attributs observés par le composant.
+   * @returns {string[]}
+   * @static
+   * @protected
+   */
+  static _p_observedAttributes() {
+    return [
+      'data-icon',
+      'data-icon-pos',
+      'data-icon-margin',
+      'data-variation',
+      'square',
+      'loading',
+    ];
+  }
+
+  /**
+   * ## Liste des événements disponibles sur ce composant :
+   * - onloadingstatechange : déclenché lors du changement d'état de chargement (loading)
+   * - oniconchange : déclenché lors du changement d'icône
+   * - oniconpropchange : déclenché lors du changement de propriété de l'icône (position ou marge)
+   * - onvariationchange : déclenché lors du changement de variation (primary, secondary, danger)
+   *
+   * ## Les événements DOM suivants sont également dispatchés :
+   * - custom:element-changed.icon (ElementChangedEvent)
+   * - custom:element-changed.variation (ElementChangedEvent)
+   * - custom:icon.prop.changed (CustomEvent)
+   * - custom:loading (CustomEvent)
+   *
+   * ## Attributs disponibles :
+   * - data-icon : string | null — Nom de l'icône à afficher (par défaut : null)
+   * - data-icon-pos : 'left' | 'right' — Position de l'icône (par défaut : 'right')
+   * - data-icon-margin : string | null — Marge CSS appliquée à l'icône (par défaut : 'var(--custom-button-icon-margin, 20px)')
+   * - data-variation : 'primary' | 'secondary' | 'danger' — Variation du bouton (par défaut : 'primary')
+   * - square : boolean — Rend le bouton carré (par défaut : false)
+   * - loading : boolean — Active l'état de chargement (par défaut : false)
+   *
+   * ## États internes (internals.states) :
+   * - primary, secondary, danger : variation du bouton
+   * - square : bouton carré
+   * - loading : bouton en chargement
+   * - disabled : bouton désactivé (si loading ou disabled)
+   * - icon : bouton avec icône
+   * - without-icon : bouton sans icône
+   * - without-icon-loading : bouton sans icône mais en chargement
+   *
+   * ## Slots disponibles :
+   * - (default) : contenu texte ou HTML du bouton
+   *
+   */
+  constructor() {
+    super();
+
+    /**
+     * Événement déclenché lorsque le bouton passe en mode chargement ou non.
+     * @type {BnumEvent<(state: bool) => void>}
+     */
+    this.onloadingstatechange = new BnumEvent();
+    /**
+     * Événement déclenché lorsque l'icône est changé.
+     * @type {BnumEvent<(newIcon: string, oldIcon: string) => void>}
+     */
+    this.oniconchange = new BnumEvent();
+    /**
+     * Événement déclenché lorsque le margin ou la position droite/gauche de l'icône est changé.
+     * @type {BnumEvent<(type: 'margin' | 'pos', new: string) => void>}
+     */
+    this.oniconpropchange = new BnumEvent();
+    /**
+     * Événement déclenché lorsque la variation du bouton est changé.
+     * @type {BnumEvent<(newVariation: 'primary' | 'secondary' | 'danger', oldVariation: 'primary' | 'secondary' | 'danger') => void>}
+     */
+    this.onvariationchange = new BnumEvent();
+
+    this.oniconchange.push((n, o) => {
+      this.dispatchEvent(new ElementChangedEvent('icon', n, o, this));
+    });
+
+    this.onvariationchange.push((n, o) => {
+      this.dispatchEvent(new ElementChangedEvent('variation', n, o, this));
+    });
+
+    this.oniconpropchange.push((type, newValue) => {
+      this.dispatchEvent(
+        new CustomEvent('custom:icon.prop.changed', {
+          detail: { type, newValue },
+        }),
+      );
+    });
+
+    this.onloadingstatechange.push((state) => {
+      this.dispatchEvent(
+        new CustomEvent('custom:loading', {
+          detail: { state },
+        }),
+      );
+    });
+
+    this._p_on_attribute_changed.push((name, _, newVal) => {
+      switch (name) {
+        case 'data-variation':
+          if (!(newVal || false)) return;
+      
+        default:
+          break;
+      }
+
+      if (!this.#_firstRender) {
+        this.#_ignoreFindingIcons = true;
+        this.render();
+      }
+    });
+  }
+
+  /**
+   * Variation du bouton (primary, secondary, danger).
+   * @type {'primary' | 'secondary' | 'danger'}
+   */
+  get variation() {
+    return this.data('variation') || 'primary';
+  }
+  set variation(value) {
+    // Ne permettre que 'primary', 'secondary', 'tertiary' ou 'danger'
+    if (['primary', 'secondary', 'tertiary', 'danger'].includes(value)) {
+      this.data('variation', { value, fromAttribute: true });
+
+      if (!this.#_firstRender) {
+        this.onvariationchange.call(value);
+      }
+    }
+  }
+
+  /**
+   * Récupère l'icône associée au bouton.
+   * @type {?string}
+   */
+  get icon() {
+    return this.data('icon') || null;
+  }
+
+  /**
+   * Définit l'icône du bouton.
+   * @param {string} value - Nom de l'icône.
+   */
+  set icon(value) {
+    if (!this.#_firstRender) {
+      this.oniconchange.call(value, this.icon);
+    }
+
+    if (typeof value === 'string' && /^[\w-]+$/.test(value))
+      this.data('icon', { value, fromAttribute: true });
+    else this.data('icon', null);
+  }
+
+  /**
+   * Position de l'icône (left ou right).
+   * @type {'left' | 'right'}
+   */
+  get iconPos() {
+    return this.data('icon-pos') || 'right';
+  }
+
+  /**
+   * Définit la position de l'icône.
+   * @param {'left' | 'right'} value
+   */
+  set iconPos(value) {
+    if (!this.#_firstRender) {
+      this.oniconpropchange.call('pos', value);
+    }
+
+    // Ne permettre que 'left' ou 'right'
+    if (['left', 'right'].includes(value))
+      this.data('icon-pos', { value, fromAttribute: true });
+  }
+
+  /**
+   * Marge appliquée à l'icône.
+   * @type {string}
+   */
+  get iconMargin() {
+    return this.data('icon-margin') || 'var(--custom-button-icon-margin, 20px)';
+  }
+  /**
+   * Définit la marge de l'icône.
+   * @param {string|null} value - Valeur CSS de la marge ou null.
+   */
+  set iconMargin(value) {
+    if (!this.#_firstRender) {
+      this.oniconpropchange.call('pos', value);
+    }
+
+    if (typeof value === 'string' && REG_XSS_SAFE.test(value))
+      this.data('icon-margin', { value, fromAttribute: true });
+    else if (value === null) {
+      this.data('icon-margin', { value });
+      this.#_ignoreFindingIcons = true;
+      this.render();
+    }
+  }
+
+  /**
+   * Rendu du composant.
+   * @protected
+   * @returns {string}
+   */
+  _p_render() {
+    super._p_render();
+    const isLoading = this.#_isLoading();
+
+    this.#_internals.states.clear();
+    this.#_internals.states.clear();
+    this.#_internals.states.clear();
+    this.#_internals.states.delete('primary');
+    this.#_internals.states.delete('danger');
+    this.#_internals.states.delete('secondary');
+    this.#_internals.states.delete('square');
+    this.#_internals.states.delete('loading');
+
+    if (this.#_isSquare()) this.#_internals.states.add('square');
+
+    if (isLoading) this.#_internals.states.add('loading');
+
+    if (isLoading || this.#_isDisabled())
+      this.#_internals.states.add('disabled');
+
+    let txt = '<slot></slot>';
+
+    const iconData = this.#_findIcon();
+
+    if (iconData) {
+      this.data('icon-pos', { value: iconData.first ? 'left' : 'right' });
+      const icon = `<${BnumHtmlShadowIcon.TAG} class="icon" data-icon="${isLoading ? ICON_LOADER : iconData.icon}"></${BnumHtmlShadowIcon.TAG}>`;
+
+      if (iconData.first) txt = `${icon}${txt}`;
+      else txt += icon;
+
+      this.#_internals.states.add('icon');
+    } else if (isLoading) {
+      this.#_internals.states.add('without-icon-loading');
+      txt += `<${BnumHtmlShadowIcon.TAG} class="loader" data-icon="${ICON_LOADER}"></${BnumHtmlShadowIcon.TAG}>`;
+    } else {
+      this.#_internals.states.add('without-icon');
+    }
+
+    this.#_firstRender = false;
+    const variation = this.variation;
+    console.log('variation', variation);
+    this.#_internals.states.add(variation);
+    return `${this.#_style()}<div class="wrapper">${txt}</div>`.replaceAll("<script", "&lt;script").replaceAll("<\/script>", "&lt;/script&gt;");
+  }
+
+  /**
+   * Génère le style du composant.
+   * @private
+   * @returns {string}
+   */
+  #_style() {
+    return `<style>${btn_style.replaceAll('%0', this.iconPos === 'left' ? 'right' : 'left').replaceAll('%1', this.iconMargin)}</style>`;
+  }
+
+  /**
+   * Indique si le bouton est carré.
+   * @private
+   * @returns {boolean}
+   */
+  #_isSquare() {
+    return this.#_is('square');
+  }
+
+  /**
+   * Indique si le bouton est en état de chargement.
+   * @private
+   * @returns {boolean}
+   */
+  #_isLoading() {
+    return this.#_is('loading');
+  }
+
+  /**
+   * Indique si le bouton est désactivé.
+   * @private
+   * @returns {boolean}
+   */
+  #_isDisabled() {
+    return this.#_is('disabled');
+  }
+
+  /**
+   * Vérifie si un attribut est présent et actif.
+   * @private
+   * @param {string} attr - Nom de l'attribut.
+   * @returns {boolean}
+   */
+  #_is(attr) {
+    return (
+      this.hasAttribute(attr) &&
+      [attr, 'true', true].includes(this.getAttribute(attr))
+    );
+  }
+
+  /**
+   * Recherche et retourne les informations sur l'icône à afficher.
+   * @private
+   * @returns {{first: boolean, icon: string}|false}
+   */
+  #_findIcon() {
+    if (this.icon) {
+      return {
+        first: this.iconPos === 'left',
+        icon: this.icon,
+      };
+    } else if (!this.#_ignoreFindingIcons) {
+      const children = Array.from(this.childNodes);
+      let foundNode = true;
+
+      for (const child of children) {
+        if (
+          child.nodeName === BnumHtmlShadowIcon.TAG.toUpperCase() ||
+          child.nodeName === BnumHtmlIcon.TAG.toUpperCase()
+        ) {
+          this._p_setData('icon', child.icon);
+          const icon = child.icon;
+          child.remove();
+
+          return {
+            first: foundNode,
+            icon,
+          };
+        } else if (foundNode) foundNode = false;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Active l'état de chargement du bouton.
+   * @returns {this}
+   */
+  setLoading() {
+    return this.attr('loading', true);
+  }
+
+  /**
+   * Désactive l'état de chargement du bouton.
+   * @returns {this}
+   */
+  stopLoading() {
+    this.removeAttribute('loading');
+    return this;
+  }
+
+  /**
+   * Méthode statique de création d'un bouton Bnum.
+   * Permet de créer dynamiquement un élément bouton personnalisé avec les propriétés spécifiées.
+   *
+   * @function
+   * @static
+   * @memberof BnumHTMLButton
+   * @param {Object} [options={}] - Options de création du bouton.
+   * @param {string} [options.text=EMPTY_STRING] - Texte du bouton.
+   * @param {?string} [options.icon=null] - Nom de l'icône à afficher.
+   * @param {'left'|'right'} [options.iconPos='right'] - Position de l'icône.
+   * @param {?string} [options.iconMargin=null] - Marge CSS appliquée à l'icône.
+   * @param {'primary'|'secondary'|'danger'} [options.variation=EButtonType.PRIMARY] - Variation du bouton.
+   * @param {boolean} [options.square=false] - Indique si le bouton est carré.
+   * @param {boolean} [options.loading=false] - Indique si le bouton est en état de chargement.
+   * @returns {HTMLElement} Élément bouton Bnum configuré.
+   */
+  static Create({
+    text = EMPTY_STRING,
+    icon = null,
+    iconPos = 'right',
+    iconMargin = null,
+    variation = EButtonType.PRIMARY,
+    square = false,
+    loading = false,
+  } = {}) {
+    let node = document.createElement(this.TAG);
+    node.textContent = text;
+
+    if (icon) node.setAttribute('data-icon', icon);
+    if (iconPos) node.setAttribute('data-icon-pos', iconPos);
+    if (iconMargin) node.setAttribute('data-icon-margin', iconMargin);
+    if (variation) node.setAttribute('data-variation', variation);
+    if (square) node.setAttribute('square', true);
+    if (loading) node.setAttribute('loading', true);
+
+    return node;
+  }
+
+  /**
+   * Tag HTML du composant.
+   * @type {string}
+   * @readonly
+   * @static
+   */
+  static get TAG() {
+    return 'bnum-test-button';
+  }
+}
+
+BnumHTMLButton.TryDefine();
+
+/**
+ * Enumération des types de boutons.
+ * @enum {string}
+ */
+const EButtonType = {
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  TERTIARY: 'tertiary',
+  DANGER: 'danger',
+};
+
+/**
+ * Classe représentant un bouton Bnum de type "primary".
+ * Hérite de {@link BnumHTMLButton} et applique automatiquement la variation "primary".
+ *
+ * @class
+ * @extends BnumHTMLButton
+ */
+ class BnumHTMLPrimaryButton extends BnumHTMLButton {
+  constructor() {
+    super();
+    this.data('variation', {
+      value: EButtonType.PRIMARY,
+      fromAttribute: false,
+    });
+  }
+
+  /**
+   * Méthode statique de création d'un bouton Bnum de type "primary".
+   * Permet de créer dynamiquement un élément bouton personnalisé avec les propriétés spécifiées.
+   *
+   * @function
+   * @static
+   * @memberof BnumHTMLPrimaryButton
+   * @param {Object} [options={}] - Options de création du bouton.
+   * @param {string} [options.text=EMPTY_STRING] - Texte du bouton.
+   * @param {?string} [options.icon=null] - Nom de l'icône à afficher.
+   * @param {'left'|'right'} [options.iconPos='right'] - Position de l'icône.
+   * @param {?string} [options.iconMargin=null] - Marge CSS appliquée à l'icône.
+   * @param {boolean} [options.square=false] - Indique si le bouton est carré.
+   * @param {boolean} [options.loading=false] - Indique si le bouton est en état de chargement.
+   * @returns {HTMLElement} Élément bouton Bnum configuré.
+   */
+  static Create({
+    text = EMPTY_STRING,
+    icon = null,
+    iconPos = 'right',
+    iconMargin = null,
+    square = false,
+    loading = false,
+  } = {}) {
+    let node = document.createElement(this.TAG);
+    node.textContent = text;
+
+    if (icon) node.setAttribute('data-icon', icon);
+    if (iconPos) node.setAttribute('data-icon-pos', iconPos);
+    if (iconMargin) node.setAttribute('data-icon-margin', iconMargin);
+    if (square) node.setAttribute('square', true);
+    if (loading) node.setAttribute('loading', true);
+
+    return node;
+  }
+
+  static get TAG() {
+    return 'bnum-primary-button';
+  }
+}
+
+BnumHTMLPrimaryButton.TryDefine();
+
+/**
+ * Classe représentant un bouton Bnum de type "secondary".
+ * Hérite de {@link BnumHTMLButton} et applique automatiquement la variation "secondary".
+ *
+ * @class
+ * @extends BnumHTMLButton
+ */
+ class BnumHTMLSecondaryButton extends BnumHTMLButton {
+  constructor() {
+    super();
+    this.data('variation', {
+      value: EButtonType.SECONDARY,
+      fromAttribute: false,
+    });
+  }
+
+  /**
+   * Méthode statique de création d'un bouton Bnum de type "secondary".
+   * Permet de créer dynamiquement un élément bouton personnalisé avec les propriétés spécifiées.
+   *
+   * @function
+   * @static
+   * @memberof BnumHTMLSecondaryButton
+   * @param {Object} [options={}] - Options de création du bouton.
+   * @param {string} [options.text=EMPTY_STRING] - Texte du bouton.
+   * @param {?string} [options.icon=null] - Nom de l'icône à afficher.
+   * @param {'left'|'right'} [options.iconPos='right'] - Position de l'icône.
+   * @param {?string} [options.iconMargin=null] - Marge CSS appliquée à l'icône.
+   * @param {boolean} [options.square=false] - Indique si le bouton est carré.
+   * @param {boolean} [options.loading=false] - Indique si le bouton est en état de chargement.
+   * @returns {HTMLElement} Élément bouton Bnum configuré.
+   */
+  static Create({
+    text = EMPTY_STRING,
+    icon = null,
+    iconPos = 'right',
+    iconMargin = null,
+    square = false,
+    loading = false,
+  } = {}) {
+    let node = document.createElement(this.TAG);
+    node.textContent = text;
+
+    if (icon) node.setAttribute('data-icon', icon);
+    if (iconPos) node.setAttribute('data-icon-pos', iconPos);
+    if (iconMargin) node.setAttribute('data-icon-margin', iconMargin);
+    if (square) node.setAttribute('square', true);
+    if (loading) node.setAttribute('loading', true);
+
+    return node;
+  }
+
+  static get TAG() {
+    return 'bnum-secondary-button';
+  }
+}
+
+BnumHTMLSecondaryButton.TryDefine();
+
+/**
+ * Classe représentant un bouton Bnum de type "danger".
+ * Hérite de {@link BnumHTMLButton} et applique automatiquement la variation "danger".
+ *
+ * @class
+ * @extends BnumHTMLButton
+ */
+ class BnumHTMLDangerButton extends BnumHTMLButton {
+  constructor() {
+    super();
+    this.data('variation', {
+      value: EButtonType.DANGER,
+      fromAttribute: false,
+    });
+  }
+
+  /**
+   * Méthode statique de création d'un bouton Bnum de type "danger".
+   * Permet de créer dynamiquement un élément bouton personnalisé avec les propriétés spécifiées.
+   *
+   * @function
+   * @static
+   * @memberof BnumHTMLDangerButton
+   * @param {Object} [options={}] - Options de création du bouton.
+   * @param {string} [options.text=EMPTY_STRING] - Texte du bouton.
+   * @param {?string} [options.icon=null] - Nom de l'icône à afficher.
+   * @param {'left'|'right'} [options.iconPos='right'] - Position de l'icône.
+   * @param {?string} [options.iconMargin=null] - Marge CSS appliquée à l'icône.
+   * @param {boolean} [options.square=false] - Indique si le bouton est carré.
+   * @param {boolean} [options.loading=false] - Indique si le bouton est en état de chargement.
+   * @returns {HTMLElement} Élément bouton Bnum configuré.
+   */
+  static Create({
+    text = EMPTY_STRING,
+    icon = null,
+    iconPos = 'right',
+    iconMargin = null,
+    square = false,
+    loading = false,
+  } = {}) {
+    let node = document.createElement(this.TAG);
+    node.textContent = text;
+
+    if (icon) node.setAttribute('data-icon', icon);
+    if (iconPos) node.setAttribute('data-icon-pos', iconPos);
+    if (iconMargin) node.setAttribute('data-icon-margin', iconMargin);
+    if (square) node.setAttribute('square', true);
+    if (loading) node.setAttribute('loading', true);
+
+    return node;
+  }
+
+  static get TAG() {
+    return 'bnum-danger-button';
+  }
+}
+
+BnumHTMLDangerButton.TryDefine();
+
+
+
+    </script>
+
+    <style>
+
+    </style>
+    <link rel="stylesheet" href="material-symbols.css?v=0.0.1">
+
+</head>
+<body>
+  <script>
+    if (window.location.href.includes('#primary')) {
+      document.body.append(
+        BnumHTMLPrimaryButton.Create({
+          text: 'Icône à gauche',
+          icon: 'check_circle',
+          iconPos: 'left',
+        }),
+        BnumHTMLPrimaryButton.Create({
+          text: 'Sans icône',
+        }),
+        BnumHTMLPrimaryButton.Create({
+          text: 'Icône à droite',
+          icon: 'check_circle',
+        }),
+      );
+    } else if (window.location.href.includes('#secondary')) {
+      document.body.append(
+        BnumHTMLSecondaryButton.Create({
+          text: 'Icône à gauche',
+          icon: 'check_circle',
+          iconPos: 'left',
+        }),
+        BnumHTMLSecondaryButton.Create({
+          text: 'Sans icône',
+        }),
+        BnumHTMLSecondaryButton.Create({
+          text: 'Icône à droite',
+          icon: 'check_circle',
+        }),
+      );
+    }else if (window.location.href.includes('#danger')) {
+      document.body.append(
+        BnumHTMLDangerButton.Create({
+          text: 'Icône à gauche',
+          icon: 'check_circle',
+          iconPos: 'left',
+        }),
+        BnumHTMLDangerButton.Create({
+          text: 'Sans icône',
+        }),
+        BnumHTMLDangerButton.Create({
+          text: 'Icône à droite',
+          icon: 'check_circle',
+        }),
+      );
+    }
+  </script>
+</body>
+</html>
