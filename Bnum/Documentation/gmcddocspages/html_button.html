@@ -1938,7 +1938,9 @@ class BnumHTMLButton extends ABnumHTMLElement {
     }
 
     this.#_firstRender = false;
-    this.#_internals.states.add(this.variation);
+    const variation = this.variation;
+    console.log('variation', variation);
+    this.#_internals.states.add(variation);
     return `${this.#_style()}<div class="wrapper">${txt}</div>`.replaceAll("<script", "&lt;script").replaceAll("<\/script>", "&lt;/script&gt;");
   }
 
