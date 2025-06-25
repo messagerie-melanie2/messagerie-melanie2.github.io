@@ -2366,6 +2366,19 @@ BnumHTMLDangerButton.TryDefine();
         }),
       );
     } 
+else if (window.location.href.includes('#loading')) {
+      document.body.append(
+        BnumHTMLPrimaryButton.Create({
+          text: 'Chargement sans icône',
+          loading: true,
+        }),
+        BnumHTMLPrimaryButton.Create({
+          text: 'Chargement avec une icône',
+          icon: 'search',
+          loading: true,
+        }),
+      );
+    }
   </script>
 </body>
 </html>
