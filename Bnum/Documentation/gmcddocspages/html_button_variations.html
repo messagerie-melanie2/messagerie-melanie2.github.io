@@ -2350,7 +2350,22 @@ BnumHTMLDangerButton.TryDefine();
           icon: 'delete',
         }),
       );
-    }
+    }   else if (window.location.href.includes('#bdefault')) {
+      document.body.append(
+        BnumHTMLPrimaryButton.Create({
+          text: 'Bordure arrondie',
+          icon: 'search',
+        }),
+      );
+        }   else if (window.location.href.includes('#bsquare')) {
+      document.body.append(
+        BnumHTMLPrimaryButton.Create({
+          text: 'Bordure arrondie carrée',
+          icon: 'search',
+          square: true,
+        }),
+      );
+    } 
   </script>
 </body>
 </html>
