@@ -1901,8 +1901,13 @@ class BnumHTMLButton extends ABnumHTMLElement {
     const isLoading = this.#_isLoading();
 
     this.#_internals.states.clear();
-        this.#_internals.states.clear();
-            this.#_internals.states.clear();
+    this.#_internals.states.clear();
+    this.#_internals.states.clear();
+    this.#_internals.states.remove('primary');
+    this.#_internals.states.remove('danger');
+        this.#_internals.states.remove('secondary');
+            this.#_internals.states.remove('square');
+                this.#_internals.states.remove('loading');
 
     if (this.#_isSquare()) this.#_internals.states.add('square');
 
@@ -2300,7 +2305,7 @@ BnumHTMLDangerButton.TryDefine();
       <input type="radio" name="variation" value="danger" id="Danger"> 
       <span><label for="Danger"> Danger</label></span>
     </div>
-    <div style="display: flex;flex-direction: column;border-left: solid thin black;margin:5px">
+    <div style="display: flex;flex-direction: column;border-left: solid thin black;margin-left:15px; padding-left: 15px;">
       <span>
       <input type="checkbox" name="square" id="square">
       <label for="square">Carré</label></span>
