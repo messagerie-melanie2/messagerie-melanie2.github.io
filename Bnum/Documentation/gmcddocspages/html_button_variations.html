@@ -2324,7 +2324,7 @@ BnumHTMLDangerButton.TryDefine();
       document.body.append(
         BnumHTMLSecondaryButton.Create({
           text: 'Icône à gauche',
-          icon: 'check_circle',
+          icon: 'hide',
           iconPos: 'left',
         }),
         BnumHTMLSecondaryButton.Create({
@@ -2332,14 +2332,14 @@ BnumHTMLDangerButton.TryDefine();
         }),
         BnumHTMLSecondaryButton.Create({
           text: 'Icône à droite',
-          icon: 'check_circle',
+          icon: 'hide',
         }),
       );
     }else if (window.location.href.includes('#danger')) {
       document.body.append(
         BnumHTMLDangerButton.Create({
           text: 'Icône à gauche',
-          icon: 'check_circle',
+          icon: 'delete',
           iconPos: 'left',
         }),
         BnumHTMLDangerButton.Create({
@@ -2347,7 +2347,7 @@ BnumHTMLDangerButton.TryDefine();
         }),
         BnumHTMLDangerButton.Create({
           text: 'Icône à droite',
-          icon: 'check_circle',
+          icon: 'delete',
         }),
       );
     }
