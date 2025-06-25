@@ -1797,7 +1797,15 @@ class BnumHTMLButton extends ABnumHTMLElement {
     });
 
     this._p_on_attribute_changed.push((name, _, newVal) => {
-      if (!this.#_firstRender && !!(newVal || false)) {
+      switch (name) {
+        case 'data-variation':
+          if (newVal || false) return;
+      
+        default:
+          break;
+      }
+
+      if (!this.#_firstRender) {
         this.#_ignoreFindingIcons = true;
         this.render();
       }
