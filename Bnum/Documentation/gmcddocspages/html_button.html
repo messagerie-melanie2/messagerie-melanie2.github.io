@@ -1901,7 +1901,8 @@ class BnumHTMLButton extends ABnumHTMLElement {
     const isLoading = this.#_isLoading();
 
     this.#_internals.states.clear();
-    this.#_internals.states.add(this.variation);
+        this.#_internals.states.clear();
+            this.#_internals.states.clear();
 
     if (this.#_isSquare()) this.#_internals.states.add('square');
 
@@ -1930,7 +1931,7 @@ class BnumHTMLButton extends ABnumHTMLElement {
     }
 
     this.#_firstRender = false;
-
+    this.#_internals.states.add(this.variation);
     return `${this.#_style()}<div class="wrapper">${txt}</div>`.replaceAll("<script", "&lt;script").replaceAll("<\/script>", "&lt;/script&gt;");
   }
 
@@ -2299,7 +2300,7 @@ BnumHTMLDangerButton.TryDefine();
       <input type="radio" name="variation" value="danger" id="Danger"> 
       <span><label for="Danger"> Danger</label></span>
     </div>
-    <div style="display: flex;flex-direction: column;border-left: solid thin black;">
+    <div style="display: flex;flex-direction: column;border-left: solid thin black;margin:5px">
       <span>
       <input type="checkbox" name="square" id="square">
       <label for="square">Carré</label></span>
@@ -2322,7 +2323,8 @@ BnumHTMLDangerButton.TryDefine();
     document.querySelectorAll('input[name="variation"]').forEach(input => {
       input.addEventListener('change', (e) => {
         if (e.target.checked) {
-          btn.setAttribute('data-variation', e.target.value);
+          const value = e.target.value;
+          btn.setAttribute('data-variation', value);
         }
       });
     });
