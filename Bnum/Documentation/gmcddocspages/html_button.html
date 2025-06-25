@@ -2286,16 +2286,21 @@ BnumHTMLDangerButton.TryDefine();
 
 </head>
 <body>
-  <bnum-test-button data-icon="add">Créer</bnum-primary-button>
+  <bnum-test-button data-icon="add">Créer</bnum-test-button>
   <div style="display: flex;">
     <div>
-      <input type="radio" name="variation" value="primary" checked> Primary
-      <input type="radio" name="variation" value="secondary"> Secondary
-      <input type="radio" name="variation" value="danger"> Danger
+      <input type="radio" name="variation" value="primary" checked id="primary"> 
+      <label for="primary">Primary</label>
+      <input type="radio" name="variation" value="secondary" id="Secondary"> 
+      <label for="Secondary"> Secondary</label>
+      <input type="radio" name="variation" value="danger" id="Danger"> 
+      <label for="Danger"> Danger</label>
     </div>
     <div>
-      <input type="checkbox" name="square"> Square
-      <input type="checkbox" name="loading"> Loading
+      <input type="checkbox" name="square" id="square">
+      <label for="square">Carré</label>
+      <input type="checkbox" name="loading" id="loading"> 
+      <label for="loading">Chargement</label>
     </div>
   </div>
   <div>
