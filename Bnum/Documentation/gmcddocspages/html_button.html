@@ -2299,22 +2299,59 @@ BnumHTMLDangerButton.TryDefine();
       <input type="radio" name="variation" value="danger" id="Danger"> 
       <span><label for="Danger"> Danger</label></span>
     </div>
-    <div style="display: flex;flex-direction: column;">
+    <div style="display: flex;flex-direction: column;border-left: solid thin black;">
       <span>
       <input type="checkbox" name="square" id="square">
       <label for="square">Carré</label></span>
       <span>
       <input type="checkbox" name="loading" id="loading"> 
       <label for="loading">Chargement</label></span>
+      <span>
+            <input type="checkbox" name="icon_right" checked id="icon-right" />
+    <label for="icon-right">Icône à droite</label>
+      </span>
     </div>
   </div>
-  <div>
-    <input type="checkbox" name="icon_right" checked id="icon-right" />
-    <label for="icon-right">Icône à droite</label>
-  </div>
+
 
   <script>
-    
+    // Récupération du bouton
+    const btn = document.querySelector('bnum-test-button');
+
+    // Variation radio
+    document.querySelectorAll('input[name="variation"]').forEach(input => {
+      input.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          btn.setAttribute('data-variation', e.target.value);
+        }
+      });
+    });
+
+    // Carré
+    document.getElementById('square').addEventListener('change', (e) => {
+      if (e.target.checked) {
+        btn.setAttribute('square', 'true');
+      } else {
+        btn.removeAttribute('square');
+      }
+    });
+
+    // Loading
+    document.getElementById('loading').addEventListener('change', (e) => {
+      if (e.target.checked) {
+        btn.setAttribute('loading', 'true');
+      } else {
+        btn.removeAttribute('loading');
+      }
+    });
+
+    // Icône à droite/gauche
+    document.getElementById('icon-right').addEventListener('change', (e) => {
+      btn.setAttribute('data-icon-pos', e.target.checked ? 'right' : 'left');
+    });
+
+    // Initialisation de la position de l'icône
+    btn.setAttribute('data-icon-pos', document.getElementById('icon-right').checked ? 'right' : 'left');
   </script>
 </body>
 </html>
