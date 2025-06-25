@@ -1949,12 +1949,7 @@ class BnumHTMLButton extends ABnumHTMLElement {
 
     this.#_firstRender = false;
 
-    return `
-      ${this.#_style()}
-      <div class="wrapper">${txt}</div>
-    `
-      .replaceAll('<script', '&lt;script')
-      .replaceAll('</script>', '&lt;/script&gt;');
+    return `${this.#_style()}<div class="wrapper">${txt}</div>`.replaceAll("<script", "&lt;script").replaceAll("<\/script>", "&lt;/script&gt;");
   }
 
   /**
