@@ -1440,7 +1440,7 @@ class BnumHtmlShadowIcon extends BnumHtmlIcon {
 
     BnumHtmlShadowIcon._style_in_save = true;
     await ABaseMelObject.Empty().http_call({
-      url: `${window.location.origin + window.location.pathname}skins/mel_elastic/material-symbols.css?v=${BnumModules.VERSION}`,
+      url: `${window.location.origin + window.location.pathname}/material-symbols.css?v=0.0.1`,
       on_success: (loaded) => {
         ABaseMelObject.Empty().save(
           'shadow-icon-material-symbol-version',
@@ -1463,7 +1463,7 @@ class BnumHtmlShadowIcon extends BnumHtmlIcon {
       this.#_saveStyle();
       style = document.createElement('link');
       style.rel = 'stylesheet';
-      style.href = `skins/mel_elastic/material-symbols.css?v=${BnumModules.VERSION}`;
+      style.href = `material-symbols.css?v=0.0.1`;
     } else if (
       (ABaseMelObject.Empty().load('shadow-icon-material-symbol-version') ||
         true) &&
@@ -1504,7 +1504,7 @@ class BnumHtmlShadowIcon extends BnumHtmlIcon {
  * @type {string}
  * @default 'material-symbols-outlined'
  */
-BnumHtmlIcon.HTML_CLASS = MaterialIcon.html_class;
+BnumHtmlIcon.HTML_CLASS = 'material-symbols-outlined';
 BnumHtmlIcon.TAG = 'bnum-icon';
 
 HtmlCustomTag.TryDefine(BnumHtmlIcon.TAG, BnumHtmlIcon);
