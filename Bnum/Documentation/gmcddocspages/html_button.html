@@ -1799,7 +1799,9 @@ class BnumHTMLButton extends ABnumHTMLElement {
     this._p_on_attribute_changed.push(() => {
       if (!this.#_firstRender) {
         this.#_ignoreFindingIcons = true;
+        this.#_firstRender = true;
         this.render();
+        this.#_firstRender = false;
       }
     });
   }
@@ -1905,9 +1907,9 @@ class BnumHTMLButton extends ABnumHTMLElement {
     this.#_internals.states.clear();
     this.#_internals.states.delete('primary');
     this.#_internals.states.delete('danger');
-        this.#_internals.states.delete('secondary');
-            this.#_internals.states.delete('square');
-                this.#_internals.states.delete('loading');
+    this.#_internals.states.delete('secondary');
+    this.#_internals.states.delete('square');
+    this.#_internals.states.delete('loading');
 
     if (this.#_isSquare()) this.#_internals.states.add('square');
 
