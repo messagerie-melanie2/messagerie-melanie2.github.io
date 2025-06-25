@@ -1799,7 +1799,7 @@ class BnumHTMLButton extends ABnumHTMLElement {
     this._p_on_attribute_changed.push((name, _, newVal) => {
       switch (name) {
         case 'data-variation':
-          if (newVal || false) return;
+          if (!(newVal || false)) return;
       
         default:
           break;
