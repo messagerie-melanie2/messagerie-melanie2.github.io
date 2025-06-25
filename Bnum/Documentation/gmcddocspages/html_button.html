@@ -1565,55 +1565,55 @@ const btn_style = `
 :host(:state(primary)) {
     background-color: var(--bnum-button-background-color, #363a5b);
     color: var(--bnum-button-text-color, white);
-    border: var(--bnum-button-border, solid thin var(--bnum-button-border-color));
+    border: var(--bnum-button-border, solid thin var(--bnum-button-border-color, var(--bnum-button-background-color, #363a5b)));
 }
 
 :host(:state(primary):hover) {
     background-color: var(--bnum-button-hover-background-color, #484d7a);
     color: var(--bnum-button-hover-text-color, white);
-    border: var(--bnum-button-hover-border, solid thin var(--bnum-button-hover-border-color));
+    border: var(--bnum-button-hover-border, solid thin var(--bnum-button-hover-border-color, var(--bnum-button-hover-background-color, #484d7a)));
 }
 
 :host(:state(primary):active) {
     background-color: var(--bnum-button-active-background-color, #2b2e49);
     color: var(--bnum-button-active-text-color, white);
-    border: var(--bnum-button-active-border, solid thin var(--bnum-button-active-border-color));
+    border: var(--bnum-button-active-border, solid thin var(--bnum-button-active-border-color, var(--bnum-button-active-background-color, #2b2e49)));
 }
 
 :host(:state(secondary)) {
     background-color: var(--bnum-button-secondary-background-color, #f6f6f6);
     color: var(--bnum-button-secondary-text-color, #363a5b);
-    border: var(--bnum-button-secondary-border, solid thin var(--bnum-button-secondary-border-color));
+    border: var(--bnum-button-secondary-border, solid thin var(--bnum-button-secondary-border-color, #363a5b));
 }
 
 :host(:state(secondary):hover) {
     background-color: var(--bnum-button-secondary-hover-background-color,white);
-    color: var(--bnum-button-secondary-hover-text-color, white);
-    border: var(--bnum-button-secondary-hover-border, solid thin var(--bnum-button-secondary-hover-border-color));
+    color: var(--bnum-button-secondary-hover-text-color, #363a5b);
+    border: var(--bnum-button-secondary-hover-border, solid thin var(--bnum-button-secondary-hover-border-color, #363a5b));
 }
 
 :host(:state(secondary):active) {
     background-color: var(--bnum-button-secondary-active-background-color, #d9d9d9);
-    color: var(--bnum-button-secondary-active-text-color, white);
-    border: var(--bnum-button-secondary-active-border, solid thin var(--bnum-button-secondary-active-border-color));
+    color: var(--bnum-button-secondary-active-text-color, #363a5b);
+    border: var(--bnum-button-secondary-active-border, solid thin var(--bnum-button-secondary-active-border-color, #363a5b));
 }
 
 :host(:state(danger)) {
     background-color: var(--bnum-button-danger-background-color, #fc945a);
     color: var(--bnum-button-danger-text-color, white);
-    border: var(--bnum-button-danger-border, solid thin var(--bnum-button-danger-border-color));
+    border: var(--bnum-button-danger-border, solid thin var(--bnum-button-danger-border-color, var(--bnum-button-danger-background-color, #fc945a)));
 }
 
 :host(:state(danger):hover) {
     background-color: var(--bnum-button-danger-hover-background-color, #f7ab82);
     color: var(--bnum-button-danger-hover-text-color, white);
-    border: var(--bnum-button-danger-hover-border, solid thin var(--bnum-button-danger-hover-border-color));
+    border: var(--bnum-button-danger-hover-border, solid thin var(--bnum-button-danger-hover-border-color, var(--bnum-button-danger-hover-background-color, #f7ab82)));
 }
 
 :host(:state(danger):active) {
     background-color: var(--bnum-button-danger-active-background-color, #fb6817);
     color: var(--bnum-button-danger-active-text-color, white);
-    border: var(--bnum-button-danger-active-border, solid thin var(--bnum-button-danger-active-border-color));
+    border: var(--bnum-button-danger-active-border, solid thin var(--bnum-button-danger-active-border-color, var(--bnum-button-danger-active-background-color, #fb6817)));
 }
 
 :host(:state(loading):state(without-icon-loading)) slot {
