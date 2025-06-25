@@ -1796,12 +1796,10 @@ class BnumHTMLButton extends ABnumHTMLElement {
       );
     });
 
-    this._p_on_attribute_changed.push(() => {
-      if (!this.#_firstRender) {
+    this._p_on_attribute_changed.push((name, _, newVal) => {
+      if (!this.#_firstRender && !!(newVal || false)) {
         this.#_ignoreFindingIcons = true;
-        this.#_firstRender = true;
         this.render();
-        this.#_firstRender = false;
       }
     });
   }
