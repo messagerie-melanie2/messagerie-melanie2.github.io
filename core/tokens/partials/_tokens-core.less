@@ -1,0 +1,168 @@
+:root {
+  /* =================================
+     1. Couleurs (Palette)
+     ================================= */
+  /* Sémantique de l'UI */
+  --bnum-color-primary: @bnum-blue-thunder;
+  --bnum-color-primary-hover: @bnum-blue-thunder-hover;
+  --bnum-color-primary-active: @bnum-blue-thunder-active;
+  --bnum-color-secondary: @bnum-gray-white;
+  --bnum-color-secondary-hover: @bnum-gray-white-hover;
+  --bnum-color-secondary-active: @bnum-gray-white-active;
+  --bnum-color-danger: @bnum-danger;
+  --bnum-color-danger-hover: @bnum-danger-hover;
+  --bnum-color-danger-active: @bnum-danger-active;
+  --bnum-color-background: @bnum-gray-white; /* Le fond de la page */
+  --bnum-color-surface: @bnum-gray-light; /* Le fond des surfaces */
+  --bnum-color-in-surface-border: @bnum-gray-border; /* Bordure des surfaces */
+  --bnum-color-in-surface-hover: @bnum-gray-light-hover;
+  --bnum-color-in-surface-active: @bnum-gray-light-active;
+
+  /* Texte */
+  --bnum-text-primary: @bnum-gray-dark; /* Texte principal */
+  --bnum-text-title-primary: @bnum-gray-void; /* Titres principaux */
+
+  --bnum-text-on-primary: @bnum-blue-cloud; /* Texte sur fond primaire */
+  --bnum-text-on-primary-hover: var(--bnum-text-on-primary);
+  --bnum-text-on-primary-active: var(--bnum-text-on-primary);
+  --bnum-text-on-secondary: @bnum-blue-thunder; /* Texte sur fond secondaire */
+  --bnum-text-on-secondary-hover: var(--bnum-text-on-secondary);
+  --bnum-text-on-secondary-active: var(--bnum-text-on-secondary);
+  --bnum-text-on-danger: @bnum-blue-cloud; /* Texte sur fond danger */
+  --bnum-text-on-danger-hover: var(--bnum-text-on-danger);
+  --bnum-text-on-danger-active: var(--bnum-text-on-danger);
+
+  /* Sémantique de Feedback (vu sur les avatars) */ //4
+  --bnum-semantic-danger: #de350b; /* Rouge "DEV" */
+  --bnum-semantic-success: #36b37e; /* Vert "TES" */
+
+  /* =================================
+     2. Typographie
+     ================================= */
+
+  --bnum-font-family-primary:
+    -apple-system, system-ui, BlinkMacSystemFont, Arial, 'Segoe UI', Roboto,
+    'Helvetica Neue', sans-serif;
+  --bnum-font-family-secondary: Georgia;
+  --bnum-icon-font-family: 'Material Symbols Outlined';
+
+  /* Tailles */
+  --bnum-font-size-xxl: 24px;
+  --bnum-font-size-xl: @font-size-text-xl;
+  --bnum-font-size-l: @font-size-text-l;
+  --bnum-font-size-m: @font-size-text-m;
+  --bnum-font-size-s: @font-size-text-s;
+  --bnum-font-size-xs: @font-size-text-xs;
+
+  --bnum-font-size-h1: @font-size-h1;
+  --bnum-font-size-h2: @font-size-h2;
+  --bnum-font-size-h3: @font-size-h3;
+  --bnum-font-size-h4: @font-size-h4;
+  --bnum-font-size-h5: @font-size-h5;
+  --bnum-font-size-h6: @font-size-h6;
+
+  --bnum-font-size-title-xl: @font-size-title-xl;
+  --bnum-font-size-title-l: @font-size-title-l;
+  --bnum-font-size-title-m: @font-size-title-m;
+  --bnum-font-size-title-s: @font-size-title-s;
+  --bnum-font-size-title-xs: @font-size-title-xs;
+
+  /* Line heights */
+  --bnum-font-height-h1: @font-height-h1;
+  --bnum-font-height-h1-mobile: @font-height-h1-mobile;
+  --bnum-font-height-h2: @font-height-h2;
+  --bnum-font-height-h2-mobile: @font-height-h2-mobile;
+  --bnum-font-height-h3: @font-height-h3;
+  --bnum-font-height-h3-mobile: @font-height-h3-mobile;
+  --bnum-font-height-h4: @font-height-h4;
+  --bnum-font-height-h4-mobile: @font-height-h4-mobile;
+  --bnum-font-height-h5: @font-height-h5;
+  --bnum-font-height-h5-mobile: @font-height-h5-mobile;
+  --bnum-font-height-h6: @font-height-h6;
+  --bnum-font-height-h6-mobile: @font-height-h6-mobile;
+
+  --bnum-font-height-title-xl: @font-height-title-xl;
+  --bnum-font-height-title-xl-mobile: @font-height-title-xl-mobile;
+  --bnum-font-height-title-l: @font-height-title-l;
+  --bnum-font-height-title-l-mobile: @font-height-title-l-mobile;
+  --bnum-font-height-title-m: @font-height-title-m;
+  --bnum-font-height-title-m-mobile: @font-height-title-m-mobile;
+  --bnum-font-height-title-s: @font-height-title-s;
+  --bnum-font-height-title-s-mobile: @font-height-title-s-mobile;
+  --bnum-font-height-title-xs: @font-height-title-xs;
+  --bnum-font-height-title-xs-mobile: @font-height-title-xs-mobile;
+
+  --bnum-font-height-text-xl: @font-height-text-xl;
+  --bnum-font-height-text-l: @font-height-text-l;
+  --bnum-font-height-text-m: @font-height-text-m;
+  --bnum-font-height-text-s: @font-height-text-s;
+  --bnum-font-height-text-xs: @font-height-text-xs;
+
+  /* Graisses */
+
+  --bnum-font-weight-bold: @font-weight-bold;
+  --bnum-font-weight-medium: @font-weight-medium;
+  --bnum-font-weight-normal: @font-weight-normal;
+
+  /* =================================
+     3. Espacements (Grille)
+     ================================= */
+
+  /* Basé sur une grille de 10px */
+  --bnum-space-xs: @bnum-space-xs; /*  - Espace interne des boutons            */
+  --bnum-space-s: @bnum-space-s; /*  - Espace entre items de liste           */
+  --bnum-space-m: @bnum-space-m; /*  - Padding interne des cartes            */
+  --bnum-space-l: @bnum-space-l; /*  - Espace entre les cartes (organismes)  */
+  --bnum-space-xl: @bnum-space-xl; /* - Espace entre sections                 */
+
+  --bnum-space-title: var(--bnum-space-l);
+  --bnum-space-alternate-title: var(--bnum-space-xl);
+  --bnum-space-text: var(--bnum-space-l);
+  /* =================================
+     4. Bordures et Ombres
+     ================================= */
+
+  /* --- A. RADIUS (Arrondis) --- */
+  --bnum-radius-s: @bnum-border-radius-base;
+  --bnum-radius-m: @bnum-border-radius-secondary;
+  --bnum-radius-circle: @bnum-border-radius-circle;
+  --bnum-radius-pill: @bnum-border-radius-pill;
+
+  /* --- B. WIDTHS (Epaisseurs) --- */
+  --bnum-border-width-s: @bnum-border-width-s;
+  --bnum-border-width-m: @bnum-border-width-m;
+  --bnum-border-width-l: @bnum-border-width-l;
+
+  /* --- C. STYLES --- */
+  --bnum-border-style-default: @bnum-border-style-default;
+  --bnum-border-style-dashed: @bnum-border-style-dashed;
+
+  /* --- D. COMPOSITES (Shorthands Intelligents) --- */
+
+  --bnum-border-in-surface: var(--bnum-border-style-default)
+    var(--bnum-border-width-s) var(--bnum-color-in-surface-border);
+  --bnum-border-in-surface-hover: var(--bnum-border-style-default)
+    var(--bnum-border-width-s) var(--bnum-border-in-surface-hover);
+  --bnum-border-in-surface-active: var(--bnum-border-style-default)
+    var(--bnum-border-width-s) var(--bnum-border-in-surface-active);
+  --bnum-border-surface: var(--bnum-border-style-default)
+    var(--bnum-border-width-s) var(--bnum-color-primary);
+
+  /* Ombres (pour élever les cartes) */
+  --bnum-shadow-s: @bnum-shadow-s;
+  --bnum-shadow-m: @bnum-shadow-m;
+
+  /* =================================
+     5. Z-index
+     ================================= */
+
+  --bnum-zindex-dropdown: 10;
+  --bnum-zindex-modal: 100;
+  --bnum-zindex-tooltip: 1000;
+
+  /* =================================
+     6. Animations
+     ================================= */
+
+  --bnum-animation-rotate360: @animation-rotate360;
+}

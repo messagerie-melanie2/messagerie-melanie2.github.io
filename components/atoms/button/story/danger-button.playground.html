@@ -1,0 +1,53 @@
+    <div id="playground-danger">
+      <div id="playground-demo-danger">
+        <danger-button id="main-btn-danger" data-icon="rocket_launch"
+          >Mon Bouton</danger-button
+        >
+      </div>
+
+      <div id="playground-controls-danger">
+        <div class="control-group">
+          <label for="ctrl-text-danger">Texte (Slot)</label>
+          <input type="text" id="ctrl-text-danger" value="Mon Bouton" />
+        </div>
+
+        <div class="control-group">
+          <label for="ctrl-icon-danger">Icône (<code>.icon</code>)</label>
+          <input type="text" id="ctrl-icon-danger" value="rocket_launch" />
+        </div>
+
+        <div class="control-group">
+          <label>Position Icône (<code>.iconPos</code>)</label>
+          <span>
+            <input type="radio" name="icon-pos" value="left" id="p-left-danger" />
+            <label for="p-left-danger">Gauche</label>
+          </span>
+          <span>
+            <input
+              type="radio"
+              name="icon-pos"
+              value="right"
+              id="p-right-danger"
+              checked
+            />
+            <label for="p-right-danger">Droite</label>
+          </span>
+        </div>
+
+        <div class="control-group">
+          <label>États (Attributs)</label>
+          <span>
+            <input type="checkbox" id="ctrl-rounded-danger" />
+            <label for="ctrl-rounded-danger">Arrondi (<code>[rounded]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-loading-danger" />
+            <label for="ctrl-loading-danger">Chargement (<code>[loading]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-disabled-danger" />
+            <label for="ctrl-disabled-danger">Désactivé (<code>[disabled]</code>)</label>
+          </span>
+        </div>
+      </div>
+    </div>
