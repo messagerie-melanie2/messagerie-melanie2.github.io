@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MelHtml</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link href="css/colors.css" rel="stylesheet" />
+    <link href="css/jquery-ui.min.css" rel="stylesheet" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/lib/jquery-ui.min.js"></script>
+    <script src="js/constants.min.js"></script>
+    <script src="js/html.js"></script>
+  </head>
+  <body>
+    <style>
+      ul.ignore-bullet {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .mel-button {
+        transition: all 0.1s ease-in;
+        color: var(--secondary-text-color);
+        background-color: var(--main-bckg-color);
+        border-color: var(--mel-button-border-color);
+        display: inline-block;
+        width: -moz-fit-content;
+        width: fit-content;
+        border-radius: 50px;
+        padding: 5px 10px;
+        margin-top: 15px;
+        cursor: pointer;
+      }
+
+      .mel-button:hover,
+      .invite-button.create:hover {
+        background-color: var(--mel-button-hover-background-color);
+        border-color: var(--mel-button-hover-border-color);
+        color: var(--mel-button-hover-text-color);
+      }
+
+      .mel-button.selected-item {
+        background-color: var(--mel-button-active-background-color);
+        color: var(--mel-button-active-text-color);
+        pointer-events: none;
+      }
+
+      #bnum-folder-icon .square-item {
+        border: solid thin var(--main-border-color);
+        border-radius: 5px;
+      }
+
+      #bnum-folder-icon .square-item.px25 {
+        width: 25px;
+        height: 25px;
+      }
+
+      #bnum-folder-icon {
+        max-width: 500px;
+        background-color: var(--card-background-color);
+        padding: 15px;
+        border-radius: 5px;
+      }
+
+      #bnum-folder-icon-div {
+        display: flex;
+        justify-content: center;
+      }
+
+      .black-screen {
+        width: 100%;
+        height: 100%;
+        background-color: #00000063;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+
+    <h2 style="text-align: center">
+      Utilisation de
+      <a href="#">MelHtml</a>
+    </h2>
+
+    <ul class="nav nav-pills nav-fill" style="margin-bottom: 15px;">
+      <li class="nav-item">
+        <a id="nav-exemple" class="nav-link active" href="#">Exemple</a>
+      </li>
+      <li class="nav-item">
+        <a id="nav-doc" class="nav-link" href="#">Documentation</a>
+      </li>
+    </ul>
+
+    <div class="code-html nav-exemple navcore">
+      <div id="parent"></div>
+    </div>
+
+    <div class="nav-doc navcore" style="display:none">
+      <p>La documentation qui n'est pas documentable par JsDoc</p>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><bnum-icon>search</bnum-icon></span>
+        </div>
+        <input id="search-methods" class="form-control" placeholder="Rechercher une fonction"/>
+      </div>
+      <div id="documentation"></div>
+    </div>
+
+      <script>
+      $('h2 a').click(() => {
+        parent.location.href =
+          'https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/module-JsHtml.html#.JsHtml';
+      });
+
+      $('#parent').css('overflow', 'auto');
+
+      $('#nav-exemple, #nav-doc').click((e) => {
+        $('.nav-link').removeClass('active');
+        $('.navcore').hide();
+        $(`.${$(e.currentTarget).addClass('active').attr('id')}`).show();
+      });
+
+      $('#search-methods').on('input', (e) => {
+        const val = $(e.currentTarget).val();
+
+        if (val || false) {
+          let iterator;
+          for (iterator of $('.doc-block').show().find('h3')) {
+            iterator = $(iterator);
+            if (!iterator.text().includes(val)) iterator.parent().hide();
+          }
+        }
+      });
+
+      let $div = $('#documentation');
+
+      class Documentation {
+        constructor(name, desc, see = null) {
+          this.name = name;
+          this.desc = desc;
+          this.see = see;
+          this.args = {};
+        }
+
+        set_argument(name, type, def){
+          this.args[name] = {type, def, name};
+          return this;
+        }
+
+        show($parent) {
+          let $item = $(`
+            <h3>${this.name}</h3>
+            <p>${this.desc}</p>
+            <ul class="ignore-bullet">
+              ${Object.values(this.args).map(arg => `
+                <li>
+                  <b>${arg.name}</b> : ${typeof arg.type === 'string' ? arg.type : `<a class="typeurl" href="${arg.type.url}">${arg.type.name}</a>`} - ${arg.def}
+                </li>
+              `).join('')}
+            </ul>
+            <p>${this.see ? `Voir : <a href="#" class="seee">${this.see.name}</a>` : ''}</p>
+          `);
+
+          $item.find('a.seee').click(() => {
+            parent.open(this.see.url, "_blank");
+          });
+
+          $item.find('a.typeurl').click((e) => {
+            e.preventDefault();
+            e = $(e.currentTarget);
+
+            parent.open(e.attr('href'), "_blank");
+          });
+
+          $item = $('<div>').html($item).addClass(`doc-${this.name}`).addClass('doc-block');
+
+          $parent.append($item);
+        }
+
+        static Set(name, desc, see = null){
+          return new Documentation(name, desc, see);
+        }
+      }
+
+      class Attrib {
+        static Get(name, url) {
+          return {
+            name, url
+          }
+        }
+      }
+
+      class See extends Attrib {}
+
+      const attribs_url = 'https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/module-JsHtml.html#~Attribs';
+      Documentation.Set('row', 'Balise <c>div</c> avec une classe <c>row</c>', See.Get('Ligne bootstrap', 'https://getbootstrap.com/docs/4.6/layout/grid/#how-it-works'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('column', 'Balise <c>div</c> avec une classe <c>col-{md}</c>', See.Get('Colonne bootstrap', 'https://getbootstrap.com/docs/4.6/layout/grid/#how-it-works'))
+        .set_argument('md', 'number', 'Taille de la colonne, de 1 à 12')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      for (let index = 1; index <= 12; ++index) {
+        Documentation.Set(`col_${index}`, `Balise <c>div</c> avec une classe <c>col-${index}</c>`, See.Get('Colonne bootstrap', 'https://getbootstrap.com/docs/4.6/layout/grid/#how-it-works'))
+          .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+          .show($div);
+      }
+
+      Documentation.Set('card', `Balise <c>div</c> avec un classe <c>card</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('card_body', `Balise <c>div</c> avec un classe <c>card_body</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('card_title', `Balise <c>h5</c> avec un classe <c>card_title</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('card_subtitle', `Balise <c>h6</c> avec un classe <c>card_subtitle</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('card_text', `Balise <c>p</c> avec un classe <c>card_text</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('card_link', `Balise <c>a</c> avec un classe <c>card_link</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('card_img_top', `Balise <c>img</c> avec un classe <c>card_img_top</c>`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+  
+      Documentation.Set('card_container', `Créer une card bootstrap. Utilisez les attributs pour définir les composants. Ex: data-card-subtitle`, See.Get('Card bootstrap', 'https://getbootstrap.com/docs/4.6/components/card/'))
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div);
+
+      Documentation.Set('center', `Centre la balise`, See.Get('Css bootstrap', 'https://getbootstrap.com/docs/4.6/utilities/spacing/#horizontal-centering'))
+        .show($div);
+
+      Documentation.Set('icon', 'Ajoute une icone "Material Symbol"', See.Get('Material Symbol', 'https://fonts.google.com/icons'))
+        .set_argument('icon', 'string', 'Nom de l\'icone')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)
+
+      Documentation.Set('sr', 'Div custom qui est afficher seulement par les lecteur d\'écrans')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)
+
+      Documentation.Set('separate', 'Div custom de séparation')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)
+
+      Documentation.Set('flex_container', 'Div custom qui est "flex"')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)    
+        
+      Documentation.Set('centered_flex_container', 'Div custom qui est "flex". Le contenu est centré.')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)  
+
+      Documentation.Set('placeholder', 'Div custom qui représente un placeholder.')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)  
+
+      const inputs = ['button', 'checkbox', 'color', 'date', 'datetime_local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'radio', 'reset', 'search', 'submit', 'tel', 'text', 'time', 'url', 'week'];
+      
+      for (const input_type of inputs) {
+        Documentation.Set(`input_${input_type}`, `Input de type "${input_type}"`, See.Get('JsHtml input', 'https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/module-JsHtml-____JsHtml.html#input'))
+          .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+          .show($div)  
+      }
+
+      Documentation.Set('mel_button', 'Bouton avec le visuel "bnum".')
+        .set_argument('attribs', Attrib.Get('Attribs', attribs_url), 'Attributs de la balise')
+        .show($div)  
+    </script>
+
+    <script type="module" class="code-js">
+      import { MelHtml } from './js/MelHtml.js';
+
+      MelHtml.start
+        .div({class:'table table-striped table-hover table-bordered'}).css({height:'400px', 'max-height':'400px'})
+          .row()
+              .col_4().text('Nom').end()
+              .col_4().text('Prénom').end()
+              .col_4().text('Age').end()
+          .end()
+          .row()
+              .col_4().text('Doe').end()
+              .col_4().text('John').end()
+              .col_4().text('25').end()
+          .end()
+          .row()
+              .col_4().text('Doe').end()
+              .col_4().text('Jane').end()
+              .col_4().text('22').end()
+          .end()
+        .end().generate().appendTo($('#parent'));
+
+        MelHtml.start
+            .input_button({class:'mel-button', value:'CLIQUE !', onclick:() => {
+                MelHtml.start
+                    .row({class:'added'})
+                        .col_4()
+                          .input_text({placeholder:'Nom'})
+                        .end()
+                        .col_4()
+                          .input_text({placeholder:'Prénom'})
+                        .end()
+                        .col_4()
+                          .input_number({value:5})
+                        .end()
+                    .end().generate().appendTo($('.table'));
+            }}).generate().appendTo($('#parent').parent());
+
+    </script>
+  </body>
+</html>
+
+<!-- By Rotomeca -->
