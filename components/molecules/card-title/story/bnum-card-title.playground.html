@@ -1,0 +1,49 @@
+
+<div class="story-bnum-card-title-container">  
+  <div id="bnum-card-title-playground-demo">
+    <bnum-card-title id="bnum-card-title-main-title" data-icon="info"
+      >Titre interactif</bnum-card-title
+    >
+  </div>
+
+  <div id="bnum-card-title-playground-controls">
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-text">Texte (Slot par défaut)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-text"
+        value="Titre interactif"
+        placeholder="Texte du titre..."
+      />
+    </div>
+
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-icon">Icône (Propriété <code>.icon</code>)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-icon"
+        value="info"
+        placeholder="Nom de l'icône (ex: 'home')"
+      />
+      <small>Remplir ceci masque l'icône fournie par le slot "icon".</small>
+    </div>
+
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-url">Lien (Attribut <code>url</code>)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-url"
+        value=""
+        placeholder="ex: '/lien' ou 'https://...'"
+      />
+      <small>Remplir ceci transforme le titre en lien.</small>
+    </div>
+</div>
+
+      <h3>Logs des événements</h3>
+  <p>
+    Affiche les actions du playground et les événements <code>click</code> sur le
+    composant interactif.
+  </p>
+  <pre id="bnum-card-title-log-output" class=".log-output"></pre>
+  </div>

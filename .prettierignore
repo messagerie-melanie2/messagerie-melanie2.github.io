@@ -1,0 +1,14 @@
+scripts/generate-docs.js
+scripts/generate-docs.js.map
+**/jsdoc-tutorials/**.html
+**/js_template/**.js
+**/barup.html
+**/user.html
+**/*.html
+**/mel_forum/*.html
+*.html
+*.min.js
+**/*.min.js
+**/**/*.min.js
+
+

@@ -1,0 +1,53 @@
+    <div id="playground-primary">
+      <div id="playground-demo-primary">
+        <primary-button id="main-btn-primary" data-icon="rocket_launch"
+          >Mon Bouton</primary-button
+        >
+      </div>
+
+      <div id="playground-controls-primary">
+        <div class="control-group">
+          <label for="ctrl-text-primary">Texte (Slot)</label>
+          <input type="text" id="ctrl-text-primary" value="Mon Bouton" />
+        </div>
+
+        <div class="control-group">
+          <label for="ctrl-icon-primary">Icône (<code>.icon</code>)</label>
+          <input type="text" id="ctrl-icon-primary" value="rocket_launch" />
+        </div>
+
+        <div class="control-group">
+          <label>Position Icône (<code>.iconPos</code>)</label>
+          <span>
+            <input type="radio" name="icon-pos" value="left" id="p-left-primary" />
+            <label for="p-left-primary">Gauche</label>
+          </span>
+          <span>
+            <input
+              type="radio"
+              name="icon-pos"
+              value="right"
+              id="p-right-primary"
+              checked
+            />
+            <label for="p-right-primary">Droite</label>
+          </span>
+        </div>
+
+        <div class="control-group">
+          <label>États (Attributs)</label>
+          <span>
+            <input type="checkbox" id="ctrl-rounded-primary" />
+            <label for="ctrl-rounded-primary">Arrondi (<code>[rounded]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-loading-primary" />
+            <label for="ctrl-loading-primary">Chargement (<code>[loading]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-disabled-primary" />
+            <label for="ctrl-disabled-primary">Désactivé (<code>[disabled]</code>)</label>
+          </span>
+        </div>
+      </div>
+    </div>

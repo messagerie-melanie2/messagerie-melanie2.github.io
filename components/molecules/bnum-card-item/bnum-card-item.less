@@ -1,0 +1,56 @@
+/**
+ * Variables CSS utilisées :
+ * --bnum-card-item-width-percent         : Largeur en pourcentage du composant
+ * --bnum-card-item-width-modifier        : Valeur soustraite à la largeur 
+ * --bnum-card-item-background-color      : Couleur de fond normale
+ * --bnum-card-item-background-color-hover: Couleur de fond au survol
+ * --bnum-card-item-background-color-active: Couleur de fond à l'état actif
+ * --bnum-card-item-cursor                : Type de curseur
+ * --bnum-card-item-padding               : Espacement interne
+ * --bnum-card-item-display               : Type d'affichage
+ */
+
+@import '../../../core/styles/mixin.less';
+
+@background-color: var(--bnum-color-surface, #f6f6f7);
+@background-color-hover: var(--bnum-color-surface-hover, #eaeaea);
+@background-color-active: var(--bnum-color-surface-active, #dfdfdf);
+@width-percent: 100%;
+@width-modifier: 30px;
+@cursor: pointer;
+@padding: 15px;
+@display: block;
+
+:host {
+  .cannot-select();
+  width: calc(
+    var(--bnum-card-item-width-percent, @width-percent) -
+      var(--bnum-card-item-width-modifier, @width-modifier)
+  );
+  background-color: var(--bnum-card-item-background-color, @background-color);
+  cursor: var(--bnum-card-item-cursor, @cursor);
+  padding: var(--bnum-card-item-padding, @padding);
+  display: var(--bnum-card-item-display, @display);
+}
+
+:host(&:hover) {
+  background-color: var(
+    --bnum-card-item-background-color-hover,
+    @background-color-hover
+  );
+}
+
+:host(&:active) {
+  background-color: var(
+    --bnum-card-item-background-color-active,
+    @background-color-active
+  );
+}
+
+:host([disabled]),
+:host(:state(disabled)),
+:host(:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}

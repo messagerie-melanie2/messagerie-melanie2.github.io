@@ -1,0 +1,44 @@
+  <div class="bnum-img-playground-container">
+  <h2 id="test-component">Contrôles</h2>
+    <button id="toggle-dark">
+      Basculer le Thème
+    </button>
+
+    <h2>Utilisation & Scénarios</h2>
+
+    <h3>
+      1. Nommage "light/dark" (<code>icon-light.png</code> &rarr;
+      <code>icon-dark.png</code>)
+    </h3>
+    <p>
+      L'attribut <code>src</code> est
+      <code>./assets/icon-light.png</code>.
+    </p>
+    <bnum-img
+      src="./assets/icon-light.png"
+      alt="Icône light/dark"
+      id="img1"
+    ></bnum-img>
+
+    <h3>
+      2. Nommage standard (<code>logo.png</code> &rarr; <code>logo-dark.png</code>)
+    </h3>
+    <p>
+      L'attribut <code>src</code> est <code>./assets/logo.png</code>.
+    </p>
+    <bnum-img src="./assets/logo.png" alt="Logo standard" id="img2"></bnum-img>
+
+    <h3>3. Cas d'erreur</h3>
+    <p>
+      L'attribut <code>src</code> pointe vers une image inexistante.
+    </p>
+    <bnum-img
+      src="./assets/fake-image.png"
+      alt="Image en erreur"
+      id="imgError"
+    ></bnum-img>
+
+    <h2>Logs des événements</h2>
+    <p>Affiche les événements <code>load</code> et <code>error</code> émis par les composants.</p>
+    <pre id="log-output-3"></pre>
+    </div>

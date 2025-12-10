@@ -1,0 +1,53 @@
+    <div id="playground-secondary">
+      <div id="playground-demo-secondary">
+        <bnum-secondary-button id="main-btn-secondary" data-icon="rocket_launch"
+          >Mon Bouton</bnum-secondary-button
+        >
+      </div>
+
+      <div id="playground-controls-secondary">
+        <div class="control-group">
+          <label for="ctrl-text-secondary">Texte (Slot)</label>
+          <input type="text" id="ctrl-text-secondary" value="Mon Bouton" />
+        </div>
+
+        <div class="control-group">
+          <label for="ctrl-icon-secondary">Icône (<code>.icon</code>)</label>
+          <input type="text" id="ctrl-icon-secondary" value="rocket_launch" />
+        </div>
+
+        <div class="control-group">
+          <label>Position Icône (<code>.iconPos</code>)</label>
+          <span>
+            <input type="radio" name="icon-pos" value="left" id="p-left-secondary" />
+            <label for="p-left-secondary">Gauche</label>
+          </span>
+          <span>
+            <input
+              type="radio"
+              name="icon-pos"
+              value="right"
+              id="p-right-secondary"
+              checked
+            />
+            <label for="p-right-secondary">Droite</label>
+          </span>
+        </div>
+
+        <div class="control-group">
+          <label>États (Attributs)</label>
+          <span>
+            <input type="checkbox" id="ctrl-rounded-secondary" />
+            <label for="ctrl-rounded-secondary">Arrondi (<code>[rounded]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-loading-secondary" />
+            <label for="ctrl-loading-secondary">Chargement (<code>[loading]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-disabled-secondary" />
+            <label for="ctrl-disabled-secondary">Désactivé (<code>[disabled]</code>)</label>
+          </span>
+        </div>
+      </div>
+    </div>

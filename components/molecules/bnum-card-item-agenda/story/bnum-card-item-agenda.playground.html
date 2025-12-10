@@ -1,0 +1,76 @@
+
+<div class="story-bnum-card-item-agenda-container">  
+  <template id="story-bnum-card-item-agenda-action">
+    <bnum-primary-button rounded data-icon="video_camera_front" onclick="alert('CLICKED !')">Rejoindre la réunion</bnum-primary-button>
+  </template>
+
+  <div id="bnum-card-item-agenda-playground-demo">
+      <bnum-card-item-agenda id="bnum-card-item-agenda-demo"
+    data-date="2024-01-01"
+     data-start-date="2024-01-01 08:00:00"
+     data-end-date="2024-01-01 10:00:00"
+     data-start-date-format="yyyy-MM-dd HH:mm:ss"
+      data-end-date-format="yyyy-MM-dd HH:mm:ss"
+     data-title="Réunion de projet"
+     data-location="Salle de conférence">
+  </bnum-card-item-agenda>
+  </div>
+
+  <div id="bnum-card-item-agenda-playground-controls" style="margin-top:15px">
+
+    <div class="control-group">
+        <label for="ctrl-bnum-card-item-agenda-date">Modifier la date de base</label>
+        <br/>
+        <input type="date" id="ctrl-bnum-card-item-agenda-date" value="2024-01-01" />
+    </div>
+
+    <div class="control-group" style="display: flex;">
+      <div>
+        <label for="ctrl-bnum-card-item-agenda-sdate">Modifier la date de départ</label>
+        <br/>
+        <input type="datetime-local" id="ctrl-bnum-card-item-agenda-sdate" value="2024-01-01T08:00" />
+        </div>
+      <div>
+        <label for="ctrl-bnum-card-item-agenda-enddate">Modifier la date de fin</label>
+        <br/>
+        <input type="datetime-local" id="ctrl-bnum-card-item-agenda-enddate" value="2024-01-01T10:00" />
+        </div>
+    </div>
+
+
+    <div class="control-group" style="display: flex;">
+        <div>
+          <label for="ctrl-bnum-card-item-agenda-title">Modifier le titre</label>
+          <br/>
+          <input type="text" id="ctrl-bnum-card-item-agenda-title" value="Réunion de projet" />
+        </div>
+        <div>
+          <label for="ctrl-bnum-card-item-agenda-location">Modifier le lieu</label>
+          <br/>
+          <input type="text" id="ctrl-bnum-card-item-agenda-location" value="Salle de conférence" />
+        </div>
+    </div>
+
+      <div class="control-group" style="display: flex;flex-direction: column;">
+        <div><label for="ctrl-bnum-card-item-agenda-all-day">Tout la journée</label>
+        <input type="checkbox" id="ctrl-bnum-card-item-agenda-all-day" /></div>
+        <div>
+          <label for="ctrl-bnum-card-item-agenda-action">Ajouter une action</label>
+          <input type="checkbox" id="ctrl-bnum-card-item-agenda-action" />
+        </div>
+                <div>
+          <label for="ctrl-bnum-card-item-agenda-private">Privé</label>
+          <input type="checkbox" id="ctrl-bnum-card-item-agenda-private" />
+        </div>
+                        <div>
+          <label for="ctrl-bnum-card-item-agenda-mode">Télétravail ?</label>
+          <input type="checkbox" id="ctrl-bnum-card-item-agenda-mode" />
+        </div>
+      </div>
+
+  </div>
+</div>
+
+      <h3>Logs des événements</h3>
+  <pre id="bnum-card-item-agenda-log-output" class=".log-output"></pre>
+  
