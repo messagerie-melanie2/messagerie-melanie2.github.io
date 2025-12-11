@@ -13634,13 +13634,6 @@ var Bnum = (function (exports) {
    * </bnum-card-item-agenda>
    * </bnum-card-agenda>
    * <bnum-card-agenda>
-   * <bnum-card-item-agenda
-   *    data-date="2024-01-01"
-   *    data-start-date="2024-01-01 08:00:00"
-   *    data-end-date="2024-01-01 10:00:00"
-   *    data-title="Réunion de projet"
-   *    data-location="Salle de conférence">
-   * </bnum-card-item-agenda>
    *
    * @structure Sans éléments
    * <bnum-card-agenda>
