@@ -30,6 +30,8 @@ var Bnum = (function (exports) {
           invalid_date: 'Date invalide',
           last_mails: 'Courriers récents',
           no_mails: 'Aucun courrier...',
+          last_events: 'Prochains évènements',
+          no_events: 'Aucun événement...',
       },
       console_logging: true,
       console_logging_level: LogEnum.TRACE,
@@ -13853,10 +13855,10 @@ var Bnum = (function (exports) {
   }
   const TEMPLATE = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
-      <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardAgenda.ID_CARD_TITLE}" slot="title" data-icon="today">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
+      <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardAgenda.ID_CARD_TITLE}" slot="title" data-icon="today">${BnumConfig.Get('local_keys').last_events}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
           <slot></slot>
-          <${HTMLBnumCardItem.TAG} id="${HTMLBnumCardAgenda.ID_CARD_ITEM_NO_ELEMENTS}" disabled hidden>${BnumConfig.Get('local_keys').no_mails}</${HTMLBnumCardItem.TAG}>
+          <${HTMLBnumCardItem.TAG} id="${HTMLBnumCardAgenda.ID_CARD_ITEM_NO_ELEMENTS}" disabled hidden>${BnumConfig.Get('local_keys').no_events}</${HTMLBnumCardItem.TAG}>
         </${HTMLBnumCardList.TAG}>
     </${HTMLBnumCardElement.TAG}>
     `);
