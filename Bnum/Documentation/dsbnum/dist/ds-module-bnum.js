@@ -25,6 +25,7 @@ const DEFAULT_CONFIG = {
         tomorrow: 'Demain',
         day: 'Journée',
         invalid_date: 'Date invalide',
+        last_mails: 'Courriers récents',
     },
     console_logging: true,
     console_logging_level: LogEnum.TRACE,
@@ -1272,30 +1273,112 @@ class Scheduler {
 }
 /**
  * Variante de Scheduler pour gérer des tableaux ou des symboles de réinitialisation.
+ *
+ * Permet de regrouper plusieurs appels en une seule exécution lors du prochain frame.
+ *
+ * Si jamais une réinitialisation est demandée, le tableau sera vidé avant d'ajouter de nouveaux éléments.
  */
-class SchedulerArray extends Scheduler {
+class SchedulerArray {
+    /**
+     * Indique si une exécution est déjà planifiée.
+     * @private
+     */
+    #_started = false;
     /**
      * Symbole utilisé pour réinitialiser le tableau.
      * @private
      */
     #_resetSymbol;
     /**
+     * Pile des éléments planifiés.
+     * @private
+     */
+    #_stack = [];
+    /**
+     * Callback à exécuter lors de la planification.
+     * @private
+     */
+    #_callback;
+    /**
      * Constructeur de la classe SchedulerArray.
      * @param callback Fonction appelée lors de la planification.
      * @param resetSymbol Symbole utilisé pour réinitialiser le tableau.
      */
     constructor(callback, resetSymbol) {
-        super(callback);
+        this.#_callback = callback;
         this.#_resetSymbol = resetSymbol;
     }
     schedule(value) {
-        if (Array.isArray(value))
-            (this._p_value ??= []).push(...value);
-        else if (value !== this.#_resetSymbol)
-            (this._p_value ??= []).push(value);
-        if (value !== this.#_resetSymbol)
-            value = this._p_value;
-        super.schedule(value);
+        this.#_add(value);
+        if (!this.#_started) {
+            this.#_started = true;
+            requestAnimationFrame(() => {
+                for (const element of this.#_getStackItems()) {
+                    this.#_callback(element);
+                }
+                this.#_started = false;
+                this.#_stack.length = 0;
+            });
+        }
+    }
+    /**
+     * Appelle immédiatement la callback avec la valeur donnée, sans planification.
+     *
+     * La stack en mémoire est utilisé si aucune valeur n'est fournie. Sinon, elle sera vidée avant d'ajouter la nouvelle valeur.
+     * @param value Valeur à transmettre au callback
+     */
+    call(value) {
+        if (value !== null) {
+            this.#_stack.length = 0;
+            this.#_add(value);
+        }
+        for (const element of this.#_getStackItems()) {
+            this.#_callback(element);
+        }
+        this.#_stack.length = 0;
+    }
+    /**
+     * Ajoute une valeur ou un tableau de valeurs à la pile, ou gère le symbole de réinitialisation.
+     * @param value Valeur, tableau de valeurs ou symbole de réinitialisation à ajouter.
+     * @returns void
+     */
+    #_add(value) {
+        // Gestion du symbole de réinitialisation
+        if (value === this.#_resetSymbol) {
+            this.#_stack.length = 0;
+            this.#_stack.push(value);
+            this.#_stack.push([]);
+            return;
+        }
+        // Initialisation de la pile si vide
+        if (this.#_stack.length === 0)
+            this.#_stack.push([]);
+        // Ajout de l'élément ou des éléments au dernier tableau de la pile
+        if (Array.isArray(value)) {
+            this.#_stack[this.#_stack.length - 1].push(...value);
+        }
+        else if (value !== this.#_resetSymbol) {
+            this.#_stack[this.#_stack.length - 1].push(value);
+        }
+    }
+    /**
+     * Générateur pour obtenir les éléments de la pile un par un.
+     *
+     * Gère les tableaux et le symbole de réinitialisation.
+     * @returns Générateur d'éléments de type T[] ou Symbol.
+     */
+    *#_getStackItems() {
+        for (const element of this.#_stack) {
+            if (element === this.#_resetSymbol) {
+                yield element;
+            }
+            else if (Array.isArray(element)) {
+                yield element;
+            }
+            else {
+                yield [element];
+            }
+        }
     }
 }
 

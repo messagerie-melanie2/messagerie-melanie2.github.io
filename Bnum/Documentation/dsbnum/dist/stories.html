@@ -278,7 +278,90 @@ html.dark body {
   }
 </style>
   </head>
-    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-card" class="story-content" >
+    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-card-email" class="story-content" >
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-card-email&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p></p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>BnumCardEmail</h4>
+    <div><bnum-card-email>
+<bnum-card-item-mail data-date="now">
+<span slot="subject">Sujet par défaut</span>
+<span slot="sender">Expéditeur par défaut</span>
+</bnum-card-item-mail>
+<bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+</bnum-card-item-mail>
+<bnum-card-item-mail read data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+</bnum-card-item-mail>
+</bnum-card-email></div><pre><code>&lt;bnum-card-email&gt;
+&lt;bnum-card-item-mail data-date=&quot;now&quot;&gt;
+&lt;span slot=&quot;subject&quot;&gt;Sujet par défaut&lt;/span&gt;
+&lt;span slot=&quot;sender&quot;&gt;Expéditeur par défaut&lt;/span&gt;
+&lt;/bnum-card-item-mail&gt;
+&lt;bnum-card-item-mail data-date=&quot;2025-10-31 11:11&quot; data-subject=&quot;Sujet ici&quot; data-sender=&quot;Expéditeur ici&quot;&gt;
+&lt;/bnum-card-item-mail&gt;
+&lt;bnum-card-item-mail read data-date=&quot;2025-10-31 11:11&quot; data-subject=&quot;Sujet ici&quot; data-sender=&quot;Expéditeur ici&quot;&gt;
+&lt;/bnum-card-item-mail&gt;
+&lt;/bnum-card-email&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      <p>N/A</p>
+      
+      <h2>Slots</h2>
+      <p>N/A</p>
+
+      <h2>Attributs de Données</h2>
+      <p>N/A</p>
+
+      <h2>Variables CSS</h2>
+      <p>N/A</p>
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      <p>N/A</p>
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      <p>N/A</p>
+
+      <h3>Variables d'instance</h3>
+      <p>N/A</p>
+
+      <h3>Variables statiques</h3>
+      <p>N/A</p>
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-card-email)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-card" class="story-content" hidden>
         <div class="story-wrapper">
           
       <style>
