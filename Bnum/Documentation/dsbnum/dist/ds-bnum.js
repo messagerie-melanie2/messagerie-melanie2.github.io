@@ -11949,8 +11949,14 @@ var Bnum = (function (exports) {
   /**
    * @structure BnumCardEmail
    * <bnum-card-email>
-   * <bnum-card-item-mail data-date="now">...</bnum-card-item-mail>
-   * <bnum-card-item-mail data-date="2025-10-31 11:11">...</bnum-card-item-mail>
+   * <bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+   * </bnum-card-item-mail>
+   * <bnum-card-item-mail read data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+   * </bnum-card-item-mail>
+   * <bnum-card-item-mail data-date="now">
+   * <span slot="subject">Sujet par défaut</span>
+   * <span slot="sender">Expéditeur par défaut</span>
+   * </bnum-card-item-mail>
    * </bnum-card-email>
    */
   class HTMLBnumCardEmail extends BnumElement {
@@ -11991,9 +11997,6 @@ var Bnum = (function (exports) {
           }
           // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
           this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
-      }
-      _p_detach() {
-          this.#_slot.removeEventListener('slotchange', this.#_handleSlotChange.bind(this));
       }
       /**
        * Ajoute des éléments.
