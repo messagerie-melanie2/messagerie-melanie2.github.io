@@ -11994,6 +11994,7 @@ class HTMLBnumCardEmail extends BnumElement {
         }
         // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
         this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
+        this.#_handleSlotChange();
     }
     /**
      * Ajoute des éléments.
