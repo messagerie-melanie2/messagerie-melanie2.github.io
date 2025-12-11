@@ -26,6 +26,7 @@ const DEFAULT_CONFIG = {
         day: 'Journée',
         invalid_date: 'Date invalide',
         last_mails: 'Courriers récents',
+        no_mails: 'Aucun courrier...',
     },
     console_logging: true,
     console_logging_level: LogEnum.TRACE,
@@ -1202,6 +1203,7 @@ const TAG_HELPER = `${BnumConfig.Get('tag_prefix')}-helper`;
 const TAG_PICTURE = `${BnumConfig.Get('tag_prefix')}-img`;
 const TAG_CARD_TITLE = `${BnumConfig.Get('tag_prefix')}-card-title`;
 const TAG_CARD = `${BnumConfig.Get('tag_prefix')}-card`;
+const TAG_CARD_EMAIL = `${BnumConfig.Get('tag_prefix')}-card-email`;
 const TAG_CARD_ITEM = `${BnumConfig.Get('tag_prefix')}-card-item`;
 const TAG_CARD_ITEM_MAIL = `${BnumConfig.Get('tag_prefix')}-card-item-mail`;
 const TAG_CARD_ITEM_AGENDA = `${BnumConfig.Get('tag_prefix')}-card-item-agenda`;
@@ -11944,6 +11946,8 @@ var css_248z = ":host{display:var(--bnum-card-email-display,block)}[hidden]{disp
 
 const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
 /**
+ * Organisme qui permet d'afficher simplement une liste de mails dans une carte.
+ *
  * @structure Avec des éléments
  * <bnum-card-email>
  * <bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
@@ -11963,26 +11967,68 @@ const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
  * @structure Avec une url
  * <bnum-card-email data-url="#">
  * </bnum-card-email>
+ *
+ * @slot (default) - Contenu des éléments de type HTMLBnumCardItemMail.
+ *
+ * @cssvar --bnum-card-email-display - Définit le display du composant. Par défaut à "block".
  */
 class HTMLBnumCardEmail extends BnumElement {
-    // Flag pour éviter les boucles infinies lors du slotchange
+    //#region Constants
+    /**
+     * Nom du event déclenché lorsque les éléments changent (ajout/suppression).
+     * @event bnum-card-email:change
+     * @detail HTMLBnumCardItemMail[]
+     */
+    static CHANGE_EVENT = 'bnum-card-email:change';
+    /**
+     * Data pour l'URL du titre.
+     */
+    static DATA_URL = 'url';
+    /**
+     * Attribut data pour l'URL du titre.
+     * @attr {string | undefined} (optional) data-url - Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.
+     */
+    static ATTRIBUTE_DATA_URL = `data-${HTMLBnumCardEmail.DATA_URL}`;
+    /**
+     * ID du titre.
+     */
+    static ID_CARD_TITLE = 'bnum-card-title';
+    /**
+     * ID de l'élément "Aucun élément".
+     */
+    static ID_CARD_ITEM_NO_ELEMENTS = 'no-elements';
+    //#endregion Constants
+    //#region Private fields
     #_isSorting = false;
     #_cardTitle;
     #_slot;
     #_noElements;
+    /**
+     * Déclenché lorsque les éléments changent (ajout/suppression).
+     */
     #_onchange = null;
+    //#endregion Private fields
+    //#region Getters/Setters
+    /**
+     * Déclenché lorsque les éléments changent (ajout/suppression).
+     */
     get onElementChanged() {
         if (this.#_onchange === null) {
             this.#_onchange = new JsEvent();
-            this.#_onchange.add('default', (data) => {
-                this.trigger('bnum-card-email:change', { detail: data });
+            this.#_onchange.add(EVENT_DEFAULT, (data) => {
+                this.trigger(HTMLBnumCardEmail.CHANGE_EVENT, { detail: data });
             });
         }
         return this.#_onchange;
     }
+    /**
+     * Récupère l'URL du titre.
+     */
     get #_url() {
-        return this.data('url') || EMPTY_STRING;
+        return this.data(HTMLBnumCardEmail.DATA_URL) || EMPTY_STRING;
     }
+    //#endregion Getters/Setters
+    //#region Lifecycle
     constructor() {
         super();
     }
@@ -11993,9 +12039,9 @@ class HTMLBnumCardEmail extends BnumElement {
         return TEMPLATE;
     }
     _p_buildDOM(container) {
-        this.#_cardTitle = container.querySelector('#bnum-card-title');
+        this.#_cardTitle = container.querySelector(`#${HTMLBnumCardEmail.ID_CARD_TITLE}`);
         this.#_slot = container.querySelector('slot');
-        this.#_noElements = container.querySelector('#no-elements');
+        this.#_noElements = container.querySelector(`#${HTMLBnumCardEmail.ID_CARD_ITEM_NO_ELEMENTS}`);
     }
     _p_attach() {
         if (this.#_url !== EMPTY_STRING)
@@ -12004,8 +12050,11 @@ class HTMLBnumCardEmail extends BnumElement {
         this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
         this.#_handleSlotChange();
     }
+    //#endregion Lifecycle
+    //#region Public methods
     /**
      * Ajoute des éléments.
+     *
      * Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.
      */
     add(...content) {
@@ -12016,9 +12065,11 @@ class HTMLBnumCardEmail extends BnumElement {
      * Vide le composant.
      */
     clear() {
-        this.innerHTML = ''; // Vide le Light DOM
+        this.innerHTML = EMPTY_STRING; // Vide le Light DOM
         return this;
     }
+    //#endregion Public methods
+    //#region Private methods
     /**
      * Gère le tri des éléments.
      * Utilise requestAnimationFrame pour ne pas bloquer le thread si beaucoup d'items.
@@ -12031,11 +12082,14 @@ class HTMLBnumCardEmail extends BnumElement {
             this.#_sortChildren();
         });
     }
+    /**
+     * Tri les éléments enfants de la liste par date décroissante.
+     */
     #_sortChildren() {
         // 1. Récupérer les éléments assignés au slot (Uniquement les Nodes Elements, pas le texte)
         const elements = this.#_slot.assignedElements();
         // Filtrer pour être sûr de ne trier que des mails (sécurité)
-        const mailItems = elements.filter((el) => el.tagName.toLowerCase().includes('mail'));
+        const mailItems = elements.filter((el) => el.tagName.toLowerCase().includes(HTMLBnumCardItemMail.TAG));
         if (mailItems.length === 0) {
             this.#_noElements.hidden = false;
             this.#_slot.hidden = true;
@@ -12078,36 +12132,49 @@ class HTMLBnumCardEmail extends BnumElement {
      * Helper pour parser la date de manière robuste
      */
     #_getDate(item) {
-        const dateStr = item.getAttribute('data-date');
+        const dateStr = item.getAttribute(HTMLBnumCardItemMail.ATTRIBUTE_DATA_DATE);
         if (!dateStr)
             return item.date.getTime();
         if (dateStr === 'now')
             return Date.now();
         return new Date(dateStr).getTime();
     }
+    //#endregion Private methods
+    //#region Static methods
+    /**
+     * Méthode statique pour créer une instance du composant.
+     * @param param0 Options de création
+     * @param param0.contents Contenus initiaux à ajouter
+     * @param param0.url URL du titre
+     * @returns Nouvelle node HTMLBnumCardEmail
+     */
     static Create({ contents = [], url = EMPTY_STRING, } = {}) {
         const node = document.createElement(this.TAG);
         if (url !== EMPTY_STRING)
-            node.setAttribute('data-url', url);
+            node.setAttribute(HTMLBnumCardEmail.ATTRIBUTE_DATA_URL, url);
         if (contents.length > 0)
             node.add(...contents);
         return node;
     }
+    /**
+     * Tag du composant.
+     */
     static get TAG() {
-        return 'bnum-card-email';
+        return TAG_CARD_EMAIL;
     }
 }
 const TEMPLATE = BnumElement.CreateTemplate(`
-    <${HTMLBnumCardElement.TAG} id="bnum-card">
-      <${HTMLBnumCardTitle.TAG} id="bnum-card-title" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
+    <${HTMLBnumCardElement.TAG}>
+      <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardEmail.ID_CARD_TITLE}" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
-          <${HTMLBnumCardItem.TAG} id="no-elements" disabled hidden>Aucun mails à afficher....</${HTMLBnumCardItem.TAG}>
+          <${HTMLBnumCardItem.TAG} id="${HTMLBnumCardEmail.ID_CARD_ITEM_NO_ELEMENTS}" disabled hidden>${BnumConfig.Get('local_keys').no_mails}</${HTMLBnumCardItem.TAG}>
             <slot></slot>
         </${HTMLBnumCardList.TAG}>
     </${HTMLBnumCardElement.TAG}>
     `);
-Log.debug('HTMLBnumCardEmail', 'Template : ', TEMPLATE);
+//#region TryDefine
 HTMLBnumCardEmail.TryDefine();
+//#endregion TryDefine
 
 // Auto-init au chargement
 if (typeof window !== 'undefined' && window.DsBnumConfig) {
