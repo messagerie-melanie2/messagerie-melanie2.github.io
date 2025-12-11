@@ -11947,7 +11947,7 @@ var Bnum = (function (exports) {
 
   const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
   /**
-   * @structure BnumCardEmail
+   * @structure Avec des éléments
    * <bnum-card-email>
    * <bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
    * </bnum-card-item-mail>
@@ -11958,12 +11958,21 @@ var Bnum = (function (exports) {
    * <span slot="sender">Expéditeur par défaut</span>
    * </bnum-card-item-mail>
    * </bnum-card-email>
+   *
+   * @structure Sans éléments
+   * <bnum-card-email>
+   * </bnum-card-email>
+   *
+   * @structure Avec une url
+   * <bnum-card-email data-url="#">
+   * </bnum-card-email>
    */
   class HTMLBnumCardEmail extends BnumElement {
       // Flag pour éviter les boucles infinies lors du slotchange
       #_isSorting = false;
       #_card;
       #_slot;
+      #_noElements;
       #_onchange = null;
       get onElementChanged() {
           if (this.#_onchange === null) {
@@ -11989,6 +11998,7 @@ var Bnum = (function (exports) {
       _p_buildDOM(container) {
           this.#_card = container.querySelector('#bnum-card');
           this.#_slot = container.querySelector('slot');
+          this.#_noElements = container.querySelector('#no-elements');
       }
       _p_attach() {
           if (this.#_url !== EMPTY_STRING) {
@@ -12031,6 +12041,15 @@ var Bnum = (function (exports) {
           const elements = this.#_slot.assignedElements();
           // Filtrer pour être sûr de ne trier que des mails (sécurité)
           const mailItems = elements.filter((el) => el.tagName.toLowerCase().includes('mail'));
+          if (mailItems.length === 0) {
+              this.#_noElements.hidden = false;
+              this.#_slot.hidden = true;
+              return;
+          }
+          else {
+              this.#_noElements.hidden = true;
+              this.#_slot.hidden = false;
+          }
           if (mailItems.length < 2)
               return; // Pas besoin de trier
           // 2. Vérifier si un tri est nécessaire (optimisation)
@@ -12086,6 +12105,7 @@ var Bnum = (function (exports) {
   const TEMPLATE = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG} id="bnum-card" data-title-icon="mail" data-title-text="${BnumConfig.Get('local_keys').last_mails}">
         <${HTMLBnumCardList.TAG}>
+          <${HTMLBnumCardItem.TAG} id="no-elements" disabled hidden>Aucun mails à afficher....</${HTMLBnumCardItem.TAG}>
             <slot></slot>
         </${HTMLBnumCardList.TAG}>
     </${HTMLBnumCardElement.TAG}>
