@@ -13640,7 +13640,7 @@ const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
  * </bnum-card-item-agenda>
  *
  * @structure Sans éléments
- * <bnum-card-item-agenda
+ * <bnum-card-item-agenda>
  * </bnum-card-agenda>
  *
  * @structure Avec une url
