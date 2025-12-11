@@ -12099,7 +12099,7 @@ class HTMLBnumCardEmail extends BnumElement {
 }
 const TEMPLATE = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG} id="bnum-card">
-      <${HTMLBnumCardTitle} id="bnum-card-title" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle}>
+      <${HTMLBnumCardTitle.TAG} id="bnum-card-title" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
           <${HTMLBnumCardItem.TAG} id="no-elements" disabled hidden>Aucun mails à afficher....</${HTMLBnumCardItem.TAG}>
             <slot></slot>
