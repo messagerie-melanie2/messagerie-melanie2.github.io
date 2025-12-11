@@ -11973,7 +11973,7 @@ var Bnum = (function (exports) {
    *
    * @slot (default) - Contenu des éléments de type HTMLBnumCardItemMail.
    *
-   * @cssvar --bnum-card-email-display - Définit le display du composant. Par défaut à "block".
+   * @cssvar {block} --bnum-card-email-display - Définit le display du composant. Par défaut à "block".
    */
   class HTMLBnumCardEmail extends BnumElement {
       //#region Constants
@@ -12170,8 +12170,8 @@ var Bnum = (function (exports) {
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardEmail.ID_CARD_TITLE}" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
+          <slot></slot>
           <${HTMLBnumCardItem.TAG} id="${HTMLBnumCardEmail.ID_CARD_ITEM_NO_ELEMENTS}" disabled hidden>${BnumConfig.Get('local_keys').no_mails}</${HTMLBnumCardItem.TAG}>
-            <slot></slot>
         </${HTMLBnumCardList.TAG}>
     </${HTMLBnumCardElement.TAG}>
     `);
