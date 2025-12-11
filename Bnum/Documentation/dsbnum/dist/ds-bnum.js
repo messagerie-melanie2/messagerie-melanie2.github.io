@@ -13633,7 +13633,6 @@ var Bnum = (function (exports) {
    *    data-location="A la maison">
    * </bnum-card-item-agenda>
    * </bnum-card-agenda>
-   * <bnum-card-agenda>
    *
    * @structure Sans éléments
    * <bnum-card-agenda>
