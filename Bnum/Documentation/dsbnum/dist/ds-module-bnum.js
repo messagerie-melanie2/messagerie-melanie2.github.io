@@ -11998,7 +11998,8 @@ class HTMLBnumCardEmail extends BnumElement {
         this.#_noElements = container.querySelector('#no-elements');
     }
     _p_attach() {
-        if (this.#_url !== EMPTY_STRING) ;
+        if (this.#_url !== EMPTY_STRING)
+            this.#_cardTitle.url = this.#_url;
         // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
         this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
         this.#_handleSlotChange();
