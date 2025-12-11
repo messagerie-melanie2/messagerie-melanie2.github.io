@@ -12109,6 +12109,7 @@ var Bnum = (function (exports) {
         </${HTMLBnumCardList.TAG}>
     </${HTMLBnumCardElement.TAG}>
     `);
+  Log.debug('HTMLBnumCardEmail', 'Template : ', TEMPLATE);
   HTMLBnumCardEmail.TryDefine();
 
   // Auto-init au chargement
