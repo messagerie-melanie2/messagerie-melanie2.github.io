@@ -12003,6 +12003,7 @@ var Bnum = (function (exports) {
       _p_attach() {
           if (this.#_url !== EMPTY_STRING) {
               // fromAttribute à true pour respecter la logique data-*
+              debugger;
               this.#_card.data('title-url', this.#_url, true);
           }
           // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
