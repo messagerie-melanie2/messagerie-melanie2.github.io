@@ -12056,6 +12056,7 @@ class HTMLBnumCardEmail extends BnumElement {
      * Ajoute des éléments.
      *
      * Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.
+     * @param content Elements à ajouter
      */
     add(...content) {
         this.append(...content);
