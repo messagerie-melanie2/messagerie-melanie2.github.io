@@ -11943,7 +11943,7 @@ var Bnum = (function (exports) {
   }
   HTMLBnumCardList.TryDefine();
 
-  var css_248z = ":host{display:var(--bnum-card-email-display,block)}";
+  var css_248z = ":host{display:var(--bnum-card-email-display,block)}:host [hidden]{display:none}";
 
   const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
   /**
