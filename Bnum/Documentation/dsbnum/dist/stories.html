@@ -278,182 +278,7 @@ html.dark body {
   }
 </style>
   </head>
-    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-card-agenda" class="story-content" >
-        <div class="story-wrapper">
-          
-      
-      <h1><code>&lt;bnum-card-agenda&gt;</code></h1>
-      
-      <h2>Description</h2>
-      <p><p>Organisme qui permet d&#39;afficher simplement une liste de mails dans une carte.</p>
-</p>
-      
-      <h2>Structure</h2>
-      <div class="structures">
-      <div class="structure-block">
-    <h4>Avec des éléments</h4>
-    <div><bnum-card-agenda>
-<bnum-card-item-agenda
-data-date="2024-01-01"
-data-start-date="2024-01-01 08:00:00"
-data-end-date="2024-01-01 10:00:00"
-data-title="Réunion de projet"
-data-location="Salle de conférence">
-</bnum-card-item-agenda>
-<bnum-card-item-agenda
-data-date="2025-11-20"
-data-start-date="2025-10-20 09:40:00"
-data-end-date="2025-12-20 10:10:00"
-data-title="Réunion de projet"
-data-location="Salle de conférence">
-</bnum-card-item-agenda>
-<bnum-card-item-agenda all-day
-data-date="2025-11-21"
-data-title="Télétravail"
-data-location="A la maison">
-</bnum-card-item-agenda>
-</bnum-card-agenda></div><pre><code>&lt;bnum-card-agenda&gt;
-&lt;bnum-card-item-agenda
-data-date=&quot;2024-01-01&quot;
-data-start-date=&quot;2024-01-01 08:00:00&quot;
-data-end-date=&quot;2024-01-01 10:00:00&quot;
-data-title=&quot;Réunion de projet&quot;
-data-location=&quot;Salle de conférence&quot;&gt;
-&lt;/bnum-card-item-agenda&gt;
-&lt;bnum-card-item-agenda
-data-date=&quot;2025-11-20&quot;
-data-start-date=&quot;2025-10-20 09:40:00&quot;
-data-end-date=&quot;2025-12-20 10:10:00&quot;
-data-title=&quot;Réunion de projet&quot;
-data-location=&quot;Salle de conférence&quot;&gt;
-&lt;/bnum-card-item-agenda&gt;
-&lt;bnum-card-item-agenda all-day
-data-date=&quot;2025-11-21&quot;
-data-title=&quot;Télétravail&quot;
-data-location=&quot;A la maison&quot;&gt;
-&lt;/bnum-card-item-agenda&gt;
-&lt;/bnum-card-agenda&gt;</code></pre>
-  </div>
-  </div>
-      
-      <h2 style="display:none;">Utilisation (Playground)</h2>
-      <div style="display:none;" class="playground-demo-box">
-        <p>Playground non disponible.</p>
-      </div>
-      
-      <h3 style="display:none;">Code HTML</h3>
-      <pre style="display:none;"><code class="demo-code"></code></pre>
-      <h3 style="display:none;">Code JS</h3>
-      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
-      <script style="display:none;">// Fichier .playground.js non trouvé</script>
-      
-      <!--<h2>Propriétés (API Principale)</h2>
-      <p>N/A</p>-->
-      
-      <h2>Événements</h2>
-      
-    <table>
-      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-card-agenda:change</code></td><td><code>HTMLBnumCardItemAgenda[]</code></td><td>Nom du event déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody>
-    </table>
-  
-      
-      <h2>Slots</h2>
-      
-    <table>
-      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>(default)</code></td><td>Contenu des éléments de type HTMLBnumCardItemAgenda.</td></tr></tbody>
-    </table>
-  
-
-      <h2>Attributs de Données</h2>
-      
-    <table>
-      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr></tbody>
-    </table>
-  
-
-      <h2>Variables CSS</h2>
-      
-    <table>
-      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
-      <tbody><tr><td><code>--bnum-card-agenda</code></td><td><code>block</code> </td><td>Définit le display du composant. Par défaut à "block".</td></tr></tbody>
-    </table>
-  
-
-      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
-Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
-      <p>N/A</p>
-
-      <h2>API Publique</h2>
-      <h3>Méthodes</h3>
-      
-      <div class="api-method">
-        <h4><code><strong>add</strong>(content: HTMLBnumCardItemAgenda[]) : <code>this</code></code></h4>
-        <p>Ajoute des éléments.
-
-Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.</p>
-        <strong>Paramètres :</strong><ul>
-      <li><code>content</code>: Elements à ajouter</li>
-    </ul>
-        
-      </div>
-    <hr class="api-separator">
-      <div class="api-method">
-        <h4><code><strong>clear</strong>() : <code>this</code></code></h4>
-        <p>Vide le composant.</p>
-        
-        
-      </div>
-    <hr class="api-separator">
-      <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>({
-    contents = [],
-    url = EMPTY_STRING,
-  }: { contents?: HTMLBnumCardItemAgenda[]; url?: string; }) : <code>HTMLBnumCardAgenda</code></code></h4>
-        <p>Méthode statique pour créer une instance du composant.</p>
-        <strong>Paramètres :</strong><ul>
-      <li><code>{
-    contents = [],
-    url = EMPTY_STRING,
-  }</code>: Options de création</li>
-    </ul>
-        <p><strong>Retourne :</strong> Nouvelle node HTMLBnumCardAgenda</p>
-      </div>
-    
-
-      <h3>Variables d'instance</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemAgenda[]) => void></code></td><td>Oui</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
-</td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><p>Récupère l&#39;URL du titre.</p>
-</td></tr></tbody>
-    </table>
-  
-
-      <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag du composant.</p>
-</td></tr><tr><td><code>DATA_URL</code></td><td><code>string</code></td><td>Oui</td><td><p>Data pour l&#39;URL du titre.</p>
-</td></tr><tr><td><code>ID_CARD_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><p>ID du titre.</p>
-</td></tr><tr><td><code>ID_CARD_ITEM_NO_ELEMENTS</code></td><td><code>string</code></td><td>Oui</td><td><p>ID de l&#39;élément &quot;Aucun élément&quot;.</p>
-</td></tr></tbody>
-    </table>
-  
-
-      <h2>Code source</h2>
-      <p>
-        <a href="https://github.com/votre-projet/..." target="_blank">
-          Voir le code source sur GitHub (components/bnum-card-agenda)
-        </a>
-      </p>
-    
-        </div>
-      </div><div id="story-bnum-card-email" class="story-content" hidden>
+    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-card-email" class="story-content" >
         <div class="story-wrapper">
           
       
@@ -616,6 +441,211 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
       <p>
         <a href="https://github.com/votre-projet/..." target="_blank">
           Voir le code source sur GitHub (components/bnum-card-email)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-card-agenda" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-card-agenda&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Organisme qui permet d&#39;afficher simplement une liste d&#39;évènements dans une carte.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Avec des éléments</h4>
+    <div><bnum-card-agenda>
+<bnum-card-item-agenda
+data-date="2024-01-01"
+data-start-date="2024-01-01 08:00:00"
+data-end-date="2024-01-01 10:00:00"
+data-title="Réunion de projet"
+data-location="Salle de conférence">
+</bnum-card-item-agenda>
+<bnum-card-item-agenda
+data-date="2025-11-20"
+data-start-date="2025-10-20 09:40:00"
+data-end-date="2025-12-20 10:10:00"
+data-title="Réunion de projet"
+data-location="Salle de conférence">
+</bnum-card-item-agenda>
+<bnum-card-item-agenda all-day
+data-date="2025-11-21"
+data-title="Télétravail"
+data-location="A la maison">
+</bnum-card-item-agenda>
+</bnum-card-agenda>
+<bnum-card-agenda>
+<bnum-card-item-agenda
+data-date="2024-01-01"
+data-start-date="2024-01-01 08:00:00"
+data-end-date="2024-01-01 10:00:00"
+data-title="Réunion de projet"
+data-location="Salle de conférence">
+</bnum-card-item-agenda></div><pre><code>&lt;bnum-card-agenda&gt;
+&lt;bnum-card-item-agenda
+data-date=&quot;2024-01-01&quot;
+data-start-date=&quot;2024-01-01 08:00:00&quot;
+data-end-date=&quot;2024-01-01 10:00:00&quot;
+data-title=&quot;Réunion de projet&quot;
+data-location=&quot;Salle de conférence&quot;&gt;
+&lt;/bnum-card-item-agenda&gt;
+&lt;bnum-card-item-agenda
+data-date=&quot;2025-11-20&quot;
+data-start-date=&quot;2025-10-20 09:40:00&quot;
+data-end-date=&quot;2025-12-20 10:10:00&quot;
+data-title=&quot;Réunion de projet&quot;
+data-location=&quot;Salle de conférence&quot;&gt;
+&lt;/bnum-card-item-agenda&gt;
+&lt;bnum-card-item-agenda all-day
+data-date=&quot;2025-11-21&quot;
+data-title=&quot;Télétravail&quot;
+data-location=&quot;A la maison&quot;&gt;
+&lt;/bnum-card-item-agenda&gt;
+&lt;/bnum-card-agenda&gt;
+&lt;bnum-card-agenda&gt;
+&lt;bnum-card-item-agenda
+data-date=&quot;2024-01-01&quot;
+data-start-date=&quot;2024-01-01 08:00:00&quot;
+data-end-date=&quot;2024-01-01 10:00:00&quot;
+data-title=&quot;Réunion de projet&quot;
+data-location=&quot;Salle de conférence&quot;&gt;
+&lt;/bnum-card-item-agenda&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Sans éléments</h4>
+    <div><bnum-card-item-agenda
+</bnum-card-agenda></div><pre><code>&lt;bnum-card-item-agenda
+&lt;/bnum-card-agenda&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une url</h4>
+    <div><bnum-card-agenda data-url="#">
+</bnum-card-agenda></div><pre><code>&lt;bnum-card-agenda data-url=&quot;#&quot;&gt;
+&lt;/bnum-card-agenda&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-card-agenda:change</code></td><td><code>HTMLBnumCardItemAgenda[]</code></td><td>Nom du event déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(default)</code></td><td>Contenu des éléments de type HTMLBnumCardItemAgenda.</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr></tbody>
+    </table>
+  
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-card-agenda</code></td><td><code>block</code> </td><td>Définit le display du composant. Par défaut à "block".</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      <p>N/A</p>
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong>add</strong>(content: HTMLBnumCardItemAgenda[]) : <code>this</code></code></h4>
+        <p>Ajoute des éléments.
+
+Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>content</code>: Elements à ajouter</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>clear</strong>() : <code>this</code></code></h4>
+        <p>Vide le composant.</p>
+        
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>({
+    contents = [],
+    url = EMPTY_STRING,
+  }: { contents?: HTMLBnumCardItemAgenda[]; url?: string; }) : <code>HTMLBnumCardAgenda</code></code></h4>
+        <p>Méthode statique pour créer une instance du composant.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>{
+    contents = [],
+    url = EMPTY_STRING,
+  }</code>: Options de création</li>
+    </ul>
+        <p><strong>Retourne :</strong> Nouvelle node HTMLBnumCardAgenda</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemAgenda[]) => void></code></td><td>Oui</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
+</td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><p>Récupère l&#39;URL du titre.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag du composant.</p>
+</td></tr><tr><td><code>DATA_URL</code></td><td><code>string</code></td><td>Oui</td><td><p>Data pour l&#39;URL du titre.</p>
+</td></tr><tr><td><code>ID_CARD_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><p>ID du titre.</p>
+</td></tr><tr><td><code>ID_CARD_ITEM_NO_ELEMENTS</code></td><td><code>string</code></td><td>Oui</td><td><p>ID de l&#39;élément &quot;Aucun élément&quot;.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-card-agenda)
         </a>
       </p>
     

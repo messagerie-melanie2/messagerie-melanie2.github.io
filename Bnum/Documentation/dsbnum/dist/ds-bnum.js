@@ -1207,6 +1207,7 @@ var Bnum = (function (exports) {
   const TAG_CARD_TITLE = `${BnumConfig.Get('tag_prefix')}-card-title`;
   const TAG_CARD = `${BnumConfig.Get('tag_prefix')}-card`;
   const TAG_CARD_EMAIL = `${BnumConfig.Get('tag_prefix')}-card-email`;
+  const TAG_CARD_AGENDA = `${BnumConfig.Get('tag_prefix')}-card-agenda`;
   const TAG_CARD_ITEM = `${BnumConfig.Get('tag_prefix')}-card-item`;
   const TAG_CARD_ITEM_MAIL = `${BnumConfig.Get('tag_prefix')}-card-item-mail`;
   const TAG_CARD_ITEM_AGENDA = `${BnumConfig.Get('tag_prefix')}-card-item-agenda`;
@@ -13606,7 +13607,7 @@ var Bnum = (function (exports) {
 
   const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
   /**
-   * Organisme qui permet d'afficher simplement une liste de mails dans une carte.
+   * Organisme qui permet d'afficher simplement une liste d'évènements dans une carte.
    *
    * @structure Avec des éléments
    * <bnum-card-agenda>
@@ -13630,7 +13631,22 @@ var Bnum = (function (exports) {
    *    data-location="A la maison">
    * </bnum-card-item-agenda>
    * </bnum-card-agenda>
+   * <bnum-card-agenda>
+   * <bnum-card-item-agenda
+   *    data-date="2024-01-01"
+   *    data-start-date="2024-01-01 08:00:00"
+   *    data-end-date="2024-01-01 10:00:00"
+   *    data-title="Réunion de projet"
+   *    data-location="Salle de conférence">
+   * </bnum-card-item-agenda>
    *
+   * @structure Sans éléments
+   * <bnum-card-item-agenda
+   * </bnum-card-agenda>
+   *
+   * @structure Avec une url
+   * <bnum-card-agenda data-url="#">
+   * </bnum-card-agenda>
    *
    * @slot (default) - Contenu des éléments de type HTMLBnumCardItemAgenda.
    *
@@ -13753,9 +13769,9 @@ var Bnum = (function (exports) {
       #_sortChildren() {
           // 1. Récupérer les éléments assignés au slot (Uniquement les Nodes Elements, pas le texte)
           const elements = this.#_slot.assignedElements();
-          // Filtrer pour être sûr de ne trier que des mails (sécurité)
-          const mailItems = elements.filter((el) => el.tagName.toLowerCase().includes(HTMLBnumCardItemAgenda.TAG));
-          if (mailItems.length === 0) {
+          // Filtrer pour être sûr de ne trier que des événements (sécurité)
+          const agendaItems = elements.filter((el) => el.tagName.toLowerCase().includes(HTMLBnumCardItemAgenda.TAG));
+          if (agendaItems.length === 0) {
               this.#_noElements.hidden = false;
               this.#_slot.hidden = true;
               return;
@@ -13764,33 +13780,36 @@ var Bnum = (function (exports) {
               this.#_noElements.hidden = true;
               this.#_slot.hidden = false;
           }
-          if (mailItems.length < 2)
+          if (agendaItems.length < 2)
               return; // Pas besoin de trier
           // 2. Vérifier si un tri est nécessaire (optimisation)
           let isSorted = true;
-          for (let i = 0; i < mailItems.length - 1; i++) {
-              if (this.#_getDate(mailItems[i]) < this.#_getDate(mailItems[i + 1])) {
+          for (let i = 0; i < agendaItems.length - 1; i++) {
+              if (this.#_getDate(agendaItems[i]) < this.#_getDate(agendaItems[i + 1])) {
                   isSorted = false;
                   break;
+              }
+              else if (this.#_getDate(agendaItems[i]) === this.#_getDate(agendaItems[i + 1])) {
+                  // Même date de base, on regardmailItemse la date de début
+                  if (this.#_getStartDate(agendaItems[i]) <
+                      this.#_getStartDate(agendaItems[i + 1])) {
+                      isSorted = false;
+                      break;
+                  }
               }
           }
           if (isSorted)
               return;
           // 3. Trier en mémoire
           this.#_isSorting = true; // Verrouiller pour éviter que le déplacement ne relance slotchange
-          // mailItems.sort((a, b) => {
-          //   // Tri décroissant (le plus récent en haut)
-          //   return this.#_getDate(b) - this.#_getDate(a);
-          // });
           // 4. Réinsérer dans l'ordre via un Fragment (1 seul Reflow)
           const fragment = document.createDocumentFragment();
-          // mailItems.forEach((item) => fragment.appendChild(item));
-          fragment.append(...JsEnumerable.from(mailItems)
+          fragment.append(...JsEnumerable.from(agendaItems)
               .orderByDescending((x) => this.#_getDate(x))
               .thenDescending((x) => this.#_getStartDate(x)));
           this.appendChild(fragment); // Déplace les éléments existants, ne les recrée pas.
           // Notifier le changement
-          this.onElementChanged.call(mailItems);
+          this.onElementChanged.call(agendaItems);
           // Déverrouiller après que le microtask de mutation soit passé
           setTimeout(() => {
               this.#_isSorting = false;
@@ -13829,7 +13848,7 @@ var Bnum = (function (exports) {
        * Tag du composant.
        */
       static get TAG() {
-          return 'bnum-card-agenda';
+          return TAG_CARD_AGENDA;
       }
   }
   const TEMPLATE = BnumElement.CreateTemplate(`
