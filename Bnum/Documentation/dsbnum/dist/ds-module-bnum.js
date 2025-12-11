@@ -12063,7 +12063,7 @@ class HTMLBnumCardEmail extends BnumElement {
     #_getDate(item) {
         const dateStr = item.getAttribute('data-date');
         if (!dateStr)
-            return 0;
+            return item.date.getTime();
         if (dateStr === 'now')
             return Date.now();
         return new Date(dateStr).getTime();
