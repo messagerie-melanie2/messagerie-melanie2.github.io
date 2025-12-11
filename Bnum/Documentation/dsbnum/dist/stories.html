@@ -292,23 +292,11 @@ html.dark body {
       <div class="structure-block">
     <h4>BnumCardEmail</h4>
     <div><bnum-card-email>
-<bnum-card-item-mail data-date="now">
-<span slot="subject">Sujet par défaut</span>
-<span slot="sender">Expéditeur par défaut</span>
-</bnum-card-item-mail>
-<bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
-</bnum-card-item-mail>
-<bnum-card-item-mail read data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
-</bnum-card-item-mail>
+<bnum-card-item-mail data-date="now">...</bnum-card-item-mail>
+<bnum-card-item-mail data-date="2025-10-31 11:11">...</bnum-card-item-mail>
 </bnum-card-email></div><pre><code>&lt;bnum-card-email&gt;
-&lt;bnum-card-item-mail data-date=&quot;now&quot;&gt;
-&lt;span slot=&quot;subject&quot;&gt;Sujet par défaut&lt;/span&gt;
-&lt;span slot=&quot;sender&quot;&gt;Expéditeur par défaut&lt;/span&gt;
-&lt;/bnum-card-item-mail&gt;
-&lt;bnum-card-item-mail data-date=&quot;2025-10-31 11:11&quot; data-subject=&quot;Sujet ici&quot; data-sender=&quot;Expéditeur ici&quot;&gt;
-&lt;/bnum-card-item-mail&gt;
-&lt;bnum-card-item-mail read data-date=&quot;2025-10-31 11:11&quot; data-subject=&quot;Sujet ici&quot; data-sender=&quot;Expéditeur ici&quot;&gt;
-&lt;/bnum-card-item-mail&gt;
+&lt;bnum-card-item-mail data-date=&quot;now&quot;&gt;...&lt;/bnum-card-item-mail&gt;
+&lt;bnum-card-item-mail data-date=&quot;2025-10-31 11:11&quot;&gt;...&lt;/bnum-card-item-mail&gt;
 &lt;/bnum-card-email&gt;</code></pre>
   </div>
   </div>
@@ -345,7 +333,24 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 
       <h2>API Publique</h2>
       <h3>Méthodes</h3>
-      <p>N/A</p>
+      
+      <div class="api-method">
+        <h4><code><strong>add</strong>(content: HTMLBnumCardItemMail[]) : <code>this</code></code></h4>
+        <p>Ajoute des éléments.
+Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>content</code>: N/A</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>clear</strong>() : <code>this</code></code></h4>
+        <p>Vide le composant.</p>
+        
+        
+      </div>
+    
 
       <h3>Variables d'instance</h3>
       <p>N/A</p>
