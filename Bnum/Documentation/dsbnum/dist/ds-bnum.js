@@ -11970,7 +11970,7 @@ var Bnum = (function (exports) {
   class HTMLBnumCardEmail extends BnumElement {
       // Flag pour éviter les boucles infinies lors du slotchange
       #_isSorting = false;
-      #_card;
+      #_cardTitle;
       #_slot;
       #_noElements;
       #_onchange = null;
@@ -11996,16 +11996,12 @@ var Bnum = (function (exports) {
           return TEMPLATE;
       }
       _p_buildDOM(container) {
-          this.#_card = container.querySelector('#bnum-card');
+          this.#_cardTitle = container.querySelector('#bnum-card-title');
           this.#_slot = container.querySelector('slot');
           this.#_noElements = container.querySelector('#no-elements');
       }
       _p_attach() {
-          if (this.#_url !== EMPTY_STRING) {
-              // fromAttribute à true pour respecter la logique data-*
-              debugger;
-              this.#_card.data('title-url', this.#_url, true);
-          }
+          if (this.#_url !== EMPTY_STRING) ;
           // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
           this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
           this.#_handleSlotChange();
@@ -12104,7 +12100,8 @@ var Bnum = (function (exports) {
       }
   }
   const TEMPLATE = BnumElement.CreateTemplate(`
-    <${HTMLBnumCardElement.TAG} id="bnum-card" data-title-icon="mail" data-title-text="${BnumConfig.Get('local_keys').last_mails}">
+    <${HTMLBnumCardElement.TAG} id="bnum-card">
+      <${HTMLBnumCardTitle} id="bnum-card-title" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle}>
         <${HTMLBnumCardList.TAG}>
           <${HTMLBnumCardItem.TAG} id="no-elements" disabled hidden>Aucun mails à afficher....</${HTMLBnumCardItem.TAG}>
             <slot></slot>
