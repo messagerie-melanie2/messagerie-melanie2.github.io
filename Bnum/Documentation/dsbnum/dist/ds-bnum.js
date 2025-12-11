@@ -11801,7 +11801,7 @@ var Bnum = (function (exports) {
   });
   HTMLBnumCardItemAgenda.TryDefine();
 
-  var css_248z$1 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}";
+  var css_248z$1 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
 
   /**
    * Feuille de style CSS pour le composant liste de cartes.
@@ -11943,7 +11943,7 @@ var Bnum = (function (exports) {
   }
   HTMLBnumCardList.TryDefine();
 
-  var css_248z = ":host{display:var(--bnum-card-email-display,block)}:host [hidden]{display:none}";
+  var css_248z = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
 
   const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
   /**
