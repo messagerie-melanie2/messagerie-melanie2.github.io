@@ -2714,7 +2714,7 @@ var Bnum = (function (exports) {
   HTMLBnumPicture.TryDefine();
   //#endregion
 
-  var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}";
+  var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
 
   const SHEET$7 = BnumElement.ConstructCSSStyleSheet(css_248z$7);
   /**
@@ -3030,7 +3030,7 @@ var Bnum = (function (exports) {
       }
   }
   const TEMPLATE$5 = BnumElement.CreateTemplate(`
-      <a class="${HTMLBnumCardTitle.CLASS_LINK}">
+      <h2><a class="${HTMLBnumCardTitle.CLASS_LINK}">
         <span class="container">
           <slot id="${HTMLBnumCardTitle.ID_SLOT_ICON}" name="${HTMLBnumCardTitle.SLOT_NAME_ICON}"></slot>
           <${HTMLBnumIcon.TAG} class="${HTMLBnumCardTitle.CLASS_ICON_TITLE}" hidden></${HTMLBnumIcon.TAG}>
@@ -3039,7 +3039,7 @@ var Bnum = (function (exports) {
           <slot id="${HTMLBnumCardTitle.ID_SLOT_TEXT}"></slot>
           <span id="${HTMLBnumCardTitle.ID_CUSTOM_BODY}" hidden></span>
         </span>
-      </a>
+      </a></h2>
     `);
   //#region TryDefine
   HTMLBnumCardTitle.TryDefine();
