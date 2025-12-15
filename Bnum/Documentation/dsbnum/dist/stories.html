@@ -328,16 +328,434 @@ html.dark body {
   </div>
   </div>
       
-      <h2 style="display:none;">Utilisation (Playground)</h2>
-      <div style="display:none;" class="playground-demo-box">
-        <p>Playground non disponible.</p>
+      <h2 >Utilisation (Playground)</h2>
+      <div  class="playground-demo-box">
+        <div id="bnum-card-email-story">
+
+  <div class="demo-container">
+
+  <div id="bnum-card-email-story-playground-section">
+    <div id="bnum-card-email-story-playground-controls">
+      <div class="control-group">
+        <label>Contrôles d'état (Attributs) :</label>
+        <label>
+          <input type="checkbox" id="bnum-card-email-story-ctrl-loading" />
+          <code>[loading]</code>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>Méthodes JS (Corps) :</label>
+        <bnum-primary-button data-icon="add" id="bnum-card-email-story-btn-append-body">Ajouter un mail</bnum-primary-button>
+        <bnum-primary-button data-icon="clear_all" id="bnum-card-email-story-btn-clear-body">Vider</bnum-primary-button>
+      </div>
+    </div>
+
+    <bnum-card-email id="bnum-card-email-story-card-playground" style="display: block;">
+    </bnum-card-email>
+
+    <h4>Logs des événements (sur le Playground)</h4>
+    <pre id="bnum-card-email-story-log-output-card" class="log-output"></pre>
+  </div>
+</div>
+</div>
       </div>
       
-      <h3 style="display:none;">Code HTML</h3>
-      <pre style="display:none;"><code class="demo-code"></code></pre>
-      <h3 style="display:none;">Code JS</h3>
-      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
-      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      <h3 >Code HTML</h3>
+      <pre ><code class="demo-code">&lt;div id=&quot;bnum-card-email-story&quot;&gt;
+
+  &lt;div class=&quot;demo-container&quot;&gt;
+
+  &lt;div id=&quot;bnum-card-email-story-playground-section&quot;&gt;
+    &lt;div id=&quot;bnum-card-email-story-playground-controls&quot;&gt;
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Contrôles d&#039;état (Attributs) :&lt;/label&gt;
+        &lt;label&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;bnum-card-email-story-ctrl-loading&quot; /&gt;
+          &lt;code&gt;[loading]&lt;/code&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Méthodes JS (Corps) :&lt;/label&gt;
+        &lt;bnum-primary-button data-icon=&quot;add&quot; id=&quot;bnum-card-email-story-btn-append-body&quot;&gt;Ajouter un mail&lt;/bnum-primary-button&gt;
+        &lt;bnum-primary-button data-icon=&quot;clear_all&quot; id=&quot;bnum-card-email-story-btn-clear-body&quot;&gt;Vider&lt;/bnum-primary-button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;bnum-card-email id=&quot;bnum-card-email-story-card-playground&quot; style=&quot;display: block;&quot;&gt;
+    &lt;/bnum-card-email&gt;
+
+    &lt;h4&gt;Logs des événements (sur le Playground)&lt;/h4&gt;
+    &lt;pre id=&quot;bnum-card-email-story-log-output-card&quot; class=&quot;log-output&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      <h3 >Code JS</h3>
+      <pre ><code class="demo-code">/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise &#039;DOMContentLoaded&#039; pour s&#039;assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener(&#039;DOMContentLoaded&#039;, () =&gt; {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d&#039;événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    &#039;bnum-card-email-story-card-playground&#039;,
+  );
+  const logOutput = document.getElementById(
+    &#039;bnum-card-email-story-log-output-card&#039;,
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d&#039;attacher les listeners,
+        au cas où la story ne serait pas la première à s&#039;afficher.
+      */
+  const cardClickable = document.getElementById(
+    &#039;bnum-card-email-story-card-clickable&#039;,
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener(&#039;bnum-card-email:click&#039;, (e) =&gt; {
+      log(&#039;✅ Événement &quot;bnum-card-email:click&quot; reçu (sur la carte cliquable)&#039;);
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      &#039;Page chargée. Attachement des écouteurs pour #bnum-card-email-story-card-playground...&#039;,
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      &#039;bnum-card-email-story-ctrl-clickable&#039;,
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener(&#039;change&#039;, (e) =&gt; {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      &#039;bnum-card-email-story-ctrl-loading&#039;,
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener(&#039;change&#039;, (e) =&gt; {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d&#039;événements sur le Playground
+    playgroundCard.addEventListener(&#039;bnum-card-email:loading&#039;, (e) =&gt; {
+      log(
+        `✅ Événement &quot;bnum-card-email:loading&quot; reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener(&#039;bnum-card-email:click&#039;, (e) =&gt; {
+      log(&#039;✅ Événement &quot;bnum-card-email:click&quot; reçu (sur le playground)&#039;);
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const mail_subjects = [
+      &#039;Réunion de projet&#039;,
+      &#039;Présentation du nouveau produit&#039;,
+      &#039;Atelier de formation&#039;,
+      &#039;Déjeuner d\&#039;équipe&#039;,
+      &#039;Session de brainstorming&#039;,
+      &#039;Mise à jour du statut&#039;,
+      &#039;Planification stratégique&#039;,
+      &#039;Révision du budget&#039;,
+      &#039;Conférence client&#039;,
+      &#039;Webinaire sur les tendances du marché&#039;,
+    ];
+
+    const mail_senders = [
+      &#039;Marie Dupont&#039;,
+      &#039;Antoine Martin&#039;,
+      &#039;Sophie Bernard&#039;,
+      &#039;Lucas Durand&#039;,
+      &#039;Emma Moreau&#039;,
+      &#039;Hugo Lefebvre&#039;,
+      &#039;Chloé Simon&#039;,
+      &#039;Louis Michel&#039;,
+      &#039;Camille Garcia&#039;,
+      &#039;Julien Robert&#039;,
+      &#039;Laura Richard&#039;,
+      &#039;Maxime Petit&#039;,
+      &#039;Sarah Durand&#039;,
+      &#039;Nicolas Fournier&#039;,
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const subject = randomArrayElement(mail_subjects);
+      const sender = randomArrayElement(mail_senders);
+
+      return Bnum.HTMLBnumCardItemMail.Create(subject, sender, start);
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById(&#039;bnum-card-email-story-btn-clear-body&#039;)
+      ?.addEventListener(&#039;click&#039;, () =&gt; {
+        log(&#039;Reset des évènements&#039;);
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById(&#039;bnum-card-email-story-btn-append-body&#039;)
+      ?.addEventListener(&#039;click&#039;, () =&gt; {
+        log(&#039;Action: Appel de .appendToBody()&#039;);
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n&#039;est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      &#039;Script bnum-card-email: #bnum-card-email-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).&#039;,
+    );
+  }
+});
+</code></pre>
+      <script >/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise 'DOMContentLoaded' pour s'assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener('DOMContentLoaded', () => {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d'événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    'bnum-card-email-story-card-playground',
+  );
+  const logOutput = document.getElementById(
+    'bnum-card-email-story-log-output-card',
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d'attacher les listeners,
+        au cas où la story ne serait pas la première à s'afficher.
+      */
+  const cardClickable = document.getElementById(
+    'bnum-card-email-story-card-clickable',
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener('bnum-card-email:click', (e) => {
+      log('✅ Événement "bnum-card-email:click" reçu (sur la carte cliquable)');
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      'Page chargée. Attachement des écouteurs pour #bnum-card-email-story-card-playground...',
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      'bnum-card-email-story-ctrl-clickable',
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener('change', (e) => {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      'bnum-card-email-story-ctrl-loading',
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener('change', (e) => {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d'événements sur le Playground
+    playgroundCard.addEventListener('bnum-card-email:loading', (e) => {
+      log(
+        `✅ Événement "bnum-card-email:loading" reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener('bnum-card-email:click', (e) => {
+      log('✅ Événement "bnum-card-email:click" reçu (sur le playground)');
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const mail_subjects = [
+      'Réunion de projet',
+      'Présentation du nouveau produit',
+      'Atelier de formation',
+      'Déjeuner d\'équipe',
+      'Session de brainstorming',
+      'Mise à jour du statut',
+      'Planification stratégique',
+      'Révision du budget',
+      'Conférence client',
+      'Webinaire sur les tendances du marché',
+    ];
+
+    const mail_senders = [
+      'Marie Dupont',
+      'Antoine Martin',
+      'Sophie Bernard',
+      'Lucas Durand',
+      'Emma Moreau',
+      'Hugo Lefebvre',
+      'Chloé Simon',
+      'Louis Michel',
+      'Camille Garcia',
+      'Julien Robert',
+      'Laura Richard',
+      'Maxime Petit',
+      'Sarah Durand',
+      'Nicolas Fournier',
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const subject = randomArrayElement(mail_subjects);
+      const sender = randomArrayElement(mail_senders);
+
+      return Bnum.HTMLBnumCardItemMail.Create(subject, sender, start);
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById('bnum-card-email-story-btn-clear-body')
+      ?.addEventListener('click', () => {
+        log('Reset des évènements');
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById('bnum-card-email-story-btn-append-body')
+      ?.addEventListener('click', () => {
+        log('Action: Appel de .appendToBody()');
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n'est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      'Script bnum-card-email: #bnum-card-email-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).',
+    );
+  }
+});
+</script>
       
       <!--<h2>Propriétés (API Principale)</h2>
       <p>N/A</p>-->
@@ -362,7 +780,7 @@ html.dark body {
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr></tbody>
+      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody>
     </table>
   
 
@@ -420,6 +838,7 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
       <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemMail[]) => void></code></td><td>Oui</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
+</td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><p>Mode loading.</p>
 </td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><p>Récupère l&#39;URL du titre.</p>
 </td></tr></tbody>
     </table>
@@ -517,16 +936,422 @@ data-location=&quot;A la maison&quot;&gt;
   </div>
   </div>
       
-      <h2 style="display:none;">Utilisation (Playground)</h2>
-      <div style="display:none;" class="playground-demo-box">
-        <p>Playground non disponible.</p>
+      <h2 >Utilisation (Playground)</h2>
+      <div  class="playground-demo-box">
+        <div id="bnum-card-agenda-story">
+
+  <div class="demo-container">
+
+  <div id="bnum-card-agenda-story-playground-section">
+    <div id="bnum-card-agenda-story-playground-controls">
+      <div class="control-group">
+        <label>Contrôles d'état (Attributs) :</label>
+        <label>
+          <input type="checkbox" id="bnum-card-agenda-story-ctrl-loading" />
+          <code>[loading]</code>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>Méthodes JS (Corps) :</label>
+        <bnum-primary-button data-icon="add" id="bnum-card-agenda-story-btn-append-body">Ajouter un évènement</bnum-primary-button>
+        <bnum-primary-button data-icon="clear_all" id="bnum-card-agenda-story-btn-clear-body">Vider</bnum-primary-button>
+      </div>
+    </div>
+
+    <bnum-card-agenda id="bnum-card-agenda-story-card-playground" style="display: block;">
+    </bnum-card-agenda>
+
+    <h4>Logs des événements (sur le Playground)</h4>
+    <pre id="bnum-card-agenda-story-log-output-card" class="log-output"></pre>
+  </div>
+</div>
+</div>
       </div>
       
-      <h3 style="display:none;">Code HTML</h3>
-      <pre style="display:none;"><code class="demo-code"></code></pre>
-      <h3 style="display:none;">Code JS</h3>
-      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
-      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      <h3 >Code HTML</h3>
+      <pre ><code class="demo-code">&lt;div id=&quot;bnum-card-agenda-story&quot;&gt;
+
+  &lt;div class=&quot;demo-container&quot;&gt;
+
+  &lt;div id=&quot;bnum-card-agenda-story-playground-section&quot;&gt;
+    &lt;div id=&quot;bnum-card-agenda-story-playground-controls&quot;&gt;
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Contrôles d&#039;état (Attributs) :&lt;/label&gt;
+        &lt;label&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;bnum-card-agenda-story-ctrl-loading&quot; /&gt;
+          &lt;code&gt;[loading]&lt;/code&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Méthodes JS (Corps) :&lt;/label&gt;
+        &lt;bnum-primary-button data-icon=&quot;add&quot; id=&quot;bnum-card-agenda-story-btn-append-body&quot;&gt;Ajouter un évènement&lt;/bnum-primary-button&gt;
+        &lt;bnum-primary-button data-icon=&quot;clear_all&quot; id=&quot;bnum-card-agenda-story-btn-clear-body&quot;&gt;Vider&lt;/bnum-primary-button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;bnum-card-agenda id=&quot;bnum-card-agenda-story-card-playground&quot; style=&quot;display: block;&quot;&gt;
+    &lt;/bnum-card-agenda&gt;
+
+    &lt;h4&gt;Logs des événements (sur le Playground)&lt;/h4&gt;
+    &lt;pre id=&quot;bnum-card-agenda-story-log-output-card&quot; class=&quot;log-output&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      <h3 >Code JS</h3>
+      <pre ><code class="demo-code">/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise &#039;DOMContentLoaded&#039; pour s&#039;assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener(&#039;DOMContentLoaded&#039;, () =&gt; {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d&#039;événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    &#039;bnum-card-agenda-story-card-playground&#039;,
+  );
+  const logOutput = document.getElementById(
+    &#039;bnum-card-agenda-story-log-output-card&#039;,
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d&#039;attacher les listeners,
+        au cas où la story ne serait pas la première à s&#039;afficher.
+      */
+  const cardClickable = document.getElementById(
+    &#039;bnum-card-agenda-story-card-clickable&#039;,
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener(&#039;bnum-card-agenda:click&#039;, (e) =&gt; {
+      log(
+        &#039;✅ Événement &quot;bnum-card-agenda:click&quot; reçu (sur la carte cliquable)&#039;,
+      );
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      &#039;Page chargée. Attachement des écouteurs pour #bnum-card-agenda-story-card-playground...&#039;,
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      &#039;bnum-card-agenda-story-ctrl-clickable&#039;,
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener(&#039;change&#039;, (e) =&gt; {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      &#039;bnum-card-agenda-story-ctrl-loading&#039;,
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener(&#039;change&#039;, (e) =&gt; {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d&#039;événements sur le Playground
+    playgroundCard.addEventListener(&#039;bnum-card-agenda:loading&#039;, (e) =&gt; {
+      log(
+        `✅ Événement &quot;bnum-card-agenda:loading&quot; reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener(&#039;bnum-card-agenda:click&#039;, (e) =&gt; {
+      log(&#039;✅ Événement &quot;bnum-card-agenda:click&quot; reçu (sur le playground)&#039;);
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const event_subjects = [
+      &#039;Réunion de projet&#039;,
+      &#039;Déjeuner avec l\&#039;équipe&#039;,
+      &#039;Présentation client&#039;,
+      &#039;Atelier de brainstorming&#039;,
+      &#039;Revue de code&#039;,
+    ];
+
+    const event_locations = [
+      &#039;Salle de conférence A&#039;,
+      &#039;Cafétéria&#039;,
+      &#039;Bureau du client&#039;,
+      &#039;Espace de coworking&#039;,
+      &#039;Salle de réunion B&#039;,
+      null,
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const end = addRandomHours(start);
+      const base = new Date(new Date(start).setHours(0, 0, 0, 0));
+      const subject = randomArrayElement(event_subjects);
+      const location = randomArrayElement(event_locations);
+
+      return Bnum.HTMLBnumCardItemAgenda.Create(base, start, end, {
+        location,
+        title: subject,
+      });
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById(&#039;bnum-card-agenda-story-btn-clear-body&#039;)
+      ?.addEventListener(&#039;click&#039;, () =&gt; {
+        log(&#039;Reset des évènements&#039;);
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById(&#039;bnum-card-agenda-story-btn-append-body&#039;)
+      ?.addEventListener(&#039;click&#039;, () =&gt; {
+        log(&#039;Action: Appel de .appendToBody()&#039;);
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n&#039;est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      &#039;Script bnum-card-agenda: #bnum-card-agenda-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).&#039;,
+    );
+  }
+});
+</code></pre>
+      <script >/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise 'DOMContentLoaded' pour s'assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener('DOMContentLoaded', () => {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d'événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    'bnum-card-agenda-story-card-playground',
+  );
+  const logOutput = document.getElementById(
+    'bnum-card-agenda-story-log-output-card',
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d'attacher les listeners,
+        au cas où la story ne serait pas la première à s'afficher.
+      */
+  const cardClickable = document.getElementById(
+    'bnum-card-agenda-story-card-clickable',
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener('bnum-card-agenda:click', (e) => {
+      log(
+        '✅ Événement "bnum-card-agenda:click" reçu (sur la carte cliquable)',
+      );
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      'Page chargée. Attachement des écouteurs pour #bnum-card-agenda-story-card-playground...',
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      'bnum-card-agenda-story-ctrl-clickable',
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener('change', (e) => {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      'bnum-card-agenda-story-ctrl-loading',
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener('change', (e) => {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d'événements sur le Playground
+    playgroundCard.addEventListener('bnum-card-agenda:loading', (e) => {
+      log(
+        `✅ Événement "bnum-card-agenda:loading" reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener('bnum-card-agenda:click', (e) => {
+      log('✅ Événement "bnum-card-agenda:click" reçu (sur le playground)');
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const event_subjects = [
+      'Réunion de projet',
+      'Déjeuner avec l\'équipe',
+      'Présentation client',
+      'Atelier de brainstorming',
+      'Revue de code',
+    ];
+
+    const event_locations = [
+      'Salle de conférence A',
+      'Cafétéria',
+      'Bureau du client',
+      'Espace de coworking',
+      'Salle de réunion B',
+      null,
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const end = addRandomHours(start);
+      const base = new Date(new Date(start).setHours(0, 0, 0, 0));
+      const subject = randomArrayElement(event_subjects);
+      const location = randomArrayElement(event_locations);
+
+      return Bnum.HTMLBnumCardItemAgenda.Create(base, start, end, {
+        location,
+        title: subject,
+      });
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById('bnum-card-agenda-story-btn-clear-body')
+      ?.addEventListener('click', () => {
+        log('Reset des évènements');
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById('bnum-card-agenda-story-btn-append-body')
+      ?.addEventListener('click', () => {
+        log('Action: Appel de .appendToBody()');
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n'est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      'Script bnum-card-agenda: #bnum-card-agenda-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).',
+    );
+  }
+});
+</script>
       
       <!--<h2>Propriétés (API Principale)</h2>
       <p>N/A</p>-->
@@ -551,7 +1376,7 @@ data-location=&quot;A la maison&quot;&gt;
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr></tbody>
+      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody>
     </table>
   
 
@@ -609,6 +1434,7 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
       <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemAgenda[]) => void></code></td><td>Oui</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
+</td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><p>Mode loading.</p>
 </td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><p>Récupère l&#39;URL du titre.</p>
 </td></tr></tbody>
     </table>

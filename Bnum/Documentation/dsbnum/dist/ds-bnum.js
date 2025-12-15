@@ -3500,7 +3500,8 @@ var Bnum = (function (exports) {
               this._p_addState(HTMLBnumCardElement.STATE_LOADING);
               // Initialise le loading si nécessaire
               if (!this.#_loadingElement) {
-                  this.#_bodyElement?.appendChild(this.#_getLoading());
+                  const div = this.shadowRoot?.querySelector(`.${HTMLBnumCardElement.CSS_CLASS_BODY}`);
+                  div.appendChild(this.#_getLoading());
               }
           }
       }
@@ -12003,12 +12004,18 @@ var Bnum = (function (exports) {
        * ID de l'élément "Aucun élément".
        */
       static ID_CARD_ITEM_NO_ELEMENTS = 'no-elements';
+      /**
+       * Attribut pour le mode loading.
+       * @attr {string | undefined} (optional) loading - Si présent, affiche le mode loading.
+       */
+      static ATTRIBUTE_LOADING = 'loading';
       //#endregion Constants
       //#region Private fields
       #_isSorting = false;
       #_cardTitle;
       #_slot;
       #_noElements;
+      #_card = null;
       /**
        * Déclenché lorsque les éléments changent (ajout/suppression).
        */
@@ -12026,6 +12033,29 @@ var Bnum = (function (exports) {
               });
           }
           return this.#_onchange;
+      }
+      /**
+       * Mode loading.
+       */
+      get loading() {
+          return this.hasAttribute(HTMLBnumCardEmail.ATTRIBUTE_LOADING);
+      }
+      set loading(value) {
+          if (value) {
+              this.setAttribute(HTMLBnumCardEmail.ATTRIBUTE_LOADING, HTMLBnumCardEmail.ATTRIBUTE_LOADING);
+          }
+          else {
+              this.removeAttribute(HTMLBnumCardEmail.ATTRIBUTE_LOADING);
+          }
+      }
+      get #_cardPart() {
+          if (this.#_card === null) {
+              this.#_card =
+                  this.querySelector?.(HTMLBnumCardElement.TAG) ??
+                      this.shadowRoot?.querySelector?.(HTMLBnumCardElement.TAG) ??
+                      null;
+          }
+          return this.#_card;
       }
       /**
        * Récupère l'URL du titre.
@@ -12055,6 +12085,16 @@ var Bnum = (function (exports) {
           // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
           this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
           this.#_handleSlotChange();
+      }
+      _p_update(name, oldVal, newVal) {
+          switch (name) {
+              case HTMLBnumCardEmail.ATTRIBUTE_LOADING:
+                  if (newVal === null || newVal === EMPTY_STRING)
+                      this.#_cardPart.removeAttribute(HTMLBnumCardEmail.ATTRIBUTE_LOADING);
+                  else
+                      this.#_cardPart.setAttribute(HTMLBnumCardEmail.ATTRIBUTE_LOADING, newVal || EMPTY_STRING);
+                  break;
+          }
       }
       //#endregion Lifecycle
       //#region Public methods
@@ -12148,6 +12188,9 @@ var Bnum = (function (exports) {
       }
       //#endregion Private methods
       //#region Static methods
+      static _p_observedAttributes() {
+          return [HTMLBnumCardEmail.ATTRIBUTE_LOADING];
+      }
       /**
        * Méthode statique pour créer une instance du composant.
        * @param param0 Options de création
@@ -13664,6 +13707,11 @@ var Bnum = (function (exports) {
        */
       static ATTRIBUTE_DATA_URL = `data-${HTMLBnumCardAgenda.DATA_URL}`;
       /**
+       * Attribut pour le mode loading.
+       * @attr {string | undefined} (optional) loading - Si présent, affiche le mode loading.
+       */
+      static ATTRIBUTE_LOADING = 'loading';
+      /**
        * ID du titre.
        */
       static ID_CARD_TITLE = 'bnum-card-title';
@@ -13677,6 +13725,7 @@ var Bnum = (function (exports) {
       #_cardTitle;
       #_slot;
       #_noElements;
+      #_card = null;
       /**
        * Déclenché lorsque les éléments changent (ajout/suppression).
        */
@@ -13694,6 +13743,29 @@ var Bnum = (function (exports) {
               });
           }
           return this.#_onchange;
+      }
+      /**
+       * Mode loading.
+       */
+      get loading() {
+          return this.hasAttribute(HTMLBnumCardAgenda.ATTRIBUTE_LOADING);
+      }
+      set loading(value) {
+          if (value) {
+              this.setAttribute(HTMLBnumCardAgenda.ATTRIBUTE_LOADING, HTMLBnumCardAgenda.ATTRIBUTE_LOADING);
+          }
+          else {
+              this.removeAttribute(HTMLBnumCardAgenda.ATTRIBUTE_LOADING);
+          }
+      }
+      get #_cardPart() {
+          if (this.#_card === null) {
+              this.#_card =
+                  this.querySelector?.(HTMLBnumCardElement.TAG) ??
+                      this.shadowRoot?.querySelector?.(HTMLBnumCardElement.TAG) ??
+                      null;
+          }
+          return this.#_card;
       }
       /**
        * Récupère l'URL du titre.
@@ -13723,6 +13795,16 @@ var Bnum = (function (exports) {
           // On écoute les changements dans le slot (Items statiques ou ajoutés via JS)
           this.#_slot.addEventListener('slotchange', this.#_handleSlotChange.bind(this));
           this.#_handleSlotChange();
+      }
+      _p_update(name, oldVal, newVal) {
+          switch (name) {
+              case HTMLBnumCardAgenda.ATTRIBUTE_LOADING:
+                  if (newVal === null || newVal === EMPTY_STRING)
+                      this.#_cardPart.removeAttribute(HTMLBnumCardAgenda.ATTRIBUTE_LOADING);
+                  else
+                      this.#_cardPart.setAttribute(HTMLBnumCardAgenda.ATTRIBUTE_LOADING, newVal || EMPTY_STRING);
+                  break;
+          }
       }
       //#endregion Lifecycle
       //#region Public methods
@@ -13823,6 +13905,9 @@ var Bnum = (function (exports) {
       }
       //#endregion Private methods
       //#region Static methods
+      static _p_observedAttributes() {
+          return [HTMLBnumCardAgenda.ATTRIBUTE_LOADING];
+      }
       /**
        * Méthode statique pour créer une instance du composant.
        * @param param0 Options de création
