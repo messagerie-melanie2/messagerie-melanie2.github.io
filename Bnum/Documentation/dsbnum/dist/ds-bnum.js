@@ -1157,7 +1157,7 @@ var Bnum = (function (exports) {
   var eventExports = requireEvent();
   var JsEvent = /*@__PURE__*/getDefaultExportFromCjs(eventExports);
 
-  var css_248z$c = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+  var css_248z$b = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
 
   /**
    * Événement personnalisé signalant le changement d'un élément.
@@ -1215,7 +1215,6 @@ var Bnum = (function (exports) {
   const TAG_CARD_ITEM_AGENDA = `${BnumConfig.Get('tag_prefix')}-card-item-agenda`;
   const TAG_CARD_LIST = `${BnumConfig.Get('tag_prefix')}-card-list`;
   const TAG_DATE = `${BnumConfig.Get('tag_prefix')}-date`;
-  const TAG_ICON_BUTTON = `${BnumConfig.Get('tag_prefix')}-icon-button`;
 
   /**
    * Classe de gestion de planification d'exécution de callback.
@@ -1398,7 +1397,7 @@ var Bnum = (function (exports) {
   /**
    * Feuille de style CSS pour les icônes Material Symbols.
    */
-  const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$c.replaceAll(`.${ICON_CLASS}`, ':host'));
+  const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$b.replaceAll(`.${ICON_CLASS}`, ':host'));
   /**
    * Composant personnalisé <bnum-icon> pour afficher une icône Material Symbol.
    *
@@ -1659,13 +1658,13 @@ var Bnum = (function (exports) {
   const REG_LIGHT_PICTURE_NAME = /(-light)\.(([\w\d]+)|\1?.+)$/;
   const REG_XSS_SAFE = /^[-.\w\s%()]+$/;
 
-  var css_248z$b = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+  var css_248z$a = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
   //#region External Constants
   /**
    * Style CSS du composant bouton.
    */
-  const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$b);
+  const SHEET$a = BnumElement.ConstructCSSStyleSheet(css_248z$a);
   // Constantes pour les tags des différents types de boutons
   /**
    * Tag du bouton Bnum.
@@ -2055,7 +2054,7 @@ var Bnum = (function (exports) {
        * @returns Template utiliser pour le composant
        */
       _p_fromTemplate() {
-          return TEMPLATE$7;
+          return TEMPLATE$6;
       }
       /**
        * Construit le DOM du composant bouton.
@@ -2078,7 +2077,7 @@ var Bnum = (function (exports) {
        * @inheritdoc
        */
       _p_getStylesheets() {
-          return [SHEET$b];
+          return [SHEET$a];
       }
       //#endregion Lifecycle
       //#region Private methods
@@ -2292,7 +2291,7 @@ var Bnum = (function (exports) {
   /**
    * Template HTML du composant bouton.
    */
-  const TEMPLATE$7 = BnumElement.CreateTemplate(`
+  const TEMPLATE$6 = BnumElement.CreateTemplate(`
   <div class="${HTMLBnumButton.CLASS_WRAPPER}">
     <span class="${HTMLBnumButton.CLASS_SLOT}">
       <slot></slot>
@@ -2404,10 +2403,10 @@ var Bnum = (function (exports) {
   }
   HTMLBnumDangerButton.TryDefine();
 
-  var css_248z$a = ":host{border-bottom:thin dotted;cursor:help}";
+  var css_248z$9 = ":host{border-bottom:thin dotted;cursor:help}";
 
   // bnum-helper.ts
-  const SHEET$a = BnumElement.ConstructCSSStyleSheet(css_248z$a);
+  const SHEET$9 = BnumElement.ConstructCSSStyleSheet(css_248z$9);
   /**
    * Constante représentant l'icône utilisée par défaut.
    */
@@ -2452,7 +2451,7 @@ var Bnum = (function (exports) {
        * @inheritdoc
        */
       _p_getStylesheets() {
-          return [SHEET$a];
+          return [SHEET$9];
       }
       /**
        * Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.
@@ -2475,12 +2474,12 @@ var Bnum = (function (exports) {
   }
   HTMLBnumHelper.TryDefine();
 
-  var css_248z$9 = ":host{--_image-url:var(--_image-light);display:inline-block}img{content:var(--_image-url);height:100%;width:100%}";
+  var css_248z$8 = ":host{--_image-url:var(--_image-light);display:inline-block}img{content:var(--_image-url);height:100%;width:100%}";
 
   /**
    * Feuille de style CSS pour le composant BnumHTMLPicture.
    */
-  const SHEET$9 = BnumElement.ConstructCSSStyleSheet(css_248z$9);
+  const SHEET$8 = BnumElement.ConstructCSSStyleSheet(css_248z$8);
   /**
    * Élément web personnalisé permettant d'afficher une image qui s'adapte automatiquement au mode sombre ou clair de l'interface.
    *
@@ -2608,7 +2607,7 @@ var Bnum = (function (exports) {
        * @inheritdoc
        */
       _p_getStylesheets() {
-          return [SHEET$9];
+          return [SHEET$8];
       }
       /**
        * Construit le DOM du composant.
@@ -2715,9 +2714,9 @@ var Bnum = (function (exports) {
   HTMLBnumPicture.TryDefine();
   //#endregion
 
-  var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
+  var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
 
-  const SHEET$8 = BnumElement.ConstructCSSStyleSheet(css_248z$8);
+  const SHEET$7 = BnumElement.ConstructCSSStyleSheet(css_248z$7);
   /**
    * Composant représentant le titre d'une carte, pouvant inclure une icône et un lien.
    * Permet d'afficher un titre enrichi avec une icône et éventuellement un lien cliquable.
@@ -2870,10 +2869,10 @@ var Bnum = (function (exports) {
           super();
       }
       _p_getStylesheets() {
-          return [SHEET$8];
+          return [SHEET$7];
       }
       _p_fromTemplate() {
-          return TEMPLATE$6;
+          return TEMPLATE$5;
       }
       /**
        * Construit le DOM du composant dans le conteneur donné.
@@ -3030,7 +3029,7 @@ var Bnum = (function (exports) {
           return TAG_CARD_TITLE;
       }
   }
-  const TEMPLATE$6 = BnumElement.CreateTemplate(`
+  const TEMPLATE$5 = BnumElement.CreateTemplate(`
       <h2><a class="${HTMLBnumCardTitle.CLASS_LINK}">
         <span class="container">
           <slot id="${HTMLBnumCardTitle.ID_SLOT_ICON}" name="${HTMLBnumCardTitle.SLOT_NAME_ICON}"></slot>
@@ -3159,9 +3158,9 @@ var Bnum = (function (exports) {
       return element;
   }
 
-  var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-border-on-surface-bottom,solid 4px #000091);border-left:var(--bnum-border-on-surface-left,none);border-right:var(--bnum-border-on-surface-right,none);border-top:var(--bnum-border-on-surface-top,none);display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
+  var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-border-on-surface-bottom,solid 4px #000091);border-left:var(--bnum-border-on-surface-left,none);border-right:var(--bnum-border-on-surface-right,none);border-top:var(--bnum-border-on-surface-top,none);display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
 
-  const SHEET$7 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$7);
+  const SHEET$6 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$6);
   /**
    * Élément à ajouter dans un slot avec un nom de slot optionnel.
    */
@@ -3449,7 +3448,7 @@ var Bnum = (function (exports) {
           this.addEventListener('click', this.#_handleClick.bind(this));
       }
       _p_fromTemplate() {
-          return TEMPLATE$5;
+          return TEMPLATE$4;
       }
       /**
        * Construit le DOM interne du composant.
@@ -3485,7 +3484,7 @@ var Bnum = (function (exports) {
           this.#_updateDOM();
       }
       _p_getStylesheets() {
-          return [SHEET$7];
+          return [SHEET$6];
       }
       //#endregion Lifecycle
       //#region Private methods
@@ -3678,7 +3677,7 @@ var Bnum = (function (exports) {
           return TAG_CARD;
       }
   }
-  const TEMPLATE$5 = BnumElementInternal.CreateTemplate(`
+  const TEMPLATE$4 = BnumElementInternal.CreateTemplate(`
       <div class="${HTMLBnumCardElement.CSS_CLASS_TITLE}">
         <slot name="${HTMLBnumCardElement.SLOT_TITLE}"></slot>
       </div>
@@ -3688,9 +3687,9 @@ var Bnum = (function (exports) {
     `);
   HTMLBnumCardElement.TryDefine();
 
-  var css_248z$6 = ":host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
+  var css_248z$5 = ":host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
 
-  const SHEET$6 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$6);
+  const SHEET$5 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$5);
   /**
    * Représente un item d'une carte `<bnum-card>` qui peut être mis dans un `bnum-card-list`.
    *
@@ -3811,7 +3810,7 @@ var Bnum = (function (exports) {
           return true;
       }
       _p_getStylesheets() {
-          return [SHEET$6];
+          return [SHEET$5];
       }
       static CreateChildTemplate(childTemplate, { defaultSlot = true, slotName = EMPTY_STRING, } = {}) {
           const template = document.createElement('template');
@@ -10437,12 +10436,12 @@ var Bnum = (function (exports) {
   // Auto-définition du composant
   HTMLBnumDate.TryDefine();
 
-  var css_248z$5 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
+  var css_248z$4 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
 
   const EVENT_DEFAULT = 'default';
 
   // --- Importe tes dépendances (date-fns, BnumCardItem, etc.) ---
-  const SHEET$5 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$5);
+  const SHEET$4 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$4);
   /**
    * Composant HTML personnalisé représentant un élément de carte mail.
    *
@@ -10739,7 +10738,7 @@ var Bnum = (function (exports) {
        * @returns Liste des CSSStyleSheet à appliquer.
        */
       _p_getStylesheets() {
-          return [...super._p_getStylesheets(), SHEET$5];
+          return [...super._p_getStylesheets(), SHEET$4];
       }
       /**
        * Méthode appelée lors de la mise à jour d'un attribut observé.
@@ -10757,7 +10756,7 @@ var Bnum = (function (exports) {
        * @returns Le template HTML.
        */
       _p_fromTemplate() {
-          return TEMPLATE$4;
+          return TEMPLATE$3;
       }
       //#endregion Lifecycle
       //#region Public methods
@@ -10996,7 +10995,7 @@ var Bnum = (function (exports) {
           return TAG_CARD_ITEM_MAIL;
       }
   }
-  const TEMPLATE$4 = HTMLBnumCardItem.CreateChildTemplate(`
+  const TEMPLATE$3 = HTMLBnumCardItem.CreateChildTemplate(`
   <div class="${HTMLBnumCardItemMail.CLASS_MAIN_CONTENT}">
     <div class="${HTMLBnumCardItemMail.CLASS_SENDER}">
       <slot id="${HTMLBnumCardItemMail.ID_SENDER_SLOT}" name="${HTMLBnumCardItemMail.SLOT_SENDER_NAME}"></slot>
@@ -11018,9 +11017,9 @@ var Bnum = (function (exports) {
   HTMLBnumCardItemMail.TryDefine();
   //#endregion
 
-  var css_248z$4 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,12px))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,24px));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
+  var css_248z$3 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,12px))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,24px));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
 
-  const SHEET$4 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$4);
+  const SHEET$3 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$3);
   /**
    * Item de carte agenda
    *
@@ -11357,7 +11356,7 @@ var Bnum = (function (exports) {
        * @returns Chaîne de style CSS à appliquer au composant.
        */
       _p_getStylesheets() {
-          return [...super._p_getStylesheets(), SHEET$4];
+          return [...super._p_getStylesheets(), SHEET$3];
       }
       /**
        * Précharge les données nécessaires à l'initialisation du composant.
@@ -11519,7 +11518,7 @@ var Bnum = (function (exports) {
               this.#_privateIcon.hidden = true;
       }
       _p_fromTemplate() {
-          return TEMPLATE$3;
+          return TEMPLATE$2;
       }
       //#endregion
       //#region Public Methods
@@ -11803,17 +11802,17 @@ var Bnum = (function (exports) {
   <${HTMLBnumIcon.TAG} class="${HTMLBnumCardItemAgenda.CLASS_BNUM_CARD_ITEM_AGENDA_PRIVATE_ICON}" hidden>${HTMLBnumCardItemAgenda.ICON_PRIVATE}</${HTMLBnumIcon.TAG}>
 `;
   // Optimisation : Le HTML est parsé une seule fois ici.
-  const TEMPLATE$3 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
+  const TEMPLATE$2 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
       defaultSlot: false,
   });
   HTMLBnumCardItemAgenda.TryDefine();
 
-  var css_248z$3 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
+  var css_248z$2 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
 
   /**
    * Feuille de style CSS pour le composant liste de cartes.
    */
-  const SHEET$3 = BnumElement.ConstructCSSStyleSheet(css_248z$3);
+  const SHEET$2 = BnumElement.ConstructCSSStyleSheet(css_248z$2);
   /**
    * Composant liste de cartes Bnum.
    * Permet d'afficher une liste d'éléments de type carte.
@@ -11887,7 +11886,7 @@ var Bnum = (function (exports) {
        * @returns {CSSStyleSheet[]} Feuilles de style CSS
        */
       _p_getStylesheets() {
-          return [SHEET$3];
+          return [SHEET$2];
       }
       /**
        * Construit le DOM interne du composant.
@@ -11950,9 +11949,9 @@ var Bnum = (function (exports) {
   }
   HTMLBnumCardList.TryDefine();
 
-  var css_248z$2 = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
+  var css_248z$1 = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
 
-  const SHEET$2 = BnumElement.ConstructCSSStyleSheet(css_248z$2);
+  const SHEET$1 = BnumElement.ConstructCSSStyleSheet(css_248z$1);
   /**
    * Organisme qui permet d'afficher simplement une liste de mails dans une carte.
    *
@@ -12070,10 +12069,10 @@ var Bnum = (function (exports) {
           super();
       }
       get _p_styleSheets() {
-          return [SHEET$2];
+          return [SHEET$1];
       }
       _p_fromTemplate() {
-          return TEMPLATE$2;
+          return TEMPLATE$1;
       }
       _p_buildDOM(container) {
           this.#_cardTitle = container.querySelector(`#${HTMLBnumCardEmail.ID_CARD_TITLE}`);
@@ -12214,7 +12213,7 @@ var Bnum = (function (exports) {
           return TAG_CARD_EMAIL;
       }
   }
-  const TEMPLATE$2 = BnumElement.CreateTemplate(`
+  const TEMPLATE$1 = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardEmail.ID_CARD_TITLE}" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
@@ -12227,7 +12226,7 @@ var Bnum = (function (exports) {
   HTMLBnumCardEmail.TryDefine();
   //#endregion TryDefine
 
-  var css_248z$1 = ":host{display:var(--bnum-card-agenda-display,block)}[hidden]{display:none}";
+  var css_248z = ":host{display:var(--bnum-card-agenda-display,block)}[hidden]{display:none}";
 
   var constants;
   var hasRequiredConstants;
@@ -13651,7 +13650,7 @@ var Bnum = (function (exports) {
   var JsEnumerableExports = requireJsEnumerable();
   var JsEnumerable = /*@__PURE__*/getDefaultExportFromCjs(JsEnumerableExports);
 
-  const SHEET$1 = BnumElement.ConstructCSSStyleSheet(css_248z$1);
+  const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
   /**
    * Organisme qui permet d'afficher simplement une liste d'évènements dans une carte.
    *
@@ -13780,10 +13779,10 @@ var Bnum = (function (exports) {
           super();
       }
       get _p_styleSheets() {
-          return [SHEET$1];
+          return [SHEET];
       }
       _p_fromTemplate() {
-          return TEMPLATE$1;
+          return TEMPLATE;
       }
       _p_buildDOM(container) {
           this.#_cardTitle = container.querySelector(`#${HTMLBnumCardAgenda.ID_CARD_TITLE}`);
@@ -13931,7 +13930,7 @@ var Bnum = (function (exports) {
           return TAG_CARD_AGENDA;
       }
   }
-  const TEMPLATE$1 = BnumElement.CreateTemplate(`
+  const TEMPLATE = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardAgenda.ID_CARD_TITLE}" slot="title" data-icon="today">${BnumConfig.Get('local_keys').last_events}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
@@ -13944,127 +13943,6 @@ var Bnum = (function (exports) {
   HTMLBnumCardAgenda.TryDefine();
   //#endregion TryDefine
 
-  var css_248z = ":host{cursor:pointer;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){font-variation-settings:\"FILL\" 1}:host(:active){font-variation-settings:\"FILL\" 1,\"wght\" 700,\"GRAD\" 200,\"opsz\" 20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
-
-  const SHEET = BnumElement.ConstructCSSStyleSheet(css_248z);
-  /**
-   * Button contenant une icône.
-   *
-   * @structure Button Icon
-   * <bnum-icon-button>home</bnum-icon-button>
-   *
-   * @structure Button Disabled
-   * <bnum-icon-button disabled>home</bnum-icon-button>
-   *
-   * @cssvar {0.6} --bnum-button-disabled-opacity - Opacité du bouton désactivé
-   * @cssvar {none} --bnum-button-disabled-pointer-events - Gestion des événements souris pour le bouton désactivé
-   *
-   * @slot (default) - Contenu de l'icône (nom de l'icône à afficher)
-   */
-  class HTMLBnumButtonIcon extends BnumElement {
-      //#region Constantes
-      /**
-       * Id de l'icône à l'intérieur du bouton
-       */
-      static ID_ICON = 'icon';
-      /**
-       * Attribut pour définir le gestionnaire de clic
-       * @event click
-       */
-      static ATTRIBUTE_ON_CLICK = 'onclick';
-      //#endregion Constantes
-      //#region Private fields
-      /**
-       * Référence vers l'élément icône à l'intérieur du bouton
-       */
-      #_icon = null;
-      //#endregion Private fields
-      //#region Getters/Setters
-      /**
-       * Référence vers l'élément icône à l'intérieur du bouton.
-       *
-       * Si l'icône n'a pas été mise en mémoire, elle sera cherché puis mise en mémoire.
-       */
-      get #_iconElement() {
-          if (!this.#_icon) {
-              const icon = this.querySelector(HTMLBnumIcon.TAG) ??
-                  this.shadowRoot?.getElementById(HTMLBnumButtonIcon.ID_ICON);
-              if (!icon)
-                  this.#_throw('Icon element not found inside icon button');
-              this.#_icon = icon;
-          }
-          return this.#_icon;
-      }
-      /**
-       * Icône affichée dans le bouton
-       */
-      get icon() {
-          return ((this.#_iconElement.icon || this.#_throw('Icon is not defined')) ??
-              EMPTY_STRING);
-      }
-      set icon(value) {
-          this.#_iconElement.icon = value;
-      }
-      //#endregion Getters/Setters
-      //#region Lifecycle
-      constructor() {
-          super();
-      }
-      /**
-       * @inheritdoc
-       */
-      _p_getStylesheets() {
-          return [SHEET];
-      }
-      /**
-       * @inheritdoc
-       */
-      _p_fromTemplate() {
-          return TEMPLATE;
-      }
-      /**
-       * @inheritdoc
-       */
-      _p_buildDOM(container) {
-          HTMLBnumButton.ToButton(this);
-          if (this.title === EMPTY_STRING)
-              console.warn('Icon button should have a title for accessibility purposes');
-      }
-      //#endregion Lifecycle
-      //#region Private methods
-      /**
-       * Permet de lancer une erreur avec un message spécifique dans une expression inline.
-       * @param msg Message à envoyer dans l'erreur.
-       */
-      #_throw(msg) {
-          throw new Error(msg);
-      }
-      //#endregion Private methods
-      //#region Static methods
-      /**
-       * Génère un bouton icône avec l'icône spécifiée.
-       * @param icon Icône à afficher dans le bouton.
-       * @returns Node créée.
-       */
-      static Create(icon) {
-          const node = document.createElement(this.TAG);
-          node.icon = icon;
-          return node;
-      }
-      /**
-       * Tag de l'élément.
-       */
-      static get TAG() {
-          return TAG_ICON_BUTTON;
-      }
-  }
-  const TEMPLATE = HTMLBnumButtonIcon.CreateTemplate(`
-    <${HTMLBnumIcon.TAG} id="${HTMLBnumButtonIcon.ID_ICON}"><slot></slot></${HTMLBnumIcon.TAG}>
-    `);
-  //#region TryDefine
-  HTMLBnumButtonIcon.TryDefine();
-  //#endregion TryDefine
-
   // Auto-init au chargement
   if (typeof window !== 'undefined' && window.DsBnumConfig) {
       BnumConfig.Initialize(window.DsBnumConfig);
@@ -14073,7 +13951,6 @@ var Bnum = (function (exports) {
   exports.BnumElement = BnumElement;
   exports.Config = BnumConfig;
   exports.HTMLBnumButton = HTMLBnumButton;
-  exports.HTMLBnumButtonIcon = HTMLBnumButtonIcon;
   exports.HTMLBnumCardAgenda = HTMLBnumCardAgenda;
   exports.HTMLBnumCardElement = HTMLBnumCardElement;
   exports.HTMLBnumCardEmail = HTMLBnumCardEmail;
