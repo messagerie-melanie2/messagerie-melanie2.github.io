@@ -278,28 +278,193 @@ html.dark body {
   }
 </style>
   </head>
-    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-card-header" data-target="story-bnum-card-header">bnum-card-header</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-card-header" class="story-content" >
+    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-header" data-target="story-bnum-header">bnum-header</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon-button" data-target="story-bnum-icon-button">bnum-icon-button</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-header" class="story-content" >
         <div class="story-wrapper">
           
       
-      <h1><code>&lt;bnum-card-header&gt;</code></h1>
+      <h1><code>&lt;bnum-header&gt;</code></h1>
       
       <h2>Description</h2>
-      <p></p>
+      <p><p>Composant Header du Bnum</p>
+</p>
       
       <h2>Structure</h2>
-      <div class="structures"><p>N/A</p></div>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Par défaut</h4>
+    <div><bnum-header>
+<img slot="logo" src="assets/bnumloader.svg" alt="Logo du bnum"/>
+<h1 slot="title">Accueil</h1>
+
+<bnum-secondary-button slot="actions" data-icon="add">Créer</bnum-secondary-button>
+<bnum-icon-button slot="actions">article</bnum-icon-button>
+<bnum-icon-button slot="actions">help</bnum-icon-button>
+<bnum-icon-button slot="actions">settings</bnum-icon-button>
+<bnum-icon-button slot="actions">notifications</bnum-icon-button>
+
+<img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
+</bnum-header></div><pre><code>&lt;bnum-header&gt;
+&lt;img slot=&quot;logo&quot; src=&quot;assets/bnumloader.svg&quot; alt=&quot;Logo du bnum&quot;/&gt;
+&lt;h1 slot=&quot;title&quot;&gt;Accueil&lt;/h1&gt;
+
+&lt;bnum-secondary-button slot=&quot;actions&quot; data-icon=&quot;add&quot;&gt;Créer&lt;/bnum-secondary-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;article&lt;/bnum-icon-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;help&lt;/bnum-icon-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;settings&lt;/bnum-icon-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;notifications&lt;/bnum-icon-button&gt;
+
+&lt;img slot=&quot;avatar&quot; style=&quot;border-radius: 100%&quot; src=&quot;assets/avatar.png&quot; alt=&quot;Avatar de remplacement&quot;&gt;&lt;/img&gt;
+&lt;/bnum-header&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec image de fond</h4>
+    <div><bnum-header data-background="assets/headerbackground.gif">
+<img slot="logo" src="assets/bnumloader.svg" alt="Logo du bnum"/>
+<h1 slot="title">Accueil</h1>
+
+<bnum-secondary-button slot="actions" data-icon="add">Créer</bnum-secondary-button>
+<bnum-icon-button slot="actions">article</bnum-icon-button>
+<bnum-icon-button slot="actions">help</bnum-icon-button>
+<bnum-icon-button slot="actions">settings</bnum-icon-button>
+<bnum-icon-button slot="actions">notifications</bnum-icon-button>
+
+<img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
+</bnum-header></div><pre><code>&lt;bnum-header data-background=&quot;assets/headerbackground.gif&quot;&gt;
+&lt;img slot=&quot;logo&quot; src=&quot;assets/bnumloader.svg&quot; alt=&quot;Logo du bnum&quot;/&gt;
+&lt;h1 slot=&quot;title&quot;&gt;Accueil&lt;/h1&gt;
+
+&lt;bnum-secondary-button slot=&quot;actions&quot; data-icon=&quot;add&quot;&gt;Créer&lt;/bnum-secondary-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;article&lt;/bnum-icon-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;help&lt;/bnum-icon-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;settings&lt;/bnum-icon-button&gt;
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;notifications&lt;/bnum-icon-button&gt;
+
+&lt;img slot=&quot;avatar&quot; style=&quot;border-radius: 100%&quot; src=&quot;assets/avatar.png&quot; alt=&quot;Avatar de remplacement&quot;&gt;&lt;/img&gt;
+&lt;/bnum-header&gt;</code></pre>
+  </div>
+  </div>
       
-      <h2 style="display:none;">Utilisation (Playground)</h2>
-      <div style="display:none;" class="playground-demo-box">
-        <p>Playground non disponible.</p>
+      <h2 >Utilisation (Playground)</h2>
+      <div  class="playground-demo-box">
+        <div id="bnum-header-story">
+
+  <div class="demo-container">
+     <bnum-header id="bnum-header-story-card-playground">
+  <img slot="logo" src="assets/bnumloader.svg" alt="Logo du bnum"/>
+  <h1 slot="title">Accueil</h1>
+ 
+   <bnum-secondary-button slot="actions" data-icon="add">Créer</bnum-secondary-button>
+   <bnum-icon-button slot="actions">article</bnum-icon-button>
+   <bnum-icon-button slot="actions">help</bnum-icon-button>
+   <bnum-icon-button slot="actions">settings</bnum-icon-button>
+   <bnum-icon-button slot="actions">notifications</bnum-icon-button>
+ 
+  <img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
+ </bnum-header>
+
+  <div id="bnum-header-story-playground-section">
+    <div id="bnum-header-story-playground-controls">
+      <div class="control-group">
+        <label for="bnum-header-story-ctrl-title">Modifier le titre de la page : </label>
+        <br/>
+        <input type="text" id="bnum-header-story-ctrl-title" value="Accueil" />
+      </div>
+
+      <div class="control-group">
+        <label>Contrôles d'état (Attributs) :</label>
+        <label>
+          <input type="checkbox" id="bnum-header-story-ctrl-with-background" />
+          <code>Image en arrière plan ?</code>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
       </div>
       
-      <h3 style="display:none;">Code HTML</h3>
-      <pre style="display:none;"><code class="demo-code"></code></pre>
-      <h3 style="display:none;">Code JS</h3>
-      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
-      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      <h3 >Code HTML</h3>
+      <pre ><code class="demo-code">&lt;div id=&quot;bnum-header-story&quot;&gt;
+
+  &lt;div class=&quot;demo-container&quot;&gt;
+     &lt;bnum-header id=&quot;bnum-header-story-card-playground&quot;&gt;
+  &lt;img slot=&quot;logo&quot; src=&quot;assets/bnumloader.svg&quot; alt=&quot;Logo du bnum&quot;/&gt;
+  &lt;h1 slot=&quot;title&quot;&gt;Accueil&lt;/h1&gt;
+ 
+   &lt;bnum-secondary-button slot=&quot;actions&quot; data-icon=&quot;add&quot;&gt;Créer&lt;/bnum-secondary-button&gt;
+   &lt;bnum-icon-button slot=&quot;actions&quot;&gt;article&lt;/bnum-icon-button&gt;
+   &lt;bnum-icon-button slot=&quot;actions&quot;&gt;help&lt;/bnum-icon-button&gt;
+   &lt;bnum-icon-button slot=&quot;actions&quot;&gt;settings&lt;/bnum-icon-button&gt;
+   &lt;bnum-icon-button slot=&quot;actions&quot;&gt;notifications&lt;/bnum-icon-button&gt;
+ 
+  &lt;img slot=&quot;avatar&quot; style=&quot;border-radius: 100%&quot; src=&quot;assets/avatar.png&quot; alt=&quot;Avatar de remplacement&quot;&gt;&lt;/img&gt;
+ &lt;/bnum-header&gt;
+
+  &lt;div id=&quot;bnum-header-story-playground-section&quot;&gt;
+    &lt;div id=&quot;bnum-header-story-playground-controls&quot;&gt;
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label for=&quot;bnum-header-story-ctrl-title&quot;&gt;Modifier le titre de la page : &lt;/label&gt;
+        &lt;br/&gt;
+        &lt;input type=&quot;text&quot; id=&quot;bnum-header-story-ctrl-title&quot; value=&quot;Accueil&quot; /&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Contrôles d&#039;état (Attributs) :&lt;/label&gt;
+        &lt;label&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;bnum-header-story-ctrl-with-background&quot; /&gt;
+          &lt;code&gt;Image en arrière plan ?&lt;/code&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      <h3 >Code JS</h3>
+      <pre ><code class="demo-code">(() =&gt; {
+  const header = document.getElementById(&#039;bnum-header-story-card-playground&#039;);
+  const titleInput = document.getElementById(&#039;bnum-header-story-ctrl-title&#039;);
+  const withBackgroundCheckbox = document.getElementById(
+    &#039;bnum-header-story-ctrl-with-background&#039;,
+  );
+
+  // Met à jour le titre de la page dans le header
+  titleInput.addEventListener(&#039;change&#039;, (event) =&gt; {
+    header.setPageTitle(event.target.value);
+  });
+
+  // Gère l&#039;attribut with-background
+  withBackgroundCheckbox.addEventListener(&#039;change&#039;, (event) =&gt; {
+    if (event.target.checked) {
+      header.updateBackground(&#039;assets/headerbackground.gif&#039;);
+    } else {
+      header.clearBackground();
+    }
+  });
+})();
+</code></pre>
+      <script >(() => {
+  const header = document.getElementById('bnum-header-story-card-playground');
+  const titleInput = document.getElementById('bnum-header-story-ctrl-title');
+  const withBackgroundCheckbox = document.getElementById(
+    'bnum-header-story-ctrl-with-background',
+  );
+
+  // Met à jour le titre de la page dans le header
+  titleInput.addEventListener('change', (event) => {
+    header.setPageTitle(event.target.value);
+  });
+
+  // Gère l'attribut with-background
+  withBackgroundCheckbox.addEventListener('change', (event) => {
+    if (event.target.checked) {
+      header.updateBackground('assets/headerbackground.gif');
+    } else {
+      header.clearBackground();
+    }
+  });
+})();
+</script>
       
       <!--<h2>Propriétés (API Principale)</h2>
       <p>N/A</p>-->
@@ -322,18 +487,76 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 
       <h2>API Publique</h2>
       <h3>Méthodes</h3>
-      <p>N/A</p>
+      
+      <div class="api-method">
+        <h4><code><strong>setPageTitle</strong>(content: string | HTMLElement) : <code>this</code></code></h4>
+        <p>Change le titre dynamiquement.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>content</code>: - String : Met à jour le H1.
+- HTMLElement : Affiche l'élément dans le conteneur dédié.
+- null : Affiche le slot par défaut.</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>updateBackground</strong>(urlOrData: string) : <code>this</code></code></h4>
+        <p>Met à jour l'image de fond du header.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>urlOrData</code>: Interpréte la valeur comme une URL ou une Data URL.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>clearBackground</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'image de fond du header.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>() : <code>HTMLBnumHeader</code></code></h4>
+        <p>Génère un nouvel élément HTMLBnumHeader</p>
+        
+        <p><strong>Retourne :</strong> Element créé</p>
+      </div>
+    
 
       <h3>Variables d'instance</h3>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>#_backgroundScheduler</code></td><td><code>Scheduler<string></code></td><td>Oui</td><td><p>Scheduler pour la mise à jour de l&#39;image de fond</p>
+</td></tr><tr><td><code>ImgBackground</code></td><td><code>string</code></td><td>Non</td><td><p>URL de l&#39;image de fond du header</p>
+</td></tr></tbody>
+    </table>
+  
 
       <h3>Variables statiques</h3>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML de l&#39;élément</p>
+</td></tr><tr><td><code>CLASS_HEADER_CONTAINER</code></td><td><code>"bnum-header-container"</code></td><td>Oui</td><td><p>Classe CSS du container principal</p>
+</td></tr><tr><td><code>CLASS_HEADER_LEFT</code></td><td><code>"header-left"</code></td><td>Oui</td><td><p>Classe CSS de la partie gauche du header</p>
+</td></tr><tr><td><code>CLASS_HEADER_RIGHT</code></td><td><code>"header-right"</code></td><td>Oui</td><td><p>Classe CSS de la partie droite du header</p>
+</td></tr><tr><td><code>CLASS_HEADER_TITLE</code></td><td><code>"header-title"</code></td><td>Oui</td><td><p>Classe CSS du titre textuel</p>
+</td></tr><tr><td><code>CLASS_HEADER_CUSTOM</code></td><td><code>"header-custom"</code></td><td>Oui</td><td><p>Classe CSS du conteneur du titre custom</p>
+</td></tr><tr><td><code>ID_TITLE_TEXT</code></td><td><code>"title-text"</code></td><td>Oui</td><td><p>ID du H1 pour le titre textuel</p>
+</td></tr><tr><td><code>ID_TITLE_CUSTOM</code></td><td><code>"title-custom"</code></td><td>Oui</td><td><p>ID du conteneur pour le titre custom</p>
+</td></tr><tr><td><code>SLOT_NAME_LOGO</code></td><td><code>"logo"</code></td><td>Oui</td><td><p>Nom du slot pour le logo</p>
+</td></tr><tr><td><code>SLOT_NAME_TITLE</code></td><td><code>"title"</code></td><td>Oui</td><td><p>Nom du slot pour le titre</p>
+</td></tr><tr><td><code>SLOT_NAME_ACTIONS</code></td><td><code>"actions"</code></td><td>Oui</td><td><p>Nom du slot pour les actions</p>
+</td></tr><tr><td><code>SLOT_NAME_AVATAR</code></td><td><code>"avatar"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;avatar</p>
+</td></tr></tbody>
+    </table>
+  
 
       <h2>Code source</h2>
       <p>
         <a href="https://github.com/votre-projet/..." target="_blank">
-          Voir le code source sur GitHub (components/bnum-card-header)
+          Voir le code source sur GitHub (components/bnum-header)
         </a>
       </p>
     
@@ -5821,6 +6044,116 @@ Utilisé pour définir et référencer le composant dans le DOM.</p>
       <p>
         <a href="https://github.com/votre-projet/..." target="_blank">
           Voir le code source sur GitHub (components/bnum-img)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-icon-button" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-icon-button&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Button contenant une icône.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Button Icon</h4>
+    <div><bnum-icon-button>home</bnum-icon-button></div><pre><code>&lt;bnum-icon-button&gt;home&lt;/bnum-icon-button&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Button Disabled</h4>
+    <div><bnum-icon-button disabled>home</bnum-icon-button></div><pre><code>&lt;bnum-icon-button disabled&gt;home&lt;/bnum-icon-button&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>click</code></td><td><code>{}</code></td><td>Attribut pour définir le gestionnaire de clic</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(default)</code></td><td>Contenu de l'icône (nom de l'icône à afficher)</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      <p>N/A</p>
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-button-disabled-opacity</code></td><td><code>0.6</code> </td><td>Opacité du bouton désactivé</td></tr><tr><td><code>--bnum-button-disabled-pointer-events</code></td><td><code>none</code> </td><td>Gestion des événements souris pour le bouton désactivé</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      <p>N/A</p>
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>(icon: string) : <code>HTMLBnumButtonIcon</code></code></h4>
+        <p>Génère un bouton icône avec l'icône spécifiée.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Icône à afficher dans le bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> Node créée.</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>#_iconElement</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Référence vers l&#39;élément icône à l&#39;intérieur du bouton.</p>
+<p>Si l&#39;icône n&#39;a pas été mise en mémoire, elle sera cherché puis mise en mémoire.</p>
+</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Icône affichée dans le bouton</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag de l&#39;élément.</p>
+</td></tr><tr><td><code>ID_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Id de l&#39;icône à l&#39;intérieur du bouton</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-icon-button)
         </a>
       </p>
     
