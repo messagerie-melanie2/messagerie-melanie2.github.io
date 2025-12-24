@@ -324,6 +324,18 @@ var Bnum = (function (exports) {
           this.setAttribute(name, typeof value === 'string' ? value : value.toString());
           return this;
       }
+      /**
+       * Essaye de définir un attribut html
+       * @param doSomething true pour le définir
+       * @param name Nom de l'attribut
+       * @param value Nouvelle valeur
+       * @returns L'instance courante pour le chaînage.
+       */
+      condAttr(doSomething, name, value) {
+          if (doSomething)
+              this.attr(name, value);
+          return this;
+      }
       css(prop, value) {
           if (typeof prop === 'string') {
               if (value === undefined)
@@ -1659,7 +1671,7 @@ var Bnum = (function (exports) {
   const REG_LIGHT_PICTURE_NAME = /(-light)\.(([\w\d]+)|\1?.+)$/;
   const REG_XSS_SAFE = /^[-.\w\s%()]+$/;
 
-  var css_248z$c = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+  var css_248z$c = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}:host .slot{margin-bottom:var(--bnum-button-margin-bottom-text-correction,-3px)}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
   //#region External Constants
   /**
@@ -1801,6 +1813,7 @@ var Bnum = (function (exports) {
    * @cssvar {0.75s} --bnum-button-spin-duration - Durée de l'animation de spin
    * @cssvar {linear} --bnum-button-spin-timing - Fonction de timing de l'animation de spin
    * @cssvar {infinite} --bnum-button-spin-iteration - Nombre d'itérations de l'animation de spin
+   * @cssvar {-3px} --bnum-button-margin-bottom-text-correction - Correction basse du texte
    */
   class HTMLBnumButton extends BnumElement {
       //#endregion Component Definition
@@ -14065,7 +14078,7 @@ var Bnum = (function (exports) {
   HTMLBnumButtonIcon.TryDefine();
   //#endregion TryDefine
 
-  var css_248z = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}#red{color:#ffffffee}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{align-items:center;display:flex;line-height:1.2;margin:0 0 -10px}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:#fff;color:#fff}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
+  var css_248z = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{align-items:center;display:flex;line-height:1.2;margin:0 0 -10px}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}::slotted(bnum-secondary-button){--bnum-button-padding:var(--bnum-header-background-button-padding,5px 3px)}::slotted(.main-action-button){-padding:var(--bnum-header-background-button-padding,5px 3px)}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:var(--bnum-header-main-action-border-color,#fff);color:var(--bnum-header-main-action-color,#fff)}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
 
   const SHEET = BnumElementInternal.ConstructCSSStyleSheet(css_248z);
   /**
@@ -14098,9 +14111,34 @@ var Bnum = (function (exports) {
    *
    *  <img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
    * </bnum-header>
+   *
+   * @slot logo - Slot pour le logo
+   * @slot title - Slot pour le titre
+   * @slot actions - Slot pour les actions
+   * @slot avatar - Slot pour l'avatar
+   *
+   * @state with-background - Actif si une image de fond est définie
+   *
+   * @cssvar {block} --bnum-header-display - Définit le type d'affichage du header
+   * @cssvar {60px} --bnum-header-height - Hauteur du header
+   * @cssvar {#f5f6fa} --bnum-header-background-color - Couleur de fond du header
+   * @cssvar {1px solid #e5e7eb} --bnum-header-border-bottom - Bordure basse du header
+   * @cssvar {8px} --bnum-header-left-gap - Espace à gauche entre les éléments du header
+   * @cssvar {24px} --bnum-header-right-gap - Espace à droite entre les éléments du header
+   * @cssvar {45px} --bnum-header-logo-height - Hauteur du logo dans le header
+   * @cssvar {none} --bnum-header-background-image - Image de fond du header (par défaut aucune)
+   * @cssvar {#ffffff} --bnum-header-with-background-color - Couleur du texte sur fond personnalisé
+   * @cssvar {#ffffff} --bnum-header-main-action-border-color - Couleur de la bordure du bouton principal sur fond personnalisé
+   * @cssvar {#ffffff} --bnum-header-main-action-color - Couleur du texte du bouton principal sur fond personnalisé
+   * @cssvar {5px 3px} --bnum-header-background-button-padding - Padding de l'action principale
    */
   class HTMLBnumHeader extends BnumElementInternal {
       //#region Constants
+      /**
+       * Data pour avoir un background par défaut
+       * @attr {string | undefined} (optional) data-background - Met une image de fond par défaut
+       */
+      static DATA_BACKGROUND = 'background';
       /**
        * Classe CSS du container principal
        */
@@ -14121,6 +14159,30 @@ var Bnum = (function (exports) {
        * Classe CSS du conteneur du titre custom
        */
       static CLASS_HEADER_CUSTOM = 'header-custom';
+      /**
+       * Classe CSS de la zone qui peut obtenir des "effets"
+       */
+      static CLASS_HEADER_MODIFIER = 'header-modifier';
+      /**
+       * Partie du container principal
+       */
+      static PART_HEADER_CONTAINER = 'header-container';
+      /**
+       * Partie du header gauche
+       */
+      static PART_HEADER_LEFT = 'header-left';
+      /**
+       * Partie du header droit
+       */
+      static PART_HEADER_RIGHT = 'header-right';
+      /**
+       * Partie du titre
+       */
+      static PART_HEADER_TITLE = 'header-title';
+      /**
+       * Partie de l'élément custom
+       */
+      static PART_HEADER_CUSTOM = 'header-custom';
       /**
        * ID du H1 pour le titre textuel
        */
@@ -14145,6 +14207,12 @@ var Bnum = (function (exports) {
        * Nom du slot pour l'avatar
        */
       static SLOT_NAME_AVATAR = 'avatar';
+      /**
+       * Evènement du changement de d'image
+       * @event bnum-header:background.changed
+       * @detail {newBackground:Nullable<string>}
+       */
+      static EVENT_BACKGROUND_CHANGED = 'bnum-header:background.changed';
       //#endregion Constants
       //#region Private fields
       // Références DOM
@@ -14169,6 +14237,10 @@ var Bnum = (function (exports) {
        * Scheduler pour la mise à jour de l'image de fond
        */
       #_scheduleUpdateBackground = null;
+      /**
+       * Evènement du changement d'image de fond
+       */
+      #_onBackgroundChanged = null;
       //#endregion Private fields
       //#region Getters/Setters
       /**
@@ -14179,13 +14251,27 @@ var Bnum = (function (exports) {
               (this.#_scheduleUpdateBackground = new Scheduler((val) => this.#_updateBackground(val))));
       }
       /**
+       * Evènement du changement d'image de fond
+       */
+      get onBackgroundChanged() {
+          if (this.#_onBackgroundChanged === null) {
+              this.#_onBackgroundChanged = new JsEvent();
+              this.#_onBackgroundChanged.add(EVENT_DEFAULT, (newBackground) => {
+                  this.trigger(HTMLBnumHeader.EVENT_BACKGROUND_CHANGED, {
+                      newBackground,
+                  });
+              });
+          }
+          return this.#_onBackgroundChanged;
+      }
+      /**
        * URL de l'image de fond du header
        */
       get ImgBackground() {
-          return this.data('background');
+          return this.data(HTMLBnumHeader.DATA_BACKGROUND);
       }
       set ImgBackground(value) {
-          this.data('background', value);
+          this.data(HTMLBnumHeader.DATA_BACKGROUND, value);
       }
       //#endregion Getters/Setters
       //#region Lifecycle
@@ -14310,6 +14396,7 @@ var Bnum = (function (exports) {
               this.style.removeProperty('--bnum-header-background-image');
               this._p_removeState('with-background');
           }
+          this.onBackgroundChanged.call(value);
       }
       //#endregion Private methods
       //#region Static methods
@@ -14317,8 +14404,8 @@ var Bnum = (function (exports) {
        * Génère un nouvel élément HTMLBnumHeader
        * @returns Element créé
        */
-      static Create() {
-          return document.createElement(HTMLBnumHeader.TAG);
+      static Create({ background = null, } = {}) {
+          return document.createElement(HTMLBnumHeader.TAG).condAttr(background !== null, `data-${HTMLBnumHeader.DATA_BACKGROUND}`, background);
       }
       /**
        * Tag HTML de l'élément
@@ -14328,19 +14415,19 @@ var Bnum = (function (exports) {
       }
   }
   const TEMPLATE = BnumElementInternal.CreateTemplate(`
-  <div class="header-modifier">
-    <div  part="header-container" class="${HTMLBnumHeader.CLASS_HEADER_CONTAINER}">
-      <div part="header-left" class="${HTMLBnumHeader.CLASS_HEADER_LEFT}">
+  <div class="${HTMLBnumHeader.CLASS_HEADER_MODIFIER}">
+    <div  part="${HTMLBnumHeader.PART_HEADER_CONTAINER}" class="${HTMLBnumHeader.CLASS_HEADER_CONTAINER}">
+      <div part="${HTMLBnumHeader.PART_HEADER_LEFT}" class="${HTMLBnumHeader.CLASS_HEADER_LEFT}">
         <slot name="${HTMLBnumHeader.SLOT_NAME_LOGO}"></slot>
         
         <slot name="${HTMLBnumHeader.SLOT_NAME_TITLE}"></slot>
         
-        <h1 part="header-title" id="${HTMLBnumHeader.ID_TITLE_TEXT}" class="${HTMLBnumHeader.CLASS_HEADER_TITLE}" hidden></h1>
+        <h1 part="${HTMLBnumHeader.PART_HEADER_TITLE}" id="${HTMLBnumHeader.ID_TITLE_TEXT}" class="${HTMLBnumHeader.CLASS_HEADER_TITLE}" hidden></h1>
 
-        <div part="header-custom" id="${HTMLBnumHeader.ID_TITLE_CUSTOM}" class="${HTMLBnumHeader.CLASS_HEADER_CUSTOM}" hidden></div>
+        <div part="${HTMLBnumHeader.PART_HEADER_CUSTOM}" id="${HTMLBnumHeader.ID_TITLE_CUSTOM}" class="${HTMLBnumHeader.CLASS_HEADER_CUSTOM}" hidden></div>
       </div>
 
-      <div part="header-right" class="${HTMLBnumHeader.CLASS_HEADER_RIGHT}">
+      <div part="${HTMLBnumHeader.PART_HEADER_RIGHT}" class="${HTMLBnumHeader.CLASS_HEADER_RIGHT}">
         <slot name="${HTMLBnumHeader.SLOT_NAME_ACTIONS}"></slot> 
         <slot name="${HTMLBnumHeader.SLOT_NAME_AVATAR}"></slot>  
       </div>
