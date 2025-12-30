@@ -278,7 +278,7 @@ html.dark body {
   }
 </style>
   </head>
-    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-header" data-target="story-bnum-header">bnum-header</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-icon-button" data-target="story-bnum-icon-button">bnum-icon-button</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-header" class="story-content" >
+    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-header" data-target="story-bnum-header">bnum-header</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-input-time" data-target="story-bnum-input-time">bnum-input-time</a></li><li><a href="#bnum-input-text" data-target="story-bnum-input-text">bnum-input-text</a></li><li><a href="#bnum-input-number" data-target="story-bnum-input-number">bnum-input-number</a></li><li><a href="#bnum-input-date" data-target="story-bnum-input-date">bnum-input-date</a></li><li><a href="#bnum-input" data-target="story-bnum-input">bnum-input</a></li><li><a href="#bnum-icon-button" data-target="story-bnum-icon-button">bnum-icon-button</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-header" class="story-content" >
         <div class="story-wrapper">
           
       
@@ -6128,6 +6128,2609 @@ Utilisé pour définir et référencer le composant dans le DOM.</p>
       </p>
     
         </div>
+      </div><div id="story-bnum-input-time" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-input-time&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Input de temps.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Sans rien</h4>
+    <div><bnum-input-time></bnum-input-time></div><pre><code>&lt;bnum-input-time&gt;&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende</h4>
+    <div><bnum-input-time>Label du champ</bnum-input-time></div><pre><code>&lt;bnum-input-time&gt;Label du champ&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende et un indice</h4>
+    <div><bnum-input-time>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+</bnum-input-time></div><pre><code>&lt;bnum-input-time&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton</h4>
+    <div><bnum-input-time button="true" button-icon="add">Label du champ
+<span slot="button">Ajouter</span>
+</bnum-input-time></div><pre><code>&lt;bnum-input-time button=&quot;true&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;span slot=&quot;button&quot;&gt;Ajouter&lt;/span&gt;
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>En erreur</h4>
+    <div><bnum-input-time min="05:00" data-value="04:00">Label du champ
+</bnum-input-time></div><pre><code>&lt;bnum-input-time min=&quot;05:00&quot; data-value=&quot;04:00&quot;&gt;Label du champ
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un état de succès</h4>
+    <div><bnum-input-time state="success">Label du champ
+<span slot="success">Le champ est valide !</span>
+</bnum-input-time></div><pre><code>&lt;bnum-input-time state=&quot;success&quot;&gt;Label du champ
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une icône</h4>
+    <div><bnum-input-time icon="search">Label du champ</bnum-input-time></div><pre><code>&lt;bnum-input-time icon=&quot;search&quot;&gt;Label du champ&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton avec icône seulement</h4>
+    <div><bnum-input-time placeholder="LA LA !" button-icon="add">Label du champ
+</bnum-input-time></div><pre><code>&lt;bnum-input-time placeholder=&quot;LA LA !&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Désactivé</h4>
+    <div><bnum-input-time disabled>
+Label du champ
+</bnum-input-time></div><pre><code>&lt;bnum-input-time disabled&gt;
+Label du champ
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Complet</h4>
+    <div><bnum-input-time
+data-value="5"
+placeholder="Texte indicatif"
+type="text"
+state="error"
+icon="search"
+button="primary"
+button-icon="send"
+step="10"
+>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+<span slot="success">Le champ est valide !</span>
+<span slot="error">Le champ est invalide !</span>
+<span slot="button">Envoyer</span>
+</bnum-input-time></div><pre><code>&lt;bnum-input-time
+data-value=&quot;5&quot;
+placeholder=&quot;Texte indicatif&quot;
+type=&quot;text&quot;
+state=&quot;error&quot;
+icon=&quot;search&quot;
+button=&quot;primary&quot;
+button-icon=&quot;send&quot;
+step=&quot;10&quot;
+&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;span slot=&quot;error&quot;&gt;Le champ est invalide !&lt;/span&gt;
+&lt;span slot=&quot;button&quot;&gt;Envoyer&lt;/span&gt;
+&lt;/bnum-input-time&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton interne (si présent).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>data-value</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Valeur initiale du champ.</td></tr><tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte indicatif du champ.</td></tr><tr><td><code>type</code></td><td><code>string</code></td><td><code>'number'</code></td><td>✅</td><td>Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'number' pour ce composant.</td></tr><tr><td><code>disabled</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le champ.</td></tr><tr><td><code>state</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>État du champ (success, error, etc.).</td></tr><tr><td><code>button</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Présence d'un bouton interne (primary, secondary, danger, ...).</td></tr><tr><td><code>button-icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône du bouton interne.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône à afficher dans le champ.</td></tr><tr><td><code>required</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ requis.</td></tr><tr><td><code>readonly</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ en lecture seule.</td></tr><tr><td><code>pattern</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Expression régulière de validation.</td></tr><tr><td><code>minlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur minimale du champ.</td></tr><tr><td><code>maxlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur maximale du champ.</td></tr><tr><td><code>autocomplete</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut autocomplete HTML.</td></tr><tr><td><code>inputmode</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Mode de saisie (mobile).</td></tr><tr><td><code>spellcheck</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Correction orthographique.</td></tr><tr><td><code>ignorevalue</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom du champ (attribut HTML name).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-input-hint-text-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte du hint.</td></tr><tr><td><code>--bnum-input-background-color</code></td><td><code>#eee</code> <span class="color-swatch" style="background-color: #eee;"></span></td><td>Couleur de fond de l'input.</td></tr><tr><td><code>--bnum-input-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte de l'input.</td></tr><tr><td><code>--bnum-input-line-color</code></td><td><code>#3a3a3a</code> <span class="color-swatch" style="background-color: #3a3a3a;"></span></td><td>Couleur de la ligne/bordure de l'input.</td></tr><tr><td><code>--bnum-input-box-shadow</code></td><td><code>inset 0 -2px 0 0 #3a3a3a</code> </td><td>Ombre portée de l'input.</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      
+    <table>
+      <thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>success</code></td><td>État de succès.</td></tr><tr><td><code>error</code></td><td>État d'erreur.</td></tr><tr><td><code>disabled</code></td><td>État désactivé.</td></tr><tr><td><code>icon</code></td><td>Présence d'une icône.</td></tr><tr><td><code>button</code></td><td>Présence d'un bouton.</td></tr><tr><td><code>obi</code></td><td>Bouton avec icône seulement (sans texte).</td></tr><tr><td><code>state</code></td><td>Présence d'un état (success / error).</td></tr></tbody>
+    </table>
+  
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong>formResetCallback</strong>() : <code>void</code></code></h4>
+        <p>Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.</p>
+        
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>formDisabledCallback</strong>(disabled: boolean) : <code>void</code></code></h4>
+        <p>Active ou désactive le champ selon l'état du fieldset parent.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>disabled</code>: N/A</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButton</strong>({
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+        <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>{
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }</code>: Objet contenant le texte, l'icône et la variation du bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButtonIconOnly</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Active uniquement l'icône du bouton interne (sans texte).</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher sur le bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>hideButton</strong>() : <code>this</code></code></h4>
+        <p>Masque le bouton interne.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setSuccessState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état de succès avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message de succès à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setErrorState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état d'erreur avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message d'erreur à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setIcon</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Définit une icône à afficher dans le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeIcon</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'icône affichée dans le champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setHint</strong>(hint: string) : <code>this</code></code></h4>
+        <p>Définit un indice d'utilisation (hint) pour le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>hint</code>: Texte de l'indice à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeHint</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'indice d'utilisation (hint) du champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setLabel</strong>(label: string | HTMLElement) : <code>this</code></code></h4>
+        <p>Définit le label principal du champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte ou élément HTML à utiliser comme label.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      min,
+      max,
+      hint,
+      success,
+      error,
+      btnText,
+      step,
+    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; min?: number; max?: number; step?: number; }) : <code>HTMLBnumInputTime</code></code></h4>
+        <p>Crée une instance du composant avec les options fournies.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte du label principal.</li>
+    
+      <li><code>{
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      min,
+      max,
+      hint,
+      success,
+      error,
+      btnText,
+      step,
+    }</code>: Options d'initialisation (attributs et slots).</li>
+    </ul>
+        <p><strong>Retourne :</strong> Instance du composant.</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
+</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
+</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
+</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
+</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
+</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
+</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
+</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
+</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
+</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
+</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
+</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
+</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
+</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
+</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
+</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
+<p>(obi = Only Button Icon)</p>
+</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
+</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
+</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
+</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
+</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
+</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
+</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
+</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
+</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
+</td></tr><tr><td><code>TYPE</code></td><td><code>"time"</code></td><td>Oui</td><td><p>Valeur pour l&#39;attribut type.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-input-time)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-input-text" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-input-text&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Input texte.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Sans rien</h4>
+    <div><bnum-input-text></bnum-input-text></div><pre><code>&lt;bnum-input-text&gt;&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende</h4>
+    <div><bnum-input-text>Label du champ</bnum-input-text></div><pre><code>&lt;bnum-input-text&gt;Label du champ&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende et un indice</h4>
+    <div><bnum-input-text>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+</bnum-input-text></div><pre><code>&lt;bnum-input-text&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton</h4>
+    <div><bnum-input-text button="true" button-icon="add">Label du champ
+<span slot="button">Ajouter</span>
+</bnum-input-text></div><pre><code>&lt;bnum-input-text button=&quot;true&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;span slot=&quot;button&quot;&gt;Ajouter&lt;/span&gt;
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>En erreur</h4>
+    <div><bnum-input-text pattern="^[a-zA-Z0-9]+$" data-value="@@@@@">Label du champ
+</bnum-input-text></div><pre><code>&lt;bnum-input-text pattern=&quot;^[a-zA-Z0-9]+$&quot; data-value=&quot;@@@@@&quot;&gt;Label du champ
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un état de succès</h4>
+    <div><bnum-input-text state="success">Label du champ
+<span slot="success">Le champ est valide !</span>
+</bnum-input-text></div><pre><code>&lt;bnum-input-text state=&quot;success&quot;&gt;Label du champ
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une icône</h4>
+    <div><bnum-input-text icon="search">Label du champ</bnum-input-text></div><pre><code>&lt;bnum-input-text icon=&quot;search&quot;&gt;Label du champ&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton avec icône seulement</h4>
+    <div><bnum-input-text placeholder="LA LA !" button-icon="add">Label du champ
+</bnum-input-text></div><pre><code>&lt;bnum-input-text placeholder=&quot;LA LA !&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Désactivé</h4>
+    <div><bnum-input-text disabled>
+Label du champ
+</bnum-input-text></div><pre><code>&lt;bnum-input-text disabled&gt;
+Label du champ
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Complet</h4>
+    <div><bnum-input-text
+data-value="Valeur initiale"
+placeholder="Texte indicatif"
+type="text"
+state="error"
+icon="search"
+button="primary"
+button-icon="send"
+>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+<span slot="success">Le champ est valide !</span>
+<span slot="error">Le champ est invalide !</span>
+<span slot="button">Envoyer</span>
+</bnum-input-text></div><pre><code>&lt;bnum-input-text
+data-value=&quot;Valeur initiale&quot;
+placeholder=&quot;Texte indicatif&quot;
+type=&quot;text&quot;
+state=&quot;error&quot;
+icon=&quot;search&quot;
+button=&quot;primary&quot;
+button-icon=&quot;send&quot;
+&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;span slot=&quot;error&quot;&gt;Le champ est invalide !&lt;/span&gt;
+&lt;span slot=&quot;button&quot;&gt;Envoyer&lt;/span&gt;
+&lt;/bnum-input-text&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton interne (si présent).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>data-value</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Valeur initiale du champ.</td></tr><tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte indicatif du champ.</td></tr><tr><td><code>type</code></td><td><code>string</code></td><td><code>'text'</code></td><td>✅</td><td>Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'text' pour ce composant.</td></tr><tr><td><code>disabled</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le champ.</td></tr><tr><td><code>state</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>État du champ (success, error, etc.).</td></tr><tr><td><code>button</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Présence d'un bouton interne (primary, secondary, danger, ...).</td></tr><tr><td><code>button-icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône du bouton interne.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône à afficher dans le champ.</td></tr><tr><td><code>required</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ requis.</td></tr><tr><td><code>readonly</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ en lecture seule.</td></tr><tr><td><code>pattern</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Expression régulière de validation.</td></tr><tr><td><code>minlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur minimale du champ.</td></tr><tr><td><code>maxlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur maximale du champ.</td></tr><tr><td><code>autocomplete</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut autocomplete HTML.</td></tr><tr><td><code>inputmode</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Mode de saisie (mobile).</td></tr><tr><td><code>spellcheck</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Correction orthographique.</td></tr><tr><td><code>ignorevalue</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom du champ (attribut HTML name).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-input-hint-text-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte du hint.</td></tr><tr><td><code>--bnum-input-background-color</code></td><td><code>#eee</code> <span class="color-swatch" style="background-color: #eee;"></span></td><td>Couleur de fond de l'input.</td></tr><tr><td><code>--bnum-input-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte de l'input.</td></tr><tr><td><code>--bnum-input-line-color</code></td><td><code>#3a3a3a</code> <span class="color-swatch" style="background-color: #3a3a3a;"></span></td><td>Couleur de la ligne/bordure de l'input.</td></tr><tr><td><code>--bnum-input-box-shadow</code></td><td><code>inset 0 -2px 0 0 #3a3a3a</code> </td><td>Ombre portée de l'input.</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      
+    <table>
+      <thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>success</code></td><td>État de succès.</td></tr><tr><td><code>error</code></td><td>État d'erreur.</td></tr><tr><td><code>disabled</code></td><td>État désactivé.</td></tr><tr><td><code>icon</code></td><td>Présence d'une icône.</td></tr><tr><td><code>button</code></td><td>Présence d'un bouton.</td></tr><tr><td><code>obi</code></td><td>Bouton avec icône seulement (sans texte).</td></tr><tr><td><code>state</code></td><td>Présence d'un état (success / error).</td></tr></tbody>
+    </table>
+  
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong>formResetCallback</strong>() : <code>void</code></code></h4>
+        <p>Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.</p>
+        
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>formDisabledCallback</strong>(disabled: boolean) : <code>void</code></code></h4>
+        <p>Active ou désactive le champ selon l'état du fieldset parent.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>disabled</code>: N/A</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButton</strong>({
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+        <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>{
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }</code>: Objet contenant le texte, l'icône et la variation du bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButtonIconOnly</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Active uniquement l'icône du bouton interne (sans texte).</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher sur le bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>hideButton</strong>() : <code>this</code></code></h4>
+        <p>Masque le bouton interne.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setSuccessState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état de succès avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message de succès à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setErrorState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état d'erreur avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message d'erreur à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setIcon</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Définit une icône à afficher dans le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeIcon</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'icône affichée dans le champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setHint</strong>(hint: string) : <code>this</code></code></h4>
+        <p>Définit un indice d'utilisation (hint) pour le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>hint</code>: Texte de l'indice à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeHint</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'indice d'utilisation (hint) du champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setLabel</strong>(label: string | HTMLElement) : <code>this</code></code></h4>
+        <p>Définit le label principal du champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte ou élément HTML à utiliser comme label.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      hint,
+      success,
+      error,
+      btnText,
+    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; }) : <code>HTMLBnumInputText</code></code></h4>
+        <p>Crée une instance du composant avec les options fournies.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte du label principal.</li>
+    
+      <li><code>{
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      hint,
+      success,
+      error,
+      btnText,
+    }</code>: Options d'initialisation (attributs et slots).</li>
+    </ul>
+        <p><strong>Retourne :</strong> Instance du composant.</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
+</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
+</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
+</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
+</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
+</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
+</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
+</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
+</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
+</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
+</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
+</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
+</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
+</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
+</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
+</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
+<p>(obi = Only Button Icon)</p>
+</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
+</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
+</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
+</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
+</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
+</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
+</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
+</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
+</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
+</td></tr><tr><td><code>TYPE_TEXT</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Valeur &#39;text&#39; pour l&#39;attribut type.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-input-text)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-input-number" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-input-number&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Input nombre.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Sans rien</h4>
+    <div><bnum-input-number></bnum-input-number></div><pre><code>&lt;bnum-input-number&gt;&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende</h4>
+    <div><bnum-input-number>Label du champ</bnum-input-number></div><pre><code>&lt;bnum-input-number&gt;Label du champ&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende et un indice</h4>
+    <div><bnum-input-number>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+</bnum-input-number></div><pre><code>&lt;bnum-input-number&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton</h4>
+    <div><bnum-input-number button="true" button-icon="add">Label du champ
+<span slot="button">Ajouter</span>
+</bnum-input-number></div><pre><code>&lt;bnum-input-number button=&quot;true&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;span slot=&quot;button&quot;&gt;Ajouter&lt;/span&gt;
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>En erreur</h4>
+    <div><bnum-input-number min="200" data-value="5">Label du champ
+</bnum-input-number></div><pre><code>&lt;bnum-input-number min=&quot;200&quot; data-value=&quot;5&quot;&gt;Label du champ
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un état de succès</h4>
+    <div><bnum-input-number state="success">Label du champ
+<span slot="success">Le champ est valide !</span>
+</bnum-input-number></div><pre><code>&lt;bnum-input-number state=&quot;success&quot;&gt;Label du champ
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une icône</h4>
+    <div><bnum-input-number icon="search">Label du champ</bnum-input-number></div><pre><code>&lt;bnum-input-number icon=&quot;search&quot;&gt;Label du champ&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton avec icône seulement</h4>
+    <div><bnum-input-number placeholder="LA LA !" button-icon="add">Label du champ
+</bnum-input-number></div><pre><code>&lt;bnum-input-number placeholder=&quot;LA LA !&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Désactivé</h4>
+    <div><bnum-input-number disabled>
+Label du champ
+</bnum-input-number></div><pre><code>&lt;bnum-input-number disabled&gt;
+Label du champ
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Complet</h4>
+    <div><bnum-input-number
+data-value="5"
+placeholder="Texte indicatif"
+type="text"
+state="error"
+icon="search"
+button="primary"
+button-icon="send"
+step="10"
+>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+<span slot="success">Le champ est valide !</span>
+<span slot="error">Le champ est invalide !</span>
+<span slot="button">Envoyer</span>
+</bnum-input-number></div><pre><code>&lt;bnum-input-number
+data-value=&quot;5&quot;
+placeholder=&quot;Texte indicatif&quot;
+type=&quot;text&quot;
+state=&quot;error&quot;
+icon=&quot;search&quot;
+button=&quot;primary&quot;
+button-icon=&quot;send&quot;
+step=&quot;10&quot;
+&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;span slot=&quot;error&quot;&gt;Le champ est invalide !&lt;/span&gt;
+&lt;span slot=&quot;button&quot;&gt;Envoyer&lt;/span&gt;
+&lt;/bnum-input-number&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton interne (si présent).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>data-value</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Valeur initiale du champ.</td></tr><tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte indicatif du champ.</td></tr><tr><td><code>type</code></td><td><code>string</code></td><td><code>'number'</code></td><td>✅</td><td>Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'number' pour ce composant.</td></tr><tr><td><code>disabled</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le champ.</td></tr><tr><td><code>state</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>État du champ (success, error, etc.).</td></tr><tr><td><code>button</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Présence d'un bouton interne (primary, secondary, danger, ...).</td></tr><tr><td><code>button-icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône du bouton interne.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône à afficher dans le champ.</td></tr><tr><td><code>required</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ requis.</td></tr><tr><td><code>readonly</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ en lecture seule.</td></tr><tr><td><code>pattern</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Expression régulière de validation.</td></tr><tr><td><code>minlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur minimale du champ.</td></tr><tr><td><code>maxlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur maximale du champ.</td></tr><tr><td><code>autocomplete</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut autocomplete HTML.</td></tr><tr><td><code>inputmode</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Mode de saisie (mobile).</td></tr><tr><td><code>spellcheck</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Correction orthographique.</td></tr><tr><td><code>ignorevalue</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom du champ (attribut HTML name).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-input-hint-text-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte du hint.</td></tr><tr><td><code>--bnum-input-background-color</code></td><td><code>#eee</code> <span class="color-swatch" style="background-color: #eee;"></span></td><td>Couleur de fond de l'input.</td></tr><tr><td><code>--bnum-input-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte de l'input.</td></tr><tr><td><code>--bnum-input-line-color</code></td><td><code>#3a3a3a</code> <span class="color-swatch" style="background-color: #3a3a3a;"></span></td><td>Couleur de la ligne/bordure de l'input.</td></tr><tr><td><code>--bnum-input-box-shadow</code></td><td><code>inset 0 -2px 0 0 #3a3a3a</code> </td><td>Ombre portée de l'input.</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      
+    <table>
+      <thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>success</code></td><td>État de succès.</td></tr><tr><td><code>error</code></td><td>État d'erreur.</td></tr><tr><td><code>disabled</code></td><td>État désactivé.</td></tr><tr><td><code>icon</code></td><td>Présence d'une icône.</td></tr><tr><td><code>button</code></td><td>Présence d'un bouton.</td></tr><tr><td><code>obi</code></td><td>Bouton avec icône seulement (sans texte).</td></tr><tr><td><code>state</code></td><td>Présence d'un état (success / error).</td></tr></tbody>
+    </table>
+  
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong>formResetCallback</strong>() : <code>void</code></code></h4>
+        <p>Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.</p>
+        
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>formDisabledCallback</strong>(disabled: boolean) : <code>void</code></code></h4>
+        <p>Active ou désactive le champ selon l'état du fieldset parent.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>disabled</code>: N/A</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButton</strong>({
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+        <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>{
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }</code>: Objet contenant le texte, l'icône et la variation du bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButtonIconOnly</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Active uniquement l'icône du bouton interne (sans texte).</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher sur le bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>hideButton</strong>() : <code>this</code></code></h4>
+        <p>Masque le bouton interne.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setSuccessState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état de succès avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message de succès à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setErrorState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état d'erreur avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message d'erreur à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setIcon</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Définit une icône à afficher dans le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeIcon</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'icône affichée dans le champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setHint</strong>(hint: string) : <code>this</code></code></h4>
+        <p>Définit un indice d'utilisation (hint) pour le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>hint</code>: Texte de l'indice à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeHint</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'indice d'utilisation (hint) du champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setLabel</strong>(label: string | HTMLElement) : <code>this</code></code></h4>
+        <p>Définit le label principal du champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte ou élément HTML à utiliser comme label.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      min,
+      max,
+      hint,
+      success,
+      error,
+      btnText,
+      step,
+    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; min?: number; max?: number; step?: number; }) : <code>HTMLBnumInputNumber</code></code></h4>
+        <p>Crée une instance du composant avec les options fournies.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte du label principal.</li>
+    
+      <li><code>{
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      min,
+      max,
+      hint,
+      success,
+      error,
+      btnText,
+      step,
+    }</code>: Options d'initialisation (attributs et slots).</li>
+    </ul>
+        <p><strong>Retourne :</strong> Instance du composant.</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
+</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
+</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
+</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
+</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
+</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
+</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
+</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
+</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
+</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
+</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
+</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
+</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
+</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
+</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
+</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
+<p>(obi = Only Button Icon)</p>
+</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
+</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
+</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
+</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
+</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
+</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
+</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
+</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
+</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
+</td></tr><tr><td><code>TYPE</code></td><td><code>"number"</code></td><td>Oui</td><td><p>Valeur pour l&#39;attribut type.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-input-number)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-input-date" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-input-date&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Input de date.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Sans rien</h4>
+    <div><bnum-input-date></bnum-input-date></div><pre><code>&lt;bnum-input-date&gt;&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende</h4>
+    <div><bnum-input-date>Label du champ</bnum-input-date></div><pre><code>&lt;bnum-input-date&gt;Label du champ&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende et un indice</h4>
+    <div><bnum-input-date>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+</bnum-input-date></div><pre><code>&lt;bnum-input-date&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton</h4>
+    <div><bnum-input-date button="true" button-icon="add">Label du champ
+<span slot="button">Ajouter</span>
+</bnum-input-date></div><pre><code>&lt;bnum-input-date button=&quot;true&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;span slot=&quot;button&quot;&gt;Ajouter&lt;/span&gt;
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>En erreur</h4>
+    <div><bnum-input-date min="2025-01-01" data-value="2024-01-01">Label du champ
+</bnum-input-date></div><pre><code>&lt;bnum-input-date min=&quot;2025-01-01&quot; data-value=&quot;2024-01-01&quot;&gt;Label du champ
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un état de succès</h4>
+    <div><bnum-input-date state="success">Label du champ
+<span slot="success">Le champ est valide !</span>
+</bnum-input-date></div><pre><code>&lt;bnum-input-date state=&quot;success&quot;&gt;Label du champ
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une icône</h4>
+    <div><bnum-input-date icon="search">Label du champ</bnum-input-date></div><pre><code>&lt;bnum-input-date icon=&quot;search&quot;&gt;Label du champ&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton avec icône seulement</h4>
+    <div><bnum-input-date placeholder="LA LA !" button-icon="add">Label du champ
+</bnum-input-date></div><pre><code>&lt;bnum-input-date placeholder=&quot;LA LA !&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Désactivé</h4>
+    <div><bnum-input-date disabled>
+Label du champ
+</bnum-input-date></div><pre><code>&lt;bnum-input-date disabled&gt;
+Label du champ
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Complet</h4>
+    <div><bnum-input-date
+data-value="5"
+placeholder="Texte indicatif"
+type="text"
+state="error"
+icon="search"
+button="primary"
+button-icon="send"
+step="10"
+>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+<span slot="success">Le champ est valide !</span>
+<span slot="error">Le champ est invalide !</span>
+<span slot="button">Envoyer</span>
+</bnum-input-date></div><pre><code>&lt;bnum-input-date
+data-value=&quot;5&quot;
+placeholder=&quot;Texte indicatif&quot;
+type=&quot;text&quot;
+state=&quot;error&quot;
+icon=&quot;search&quot;
+button=&quot;primary&quot;
+button-icon=&quot;send&quot;
+step=&quot;10&quot;
+&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;span slot=&quot;error&quot;&gt;Le champ est invalide !&lt;/span&gt;
+&lt;span slot=&quot;button&quot;&gt;Envoyer&lt;/span&gt;
+&lt;/bnum-input-date&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton interne (si présent).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>data-value</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Valeur initiale du champ.</td></tr><tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte indicatif du champ.</td></tr><tr><td><code>type</code></td><td><code>string</code></td><td><code>'number'</code></td><td>✅</td><td>Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'number' pour ce composant.</td></tr><tr><td><code>disabled</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le champ.</td></tr><tr><td><code>state</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>État du champ (success, error, etc.).</td></tr><tr><td><code>button</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Présence d'un bouton interne (primary, secondary, danger, ...).</td></tr><tr><td><code>button-icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône du bouton interne.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône à afficher dans le champ.</td></tr><tr><td><code>required</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ requis.</td></tr><tr><td><code>readonly</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ en lecture seule.</td></tr><tr><td><code>pattern</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Expression régulière de validation.</td></tr><tr><td><code>minlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur minimale du champ.</td></tr><tr><td><code>maxlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur maximale du champ.</td></tr><tr><td><code>autocomplete</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut autocomplete HTML.</td></tr><tr><td><code>inputmode</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Mode de saisie (mobile).</td></tr><tr><td><code>spellcheck</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Correction orthographique.</td></tr><tr><td><code>ignorevalue</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom du champ (attribut HTML name).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-input-hint-text-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte du hint.</td></tr><tr><td><code>--bnum-input-background-color</code></td><td><code>#eee</code> <span class="color-swatch" style="background-color: #eee;"></span></td><td>Couleur de fond de l'input.</td></tr><tr><td><code>--bnum-input-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte de l'input.</td></tr><tr><td><code>--bnum-input-line-color</code></td><td><code>#3a3a3a</code> <span class="color-swatch" style="background-color: #3a3a3a;"></span></td><td>Couleur de la ligne/bordure de l'input.</td></tr><tr><td><code>--bnum-input-box-shadow</code></td><td><code>inset 0 -2px 0 0 #3a3a3a</code> </td><td>Ombre portée de l'input.</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      
+    <table>
+      <thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>success</code></td><td>État de succès.</td></tr><tr><td><code>error</code></td><td>État d'erreur.</td></tr><tr><td><code>disabled</code></td><td>État désactivé.</td></tr><tr><td><code>icon</code></td><td>Présence d'une icône.</td></tr><tr><td><code>button</code></td><td>Présence d'un bouton.</td></tr><tr><td><code>obi</code></td><td>Bouton avec icône seulement (sans texte).</td></tr><tr><td><code>state</code></td><td>Présence d'un état (success / error).</td></tr></tbody>
+    </table>
+  
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong>formResetCallback</strong>() : <code>void</code></code></h4>
+        <p>Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.</p>
+        
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>formDisabledCallback</strong>(disabled: boolean) : <code>void</code></code></h4>
+        <p>Active ou désactive le champ selon l'état du fieldset parent.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>disabled</code>: N/A</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButton</strong>({
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+        <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>{
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }</code>: Objet contenant le texte, l'icône et la variation du bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButtonIconOnly</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Active uniquement l'icône du bouton interne (sans texte).</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher sur le bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>hideButton</strong>() : <code>this</code></code></h4>
+        <p>Masque le bouton interne.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setSuccessState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état de succès avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message de succès à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setErrorState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état d'erreur avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message d'erreur à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setIcon</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Définit une icône à afficher dans le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeIcon</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'icône affichée dans le champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setHint</strong>(hint: string) : <code>this</code></code></h4>
+        <p>Définit un indice d'utilisation (hint) pour le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>hint</code>: Texte de l'indice à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeHint</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'indice d'utilisation (hint) du champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setLabel</strong>(label: string | HTMLElement) : <code>this</code></code></h4>
+        <p>Définit le label principal du champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte ou élément HTML à utiliser comme label.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      min,
+      max,
+      hint,
+      success,
+      error,
+      btnText,
+      step,
+    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; min?: number; max?: number; step?: number; }) : <code>HTMLBnumInputDate</code></code></h4>
+        <p>Crée une instance du composant avec les options fournies.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte du label principal.</li>
+    
+      <li><code>{
+      'data-value': dataValue,
+      placeholder,
+      name,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      min,
+      max,
+      hint,
+      success,
+      error,
+      btnText,
+      step,
+    }</code>: Options d'initialisation (attributs et slots).</li>
+    </ul>
+        <p><strong>Retourne :</strong> Instance du composant.</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
+</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
+</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
+</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
+</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
+</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
+</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
+</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
+</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
+</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
+</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
+</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
+</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
+</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
+</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
+</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
+<p>(obi = Only Button Icon)</p>
+</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
+</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
+</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
+</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
+</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
+</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
+</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
+</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
+</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
+</td></tr><tr><td><code>TYPE</code></td><td><code>"date"</code></td><td>Oui</td><td><p>Valeur pour l&#39;attribut type.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-input-date)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-input" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-input&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Composant Input du design system Bnum.
+Permet de gérer un champ de saisie enrichi avec gestion d&#39;états, d&#39;icônes, de bouton et d&#39;accessibilité.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Sans rien</h4>
+    <div><bnum-input></bnum-input></div><pre><code>&lt;bnum-input&gt;&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende</h4>
+    <div><bnum-input>Label du champ</bnum-input></div><pre><code>&lt;bnum-input&gt;Label du champ&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une légende et un indice</h4>
+    <div><bnum-input>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+</bnum-input></div><pre><code>&lt;bnum-input&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton</h4>
+    <div><bnum-input button="true" button-icon="add">Label du champ
+<span slot="button">Ajouter</span>
+</bnum-input></div><pre><code>&lt;bnum-input button=&quot;true&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;span slot=&quot;button&quot;&gt;Ajouter&lt;/span&gt;
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>En erreur</h4>
+    <div><bnum-input pattern="^[a-zA-Z0-9]+$" data-value="@@@@@">Label du champ
+</bnum-input></div><pre><code>&lt;bnum-input pattern=&quot;^[a-zA-Z0-9]+$&quot; data-value=&quot;@@@@@&quot;&gt;Label du champ
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un état de succès</h4>
+    <div><bnum-input state="success">Label du champ
+<span slot="success">Le champ est valide !</span>
+</bnum-input></div><pre><code>&lt;bnum-input state=&quot;success&quot;&gt;Label du champ
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une icône</h4>
+    <div><bnum-input icon="search">Label du champ</bnum-input></div><pre><code>&lt;bnum-input icon=&quot;search&quot;&gt;Label du champ&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec un bouton avec icône seulement</h4>
+    <div><bnum-input placeholder="LA LA !" button-icon="add">Label du champ
+</bnum-input></div><pre><code>&lt;bnum-input placeholder=&quot;LA LA !&quot; button-icon=&quot;add&quot;&gt;Label du champ
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Nombre</h4>
+    <div><bnum-input type="number" data-value="42">Label du champ</bnum-input></div><pre><code>&lt;bnum-input type=&quot;number&quot; data-value=&quot;42&quot;&gt;Label du champ&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Désactivé</h4>
+    <div><bnum-input disabled>
+Label du champ
+</bnum-input></div><pre><code>&lt;bnum-input disabled&gt;
+Label du champ
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Complet</h4>
+    <div><bnum-input
+data-value="Valeur initiale"
+placeholder="Texte indicatif"
+type="text"
+state="error"
+icon="search"
+button="primary"
+button-icon="send"
+>
+Label du champ
+<span slot="hint">Indice d'utilisation</span>
+<span slot="success">Le champ est valide !</span>
+<span slot="error">Le champ est invalide !</span>
+<span slot="button">Envoyer</span>
+</bnum-input></div><pre><code>&lt;bnum-input
+data-value=&quot;Valeur initiale&quot;
+placeholder=&quot;Texte indicatif&quot;
+type=&quot;text&quot;
+state=&quot;error&quot;
+icon=&quot;search&quot;
+button=&quot;primary&quot;
+button-icon=&quot;send&quot;
+&gt;
+Label du champ
+&lt;span slot=&quot;hint&quot;&gt;Indice d&#039;utilisation&lt;/span&gt;
+&lt;span slot=&quot;success&quot;&gt;Le champ est valide !&lt;/span&gt;
+&lt;span slot=&quot;error&quot;&gt;Le champ est invalide !&lt;/span&gt;
+&lt;span slot=&quot;button&quot;&gt;Envoyer&lt;/span&gt;
+&lt;/bnum-input&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 >Utilisation (Playground)</h2>
+      <div  class="playground-demo-box">
+        <style>
+  #bnum-input-story .controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  #bnum-input-story .control {
+    flex: 1;
+  }
+
+  #bnum-input-story .control bnum-secondary-button {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+</style>
+
+<div id="bnum-input-story">
+  <div class="demo-container">
+    <bnum-input id="bnum-input-story-card-playground">
+      <span id="bnum-input-story-label">Légende</span>
+      <span id="bnum-input-story-hint" slot="hint" hidden
+        >Texte d'aide personnalisé</span
+      >
+      <span id="bnum-input-story-button-slot" slot="button">Envoyer</span>
+      <span id="bnum-input-story-success-text" slot="success"
+        >Le champ est valide !</span
+      >
+      <span id="bnum-input-story-error-text" slot="error"
+        >Le champ est invalide !</span
+      >
+    </bnum-input>
+
+    <div id="bnum-input-story-playground-section">
+      <div id="bnum-input-story-playground-controls">
+        <div class="controls">
+          <div class="control">
+            <bnum-input
+              id="bnum-input-story-control-label"
+              placeholder="Label"
+              data-value="Légende"
+              >Modifier le label</bnum-input
+            >
+          </div>
+
+          <div class="control">
+            <bnum-input
+              id="bnum-input-story-control-hint"
+              placeholder="Texte d'aide"
+              >Modifier le texte d'aide
+              <span slot="hint">Si il est vide, le texte sera caché</span>
+            </bnum-input>
+          </div>
+
+          <div class="control">
+            <bnum-input
+              id="bnum-input-story-control-placeholder"
+              placeholder="Placeholder de l'input"
+              >Modifier le texte du placeholder
+              <span slot="hint"
+                >Si il est vide, le texte sera caché</span
+              ></bnum-input
+            >
+          </div>
+        </div>
+        <br />
+        <div class="controls">
+          <div class="control">
+            <bnum-secondary-button
+              disabled
+              id="bnum-input-story-control-clear-state"
+              >Réinitialiser l'état</bnum-secondary-button
+            >
+          </div>
+
+          <div class="control">
+            <bnum-secondary-button id="bnum-input-story-control-set-success"
+              >Succès</bnum-secondary-button
+            >
+            <bnum-input
+              id="bnum-input-story-control-success-text"
+              placeholder="Texte de succès"
+              hidden
+              >Modifier le texte de succès</bnum-input
+            >
+          </div>
+
+          <div class="control">
+            <bnum-secondary-button id="bnum-input-story-control-set-error"
+              >Erreur</bnum-secondary-button
+            >
+            <bnum-input
+              id="bnum-input-story-control-error-text"
+              placeholder="Texte d'erreur"
+              hidden
+              >Modifier le texte d'erreur</bnum-input
+            >
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="control">
+            <bnum-input
+              id="bnum-input-story-control-icon"
+              placeholder="Icône du bouton (Material Symbols)"
+              >Modifier l'icône du champs
+              <span slot="hint"
+                >Si champ vide, l'icône sera cachée</span
+              ></bnum-input
+            >
+          </div>
+
+          <div class="control">
+            <bnum-secondary-button id="bnum-input-story-control-set-btn"
+              >Activer le bouton</bnum-secondary-button
+            >
+            <bnum-input
+              id="bnum-input-story-control-btn-text"
+              placeholder="Texte du bouton"
+              data-value="Envoyer"
+              hidden
+              >Modifier le texte du bouton</bnum-input
+            >
+          </div>
+          <div class="control">
+            <bnum-input
+              id="bnum-input-story-control-btn-icon"
+              placeholder="Icône du bouton (Material Symbols)"
+              hidden
+              >Modifier l'icône du bouton
+              <span slot="hint"
+                >Si champ vide, l'icône sera cachée</span
+              ></bnum-input
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+</div>
+
+      </div>
+      
+      <h3 >Code HTML</h3>
+      <pre ><code class="demo-code">&lt;style&gt;
+  #bnum-input-story .controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  #bnum-input-story .control {
+    flex: 1;
+  }
+
+  #bnum-input-story .control bnum-secondary-button {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+&lt;/style&gt;
+
+&lt;div id=&quot;bnum-input-story&quot;&gt;
+  &lt;div class=&quot;demo-container&quot;&gt;
+    &lt;bnum-input id=&quot;bnum-input-story-card-playground&quot;&gt;
+      &lt;span id=&quot;bnum-input-story-label&quot;&gt;Légende&lt;/span&gt;
+      &lt;span id=&quot;bnum-input-story-hint&quot; slot=&quot;hint&quot; hidden
+        &gt;Texte d&#039;aide personnalisé&lt;/span
+      &gt;
+      &lt;span id=&quot;bnum-input-story-button-slot&quot; slot=&quot;button&quot;&gt;Envoyer&lt;/span&gt;
+      &lt;span id=&quot;bnum-input-story-success-text&quot; slot=&quot;success&quot;
+        &gt;Le champ est valide !&lt;/span
+      &gt;
+      &lt;span id=&quot;bnum-input-story-error-text&quot; slot=&quot;error&quot;
+        &gt;Le champ est invalide !&lt;/span
+      &gt;
+    &lt;/bnum-input&gt;
+
+    &lt;div id=&quot;bnum-input-story-playground-section&quot;&gt;
+      &lt;div id=&quot;bnum-input-story-playground-controls&quot;&gt;
+        &lt;div class=&quot;controls&quot;&gt;
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-label&quot;
+              placeholder=&quot;Label&quot;
+              data-value=&quot;Légende&quot;
+              &gt;Modifier le label&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-hint&quot;
+              placeholder=&quot;Texte d&#039;aide&quot;
+              &gt;Modifier le texte d&#039;aide
+              &lt;span slot=&quot;hint&quot;&gt;Si il est vide, le texte sera caché&lt;/span&gt;
+            &lt;/bnum-input&gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-placeholder&quot;
+              placeholder=&quot;Placeholder de l&#039;input&quot;
+              &gt;Modifier le texte du placeholder
+              &lt;span slot=&quot;hint&quot;
+                &gt;Si il est vide, le texte sera caché&lt;/span
+              &gt;&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;br /&gt;
+        &lt;div class=&quot;controls&quot;&gt;
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-secondary-button
+              disabled
+              id=&quot;bnum-input-story-control-clear-state&quot;
+              &gt;Réinitialiser l&#039;état&lt;/bnum-secondary-button
+            &gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-secondary-button id=&quot;bnum-input-story-control-set-success&quot;
+              &gt;Succès&lt;/bnum-secondary-button
+            &gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-success-text&quot;
+              placeholder=&quot;Texte de succès&quot;
+              hidden
+              &gt;Modifier le texte de succès&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-secondary-button id=&quot;bnum-input-story-control-set-error&quot;
+              &gt;Erreur&lt;/bnum-secondary-button
+            &gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-error-text&quot;
+              placeholder=&quot;Texte d&#039;erreur&quot;
+              hidden
+              &gt;Modifier le texte d&#039;erreur&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;controls&quot;&gt;
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-icon&quot;
+              placeholder=&quot;Icône du bouton (Material Symbols)&quot;
+              &gt;Modifier l&#039;icône du champs
+              &lt;span slot=&quot;hint&quot;
+                &gt;Si champ vide, l&#039;icône sera cachée&lt;/span
+              &gt;&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-secondary-button id=&quot;bnum-input-story-control-set-btn&quot;
+              &gt;Activer le bouton&lt;/bnum-secondary-button
+            &gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-btn-text&quot;
+              placeholder=&quot;Texte du bouton&quot;
+              data-value=&quot;Envoyer&quot;
+              hidden
+              &gt;Modifier le texte du bouton&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;control&quot;&gt;
+            &lt;bnum-input
+              id=&quot;bnum-input-story-control-btn-icon&quot;
+              placeholder=&quot;Icône du bouton (Material Symbols)&quot;
+              hidden
+              &gt;Modifier l&#039;icône du bouton
+              &lt;span slot=&quot;hint&quot;
+                &gt;Si champ vide, l&#039;icône sera cachée&lt;/span
+              &gt;&lt;/bnum-input
+            &gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;!-- &lt;/div&gt; --&gt;
+&lt;/div&gt;
+</code></pre>
+      <h3 >Code JS</h3>
+      <pre ><code class="demo-code">(() =&gt; {
+  // Récupération des éléments du DOM nécessaires à la démonstration
+  const input = document.getElementById(&#039;bnum-input-story-card-playground&#039;);
+
+  const label = document.getElementById(&#039;bnum-input-story-label&#039;);
+  const hint = document.getElementById(&#039;bnum-input-story-hint&#039;);
+
+  const successText = document.getElementById(&#039;bnum-input-story-success-text&#039;);
+  const errorText = document.getElementById(&#039;bnum-input-story-error-text&#039;);
+
+  const buttonText = document.getElementById(&#039;bnum-input-story-button-slot&#039;);
+
+  const input_control_label = document.getElementById(
+    &#039;bnum-input-story-control-label&#039;,
+  );
+  const input_control_hint = document.getElementById(
+    &#039;bnum-input-story-control-hint&#039;,
+  );
+
+  const input_control_placeholder = document.getElementById(
+    &#039;bnum-input-story-control-placeholder&#039;,
+  );
+
+  const btnSuccess = document.getElementById(
+    &#039;bnum-input-story-control-set-success&#039;,
+  );
+  const btnError = document.getElementById(
+    &#039;bnum-input-story-control-set-error&#039;,
+  );
+  const btnDefault = document.getElementById(
+    &#039;bnum-input-story-control-clear-state&#039;,
+  );
+
+  const input_control_success_text = document.getElementById(
+    &#039;bnum-input-story-control-success-text&#039;,
+  );
+  const input_control_error_text = document.getElementById(
+    &#039;bnum-input-story-control-error-text&#039;,
+  );
+
+  const input_control_icon = document.getElementById(
+    &#039;bnum-input-story-control-icon&#039;,
+  );
+
+  const btnEnableInputBtn = document.getElementById(
+    &#039;bnum-input-story-control-set-btn&#039;,
+  );
+
+  const input_control_button_text = document.getElementById(
+    &#039;bnum-input-story-control-btn-text&#039;,
+  );
+  const input_control_button_icon = document.getElementById(
+    &#039;bnum-input-story-control-btn-icon&#039;,
+  );
+
+  // Gestion de l&#039;événement de clic sur le bouton du composant input
+  input.addEventListener(&#039;bnum-input:button.click&#039;, () =&gt; {
+    alert(&#039;Bouton cliqué !&#039;);
+  });
+
+  // Mise à jour du label en fonction de la saisie
+  input_control_label.addEventListener(&#039;input&#039;, () =&gt; {
+    label.textContent = input_control_label.value;
+  });
+
+  // Mise à jour du hint (aide) et gestion de sa visibilité
+  input_control_hint.addEventListener(&#039;input&#039;, () =&gt; {
+    hint.textContent = input_control_hint.value;
+    hint.hidden = input_control_hint.value.length === 0;
+  });
+
+  // Mise à jour du placeholder de l&#039;input
+  input_control_placeholder.addEventListener(&#039;input&#039;, () =&gt; {
+    input.setAttribute(&#039;placeholder&#039;, input_control_placeholder.value);
+  });
+
+  // Réinitialisation de l&#039;état de l&#039;input
+  btnDefault.addEventListener(&#039;click&#039;, () =&gt; {
+    input.removeAttribute(&#039;state&#039;);
+    btnSuccess.removeAttribute(&#039;disabled&#039;);
+    btnError.removeAttribute(&#039;disabled&#039;);
+    input_control_error_text.hidden = true;
+    input_control_success_text.hidden = true;
+    btnDefault.setAttribute(&#039;disabled&#039;, &#039;disabled&#039;);
+  });
+
+  // Passage de l&#039;input en état &quot;succès&quot;
+  btnSuccess.addEventListener(&#039;click&#039;, () =&gt; {
+    input.setAttribute(&#039;state&#039;, &#039;success&#039;);
+    btnSuccess.setAttribute(&#039;disabled&#039;, &#039;disabled&#039;);
+    btnError.removeAttribute(&#039;disabled&#039;);
+    input_control_success_text.hidden = false;
+    input_control_error_text.hidden = true;
+    btnDefault.removeAttribute(&#039;disabled&#039;);
+  });
+
+  // Passage de l&#039;input en état &quot;erreur&quot;
+  btnError.addEventListener(&#039;click&#039;, () =&gt; {
+    input.setAttribute(&#039;state&#039;, &#039;error&#039;);
+    btnError.setAttribute(&#039;disabled&#039;, &#039;disabled&#039;);
+    btnSuccess.removeAttribute(&#039;disabled&#039;);
+    input_control_error_text.hidden = false;
+    input_control_success_text.hidden = true;
+    btnDefault.removeAttribute(&#039;disabled&#039;);
+  });
+
+  // Mise à jour du texte de succès
+  input_control_success_text.addEventListener(&#039;input&#039;, () =&gt; {
+    successText.textContent = input_control_success_text.value;
+  });
+
+  // Mise à jour du texte d&#039;erreur
+  input_control_error_text.addEventListener(&#039;input&#039;, () =&gt; {
+    errorText.textContent = input_control_error_text.value;
+  });
+
+  // Gestion de l&#039;icône de l&#039;input
+  input_control_icon.addEventListener(&#039;input&#039;, () =&gt; {
+    if (input_control_icon.value.length === 0) {
+      input.removeAttribute(&#039;icon&#039;);
+    } else {
+      input.setAttribute(&#039;icon&#039;, input_control_icon.value);
+    }
+  });
+
+  // Gestion de l&#039;affichage et de l&#039;état du bouton dans l&#039;input
+  let enabled = false;
+  btnEnableInputBtn.addEventListener(&#039;click&#039;, () =&gt; {
+    enabled = !enabled;
+
+    if (enabled) {
+      input_control_button_text.hidden = false;
+      input_control_button_icon.hidden = false;
+      btnEnableInputBtn.textContent = &#039;Désactiver le bouton&#039;;
+      if (input_control_button_icon.value.length &gt; 0) {
+        input.setAttribute(&#039;button-icon&#039;, input_control_button_icon.value);
+      }
+      input.setAttribute(&#039;button&#039;, &#039;true&#039;);
+    } else {
+      input_control_button_text.hidden = true;
+      input_control_button_icon.hidden = true;
+      btnEnableInputBtn.textContent = &#039;Activer le bouton&#039;;
+      input.removeAttribute(&#039;button&#039;);
+      input.removeAttribute(&#039;button-icon&#039;);
+    }
+  });
+
+  // Mise à jour du texte du bouton
+  input_control_button_text.addEventListener(&#039;input&#039;, () =&gt; {
+    buttonText.textContent = input_control_button_text.value;
+
+    if (input_control_button_text.value.length === 0) {
+      if (input_control_button_icon.value.length &gt; 0) {
+        input.removeAttribute(&#039;button&#039;);
+      }
+    } else if (!input.hasAttribute(&#039;button&#039;)) {
+      input.setAttribute(&#039;button&#039;, &#039;true&#039;);
+    }
+  });
+
+  // Mise à jour de l&#039;icône du bouton
+  input_control_button_icon.addEventListener(&#039;input&#039;, () =&gt; {
+    if (input_control_button_icon.value.length === 0) {
+      input.removeAttribute(&#039;button-icon&#039;);
+    } else {
+      input.setAttribute(&#039;button-icon&#039;, input_control_button_icon.value);
+    }
+  });
+})();
+</code></pre>
+      <script >(() => {
+  // Récupération des éléments du DOM nécessaires à la démonstration
+  const input = document.getElementById('bnum-input-story-card-playground');
+
+  const label = document.getElementById('bnum-input-story-label');
+  const hint = document.getElementById('bnum-input-story-hint');
+
+  const successText = document.getElementById('bnum-input-story-success-text');
+  const errorText = document.getElementById('bnum-input-story-error-text');
+
+  const buttonText = document.getElementById('bnum-input-story-button-slot');
+
+  const input_control_label = document.getElementById(
+    'bnum-input-story-control-label',
+  );
+  const input_control_hint = document.getElementById(
+    'bnum-input-story-control-hint',
+  );
+
+  const input_control_placeholder = document.getElementById(
+    'bnum-input-story-control-placeholder',
+  );
+
+  const btnSuccess = document.getElementById(
+    'bnum-input-story-control-set-success',
+  );
+  const btnError = document.getElementById(
+    'bnum-input-story-control-set-error',
+  );
+  const btnDefault = document.getElementById(
+    'bnum-input-story-control-clear-state',
+  );
+
+  const input_control_success_text = document.getElementById(
+    'bnum-input-story-control-success-text',
+  );
+  const input_control_error_text = document.getElementById(
+    'bnum-input-story-control-error-text',
+  );
+
+  const input_control_icon = document.getElementById(
+    'bnum-input-story-control-icon',
+  );
+
+  const btnEnableInputBtn = document.getElementById(
+    'bnum-input-story-control-set-btn',
+  );
+
+  const input_control_button_text = document.getElementById(
+    'bnum-input-story-control-btn-text',
+  );
+  const input_control_button_icon = document.getElementById(
+    'bnum-input-story-control-btn-icon',
+  );
+
+  // Gestion de l'événement de clic sur le bouton du composant input
+  input.addEventListener('bnum-input:button.click', () => {
+    alert('Bouton cliqué !');
+  });
+
+  // Mise à jour du label en fonction de la saisie
+  input_control_label.addEventListener('input', () => {
+    label.textContent = input_control_label.value;
+  });
+
+  // Mise à jour du hint (aide) et gestion de sa visibilité
+  input_control_hint.addEventListener('input', () => {
+    hint.textContent = input_control_hint.value;
+    hint.hidden = input_control_hint.value.length === 0;
+  });
+
+  // Mise à jour du placeholder de l'input
+  input_control_placeholder.addEventListener('input', () => {
+    input.setAttribute('placeholder', input_control_placeholder.value);
+  });
+
+  // Réinitialisation de l'état de l'input
+  btnDefault.addEventListener('click', () => {
+    input.removeAttribute('state');
+    btnSuccess.removeAttribute('disabled');
+    btnError.removeAttribute('disabled');
+    input_control_error_text.hidden = true;
+    input_control_success_text.hidden = true;
+    btnDefault.setAttribute('disabled', 'disabled');
+  });
+
+  // Passage de l'input en état "succès"
+  btnSuccess.addEventListener('click', () => {
+    input.setAttribute('state', 'success');
+    btnSuccess.setAttribute('disabled', 'disabled');
+    btnError.removeAttribute('disabled');
+    input_control_success_text.hidden = false;
+    input_control_error_text.hidden = true;
+    btnDefault.removeAttribute('disabled');
+  });
+
+  // Passage de l'input en état "erreur"
+  btnError.addEventListener('click', () => {
+    input.setAttribute('state', 'error');
+    btnError.setAttribute('disabled', 'disabled');
+    btnSuccess.removeAttribute('disabled');
+    input_control_error_text.hidden = false;
+    input_control_success_text.hidden = true;
+    btnDefault.removeAttribute('disabled');
+  });
+
+  // Mise à jour du texte de succès
+  input_control_success_text.addEventListener('input', () => {
+    successText.textContent = input_control_success_text.value;
+  });
+
+  // Mise à jour du texte d'erreur
+  input_control_error_text.addEventListener('input', () => {
+    errorText.textContent = input_control_error_text.value;
+  });
+
+  // Gestion de l'icône de l'input
+  input_control_icon.addEventListener('input', () => {
+    if (input_control_icon.value.length === 0) {
+      input.removeAttribute('icon');
+    } else {
+      input.setAttribute('icon', input_control_icon.value);
+    }
+  });
+
+  // Gestion de l'affichage et de l'état du bouton dans l'input
+  let enabled = false;
+  btnEnableInputBtn.addEventListener('click', () => {
+    enabled = !enabled;
+
+    if (enabled) {
+      input_control_button_text.hidden = false;
+      input_control_button_icon.hidden = false;
+      btnEnableInputBtn.textContent = 'Désactiver le bouton';
+      if (input_control_button_icon.value.length > 0) {
+        input.setAttribute('button-icon', input_control_button_icon.value);
+      }
+      input.setAttribute('button', 'true');
+    } else {
+      input_control_button_text.hidden = true;
+      input_control_button_icon.hidden = true;
+      btnEnableInputBtn.textContent = 'Activer le bouton';
+      input.removeAttribute('button');
+      input.removeAttribute('button-icon');
+    }
+  });
+
+  // Mise à jour du texte du bouton
+  input_control_button_text.addEventListener('input', () => {
+    buttonText.textContent = input_control_button_text.value;
+
+    if (input_control_button_text.value.length === 0) {
+      if (input_control_button_icon.value.length > 0) {
+        input.removeAttribute('button');
+      }
+    } else if (!input.hasAttribute('button')) {
+      input.setAttribute('button', 'true');
+    }
+  });
+
+  // Mise à jour de l'icône du bouton
+  input_control_button_icon.addEventListener('input', () => {
+    if (input_control_button_icon.value.length === 0) {
+      input.removeAttribute('button-icon');
+    } else {
+      input.setAttribute('button-icon', input_control_button_icon.value);
+    }
+  });
+})();
+</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+    </table>
+  
+      
+      <h2>Slots</h2>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton interne (si présent).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Attributs de Données</h2>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>data-value</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Valeur initiale du champ.</td></tr><tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte indicatif du champ.</td></tr><tr><td><code>type</code></td><td><code>string</code></td><td><code>'text'</code></td><td>✅</td><td>Type de l'input (text, password, email, etc.)</td></tr><tr><td><code>disabled</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le champ.</td></tr><tr><td><code>state</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>État du champ (success, error, etc.).</td></tr><tr><td><code>button</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Présence d'un bouton interne (primary, secondary, danger, ...).</td></tr><tr><td><code>button-icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône du bouton interne.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Icône à afficher dans le champ.</td></tr><tr><td><code>required</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ requis.</td></tr><tr><td><code>readonly</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Champ en lecture seule.</td></tr><tr><td><code>pattern</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Expression régulière de validation.</td></tr><tr><td><code>minlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur minimale du champ.</td></tr><tr><td><code>maxlength</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Longueur maximale du champ.</td></tr><tr><td><code>autocomplete</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut autocomplete HTML.</td></tr><tr><td><code>inputmode</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Mode de saisie (mobile).</td></tr><tr><td><code>spellcheck</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Correction orthographique.</td></tr><tr><td><code>ignorevalue</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom du champ (attribut HTML name).</td></tr></tbody>
+    </table>
+  
+
+      <h2>Variables CSS</h2>
+      
+    <table>
+      <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
+      <tbody><tr><td><code>--bnum-input-hint-text-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte du hint.</td></tr><tr><td><code>--bnum-input-background-color</code></td><td><code>#eee</code> <span class="color-swatch" style="background-color: #eee;"></span></td><td>Couleur de fond de l'input.</td></tr><tr><td><code>--bnum-input-color</code></td><td><code>#666</code> <span class="color-swatch" style="background-color: #666;"></span></td><td>Couleur du texte de l'input.</td></tr><tr><td><code>--bnum-input-line-color</code></td><td><code>#3a3a3a</code> <span class="color-swatch" style="background-color: #3a3a3a;"></span></td><td>Couleur de la ligne/bordure de l'input.</td></tr><tr><td><code>--bnum-input-box-shadow</code></td><td><code>inset 0 -2px 0 0 #3a3a3a</code> </td><td>Ombre portée de l'input.</td></tr></tbody>
+    </table>
+  
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      
+    <table>
+      <thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>success</code></td><td>État de succès.</td></tr><tr><td><code>error</code></td><td>État d'erreur.</td></tr><tr><td><code>disabled</code></td><td>État désactivé.</td></tr><tr><td><code>icon</code></td><td>Présence d'une icône.</td></tr><tr><td><code>button</code></td><td>Présence d'un bouton.</td></tr><tr><td><code>obi</code></td><td>Bouton avec icône seulement (sans texte).</td></tr><tr><td><code>state</code></td><td>Présence d'un état (success / error).</td></tr></tbody>
+    </table>
+  
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      
+      <div class="api-method">
+        <h4><code><strong>formResetCallback</strong>() : <code>void</code></code></h4>
+        <p>Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.</p>
+        
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>formDisabledCallback</strong>(disabled: boolean) : <code>void</code></code></h4>
+        <p>Active ou désactive le champ selon l'état du fieldset parent.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>disabled</code>: N/A</li>
+    </ul>
+        
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButton</strong>({
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+        <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>{
+    text = undefined,
+    icon = undefined,
+    variation = EButtonType.PRIMARY,
+  }</code>: Objet contenant le texte, l'icône et la variation du bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>enableButtonIconOnly</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Active uniquement l'icône du bouton interne (sans texte).</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher sur le bouton.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>hideButton</strong>() : <code>this</code></code></h4>
+        <p>Masque le bouton interne.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setSuccessState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état de succès avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message de succès à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setErrorState</strong>(message: string) : <code>this</code></code></h4>
+        <p>Définit l'état d'erreur avec un message optionnel.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>message</code>: Message d'erreur à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setIcon</strong>(icon: string) : <code>this</code></code></h4>
+        <p>Définit une icône à afficher dans le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeIcon</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'icône affichée dans le champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setHint</strong>(hint: string) : <code>this</code></code></h4>
+        <p>Définit un indice d'utilisation (hint) pour le champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>hint</code>: Texte de l'indice à afficher.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>removeHint</strong>() : <code>this</code></code></h4>
+        <p>Supprime l'indice d'utilisation (hint) du champ.</p>
+        
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong>setLabel</strong>(label: string | HTMLElement) : <code>this</code></code></h4>
+        <p>Définit le label principal du champ.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte ou élément HTML à utiliser comme label.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'instance courante pour chaînage.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
+      'data-value': dataValue,
+      placeholder,
+      name,
+      type,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      hint,
+      success,
+      error,
+      btnText,
+    }: { 'data-value'?: string; placeholder?: string; name?: string; type?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; }) : <code>HTMLBnumInput</code></code></h4>
+        <p>Crée une instance du composant avec les options fournies.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>label</code>: Texte du label principal.</li>
+    
+      <li><code>{
+      'data-value': dataValue,
+      placeholder,
+      name,
+      type,
+      disabled,
+      state,
+      button,
+      'button-icon': buttonIcon,
+      icon,
+      required,
+      readonly,
+      pattern,
+      minlength,
+      maxlength,
+      autocomplete,
+      inputmode,
+      spellcheck,
+      hint,
+      success,
+      error,
+      btnText,
+    }</code>: Options d'initialisation (attributs et slots).</li>
+    </ul>
+        <p><strong>Retourne :</strong> Instance du composant.</p>
+      </div>
+    
+
+      <h3>Variables d'instance</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
+</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h3>Variables statiques</h3>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
+</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
+</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
+</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
+</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
+</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
+</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
+</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
+</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
+</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
+</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
+</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
+</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
+</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
+</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
+</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
+</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
+<p>(obi = Only Button Icon)</p>
+</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
+</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
+</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
+</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
+</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
+</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
+</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
+</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
+</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
+</td></tr></tbody>
+    </table>
+  
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-input)
+        </a>
+      </p>
+    
+        </div>
       </div><div id="story-bnum-icon-button" class="story-content" hidden>
         <div class="story-wrapper">
           
@@ -6245,7 +8848,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <h1><code>&lt;bnum-icon&gt;</code></h1>
       
       <h2>Description</h2>
-      <p><p>Composant personnalisé <bnum-icon> pour afficher une icône Material Symbol.</p>
+      <p><p>Composant personnalisé &quot;bnum-icon&quot; pour afficher une icône Material Symbol.</p>
 <p>Ce composant permet d&#39;afficher une icône en utilisant le nom de l&#39;icône Material Symbol.
 Le nom peut être défini via le contenu du slot ou via l&#39;attribut <code>data-icon</code>.</p>
 </p>

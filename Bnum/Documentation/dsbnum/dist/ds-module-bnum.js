@@ -199,7 +199,7 @@ class BnumElement extends HTMLElement {
     constructor() {
         super();
         if (this._p_isShadowElement())
-            this.attachShadow({ mode: 'open' });
+            this._p_attachCustomShadow() ?? this.attachShadow({ mode: 'open' });
         // Supprime tout script enfant pour éviter l'exécution indésirable.
         const script = this.querySelector('script');
         if (script)
@@ -570,6 +570,13 @@ class BnumElement extends HTMLElement {
     // === Protected ========
     // ======================
     //#region protected
+    /**
+     * Permet d'attacher un shadowroot custom au lieu de juste `{mode:'open'}`
+     * @returns Null si pas de root custom.
+     */
+    _p_attachCustomShadow() {
+        return null;
+    }
     /**
      * Demande une mise à jour de l'élément.
      * La mise à jour sera effectuée lors du prochain frame via requestAnimationFrame.
@@ -1166,8 +1173,6 @@ function requireEvent () {
 var eventExports = requireEvent();
 var JsEvent = /*@__PURE__*/getDefaultExportFromCjs(eventExports);
 
-var css_248z$d = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
-
 /**
  * Événement personnalisé signalant le changement d'un élément.
  *
@@ -1400,6 +1405,100 @@ class SchedulerArray {
     }
 }
 
+var css_248z$g = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+
+var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+
+/**
+ * Classe interne étendant BnumElement pour gérer les états personnalisés via ElementInternals.
+ */
+class BnumElementInternal extends BnumElement {
+    /**
+     * Internals de l'élément, utilisé pour accéder aux états personnalisés.
+     * @private
+     */
+    #_internal = this.attachInternals();
+    constructor() {
+        super();
+    }
+    /**
+     * Retourne l'objet ElementInternals associé à l'élément.
+     * @protected
+     */
+    get _p_internal() {
+        return this.#_internal;
+    }
+    /**
+     * Retourne l'ensemble des états personnalisés de l'élément.
+     * @protected
+     */
+    get _p_states() {
+        return this._p_internal.states;
+    }
+    /**
+     * Efface tous les états personnalisés de l'élément.
+     * @returns {this}
+     * @protected
+     */
+    _p_clearStates() {
+        this._p_states.clear();
+        return this;
+    }
+    /**
+     * Ajoute un état personnalisé à l'élément.
+     * @param {string} state - Nom de l'état à ajouter.
+     * @returns {this}
+     * @protected
+     */
+    _p_addState(state) {
+        this._p_states.add(state);
+        return this;
+    }
+    /**
+     * Ajoute plusieurs états personnalisés à l'élément.
+     * @param {string[]} states - Liste des états à ajouter.
+     * @returns {this}
+     * @protected
+     */
+    _p_addStates(...states) {
+        for (let index = 0, len = states.length; index < len; ++index) {
+            this._p_states.add(states[index]);
+        }
+        return this;
+    }
+    /**
+     * Supprime un état personnalisé de l'élément.
+     * @param {string} state - Nom de l'état à supprimer.
+     * @returns {this}
+     * @protected
+     */
+    _p_removeState(state) {
+        this._p_states.delete(state);
+        return this;
+    }
+    /**
+     * Supprime plusieurs états personnalisés de l'élément.
+     * @param {string[]} states - Liste des états à supprimer.
+     * @returns {this}
+     * @protected
+     */
+    _p_removeStates(states) {
+        for (let index = 0, len = states.length; index < len; ++index) {
+            this._p_states.delete(states[index]);
+        }
+        return this;
+    }
+    /**
+     * Vérifie si l'élément possède un état personnalisé donné.
+     * @param {string} state - Nom de l'état à vérifier.
+     * @returns {boolean}
+     * @protected
+     */
+    _p_hasState(state) {
+        return this._p_states.has(state);
+    }
+}
+
 /**
  * Classe CSS utilisée pour les icônes Material Symbols.
  */
@@ -1407,9 +1506,10 @@ const ICON_CLASS = 'material-symbols-outlined';
 /**
  * Feuille de style CSS pour les icônes Material Symbols.
  */
-const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$d.replaceAll(`.${ICON_CLASS}`, ':host'));
+const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$g.replaceAll(`.${ICON_CLASS}`, ':host'));
+const STYLE$1 = BnumElement.ConstructCSSStyleSheet(css_248z$f);
 /**
- * Composant personnalisé <bnum-icon> pour afficher une icône Material Symbol.
+ * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
  *
  * Ce composant permet d'afficher une icône en utilisant le nom de l'icône Material Symbol.
  * Le nom peut être défini via le contenu du slot ou via l'attribut `data-icon`.
@@ -1422,7 +1522,7 @@ const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$d.replaceAll(`.${ICO
  *
  * @event custom:element-changed:icon - Déclenché lors du changement d'icône.
  */
-class HTMLBnumIcon extends BnumElement {
+class HTMLBnumIcon extends BnumElementInternal {
     //#region Constantes
     /**
      * Nom de l'événement déclenché lors du changement d'icône.
@@ -1446,6 +1546,7 @@ class HTMLBnumIcon extends BnumElement {
     static ATTRIBUTE_CLASS = 'class';
     //#endregion Constantes
     //#region Private fields
+    static #_fontPromise = null;
     #_updateScheduler = null;
     /**
      * Événement déclenché lors du changement d'icône.
@@ -1506,7 +1607,7 @@ class HTMLBnumIcon extends BnumElement {
      * @returns {CSSStyleSheet[]} Les feuilles de style.
      */
     _p_getStylesheets() {
-        return [SYMBOLS];
+        return [SYMBOLS, STYLE$1];
     }
     /**
      * Construit le DOM interne du composant.
@@ -1519,10 +1620,25 @@ class HTMLBnumIcon extends BnumElement {
             this.#_updateIcon(icon);
         if (!this.hasAttribute('aria-hidden') && !this.hasAttribute('aria-label')) {
             this.setAttribute('aria-hidden', 'true');
+            this.#_checkAndLoadFont();
         }
     }
     //#endregion Lifecycle
     //#region Private methods
+    async #_checkAndLoadFont() {
+        const FONT_SPEC = '24px "Material Symbols Outlined"';
+        // Optimisation : On ne lance le chargement qu'une fois globalement
+        if (!document.fonts.check(FONT_SPEC)) {
+            this._p_addState('loading');
+            if (!HTMLBnumIcon.#_fontPromise) {
+                HTMLBnumIcon.#_fontPromise = document.fonts
+                    .load(FONT_SPEC)
+                    .then(() => { });
+            }
+            await HTMLBnumIcon.#_fontPromise;
+            this._p_removeState('loading');
+        }
+    }
     /**
      * Demande une mise à jour du DOM pour l'icône.
      * @param {string} icon - Nom de l'icône.
@@ -1668,13 +1784,13 @@ HTMLBnumIcon.TryDefine();
 const REG_LIGHT_PICTURE_NAME = /(-light)\.(([\w\d]+)|\1?.+)$/;
 const REG_XSS_SAFE = /^[-.\w\s%()]+$/;
 
-var css_248z$c = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}:host .slot{margin-bottom:var(--bnum-button-margin-bottom-text-correction,-3px)}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+var css_248z$e = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
 //#region External Constants
 /**
  * Style CSS du composant bouton.
  */
-const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$c);
+const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$e);
 // Constantes pour les tags des différents types de boutons
 /**
  * Tag du bouton Bnum.
@@ -2065,7 +2181,7 @@ class HTMLBnumButton extends BnumElement {
      * @returns Template utiliser pour le composant
      */
     _p_fromTemplate() {
-        return TEMPLATE$8;
+        return TEMPLATE$9;
     }
     /**
      * Construit le DOM du composant bouton.
@@ -2088,7 +2204,7 @@ class HTMLBnumButton extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$c];
+        return [SHEET$d];
     }
     //#endregion Lifecycle
     //#region Private methods
@@ -2302,7 +2418,7 @@ class HTMLBnumButton extends BnumElement {
 /**
  * Template HTML du composant bouton.
  */
-const TEMPLATE$8 = BnumElement.CreateTemplate(`
+const TEMPLATE$9 = BnumElement.CreateTemplate(`
   <div class="${HTMLBnumButton.CLASS_WRAPPER}">
     <span class="${HTMLBnumButton.CLASS_SLOT}">
       <slot></slot>
@@ -2414,10 +2530,10 @@ class HTMLBnumDangerButton extends HTMLBnumButton {
 }
 HTMLBnumDangerButton.TryDefine();
 
-var css_248z$b = ":host{border-bottom:thin dotted;cursor:help}";
+var css_248z$d = ":host{border-bottom:thin dotted;cursor:help}";
 
 // bnum-helper.ts
-const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$b);
+const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$d);
 /**
  * Constante représentant l'icône utilisée par défaut.
  */
@@ -2462,7 +2578,7 @@ class HTMLBnumHelper extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$b];
+        return [SHEET$c];
     }
     /**
      * Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.
@@ -2485,12 +2601,12 @@ class HTMLBnumHelper extends BnumElement {
 }
 HTMLBnumHelper.TryDefine();
 
-var css_248z$a = ":host{--_image-url:var(--_image-light);display:inline-block}img{content:var(--_image-url);height:100%;width:100%}";
+var css_248z$c = ":host{--_image-url:var(--_image-light);display:inline-block}img{content:var(--_image-url);height:100%;width:100%}";
 
 /**
  * Feuille de style CSS pour le composant BnumHTMLPicture.
  */
-const SHEET$a = BnumElement.ConstructCSSStyleSheet(css_248z$a);
+const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$c);
 /**
  * Élément web personnalisé permettant d'afficher une image qui s'adapte automatiquement au mode sombre ou clair de l'interface.
  *
@@ -2618,7 +2734,7 @@ class HTMLBnumPicture extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$a];
+        return [SHEET$b];
     }
     /**
      * Construit le DOM du composant.
@@ -2725,9 +2841,9 @@ class HTMLBnumPicture extends BnumElement {
 HTMLBnumPicture.TryDefine();
 //#endregion
 
-var css_248z$9 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
+var css_248z$b = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
 
-const SHEET$9 = BnumElement.ConstructCSSStyleSheet(css_248z$9);
+const SHEET$a = BnumElement.ConstructCSSStyleSheet(css_248z$b);
 /**
  * Composant représentant le titre d'une carte, pouvant inclure une icône et un lien.
  * Permet d'afficher un titre enrichi avec une icône et éventuellement un lien cliquable.
@@ -2880,10 +2996,10 @@ class HTMLBnumCardTitle extends BnumElement {
         super();
     }
     _p_getStylesheets() {
-        return [SHEET$9];
+        return [SHEET$a];
     }
     _p_fromTemplate() {
-        return TEMPLATE$7;
+        return TEMPLATE$8;
     }
     /**
      * Construit le DOM du composant dans le conteneur donné.
@@ -3040,7 +3156,7 @@ class HTMLBnumCardTitle extends BnumElement {
         return TAG_CARD_TITLE;
     }
 }
-const TEMPLATE$7 = BnumElement.CreateTemplate(`
+const TEMPLATE$8 = BnumElement.CreateTemplate(`
       <h2><a class="${HTMLBnumCardTitle.CLASS_LINK}">
         <span class="container">
           <slot id="${HTMLBnumCardTitle.ID_SLOT_ICON}" name="${HTMLBnumCardTitle.SLOT_NAME_ICON}"></slot>
@@ -3055,96 +3171,6 @@ const TEMPLATE$7 = BnumElement.CreateTemplate(`
 //#region TryDefine
 HTMLBnumCardTitle.TryDefine();
 //#endregion TryDefine
-
-/**
- * Classe interne étendant BnumElement pour gérer les états personnalisés via ElementInternals.
- */
-class BnumElementInternal extends BnumElement {
-    /**
-     * Internals de l'élément, utilisé pour accéder aux états personnalisés.
-     * @private
-     */
-    #_internal = this.attachInternals();
-    constructor() {
-        super();
-    }
-    /**
-     * Retourne l'objet ElementInternals associé à l'élément.
-     * @protected
-     */
-    get _p_internal() {
-        return this.#_internal;
-    }
-    /**
-     * Retourne l'ensemble des états personnalisés de l'élément.
-     * @protected
-     */
-    get _p_states() {
-        return this._p_internal.states;
-    }
-    /**
-     * Efface tous les états personnalisés de l'élément.
-     * @returns {this}
-     * @protected
-     */
-    _p_clearStates() {
-        this._p_states.clear();
-        return this;
-    }
-    /**
-     * Ajoute un état personnalisé à l'élément.
-     * @param {string} state - Nom de l'état à ajouter.
-     * @returns {this}
-     * @protected
-     */
-    _p_addState(state) {
-        this._p_states.add(state);
-        return this;
-    }
-    /**
-     * Ajoute plusieurs états personnalisés à l'élément.
-     * @param {string[]} states - Liste des états à ajouter.
-     * @returns {this}
-     * @protected
-     */
-    _p_addStates(states) {
-        for (let index = 0, len = states.length; index < len; ++index) {
-            this._p_states.add(states[index]);
-        }
-        return this;
-    }
-    /**
-     * Supprime un état personnalisé de l'élément.
-     * @param {string} state - Nom de l'état à supprimer.
-     * @returns {this}
-     * @protected
-     */
-    _p_removeState(state) {
-        this._p_states.delete(state);
-        return this;
-    }
-    /**
-     * Supprime plusieurs états personnalisés de l'élément.
-     * @param {string[]} states - Liste des états à supprimer.
-     * @returns {this}
-     * @protected
-     */
-    _p_removeStates(states) {
-        for (let index = 0, len = states.length; index < len; ++index) {
-            this._p_states.delete(states[index]);
-        }
-        return this;
-    }
-    /**
-     * Vérifie si l'élément possède un état personnalisé donné.
-     * @param {string} state - Nom de l'état à vérifier.
-     * @returns {boolean}
-     * @protected
-     */
-    _p_hasState(state) {
-        return this._p_states.has(state);
-    }
-}
 
 /**
  * Définit le rôle du bouton sur l'élément donné.
@@ -3169,9 +3195,9 @@ function removeButtonRole(element) {
     return element;
 }
 
-var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-border-on-surface-bottom,solid 4px #000091);border-left:var(--bnum-border-on-surface-left,none);border-right:var(--bnum-border-on-surface-right,none);border-top:var(--bnum-border-on-surface-top,none);display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
+var css_248z$a = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-border-on-surface-bottom,solid 4px #000091);border-left:var(--bnum-border-on-surface-left,none);border-right:var(--bnum-border-on-surface-right,none);border-top:var(--bnum-border-on-surface-top,none);display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
 
-const SHEET$8 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$8);
+const SHEET$9 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$a);
 /**
  * Élément à ajouter dans un slot avec un nom de slot optionnel.
  */
@@ -3459,7 +3485,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         this.addEventListener('click', this.#_handleClick.bind(this));
     }
     _p_fromTemplate() {
-        return TEMPLATE$6;
+        return TEMPLATE$7;
     }
     /**
      * Construit le DOM interne du composant.
@@ -3495,7 +3521,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         this.#_updateDOM();
     }
     _p_getStylesheets() {
-        return [SHEET$8];
+        return [SHEET$9];
     }
     //#endregion Lifecycle
     //#region Private methods
@@ -3688,7 +3714,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         return TAG_CARD;
     }
 }
-const TEMPLATE$6 = BnumElementInternal.CreateTemplate(`
+const TEMPLATE$7 = BnumElementInternal.CreateTemplate(`
       <div class="${HTMLBnumCardElement.CSS_CLASS_TITLE}">
         <slot name="${HTMLBnumCardElement.SLOT_TITLE}"></slot>
       </div>
@@ -3698,9 +3724,9 @@ const TEMPLATE$6 = BnumElementInternal.CreateTemplate(`
     `);
 HTMLBnumCardElement.TryDefine();
 
-var css_248z$7 = ":host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
+var css_248z$9 = ":host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
 
-const SHEET$7 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$7);
+const SHEET$8 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$9);
 /**
  * Représente un item d'une carte `<bnum-card>` qui peut être mis dans un `bnum-card-list`.
  *
@@ -3821,7 +3847,7 @@ class HTMLBnumCardItem extends BnumElementInternal {
         return true;
     }
     _p_getStylesheets() {
-        return [SHEET$7];
+        return [SHEET$8];
     }
     static CreateChildTemplate(childTemplate, { defaultSlot = true, slotName = EMPTY_STRING, } = {}) {
         const template = document.createElement('template');
@@ -10447,12 +10473,12 @@ class HTMLBnumDate extends BnumElementInternal {
 // Auto-définition du composant
 HTMLBnumDate.TryDefine();
 
-var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
+var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
 
 const EVENT_DEFAULT = 'default';
 
 // --- Importe tes dépendances (date-fns, BnumCardItem, etc.) ---
-const SHEET$6 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$6);
+const SHEET$7 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$8);
 /**
  * Composant HTML personnalisé représentant un élément de carte mail.
  *
@@ -10749,7 +10775,7 @@ class HTMLBnumCardItemMail extends HTMLBnumCardItem {
      * @returns Liste des CSSStyleSheet à appliquer.
      */
     _p_getStylesheets() {
-        return [...super._p_getStylesheets(), SHEET$6];
+        return [...super._p_getStylesheets(), SHEET$7];
     }
     /**
      * Méthode appelée lors de la mise à jour d'un attribut observé.
@@ -10767,7 +10793,7 @@ class HTMLBnumCardItemMail extends HTMLBnumCardItem {
      * @returns Le template HTML.
      */
     _p_fromTemplate() {
-        return TEMPLATE$5;
+        return TEMPLATE$6;
     }
     //#endregion Lifecycle
     //#region Public methods
@@ -11006,7 +11032,7 @@ class HTMLBnumCardItemMail extends HTMLBnumCardItem {
         return TAG_CARD_ITEM_MAIL;
     }
 }
-const TEMPLATE$5 = HTMLBnumCardItem.CreateChildTemplate(`
+const TEMPLATE$6 = HTMLBnumCardItem.CreateChildTemplate(`
   <div class="${HTMLBnumCardItemMail.CLASS_MAIN_CONTENT}">
     <div class="${HTMLBnumCardItemMail.CLASS_SENDER}">
       <slot id="${HTMLBnumCardItemMail.ID_SENDER_SLOT}" name="${HTMLBnumCardItemMail.SLOT_SENDER_NAME}"></slot>
@@ -11028,9 +11054,9 @@ const TEMPLATE$5 = HTMLBnumCardItem.CreateChildTemplate(`
 HTMLBnumCardItemMail.TryDefine();
 //#endregion
 
-var css_248z$5 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,12px))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,24px));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
+var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,.75rem))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
 
-const SHEET$5 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$5);
+const SHEET$6 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$7);
 /**
  * Item de carte agenda
  *
@@ -11367,7 +11393,7 @@ class HTMLBnumCardItemAgenda extends HTMLBnumCardItem {
      * @returns Chaîne de style CSS à appliquer au composant.
      */
     _p_getStylesheets() {
-        return [...super._p_getStylesheets(), SHEET$5];
+        return [...super._p_getStylesheets(), SHEET$6];
     }
     /**
      * Précharge les données nécessaires à l'initialisation du composant.
@@ -11529,7 +11555,7 @@ class HTMLBnumCardItemAgenda extends HTMLBnumCardItem {
             this.#_privateIcon.hidden = true;
     }
     _p_fromTemplate() {
-        return TEMPLATE$4;
+        return TEMPLATE$5;
     }
     //#endregion
     //#region Public Methods
@@ -11813,17 +11839,17 @@ const AGENDA = `
   <${HTMLBnumIcon.TAG} class="${HTMLBnumCardItemAgenda.CLASS_BNUM_CARD_ITEM_AGENDA_PRIVATE_ICON}" hidden>${HTMLBnumCardItemAgenda.ICON_PRIVATE}</${HTMLBnumIcon.TAG}>
 `;
 // Optimisation : Le HTML est parsé une seule fois ici.
-const TEMPLATE$4 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
+const TEMPLATE$5 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
     defaultSlot: false,
 });
 HTMLBnumCardItemAgenda.TryDefine();
 
-var css_248z$4 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
+var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
 
 /**
  * Feuille de style CSS pour le composant liste de cartes.
  */
-const SHEET$4 = BnumElement.ConstructCSSStyleSheet(css_248z$4);
+const SHEET$5 = BnumElement.ConstructCSSStyleSheet(css_248z$6);
 /**
  * Composant liste de cartes Bnum.
  * Permet d'afficher une liste d'éléments de type carte.
@@ -11897,7 +11923,7 @@ class HTMLBnumCardList extends BnumElement {
      * @returns {CSSStyleSheet[]} Feuilles de style CSS
      */
     _p_getStylesheets() {
-        return [SHEET$4];
+        return [SHEET$5];
     }
     /**
      * Construit le DOM interne du composant.
@@ -11960,9 +11986,9 @@ class HTMLBnumCardList extends BnumElement {
 }
 HTMLBnumCardList.TryDefine();
 
-var css_248z$3 = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
+var css_248z$5 = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
 
-const SHEET$3 = BnumElement.ConstructCSSStyleSheet(css_248z$3);
+const SHEET$4 = BnumElement.ConstructCSSStyleSheet(css_248z$5);
 /**
  * Organisme qui permet d'afficher simplement une liste de mails dans une carte.
  *
@@ -12080,10 +12106,10 @@ class HTMLBnumCardEmail extends BnumElement {
         super();
     }
     get _p_styleSheets() {
-        return [SHEET$3];
+        return [SHEET$4];
     }
     _p_fromTemplate() {
-        return TEMPLATE$3;
+        return TEMPLATE$4;
     }
     _p_buildDOM(container) {
         this.#_cardTitle = container.querySelector(`#${HTMLBnumCardEmail.ID_CARD_TITLE}`);
@@ -12224,7 +12250,7 @@ class HTMLBnumCardEmail extends BnumElement {
         return TAG_CARD_EMAIL;
     }
 }
-const TEMPLATE$3 = BnumElement.CreateTemplate(`
+const TEMPLATE$4 = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardEmail.ID_CARD_TITLE}" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
@@ -12237,7 +12263,7 @@ const TEMPLATE$3 = BnumElement.CreateTemplate(`
 HTMLBnumCardEmail.TryDefine();
 //#endregion TryDefine
 
-var css_248z$2 = ":host{display:var(--bnum-card-agenda-display,block)}[hidden]{display:none}";
+var css_248z$4 = ":host{display:var(--bnum-card-agenda-display,block)}[hidden]{display:none}";
 
 var constants;
 var hasRequiredConstants;
@@ -13661,7 +13687,7 @@ function requireJsEnumerable () {
 var JsEnumerableExports = requireJsEnumerable();
 var JsEnumerable = /*@__PURE__*/getDefaultExportFromCjs(JsEnumerableExports);
 
-const SHEET$2 = BnumElement.ConstructCSSStyleSheet(css_248z$2);
+const SHEET$3 = BnumElement.ConstructCSSStyleSheet(css_248z$4);
 /**
  * Organisme qui permet d'afficher simplement une liste d'évènements dans une carte.
  *
@@ -13790,10 +13816,10 @@ class HTMLBnumCardAgenda extends BnumElement {
         super();
     }
     get _p_styleSheets() {
-        return [SHEET$2];
+        return [SHEET$3];
     }
     _p_fromTemplate() {
-        return TEMPLATE$2;
+        return TEMPLATE$3;
     }
     _p_buildDOM(container) {
         this.#_cardTitle = container.querySelector(`#${HTMLBnumCardAgenda.ID_CARD_TITLE}`);
@@ -13941,7 +13967,7 @@ class HTMLBnumCardAgenda extends BnumElement {
         return TAG_CARD_AGENDA;
     }
 }
-const TEMPLATE$2 = BnumElement.CreateTemplate(`
+const TEMPLATE$3 = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardAgenda.ID_CARD_TITLE}" slot="title" data-icon="today">${BnumConfig.Get('local_keys').last_events}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
@@ -13954,9 +13980,9 @@ const TEMPLATE$2 = BnumElement.CreateTemplate(`
 HTMLBnumCardAgenda.TryDefine();
 //#endregion TryDefine
 
-var css_248z$1 = ":host{cursor:pointer;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){font-variation-settings:\"FILL\" 1}:host(:active){font-variation-settings:\"FILL\" 1,\"wght\" 700,\"GRAD\" 200,\"opsz\" 20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+var css_248z$3 = ":host{cursor:pointer;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){font-variation-settings:\"FILL\" 1}:host(:active){font-variation-settings:\"FILL\" 1,\"wght\" 700,\"GRAD\" 200,\"opsz\" 20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
-const SHEET$1 = BnumElement.ConstructCSSStyleSheet(css_248z$1);
+const SHEET$2 = BnumElement.ConstructCSSStyleSheet(css_248z$3);
 /**
  * Button contenant une icône.
  *
@@ -14024,13 +14050,13 @@ class HTMLBnumButtonIcon extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$1];
+        return [SHEET$2];
     }
     /**
      * @inheritdoc
      */
     _p_fromTemplate() {
-        return TEMPLATE$1;
+        return TEMPLATE$2;
     }
     /**
      * @inheritdoc
@@ -14068,12 +14094,1642 @@ class HTMLBnumButtonIcon extends BnumElement {
         return TAG_ICON_BUTTON;
     }
 }
-const TEMPLATE$1 = HTMLBnumButtonIcon.CreateTemplate(`
+const TEMPLATE$2 = HTMLBnumButtonIcon.CreateTemplate(`
     <${HTMLBnumIcon.TAG} id="${HTMLBnumButtonIcon.ID_ICON}"><slot></slot></${HTMLBnumIcon.TAG}>
     `);
 //#region TryDefine
 HTMLBnumButtonIcon.TryDefine();
 //#endregion TryDefine
+
+var css_248z$2 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host #hint-text{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}:host #hint-text__label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}:host #hint-text__hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}:host .addons__inner{position:relative;width:100%}:host input{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled) input,:host(:state(disabled)) input{cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{--bnum-input-line-color:#000091;border-top-right-radius:0}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) .error{display:block}";
+
+const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$2);
+/**
+ * Composant Input du design system Bnum.
+ * Permet de gérer un champ de saisie enrichi avec gestion d'états, d'icônes, de bouton et d'accessibilité.
+ *
+ * @structure Sans rien
+ * <bnum-input></bnum-input>
+ *
+ * @structure Avec une légende
+ * <bnum-input>Label du champ</bnum-input>
+ *
+ * @structure Avec une légende et un indice
+ * <bnum-input>
+ * Label du champ
+ * <span slot="hint">Indice d'utilisation</span>
+ * </bnum-input>
+ *
+ * @structure Avec un bouton
+ * <bnum-input button="true" button-icon="add">Label du champ
+ *   <span slot="button">Ajouter</span>
+ * </bnum-input>
+ *
+ * @structure En erreur
+ * <bnum-input pattern="^[a-zA-Z0-9]+$" data-value="@@@@@">Label du champ
+ * </bnum-input>
+ *
+ * @structure Avec un état de succès
+ * <bnum-input state="success">Label du champ
+ *   <span slot="success">Le champ est valide !</span>
+ * </bnum-input>
+ *
+ * @structure Avec une icône
+ * <bnum-input icon="search">Label du champ</bnum-input>
+ *
+ * @structure Avec un bouton avec icône seulement
+ * <bnum-input placeholder="LA LA !" button-icon="add">Label du champ
+ * </bnum-input>
+ *
+ * @structure Nombre
+ * <bnum-input type="number" data-value="42">Label du champ</bnum-input>
+ *
+ * @structure Désactivé
+ * <bnum-input disabled>
+ *   Label du champ
+ * </bnum-input>
+ *
+ * @structure Complet
+ * <bnum-input
+ *   data-value="Valeur initiale"
+ *   placeholder="Texte indicatif"
+ *   type="text"
+ *   state="error"
+ *   icon="search"
+ *   button="primary"
+ *   button-icon="send"
+ * >
+ *   Label du champ
+ *   <span slot="hint">Indice d'utilisation</span>
+ *   <span slot="success">Le champ est valide !</span>
+ *   <span slot="error">Le champ est invalide !</span>
+ *   <span slot="button">Envoyer</span>
+ * </bnum-input>
+ *
+ * @slot (defaut) - Contenu du label principal du champ.
+ * @slot hint - Contenu de l'indice d'utilisation (hint) du champ.
+ * @slot success - Contenu du message de succès du champ.
+ * @slot error - Contenu du message d'erreur du champ.
+ * @slot button - Contenu du bouton interne (si présent).
+ *
+ * @state success - État de succès.
+ * @state error - État d'erreur.
+ * @state disabled - État désactivé.
+ * @state icon - Présence d'une icône.
+ * @state button - Présence d'un bouton.
+ * @state obi - Bouton avec icône seulement (sans texte).
+ * @state state - Présence d'un état (success / error).
+ *
+ * @cssvar {#666} --bnum-input-hint-text-color - Couleur du texte du hint.
+ * @cssvar {#eee} --bnum-input-background-color - Couleur de fond de l'input.
+ * @cssvar {#666} --bnum-input-color - Couleur du texte de l'input.
+ * @cssvar {#3a3a3a} --bnum-input-line-color - Couleur de la ligne/bordure de l'input.
+ * @cssvar {inset 0 -2px 0 0 #3a3a3a} --bnum-input-box-shadow - Ombre portée de l'input.
+ *
+ */
+class HTMLBnumInput extends BnumElementInternal {
+    //#region Constants
+    /**
+     * Événement déclenché au clic sur le bouton interne.
+     * @event bnum-input:button.click
+     * @detail MouseEvent
+     */
+    static EVENT_BUTTON_CLICK = 'bnum-input:button.click';
+    /**
+     * Événement déclenché à la saisie dans le champ.
+     * @event input
+     * @detail InputEvent
+     */
+    static EVENT_INPUT = 'input';
+    /**
+     * Événement déclenché au changement de valeur du champ.
+     * @event change
+     * @detail Event
+     */
+    static EVENT_CHANGE = 'change';
+    /**
+     * Attribut data-value du composant.
+     * @attr {string} (optional) (default: undefined) data-value - Valeur initiale du champ.
+     */
+    static ATTRIBUTE_DATA_VALUE = 'data-value';
+    /**
+     * @attr {string} (optional) (default: undefined) placeholder - Texte indicatif du champ.
+     */
+    static ATTRIBUTE_PLACEHOLDER = 'placeholder';
+    /**
+     * @attr {string} (optional) (default: 'text') type - Type de l'input (text, password, email, etc.)
+     */
+    static ATTRIBUTE_TYPE = 'type';
+    /**
+     * @attr {string} (optional) (default: undefined) disabled - Désactive le champ.
+     */
+    static ATTRIBUTE_DISABLED = 'disabled';
+    /**
+     * @attr {string} (optional) (default: undefined) state - État du champ (success, error, etc.).
+     */
+    static ATTRIBUTE_STATE = 'state';
+    /**
+     * @attr {string} (optional) (default: undefined) button - Présence d'un bouton interne (primary, secondary, danger, ...).
+     */
+    static ATTRIBUTE_BUTTON = 'button';
+    /**
+     * @attr {string} (optional) (default: undefined) button-icon - Icône du bouton interne.
+     */
+    static ATTRIBUTE_BUTTON_ICON = 'button-icon';
+    /**
+     * @attr {string} (optional) (default: undefined) icon - Icône à afficher dans le champ.
+     */
+    static ATTRIBUTE_ICON = 'icon';
+    /**
+     * @attr {string} (optional) (default: undefined) required - Champ requis.
+     */
+    static ATTRIBUTE_REQUIRED = 'required';
+    /**
+     * @attr {string} (optional) (default: undefined) readonly - Champ en lecture seule.
+     */
+    static ATTRIBUTE_READONLY = 'readonly';
+    /**
+     * @attr {string} (optional) (default: undefined) pattern - Expression régulière de validation.
+     */
+    static ATTRIBUTE_PATTERN = 'pattern';
+    /**
+     * @attr {string} (optional) (default: undefined) minlength - Longueur minimale du champ.
+     */
+    static ATTRIBUTE_MINLENGTH = 'minlength';
+    /**
+     * @attr {string} (optional) (default: undefined) maxlength - Longueur maximale du champ.
+     */
+    static ATTRIBUTE_MAXLENGTH = 'maxlength';
+    /**
+     * @attr {string} (optional) (default: undefined) autocomplete - Attribut autocomplete HTML.
+     */
+    static ATTRIBUTE_AUTOCOMPLETE = 'autocomplete';
+    /**
+     * @attr {string} (optional) (default: undefined) inputmode - Mode de saisie (mobile).
+     */
+    static ATTRIBUTE_INPUTMODE = 'inputmode';
+    /**
+     * @attr {string} (optional) (default: undefined) spellcheck - Correction orthographique.
+     */
+    static ATTRIBUTE_SPELLCHECK = 'spellcheck';
+    /**
+     * @attr {string} (optional) (default: undefined) ignorevalue - Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.
+     */
+    static ATTRIBUTE_IGNOREVALUE = 'ignorevalue';
+    /**
+     * @attr {string} (optional) (default: undefined) name - Nom du champ (attribut HTML name).
+     */
+    static ATTRIBUTE_NAME = 'name';
+    /** ID du label principal */
+    static ID_HINT_TEXT = 'hint-text';
+    /** ID du label du champ */
+    static ID_HINT_TEXT_LABEL = 'hint-text__label';
+    /** ID du hint */
+    static ID_HINT_TEXT_HINT = 'hint-text__hint';
+    /** ID de l'input */
+    static ID_INPUT = 'bnum-input';
+    /** ID du bouton */
+    static ID_INPUT_BUTTON = 'input__button';
+    /** ID de l'icône d'état */
+    static ID_STATE_ICON = 'state__icon';
+    /** ID de l'icône d'input */
+    static ID_INPUT_ICON = 'input__icon';
+    /** ID du texte de succès */
+    static ID_SUCCESS_TEXT = 'success-text';
+    /** ID du texte d'erreur */
+    static ID_ERROR_TEXT = 'error-text';
+    /** ID du conteneur d'état */
+    static ID_STATE = 'state';
+    /** Classe CSS pour le texte de succès */
+    static CLASS_STATE_TEXT_SUCCESS = 'state__text success';
+    /** Classe CSS pour le texte d'erreur */
+    static CLASS_STATE_TEXT_ERROR = 'state__text error';
+    /**
+     * État de succès.
+     */
+    static STATE_SUCCESS = 'success';
+    /**
+     * État d'erreur.
+     */
+    static STATE_ERROR = 'error';
+    /**
+     * État désactivé.
+     */
+    static STATE_DISABLED = 'disabled';
+    /**
+     * État avec icône.
+     */
+    static STATE_ICON = 'icon';
+    /**
+     * État avec bouton.
+     */
+    static STATE_BUTTON = 'button';
+    /**
+     * État bouton avec icône seulement (sans texte).
+     *
+     * (obi = Only Button Icon)
+     */
+    static STATE_OBI = 'obi';
+    /**
+     * État avec état (success / error).
+     */
+    static STATE_STATE = 'state';
+    /**
+     * Icône affichée en cas de succès de validation.
+     */
+    static ICON_SUCCESS = 'check_circle';
+    /**
+     * Icône affichée en cas d'erreur de validation.
+     */
+    static ICON_ERROR = 'cancel';
+    /**
+     * Nom du slot pour le bouton interne.
+     */
+    static SLOT_BUTTON = 'button';
+    /**
+     * Nom du slot pour l'indice d'utilisation (hint).
+     */
+    static SLOT_HINT = 'hint';
+    /**
+     * Nom du slot pour le message de succès.
+     */
+    static SLOT_SUCCESS = 'success';
+    /**
+     * Nom du slot pour le message d'erreur.
+     */
+    static SLOT_ERROR = 'error';
+    /**
+     * Type d'input par défaut.
+     */
+    static DEFAULT_INPUT_TYPE = 'text';
+    /**
+     * Variation du bouton par défaut.
+     */
+    static DEFAULT_BUTTON_VARIATION = EButtonType.PRIMARY;
+    //#endregion Constants
+    //#region Private fields
+    /**
+     * Icône d'état (success / error)
+     */
+    #_stateIcon = null;
+    /**
+     * Input HTML interne
+     */
+    #_input = null;
+    /**
+     * Bouton HTML interne
+     */
+    #_button = null;
+    /**
+     * Icône interne
+     */
+    #_icon = null;
+    /**
+     * Événement déclenché au clic sur le bouton (si présent)
+     */
+    #_onButtonClicked = null;
+    /**
+     * Valeur initiale (pour la réinitialisation du formulaire)
+     */
+    #_initValue = EMPTY_STRING;
+    //#endregion Private fields
+    //#region Getters/Setters
+    /**
+     * Permet d'écouter le clic sur le bouton interne.
+     * @returns {JsEvent} Instance d'événement personnalisée.
+     */
+    get onButtonClicked() {
+        if (this.#_onButtonClicked === null) {
+            this.#_onButtonClicked = new JsEvent();
+            this.#_onButtonClicked.add(EVENT_DEFAULT, (clickEvent) => {
+                this.trigger(HTMLBnumInput.EVENT_BUTTON_CLICK, {
+                    innerEvent: clickEvent,
+                });
+            });
+            this.#_initialiseButton();
+        }
+        return this.#_onButtonClicked;
+    }
+    // -- Formulaire --
+    /**
+     * Valeur courante du champ de saisie.
+     */
+    get value() {
+        return (this.#_input?.value ||
+            this.getAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE) ||
+            EMPTY_STRING);
+    }
+    set value(val) {
+        if (this.#_input === null)
+            this.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, val);
+        else {
+            this.#_input.value = val;
+            this._p_internal.setFormValue(val);
+        }
+    }
+    /**
+     * Nom du champ (attribut HTML name).
+     */
+    get name() {
+        return this.getAttribute(HTMLBnumInput.ATTRIBUTE_NAME) || EMPTY_STRING;
+    }
+    set name(val) {
+        this.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, val);
+    }
+    //#endregion Getters/Setters
+    //#region Lifecycle
+    /**
+     * Constructeur du composant.
+     * Initialise la valeur initiale à partir de l'attribut data-value.
+     */
+    constructor() {
+        super();
+        this.#_initValue =
+            this.getAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE) ?? EMPTY_STRING;
+    }
+    /**
+     * Attache un Shadow DOM personnalisé.
+     */
+    _p_attachCustomShadow() {
+        return this.attachShadow({ mode: 'open', delegatesFocus: true });
+    }
+    /**
+     * Récupère des stylesheet déjà construites pour le composant.
+     * @returns Liste de stylesheet
+     */
+    _p_getStylesheets() {
+        return [STYLE];
+    }
+    /**
+     * Retourne le template HTML utilisé pour le composant.
+     */
+    _p_fromTemplate() {
+        return TEMPLATE$1;
+    }
+    /**
+     * Construit le DOM interne et attache les écouteurs d'événements.
+     */
+    _p_buildDOM(container) {
+        this.#_input = container.querySelector(`#${HTMLBnumInput.ID_INPUT}`);
+        this.#_button = container.querySelector(`#${HTMLBnumInput.ID_INPUT_BUTTON}`);
+        this.#_stateIcon = container.querySelector(`#${HTMLBnumInput.ID_STATE_ICON}`);
+        this.#_icon = container.querySelector(`#${HTMLBnumInput.ID_INPUT_ICON}`);
+        this.#_input.addEventListener(HTMLBnumInput.EVENT_INPUT, (e) => {
+            this.#_inputValueChangedCallback(e);
+        });
+        this.#_input.addEventListener(HTMLBnumInput.EVENT_CHANGE, (e) => {
+            this.#_inputValueChangedCallback(e);
+        });
+        this.#_initialiseButton().#_update();
+        this.attr(HTMLBnumInput.ATTRIBUTE_IGNOREVALUE, 'true').removeAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE);
+    }
+    /**
+     * Met à jour le composant lors d'un changement d'attribut.
+     */
+    _p_update(name, oldVal, newVal) {
+        if (this.alreadyLoaded === false)
+            return 'break';
+        if (newVal == oldVal)
+            return;
+        switch (name) {
+            case HTMLBnumInput.ATTRIBUTE_DATA_VALUE:
+                if (this.attr(HTMLBnumInput.ATTRIBUTE_IGNOREVALUE) !== null) {
+                    this.removeAttribute(HTMLBnumInput.ATTRIBUTE_IGNOREVALUE);
+                    break;
+                }
+                if (newVal !== null) {
+                    this._p_internal.setFormValue(newVal);
+                    if (this.#_input)
+                        this.#_input.value = newVal;
+                    this.setAttribute(HTMLBnumInput.ATTRIBUTE_IGNOREVALUE, 'true');
+                    this.removeAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE);
+                }
+                break;
+        }
+    }
+    /**
+     * Appelé après le flush du DOM pour synchroniser l'état.
+     */
+    _p_postFlush() {
+        this.#_update();
+    }
+    //#endregion Lifecycle
+    //#region Public methods
+    // --- Formulaire --
+    /**
+     * Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.
+     */
+    formResetCallback() {
+        this.value = this.#_initValue;
+    }
+    /**
+     * Active ou désactive le champ selon l'état du fieldset parent.
+     */
+    formDisabledCallback(disabled) {
+        if (disabled)
+            this.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, 'disabled');
+        this.#_sync();
+    }
+    // -- Helper --
+    /**
+     * Active le bouton interne avec texte, icône et variation éventuels.
+     * @param options Objet contenant le texte, l'icône et la variation du bouton.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    enableButton({ text = undefined, icon = undefined, variation = EButtonType.PRIMARY, } = {}) {
+        this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON, variation);
+        if (text !== undefined) {
+            this.querySelector(`slot[name="${HTMLBnumInput.SLOT_BUTTON}"]`)?.remove?.();
+            const span = this._p_createSpan({
+                child: text,
+                attributes: { slot: 'button' },
+            });
+            this.appendChild(span);
+        }
+        if (icon !== undefined) {
+            this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, icon);
+        }
+        return this;
+    }
+    /**
+     * Active uniquement l'icône du bouton interne (sans texte).
+     * @param icon Nom de l'icône à afficher sur le bouton.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    enableButtonIconOnly(icon) {
+        this.querySelector(`slot[name="${HTMLBnumInput.SLOT_BUTTON}"]`)?.remove?.();
+        this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+        this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, icon);
+        return this;
+    }
+    /**
+     * Masque le bouton interne.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    hideButton() {
+        this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+        this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON);
+        return this;
+    }
+    /**
+     * Définit l'état de succès avec un message optionnel.
+     * @param message Message de succès à afficher.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    setSuccessState(message) {
+        return this.#_setState(HTMLBnumInput.SLOT_SUCCESS, message);
+    }
+    /**
+     * Définit l'état d'erreur avec un message optionnel.
+     * @param message Message d'erreur à afficher.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    setErrorState(message) {
+        return this.#_setState(HTMLBnumInput.SLOT_ERROR, message);
+    }
+    /**
+     * Définit une icône à afficher dans le champ.
+     * @param icon Nom de l'icône à afficher.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    setIcon(icon) {
+        this.setAttribute(HTMLBnumInput.ATTRIBUTE_ICON, icon);
+        return this;
+    }
+    /**
+     * Supprime l'icône affichée dans le champ.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    removeIcon() {
+        this.removeAttribute(HTMLBnumInput.ATTRIBUTE_ICON);
+        return this;
+    }
+    /**
+     * Définit un indice d'utilisation (hint) pour le champ.
+     * @param hint Texte de l'indice à afficher.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    setHint(hint) {
+        this.removeHint();
+        const span = this._p_createSpan({
+            child: hint,
+            attributes: { slot: HTMLBnumInput.SLOT_HINT },
+        });
+        this.appendChild(span);
+        return this;
+    }
+    /**
+     * Supprime l'indice d'utilisation (hint) du champ.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    removeHint() {
+        this.querySelector(`slot[name="${HTMLBnumInput.SLOT_HINT}"]`)?.remove?.();
+        return this;
+    }
+    /**
+     * Définit le label principal du champ.
+     * @param label Texte ou élément HTML à utiliser comme label.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    setLabel(label) {
+        // On supprime tout ce qui n'a pas l'attribut slot
+        const nodes = this.childNodes.values();
+        for (const node of nodes) {
+            if (node instanceof HTMLElement) {
+                const element = node;
+                if (!element.hasAttribute('slot'))
+                    this.removeChild(element);
+            }
+        }
+        if (typeof label === 'string')
+            this.appendChild(this._p_createTextNode(label));
+        else
+            this.appendChild(label);
+        return this;
+    }
+    //#endregion Public methods
+    //#region Private methods
+    /**
+     * Met à jour l'état visuel et fonctionnel du composant selon ses attributs.
+     * @private
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_update() {
+        this._p_clearStates();
+        const btnValue = this.attr(HTMLBnumInput.ATTRIBUTE_BUTTON);
+        if (btnValue !== null) {
+            this._p_addState(HTMLBnumInput.STATE_BUTTON);
+            switch (btnValue) {
+                case EButtonType.PRIMARY:
+                    this.#_button.variation = EButtonType.PRIMARY;
+                    break;
+                case EButtonType.SECONDARY:
+                    this.#_button.variation = EButtonType.SECONDARY;
+                    break;
+                case EButtonType.DANGER:
+                    this.#_button.variation = EButtonType.DANGER;
+                    break;
+            }
+        }
+        const button_icon = this.attr(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON);
+        if (button_icon !== null) {
+            this.#_button.icon = button_icon;
+            if (!this._p_hasState(HTMLBnumInput.STATE_BUTTON))
+                this._p_addStates(HTMLBnumInput.STATE_BUTTON, HTMLBnumInput.STATE_OBI);
+            else if (btnValue === EMPTY_STRING)
+                this._p_addState(HTMLBnumInput.STATE_OBI);
+        }
+        const icon = this.attr(HTMLBnumInput.ATTRIBUTE_ICON);
+        if (icon !== null) {
+            this._p_addState(HTMLBnumInput.STATE_ICON);
+            this.#_icon.icon = icon;
+        }
+        if (this.attr(HTMLBnumInput.ATTRIBUTE_DISABLED) !== null)
+            this._p_addState(HTMLBnumInput.STATE_DISABLED);
+        return this.#_updateState(this.attr(HTMLBnumInput.ATTRIBUTE_STATE)).#_sync();
+    }
+    /**
+     * Synchronise les propriétés et attributs de l'input interne.
+     * Met à jour les propriétés HTML de l'input selon les attributs du composant.
+     * @private
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_sync() {
+        if (!this.#_input)
+            return this;
+        const input = this.#_input;
+        // 1. Propriétés de base
+        input.value = this.value;
+        input.type =
+            this.getAttribute(HTMLBnumInput.ATTRIBUTE_TYPE) ||
+                HTMLBnumInput.DEFAULT_INPUT_TYPE;
+        input.placeholder =
+            this.getAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER) || EMPTY_STRING;
+        // 2. États Booléens (On utilise .disabled / .readOnly pour la réactivité JS)
+        input.disabled =
+            this.hasAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED) ||
+                this._p_hasState(HTMLBnumInput.STATE_DISABLED);
+        input.readOnly = this.hasAttribute(HTMLBnumInput.ATTRIBUTE_READONLY);
+        input.required = this.hasAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED);
+        // 3. Validation & UX (On utilise setAttribute pour les attributs HTML5)
+        this.#_setFieldAttr(HTMLBnumInput.ATTRIBUTE_PATTERN);
+        this.#_setFieldAttr(HTMLBnumInput.ATTRIBUTE_MINLENGTH);
+        this.#_setFieldAttr(HTMLBnumInput.ATTRIBUTE_MAXLENGTH);
+        this.#_setFieldAttr(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE);
+        this.#_setFieldAttr(HTMLBnumInput.ATTRIBUTE_INPUTMODE);
+        this.#_setFieldAttr(HTMLBnumInput.ATTRIBUTE_SPELLCHECK);
+        this.#_setFieldAttr('min');
+        this.#_setFieldAttr('max');
+        this.#_setFieldAttr('step');
+        return this.#_updateA11y();
+    }
+    /**
+     * Met à jour l'accessibilité (a11y) de l'input selon l'état.
+     * Met à jour les attributs ARIA et la validité de l'input.
+     * @private
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_updateA11y() {
+        if (!this.#_input)
+            return this;
+        return this.#_setValidity();
+    }
+    /**
+     * Met à jour l'état visuel selon l'état passé en paramètre.
+     * @private
+     * @param state L'état à appliquer (success, error, etc.)
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_updateState(state) {
+        if (state !== null) {
+            switch (state) {
+                case HTMLBnumInput.STATE_SUCCESS:
+                    this._p_addStates(HTMLBnumInput.STATE_STATE, HTMLBnumInput.STATE_SUCCESS);
+                    this.#_stateIcon.icon = HTMLBnumInput.ICON_SUCCESS;
+                    break;
+                case HTMLBnumInput.STATE_ERROR:
+                    this._p_addStates(HTMLBnumInput.STATE_STATE, HTMLBnumInput.STATE_ERROR);
+                    this.#_stateIcon.icon = HTMLBnumInput.ICON_ERROR;
+                    break;
+            }
+        }
+        return this;
+    }
+    /**
+     * Définit l'état (succès ou erreur) et le message associé.
+     * @private
+     * @param state Type d'état (success ou error).
+     * @param message Message à afficher.
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_setState(state, message) {
+        this.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+        if (message) {
+            this.querySelector(`slot[name="${state}"]`)?.remove?.();
+            const span = this._p_createSpan({
+                child: message,
+                attributes: { slot: state },
+            });
+            this.appendChild(span);
+        }
+        return this;
+    }
+    /**
+     * Met à jour la validité de l'input et les messages d'erreur/succès.
+     * Gère également les attributs ARIA liés à la validation.
+     * @private
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_setValidity() {
+        if (!this.#_input)
+            return this;
+        const state = this.attr(HTMLBnumInput.ATTRIBUTE_STATE);
+        let isError = state === HTMLBnumInput.STATE_ERROR;
+        let isSuccess = state === HTMLBnumInput.STATE_SUCCESS;
+        try {
+            var validity = this.#_input.checkValidity() ||
+                this.#_input.validationMessage !== EMPTY_STRING;
+        }
+        catch (error) {
+            var validity = this.#_input.validationMessage !== EMPTY_STRING;
+        }
+        if (isError) {
+            try {
+                this._p_internal.setValidity({ customError: true }, 'Ce champ contient une erreur.', this.#_input);
+            }
+            catch (error) { }
+        }
+        else if (validity) {
+            try {
+                this._p_internal.setValidity(this.#_input.validity, this.#_input.validationMessage, this.#_input);
+            }
+            catch (error) { }
+            if (this.#_input.validationMessage !== EMPTY_STRING) {
+                this._p_addStates(HTMLBnumInput.STATE_STATE, this.#_input.validity.valid
+                    ? HTMLBnumInput.STATE_SUCCESS
+                    : HTMLBnumInput.STATE_ERROR);
+                if (this.#_input.validity.valid) {
+                    this.shadowRoot.querySelector(`#${HTMLBnumInput.ID_SUCCESS_TEXT} slot`).innerText = this.#_input.validationMessage;
+                    isSuccess = true;
+                }
+                else {
+                    this.shadowRoot.querySelector(`#${HTMLBnumInput.ID_ERROR_TEXT} slot`).innerText = this.#_input.validationMessage;
+                    isError = true;
+                }
+            }
+        }
+        else {
+            try {
+                this._p_internal.setValidity({});
+            }
+            catch (error) { }
+        }
+        // Indiquer l'erreur sémantiquement
+        this.#_input.setAttribute('aria-invalid', isError ? 'true' : 'false');
+        // Lier les descriptions (hint + erreur/success)
+        // On pointe vers les IDs définis dans le template
+        const descriptions = [];
+        if (isError)
+            descriptions.push(HTMLBnumInput.ID_ERROR_TEXT);
+        if (isSuccess)
+            descriptions.push(HTMLBnumInput.ID_SUCCESS_TEXT);
+        if (descriptions.length > 0)
+            this.#_input.setAttribute('aria-describedby', descriptions.join(' '));
+        return this.#_updateState(state ||
+            (validity
+                ? isError
+                    ? HTMLBnumInput.STATE_ERROR
+                    : isSuccess
+                        ? HTMLBnumInput.STATE_SUCCESS
+                        : null
+                : null));
+    }
+    /**
+     * Initialise le bouton interne et son écouteur de clic.
+     * Ajoute un écouteur d'événement sur le bouton si nécessaire.
+     * @private
+     * @returns {this} L'instance courante pour chaînage.
+     */
+    #_initialiseButton() {
+        if (this.#_onButtonClicked !== null && this.#_button !== null) {
+            this.#_button.addEventListener('click', (e) => {
+                this.onButtonClicked.call(e);
+            });
+        }
+        return this;
+    }
+    /**
+     * Callback appelé lors d'un changement de valeur de l'input.
+     * @private
+     * @param e Evénement de changement de valeur.
+     */
+    #_inputValueChangedCallback(e) {
+        try {
+            this._p_internal.setFormValue(this.#_input.value);
+        }
+        catch (error) { }
+        this.#_update().dispatchEvent(e);
+    }
+    /**
+     * Transfère un attribut du composant vers l'input interne si présent.
+     * @private
+     * @param attrName Nom de l'attribut à synchroniser.
+     */
+    #_setFieldAttr(attrName) {
+        const val = this.getAttribute(attrName);
+        if (val !== null) {
+            this.#_input.setAttribute(attrName, val);
+        }
+        else {
+            this.#_input.removeAttribute(attrName);
+        }
+    }
+    //#endregion Private methods
+    //#region Static methods
+    /**
+     * @inheritdoc
+     */
+    static _p_observedAttributes() {
+        return [
+            HTMLBnumInput.ATTRIBUTE_DATA_VALUE,
+            HTMLBnumInput.ATTRIBUTE_PLACEHOLDER,
+            HTMLBnumInput.ATTRIBUTE_TYPE,
+            HTMLBnumInput.ATTRIBUTE_DISABLED,
+            HTMLBnumInput.ATTRIBUTE_STATE,
+            HTMLBnumInput.ATTRIBUTE_BUTTON,
+            HTMLBnumInput.ATTRIBUTE_BUTTON_ICON,
+            HTMLBnumInput.ATTRIBUTE_ICON,
+            HTMLBnumInput.ATTRIBUTE_REQUIRED,
+            HTMLBnumInput.ATTRIBUTE_READONLY,
+            HTMLBnumInput.ATTRIBUTE_PATTERN,
+            HTMLBnumInput.ATTRIBUTE_MINLENGTH,
+            HTMLBnumInput.ATTRIBUTE_MAXLENGTH,
+            HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE,
+            HTMLBnumInput.ATTRIBUTE_INPUTMODE,
+            HTMLBnumInput.ATTRIBUTE_SPELLCHECK,
+            'min',
+            'max',
+            'step',
+        ];
+    }
+    /**
+     * Crée une instance du composant avec les options fournies.
+     * @param label Texte du label principal.
+     * @param options Options d'initialisation (attributs et slots).
+     * @returns {HTMLBnumInput} Instance du composant.
+     */
+    static Create(label, { 'data-value': dataValue, placeholder, name, type, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, hint, success, error, btnText, } = {}) {
+        const el = document.createElement(HTMLBnumInput.TAG);
+        // Appliquer chaque attribut si défini
+        if (dataValue !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, dataValue);
+        if (placeholder !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, placeholder);
+        if (type !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_TYPE, type);
+        if (disabled !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, disabled);
+        if (state !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+        if (button !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON, button);
+        if (buttonIcon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, buttonIcon);
+        if (icon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_ICON, icon);
+        if (required !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED, required);
+        if (readonly !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_READONLY, readonly);
+        if (pattern !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PATTERN, pattern);
+        if (minlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MINLENGTH, minlength);
+        if (maxlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MAXLENGTH, maxlength);
+        if (autocomplete !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+        if (inputmode !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_INPUTMODE, inputmode);
+        if (spellcheck !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_SPELLCHECK, spellcheck);
+        if (name !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, name);
+        // Slot par défaut (label)
+        el.textContent = label;
+        // Slots nommés
+        if (hint) {
+            const hintSlot = document.createElement('span');
+            hintSlot.slot = HTMLBnumInput.SLOT_HINT;
+            hintSlot.textContent = hint;
+            el.appendChild(hintSlot);
+        }
+        if (success) {
+            const successSlot = document.createElement('span');
+            successSlot.slot = HTMLBnumInput.SLOT_SUCCESS;
+            successSlot.textContent = success;
+            el.appendChild(successSlot);
+        }
+        if (error) {
+            const errorSlot = document.createElement('span');
+            errorSlot.slot = HTMLBnumInput.SLOT_ERROR;
+            errorSlot.textContent = error;
+            el.appendChild(errorSlot);
+        }
+        if (btnText) {
+            const buttonSlot = document.createElement('span');
+            buttonSlot.slot = HTMLBnumInput.SLOT_BUTTON;
+            buttonSlot.textContent = btnText;
+            el.appendChild(buttonSlot);
+        }
+        return el;
+    }
+    /**
+     * Tag HTML du composant.
+     */
+    static get TAG() {
+        return 'bnum-input';
+    }
+}
+// Utilisation des constantes dans le template
+const TEMPLATE$1 = BnumElementInternal.CreateTemplate(`
+  <label id="${HTMLBnumInput.ID_HINT_TEXT}" for="${HTMLBnumInput.ID_INPUT}">
+    <span id="${HTMLBnumInput.ID_HINT_TEXT_LABEL}">
+      <slot></slot>
+    </span>
+    <span id="${HTMLBnumInput.ID_HINT_TEXT_HINT}">
+      <slot name="${HTMLBnumInput.SLOT_HINT}"></slot>
+    </span>
+  </label>
+  <div class="container">
+    <div class="addons">
+      <div class="addons__inner">
+        <${HTMLBnumIcon.TAG} id="${HTMLBnumInput.ID_INPUT_ICON}"></${HTMLBnumIcon.TAG}>
+          <input id="${HTMLBnumInput.ID_INPUT}" type="${HTMLBnumInput.DEFAULT_INPUT_TYPE}" />
+        </div>
+        <${HTMLBnumButton.TAG} id="${HTMLBnumInput.ID_INPUT_BUTTON}" rounded data-variation="${HTMLBnumInput.DEFAULT_BUTTON_VARIATION}"><slot name="${HTMLBnumInput.SLOT_BUTTON}"></slot></${HTMLBnumButton.TAG}>
+    </div>
+    <span id="${HTMLBnumInput.ID_STATE}">
+        <${HTMLBnumIcon.TAG} id="${HTMLBnumInput.ID_STATE_ICON}"></${HTMLBnumIcon.TAG}>
+        <span id="${HTMLBnumInput.ID_SUCCESS_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_SUCCESS}"><slot name="${HTMLBnumInput.SLOT_SUCCESS}">Le champs est valide !</slot></span>
+        <span id="${HTMLBnumInput.ID_ERROR_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_ERROR}"><slot name="${HTMLBnumInput.SLOT_ERROR}">Le champ est invalide !</slot></span>
+    </span>
+  </div>
+    `);
+//#region TryDefine
+HTMLBnumInput.TryDefine();
+//#endregion TryDefine
+
+/**
+ * Input texte.
+ *
+ * @structure Sans rien
+ * <bnum-input-text></bnum-input-text>
+ *
+ * @structure Avec une légende
+ * <bnum-input-text>Label du champ</bnum-input-text>
+ *
+ * @structure Avec une légende et un indice
+ * <bnum-input-text>
+ * Label du champ
+ * <span slot="hint">Indice d'utilisation</span>
+ * </bnum-input-text>
+ *
+ * @structure Avec un bouton
+ * <bnum-input-text button="true" button-icon="add">Label du champ
+ *   <span slot="button">Ajouter</span>
+ * </bnum-input-text>
+ *
+ * @structure En erreur
+ * <bnum-input-text pattern="^[a-zA-Z0-9]+$" data-value="@@@@@">Label du champ
+ * </bnum-input-text>
+ *
+ * @structure Avec un état de succès
+ * <bnum-input-text state="success">Label du champ
+ *   <span slot="success">Le champ est valide !</span>
+ * </bnum-input-text>
+ *
+ * @structure Avec une icône
+ * <bnum-input-text icon="search">Label du champ</bnum-input-text>
+ *
+ * @structure Avec un bouton avec icône seulement
+ * <bnum-input-text placeholder="LA LA !" button-icon="add">Label du champ
+ * </bnum-input-text>
+ *
+ * @structure Désactivé
+ * <bnum-input-text disabled>
+ *   Label du champ
+ * </bnum-input-text>
+ *
+ * @structure Complet
+ * <bnum-input-text
+ *   data-value="Valeur initiale"
+ *   placeholder="Texte indicatif"
+ *   type="text"
+ *   state="error"
+ *   icon="search"
+ *   button="primary"
+ *   button-icon="send"
+ * >
+ *   Label du champ
+ *   <span slot="hint">Indice d'utilisation</span>
+ *   <span slot="success">Le champ est valide !</span>
+ *   <span slot="error">Le champ est invalide !</span>
+ *   <span slot="button">Envoyer</span>
+ * </bnum-input-text>
+ *
+ */
+class HTMLBnumInputText extends HTMLBnumInput {
+    /**
+     * @attr {string} (optional) (default: 'text') type - Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'text' pour ce composant.
+     */
+    static ATTRIBUTE_TYPE = 'type';
+    /**
+     * Valeur 'text' pour l'attribut type.
+     */
+    static TYPE_TEXT = 'text';
+    constructor() {
+        super();
+    }
+    _p_preload() {
+        super._p_preload();
+        this.setAttribute(HTMLBnumInputText.ATTRIBUTE_TYPE, HTMLBnumInputText.TYPE_TEXT);
+    }
+    /**
+     *@inheritdoc
+     */
+    _p_buildDOM(container) {
+        super._p_buildDOM(container);
+    }
+    /**
+     *@inheritdoc
+     */
+    static _p_observedAttributes() {
+        return super
+            ._p_observedAttributes()
+            .filter((x) => x !== HTMLBnumInputText.ATTRIBUTE_TYPE);
+    }
+    /**
+     * Crée une instance du composant avec les options fournies.
+     * @param label Texte du label principal.
+     * @param options Options d'initialisation (attributs et slots).
+     * @returns {HTMLBnumInputText} Instance du composant.
+     */
+    static Create(label, { 'data-value': dataValue, placeholder, name, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, hint, success, error, btnText, } = {}) {
+        const el = document.createElement(this.TAG);
+        // Appliquer chaque attribut si défini
+        if (dataValue !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, dataValue);
+        if (placeholder !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, placeholder);
+        if (disabled !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, disabled);
+        if (state !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+        if (button !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON, button);
+        if (buttonIcon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, buttonIcon);
+        if (icon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_ICON, icon);
+        if (required !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED, required);
+        if (readonly !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_READONLY, readonly);
+        if (pattern !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PATTERN, pattern);
+        if (minlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MINLENGTH, minlength);
+        if (maxlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MAXLENGTH, maxlength);
+        if (autocomplete !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+        if (inputmode !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_INPUTMODE, inputmode);
+        if (spellcheck !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_SPELLCHECK, spellcheck);
+        if (name !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, name);
+        // Slot par défaut (label)
+        el.textContent = label;
+        // Slots nommés
+        if (hint) {
+            const hintSlot = document.createElement('span');
+            hintSlot.slot = HTMLBnumInput.SLOT_HINT;
+            hintSlot.textContent = hint;
+            el.appendChild(hintSlot);
+        }
+        if (success) {
+            const successSlot = document.createElement('span');
+            successSlot.slot = HTMLBnumInput.SLOT_SUCCESS;
+            successSlot.textContent = success;
+            el.appendChild(successSlot);
+        }
+        if (error) {
+            const errorSlot = document.createElement('span');
+            errorSlot.slot = HTMLBnumInput.SLOT_ERROR;
+            errorSlot.textContent = error;
+            el.appendChild(errorSlot);
+        }
+        if (btnText) {
+            const buttonSlot = document.createElement('span');
+            buttonSlot.slot = HTMLBnumInput.SLOT_BUTTON;
+            buttonSlot.textContent = btnText;
+            el.appendChild(buttonSlot);
+        }
+        return el;
+    }
+    /**
+     *@inheritdoc
+     */
+    static get TAG() {
+        return 'bnum-input-text';
+    }
+}
+HTMLBnumInputText.TryDefine();
+
+var css_248z$1 = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
+
+const SHEET$1 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$1);
+/**
+ * Input nombre.
+ *
+ * @structure Sans rien
+ * <bnum-input-number></bnum-input-number>
+ *
+ * @structure Avec une légende
+ * <bnum-input-number>Label du champ</bnum-input-number>
+ *
+ * @structure Avec une légende et un indice
+ * <bnum-input-number>
+ * Label du champ
+ * <span slot="hint">Indice d'utilisation</span>
+ * </bnum-input-number>
+ *
+ * @structure Avec un bouton
+ * <bnum-input-number button="true" button-icon="add">Label du champ
+ *   <span slot="button">Ajouter</span>
+ * </bnum-input-number>
+ *
+ * @structure En erreur
+ * <bnum-input-number min="200" data-value="5">Label du champ
+ * </bnum-input-number>
+ *
+ * @structure Avec un état de succès
+ * <bnum-input-number state="success">Label du champ
+ *   <span slot="success">Le champ est valide !</span>
+ * </bnum-input-number>
+ *
+ * @structure Avec une icône
+ * <bnum-input-number icon="search">Label du champ</bnum-input-number>
+ *
+ * @structure Avec un bouton avec icône seulement
+ * <bnum-input-number placeholder="LA LA !" button-icon="add">Label du champ
+ * </bnum-input-number>
+ *
+ * @structure Désactivé
+ * <bnum-input-number disabled>
+ *   Label du champ
+ * </bnum-input-number>
+ *
+ * @structure Complet
+ * <bnum-input-number
+ *   data-value="5"
+ *   placeholder="Texte indicatif"
+ *   type="text"
+ *   state="error"
+ *   icon="search"
+ *   button="primary"
+ *   button-icon="send"
+ *   step="10"
+ * >
+ *   Label du champ
+ *   <span slot="hint">Indice d'utilisation</span>
+ *   <span slot="success">Le champ est valide !</span>
+ *   <span slot="error">Le champ est invalide !</span>
+ *   <span slot="button">Envoyer</span>
+ * </bnum-input-number>
+ *
+ */
+class HTMLBnumInputNumber extends HTMLBnumInput {
+    /**
+     * @attr {string} (optional) (default: 'number') type - Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'number' pour ce composant.
+     */
+    static ATTRIBUTE_TYPE = 'type';
+    /**
+     * Valeur pour l'attribut type.
+     */
+    static TYPE = 'number';
+    constructor() {
+        super();
+    }
+    _p_getStylesheets() {
+        return [...super._p_getStylesheets(), SHEET$1];
+    }
+    _p_preload() {
+        this.setAttribute(HTMLBnumInputNumber.ATTRIBUTE_TYPE, HTMLBnumInputNumber.TYPE);
+    }
+    /**
+     *@inheritdoc
+     */
+    _p_buildDOM(container) {
+        super._p_buildDOM(container);
+    }
+    /**
+     *@inheritdoc
+     */
+    static _p_observedAttributes() {
+        return super
+            ._p_observedAttributes()
+            .filter((x) => x !== HTMLBnumInputNumber.ATTRIBUTE_TYPE);
+    }
+    /**
+     * Crée une instance du composant avec les options fournies.
+     * @param label Texte du label principal.
+     * @param options Options d'initialisation (attributs et slots).
+     * @returns {HTMLBnumInputNumber} Instance du composant.
+     */
+    static Create(label, { 'data-value': dataValue, placeholder, name, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, min, max, hint, success, error, btnText, step, } = {}) {
+        const el = document.createElement(this.TAG);
+        // Appliquer chaque attribut si défini
+        if (dataValue !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, dataValue);
+        if (placeholder !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, placeholder);
+        if (disabled !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, disabled);
+        if (state !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+        if (button !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON, button);
+        if (buttonIcon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, buttonIcon);
+        if (icon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_ICON, icon);
+        if (required !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED, required);
+        if (readonly !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_READONLY, readonly);
+        if (pattern !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PATTERN, pattern);
+        if (minlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MINLENGTH, minlength);
+        if (maxlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MAXLENGTH, maxlength);
+        if (autocomplete !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+        if (inputmode !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_INPUTMODE, inputmode);
+        if (spellcheck !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_SPELLCHECK, spellcheck);
+        if (name !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, name);
+        if (min !== undefined)
+            el.setAttribute('min', min.toString());
+        if (max !== undefined)
+            el.setAttribute('max', max.toString());
+        if (step !== undefined)
+            el.setAttribute('step', step.toString());
+        // Slot par défaut (label)
+        el.textContent = label;
+        // Slots nommés
+        if (hint) {
+            const hintSlot = document.createElement('span');
+            hintSlot.slot = HTMLBnumInput.SLOT_HINT;
+            hintSlot.textContent = hint;
+            el.appendChild(hintSlot);
+        }
+        if (success) {
+            const successSlot = document.createElement('span');
+            successSlot.slot = HTMLBnumInput.SLOT_SUCCESS;
+            successSlot.textContent = success;
+            el.appendChild(successSlot);
+        }
+        if (error) {
+            const errorSlot = document.createElement('span');
+            errorSlot.slot = HTMLBnumInput.SLOT_ERROR;
+            errorSlot.textContent = error;
+            el.appendChild(errorSlot);
+        }
+        if (btnText) {
+            const buttonSlot = document.createElement('span');
+            buttonSlot.slot = HTMLBnumInput.SLOT_BUTTON;
+            buttonSlot.textContent = btnText;
+            el.appendChild(buttonSlot);
+        }
+        return el;
+    }
+    /**
+     *@inheritdoc
+     */
+    static get TAG() {
+        return 'bnum-input-number';
+    }
+    static get AdditionnalStylesheet() {
+        return SHEET$1;
+    }
+}
+HTMLBnumInputNumber.TryDefine();
+
+/**
+ * Input de date.
+ *
+ * @structure Sans rien
+ * <bnum-input-date></bnum-input-date>
+ *
+ * @structure Avec une légende
+ * <bnum-input-date>Label du champ</bnum-input-date>
+ *
+ * @structure Avec une légende et un indice
+ * <bnum-input-date>
+ * Label du champ
+ * <span slot="hint">Indice d'utilisation</span>
+ * </bnum-input-date>
+ *
+ * @structure Avec un bouton
+ * <bnum-input-date button="true" button-icon="add">Label du champ
+ *   <span slot="button">Ajouter</span>
+ * </bnum-input-date>
+ *
+ * @structure En erreur
+ * <bnum-input-date min="2025-01-01" data-value="2024-01-01">Label du champ
+ * </bnum-input-date>
+ *
+ * @structure Avec un état de succès
+ * <bnum-input-date state="success">Label du champ
+ *   <span slot="success">Le champ est valide !</span>
+ * </bnum-input-date>
+ *
+ * @structure Avec une icône
+ * <bnum-input-date icon="search">Label du champ</bnum-input-date>
+ *
+ * @structure Avec un bouton avec icône seulement
+ * <bnum-input-date placeholder="LA LA !" button-icon="add">Label du champ
+ * </bnum-input-date>
+ *
+ * @structure Désactivé
+ * <bnum-input-date disabled>
+ *   Label du champ
+ * </bnum-input-date>
+ *
+ * @structure Complet
+ * <bnum-input-date
+ *   data-value="5"
+ *   placeholder="Texte indicatif"
+ *   type="text"
+ *   state="error"
+ *   icon="search"
+ *   button="primary"
+ *   button-icon="send"
+ *   step="10"
+ * >
+ *   Label du champ
+ *   <span slot="hint">Indice d'utilisation</span>
+ *   <span slot="success">Le champ est valide !</span>
+ *   <span slot="error">Le champ est invalide !</span>
+ *   <span slot="button">Envoyer</span>
+ * </bnum-input-date>
+ *
+ */
+class HTMLBnumInputDate extends HTMLBnumInput {
+    /**
+     * @attr {string} (optional) (default: 'number') type - Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'number' pour ce composant.
+     */
+    static ATTRIBUTE_TYPE = 'type';
+    /**
+     * Valeur pour l'attribut type.
+     */
+    static TYPE = 'date';
+    constructor() {
+        super();
+    }
+    _p_getStylesheets() {
+        return [
+            ...super._p_getStylesheets(),
+            HTMLBnumInputNumber.AdditionnalStylesheet,
+        ];
+    }
+    _p_preload() {
+        this.setAttribute(HTMLBnumInputDate.ATTRIBUTE_TYPE, HTMLBnumInputDate.TYPE);
+    }
+    /**
+     *@inheritdoc
+     */
+    _p_buildDOM(container) {
+        super._p_buildDOM(container);
+    }
+    /**
+     *@inheritdoc
+     */
+    static _p_observedAttributes() {
+        return super
+            ._p_observedAttributes()
+            .filter((x) => x !== HTMLBnumInputDate.ATTRIBUTE_TYPE);
+    }
+    /**
+     * Crée une instance du composant avec les options fournies.
+     * @param label Texte du label principal.
+     * @param options Options d'initialisation (attributs et slots).
+     * @returns {HTMLBnumInputDate} Instance du composant.
+     */
+    static Create(label, { 'data-value': dataValue, placeholder, name, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, min, max, hint, success, error, btnText, step, } = {}) {
+        const el = document.createElement(this.TAG);
+        // Appliquer chaque attribut si défini
+        if (dataValue !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, dataValue);
+        if (placeholder !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, placeholder);
+        if (disabled !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, disabled);
+        if (state !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+        if (button !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON, button);
+        if (buttonIcon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, buttonIcon);
+        if (icon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_ICON, icon);
+        if (required !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED, required);
+        if (readonly !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_READONLY, readonly);
+        if (pattern !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PATTERN, pattern);
+        if (minlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MINLENGTH, minlength);
+        if (maxlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MAXLENGTH, maxlength);
+        if (autocomplete !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+        if (inputmode !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_INPUTMODE, inputmode);
+        if (spellcheck !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_SPELLCHECK, spellcheck);
+        if (name !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, name);
+        if (min !== undefined)
+            el.setAttribute('min', min.toString());
+        if (max !== undefined)
+            el.setAttribute('max', max.toString());
+        if (step !== undefined)
+            el.setAttribute('step', step.toString());
+        // Slot par défaut (label)
+        el.textContent = label;
+        // Slots nommés
+        if (hint) {
+            const hintSlot = document.createElement('span');
+            hintSlot.slot = HTMLBnumInput.SLOT_HINT;
+            hintSlot.textContent = hint;
+            el.appendChild(hintSlot);
+        }
+        if (success) {
+            const successSlot = document.createElement('span');
+            successSlot.slot = HTMLBnumInput.SLOT_SUCCESS;
+            successSlot.textContent = success;
+            el.appendChild(successSlot);
+        }
+        if (error) {
+            const errorSlot = document.createElement('span');
+            errorSlot.slot = HTMLBnumInput.SLOT_ERROR;
+            errorSlot.textContent = error;
+            el.appendChild(errorSlot);
+        }
+        if (btnText) {
+            const buttonSlot = document.createElement('span');
+            buttonSlot.slot = HTMLBnumInput.SLOT_BUTTON;
+            buttonSlot.textContent = btnText;
+            el.appendChild(buttonSlot);
+        }
+        return el;
+    }
+    /**
+     *@inheritdoc
+     */
+    static get TAG() {
+        return 'bnum-input-date';
+    }
+}
+HTMLBnumInputDate.TryDefine();
+
+/**
+ * Input de temps.
+ *
+ * @structure Sans rien
+ * <bnum-input-time></bnum-input-time>
+ *
+ * @structure Avec une légende
+ * <bnum-input-time>Label du champ</bnum-input-time>
+ *
+ * @structure Avec une légende et un indice
+ * <bnum-input-time>
+ * Label du champ
+ * <span slot="hint">Indice d'utilisation</span>
+ * </bnum-input-time>
+ *
+ * @structure Avec un bouton
+ * <bnum-input-time button="true" button-icon="add">Label du champ
+ *   <span slot="button">Ajouter</span>
+ * </bnum-input-time>
+ *
+ * @structure En erreur
+ * <bnum-input-time min="05:00" data-value="04:00">Label du champ
+ * </bnum-input-time>
+ *
+ * @structure Avec un état de succès
+ * <bnum-input-time state="success">Label du champ
+ *   <span slot="success">Le champ est valide !</span>
+ * </bnum-input-time>
+ *
+ * @structure Avec une icône
+ * <bnum-input-time icon="search">Label du champ</bnum-input-time>
+ *
+ * @structure Avec un bouton avec icône seulement
+ * <bnum-input-time placeholder="LA LA !" button-icon="add">Label du champ
+ * </bnum-input-time>
+ *
+ * @structure Désactivé
+ * <bnum-input-time disabled>
+ *   Label du champ
+ * </bnum-input-time>
+ *
+ * @structure Complet
+ * <bnum-input-time
+ *   data-value="5"
+ *   placeholder="Texte indicatif"
+ *   type="text"
+ *   state="error"
+ *   icon="search"
+ *   button="primary"
+ *   button-icon="send"
+ *   step="10"
+ * >
+ *   Label du champ
+ *   <span slot="hint">Indice d'utilisation</span>
+ *   <span slot="success">Le champ est valide !</span>
+ *   <span slot="error">Le champ est invalide !</span>
+ *   <span slot="button">Envoyer</span>
+ * </bnum-input-time>
+ *
+ */
+class HTMLBnumInputTime extends HTMLBnumInput {
+    /**
+     * @attr {string} (optional) (default: 'number') type - Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'number' pour ce composant.
+     */
+    static ATTRIBUTE_TYPE = 'type';
+    /**
+     * Valeur pour l'attribut type.
+     */
+    static TYPE = 'time';
+    constructor() {
+        super();
+    }
+    _p_getStylesheets() {
+        return [
+            ...super._p_getStylesheets(),
+            HTMLBnumInputNumber.AdditionnalStylesheet,
+        ];
+    }
+    _p_preload() {
+        this.setAttribute(HTMLBnumInputTime.ATTRIBUTE_TYPE, HTMLBnumInputTime.TYPE);
+    }
+    /**
+     *@inheritdoc
+     */
+    _p_buildDOM(container) {
+        super._p_buildDOM(container);
+    }
+    /**
+     *@inheritdoc
+     */
+    static _p_observedAttributes() {
+        return super
+            ._p_observedAttributes()
+            .filter((x) => x !== HTMLBnumInputTime.ATTRIBUTE_TYPE);
+    }
+    /**
+     * Crée une instance du composant avec les options fournies.
+     * @param label Texte du label principal.
+     * @param options Options d'initialisation (attributs et slots).
+     * @returns {HTMLBnumInputTime} Instance du composant.
+     */
+    static Create(label, { 'data-value': dataValue, placeholder, name, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, min, max, hint, success, error, btnText, step, } = {}) {
+        const el = document.createElement(this.TAG);
+        // Appliquer chaque attribut si défini
+        if (dataValue !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, dataValue);
+        if (placeholder !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, placeholder);
+        if (disabled !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, disabled);
+        if (state !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+        if (button !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON, button);
+        if (buttonIcon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, buttonIcon);
+        if (icon !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_ICON, icon);
+        if (required !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED, required);
+        if (readonly !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_READONLY, readonly);
+        if (pattern !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_PATTERN, pattern);
+        if (minlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MINLENGTH, minlength);
+        if (maxlength !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_MAXLENGTH, maxlength);
+        if (autocomplete !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+        if (inputmode !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_INPUTMODE, inputmode);
+        if (spellcheck !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_SPELLCHECK, spellcheck);
+        if (name !== undefined)
+            el.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, name);
+        if (min !== undefined)
+            el.setAttribute('min', min.toString());
+        if (max !== undefined)
+            el.setAttribute('max', max.toString());
+        if (step !== undefined)
+            el.setAttribute('step', step.toString());
+        // Slot par défaut (label)
+        el.textContent = label;
+        // Slots nommés
+        if (hint) {
+            const hintSlot = document.createElement('span');
+            hintSlot.slot = HTMLBnumInput.SLOT_HINT;
+            hintSlot.textContent = hint;
+            el.appendChild(hintSlot);
+        }
+        if (success) {
+            const successSlot = document.createElement('span');
+            successSlot.slot = HTMLBnumInput.SLOT_SUCCESS;
+            successSlot.textContent = success;
+            el.appendChild(successSlot);
+        }
+        if (error) {
+            const errorSlot = document.createElement('span');
+            errorSlot.slot = HTMLBnumInput.SLOT_ERROR;
+            errorSlot.textContent = error;
+            el.appendChild(errorSlot);
+        }
+        if (btnText) {
+            const buttonSlot = document.createElement('span');
+            buttonSlot.slot = HTMLBnumInput.SLOT_BUTTON;
+            buttonSlot.textContent = btnText;
+            el.appendChild(buttonSlot);
+        }
+        return el;
+    }
+    /**
+     *@inheritdoc
+     */
+    static get TAG() {
+        return 'bnum-input-time';
+    }
+}
+HTMLBnumInputTime.TryDefine();
 
 var css_248z = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{align-items:center;display:flex;line-height:1.2;margin:0 0 -10px}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}::slotted(bnum-secondary-button){--bnum-button-padding:var(--bnum-header-background-button-padding,5px 3px)}::slotted(.main-action-button){-padding:var(--bnum-header-background-button-padding,5px 3px)}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:var(--bnum-header-main-action-border-color,#fff);color:var(--bnum-header-main-action-color,#fff)}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
 
@@ -14440,5 +16096,5 @@ if (typeof window !== 'undefined' && window.DsBnumConfig) {
     BnumConfig.Initialize(window.DsBnumConfig);
 }
 
-export { BnumElement, BnumConfig as Config, EButtonType, EHideOn, EIconPosition, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumHeader, HTMLBnumHelper, HTMLBnumIcon, HTMLBnumPicture, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton };
+export { BnumElement, BnumConfig as Config, EButtonType, EHideOn, EIconPosition, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumHeader, HTMLBnumHelper, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPicture, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton };
 //# sourceMappingURL=ds-module-bnum.js.map
