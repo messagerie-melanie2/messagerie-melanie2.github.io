@@ -32,6 +32,10 @@ var Bnum = (function (exports) {
           no_mails: 'Aucun courrier...',
           last_events: 'Prochains évènements',
           no_events: 'Aucun événement...',
+          valid_input: 'Le champs est valide !',
+          invalid_input: 'Le champs est invalide !',
+          error_field: 'Ce champ contient une erreur.',
+          search_field: 'Rechercher',
       },
       console_logging: true,
       console_logging_level: LogEnum.TRACE,
@@ -14104,7 +14108,7 @@ var Bnum = (function (exports) {
   HTMLBnumButtonIcon.TryDefine();
   //#endregion TryDefine
 
-  var css_248z$2 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host #hint-text{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}:host #hint-text__label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}:host #hint-text__hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}:host .addons__inner{position:relative;width:100%}:host input{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled) input,:host(:state(disabled)) input{cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{--bnum-input-line-color:#000091;border-top-right-radius:0}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) .error{display:block}";
+  var css_248z$2 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host #hint-text{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}:host #hint-text__label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}:host #hint-text__hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}:host .addons__inner{position:relative;width:100%}:host input{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091;border-top-right-radius:0}:host(:state(button)) #input__button{border-bottom:var(--bnum-input-button-border-bottom,solid 2px var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;padding-bottom:7px}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-semantic-success,#36b37e)}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-semantic-danger,#de350b)}:host(:state(state):state(error)) .error{display:block}";
 
   const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$2);
   /**
@@ -14194,6 +14198,8 @@ var Bnum = (function (exports) {
       //#region Constants
       /**
        * Événement déclenché au clic sur le bouton interne.
+       *
+       * Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.
        * @event bnum-input:button.click
        * @detail MouseEvent
        */
@@ -14369,6 +14375,19 @@ var Bnum = (function (exports) {
        * Variation du bouton par défaut.
        */
       static DEFAULT_BUTTON_VARIATION = exports.EButtonType.PRIMARY;
+      /**
+       * Texte affiché en cas de succès de validation.
+       */
+      static TEXT_VALID_INPUT = BnumConfig.Get('local_keys')?.valid_input || 'Le champs est valide !';
+      /**
+       * Texte affiché en cas d'erreur de validation.
+       */
+      static TEXT_INVALID_INPUT = BnumConfig.Get('local_keys')?.invalid_input || 'Le champs est invalide !';
+      /**
+       * Texte affiché en cas d'erreur de champ.
+       */
+      static TEXT_ERROR_FIELD = BnumConfig.Get('local_keys')?.error_field ||
+          'Ce champ contient une erreur.';
       //#endregion Constants
       //#region Private fields
       /**
@@ -14798,7 +14817,7 @@ var Bnum = (function (exports) {
           }
           if (isError) {
               try {
-                  this._p_internal.setValidity({ customError: true }, 'Ce champ contient une erreur.', this.#_input);
+                  this._p_internal.setValidity({ customError: true }, HTMLBnumInput.TEXT_ERROR_FIELD, this.#_input);
               }
               catch (error) { }
           }
@@ -14867,11 +14886,25 @@ var Bnum = (function (exports) {
        * @param e Evénement de changement de valeur.
        */
       #_inputValueChangedCallback(e) {
+          this._p_inputValueChangedCallback(e);
+      }
+      _p_inputValueChangedCallback(e) {
           try {
               this._p_internal.setFormValue(this.#_input.value);
           }
           catch (error) { }
-          this.#_update().dispatchEvent(e);
+          this.#_update();
+          try {
+              this.dispatchEvent(e);
+          }
+          catch (error) {
+              this.dispatchEvent(e.type === 'input'
+                  ? new InputEvent('input', {
+                      data: this.value,
+                      inputType: this.attr('type') || 'text',
+                  })
+                  : new Event('change'));
+          }
       }
       /**
        * Transfère un attribut du composant vers l'input interne si présent.
@@ -15014,8 +15047,8 @@ var Bnum = (function (exports) {
     </div>
     <span id="${HTMLBnumInput.ID_STATE}">
         <${HTMLBnumIcon.TAG} id="${HTMLBnumInput.ID_STATE_ICON}"></${HTMLBnumIcon.TAG}>
-        <span id="${HTMLBnumInput.ID_SUCCESS_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_SUCCESS}"><slot name="${HTMLBnumInput.SLOT_SUCCESS}">Le champs est valide !</slot></span>
-        <span id="${HTMLBnumInput.ID_ERROR_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_ERROR}"><slot name="${HTMLBnumInput.SLOT_ERROR}">Le champ est invalide !</slot></span>
+        <span id="${HTMLBnumInput.ID_SUCCESS_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_SUCCESS}"><slot name="${HTMLBnumInput.SLOT_SUCCESS}">${HTMLBnumInput.TEXT_VALID_INPUT}</slot></span>
+        <span id="${HTMLBnumInput.ID_ERROR_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_ERROR}"><slot name="${HTMLBnumInput.SLOT_ERROR}">${HTMLBnumInput.TEXT_INVALID_INPUT}</slot></span>
     </span>
   </div>
     `);
@@ -16094,6 +16127,279 @@ var Bnum = (function (exports) {
   HTMLBnumHeader.TryDefine();
   //#endregion TryDefine
 
+  /**
+   * Composant d'input de recherche.
+   *
+   * Utilise le composant de base `bnum-input` avec des configurations spécifiques pour la recherche.
+   *
+   * @structure Basique
+   * <bnum-input-search>Label de recherche</bnum-input-search>
+   *
+   * @structure Avec une légende et un indice
+   * <bnum-input-search>
+   * Label du champ
+   * <span slot="hint">Indice d'utilisation</span>
+   * </bnum-input-search>
+   *
+   * @structure Désactivé
+   * <bnum-input-search disabled placeholder="Recherche désactivée">
+   *   Label du champ
+   * </bnum-input-search>
+   *
+   * @slot button - Contenu du bouton de recherche (texte ou icône). (Inutilisé)
+   *
+   */
+  class HTMLBnumInputSearch extends HTMLBnumInput {
+      //#region Constants
+      /**
+       * @attr {string} (default: 'text') type - Type de l'input (text, password, email, etc.) Ne pas modifier, toujours 'text' pour ce composant.
+       */
+      static ATTRIBUTE_TYPE = 'type';
+      /**
+       * @attr {undefined} (default: undefined) button - Attribut pour afficher le bouton interne. Ne pas modifier, toujours présent pour ce composant.
+       */
+      static ATTRIBUTE_BUTTON = 'button';
+      /**
+       * @attr {string} (default: 'search') button-icon - Icône du bouton interne. Ne pas modifier, toujours 'search' pour ce composant.
+       */
+      static ATTRIBUTE_BUTTON_ICON = 'button-icon';
+      /**
+       * Texte affiché dans le champ de recherche.
+       */
+      static TEXT_SEARCH_FIELD = BnumConfig.Get('local_keys')?.search_field || 'Rechercher';
+      /**
+       * Événement déclenché au clic sur le bouton interne.
+       * @event bnum-input:button.click
+       * @detail MouseEvent
+       */
+      static EVENT_BUTTON_CLICK = 'bnum-input:button.click';
+      /**
+       * Événement déclenché au clic par le bouton interne ou à la validation par la touche "Entrée".
+       * Envoie la valeur actuelle de l'input de recherche.
+       * @event bnum-input-search:search
+       * @detail { value: string; name: string; caller: HTMLBnumInputSearch }
+       */
+      static EVENT_SEARCH = 'bnum-input-search:search';
+      /**
+       * Icône du bouton de recherche.
+       */
+      static BUTTON_ICON = 'search';
+      //#endregion Constants
+      //#region Lifecycle
+      /**
+       * Constructeur du composant de recherche.
+       */
+      constructor() {
+          super();
+      }
+      /**
+       * Précharge les attributs spécifiques à l'input de recherche.
+       * Définit le placeholder et l'icône du bouton si non présents.
+       */
+      _p_preload() {
+          if (this.attr(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER) === null) {
+              this.attr(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, HTMLBnumInputSearch.TEXT_SEARCH_FIELD);
+          }
+          this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, HTMLBnumInputSearch.BUTTON_ICON);
+      }
+      /**
+       * Attache les événements nécessaires au composant.
+       * Supprime les attributs inutiles et gère les événements de recherche.
+       */
+      _p_attach() {
+          super._p_attach();
+          this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+          this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON);
+          this.onButtonClicked.add(EVENT_DEFAULT, this.#_triggerEventSearch.bind(this));
+          this.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') {
+                  this.#_triggerEventSearch();
+              }
+          });
+      }
+      _p_inputValueChangedCallback(e) {
+          this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+          this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, HTMLBnumInputSearch.BUTTON_ICON);
+          super._p_inputValueChangedCallback?.(e);
+          this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+      }
+      /**
+       * Nettoie les attributs après le rendu du composant.
+       */
+      _p_postFlush() {
+          this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+          this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, HTMLBnumInputSearch.BUTTON_ICON);
+          super._p_postFlush();
+          this.removeAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON);
+      }
+      //#endregion Lifecycle
+      //#region Public Methods
+      /**
+       * Désactive le bouton de recherche.
+       */
+      disableSearchButton() {
+          (this._p_isShadowElement() === false ? this : this.shadowRoot)
+              .querySelector(`#${HTMLBnumInput.ID_INPUT_BUTTON}`)
+              ?.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, HTMLBnumInput.ATTRIBUTE_DISABLED);
+          return this;
+      }
+      /**
+       * Active le bouton de recherche.
+       */
+      enableSearchButton() {
+          (this._p_isShadowElement() === false ? this : this.shadowRoot)
+              .querySelector(`#${HTMLBnumInput.ID_INPUT_BUTTON}`)
+              ?.removeAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED);
+          return this;
+      }
+      //#endregion Public Methods
+      //#region Private Methods
+      /**
+       * Déclenche l'événement de recherche avec la valeur actuelle de l'input.
+       * @private
+       */
+      #_triggerEventSearch() {
+          this.trigger(HTMLBnumInputSearch.EVENT_SEARCH, {
+              value: this.value,
+              name: this.name,
+              caller: this,
+          });
+      }
+      //#endregion Private Methods
+      //#region Static Methods
+      /**
+       * Retourne la liste des attributs observés, en excluant ceux spécifiques à la recherche.
+       * @inheritdoc
+       */
+      static _p_observedAttributes() {
+          return super._p_observedAttributes().filter((x) => {
+              switch (x) {
+                  case HTMLBnumInputSearch.ATTRIBUTE_TYPE:
+                  case HTMLBnumInput.ATTRIBUTE_BUTTON:
+                  case HTMLBnumInput.ATTRIBUTE_BUTTON_ICON:
+                      return false;
+                  default:
+                      return true;
+              }
+          });
+      }
+      /**
+       * Crée une instance du composant avec les options fournies.
+       * @param label Texte du label principal.
+       * @param options Options d'initialisation (attributs et slots).
+       * @returns {HTMLBnumInput} Instance du composant.
+       */
+      static Create(label, { 'data-value': dataValue, placeholder, name, disabled, state, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, hint, success, error, btnText, } = {}) {
+          const el = document.createElement(HTMLBnumInputSearch.TAG);
+          // Appliquer chaque attribut si défini
+          if (dataValue !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, dataValue);
+          if (placeholder !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, placeholder);
+          if (disabled !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_DISABLED, disabled);
+          if (state !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_STATE, state);
+          if (required !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_REQUIRED, required);
+          if (readonly !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_READONLY, readonly);
+          if (pattern !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_PATTERN, pattern);
+          if (minlength !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_MINLENGTH, minlength);
+          if (maxlength !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_MAXLENGTH, maxlength);
+          if (autocomplete !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+          if (inputmode !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_INPUTMODE, inputmode);
+          if (spellcheck !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_SPELLCHECK, spellcheck);
+          if (name !== undefined)
+              el.setAttribute(HTMLBnumInput.ATTRIBUTE_NAME, name);
+          // Slot par défaut (label)
+          el.textContent = label;
+          // Slots nommés
+          if (hint) {
+              const hintSlot = document.createElement('span');
+              hintSlot.slot = HTMLBnumInput.SLOT_HINT;
+              hintSlot.textContent = hint;
+              el.appendChild(hintSlot);
+          }
+          if (success) {
+              const successSlot = document.createElement('span');
+              successSlot.slot = HTMLBnumInput.SLOT_SUCCESS;
+              successSlot.textContent = success;
+              el.appendChild(successSlot);
+          }
+          if (error) {
+              const errorSlot = document.createElement('span');
+              errorSlot.slot = HTMLBnumInput.SLOT_ERROR;
+              errorSlot.textContent = error;
+              el.appendChild(errorSlot);
+          }
+          if (btnText) {
+              const buttonSlot = document.createElement('span');
+              buttonSlot.slot = HTMLBnumInput.SLOT_BUTTON;
+              buttonSlot.textContent = btnText;
+              el.appendChild(buttonSlot);
+          }
+          return el;
+      }
+      /**
+       * Crée un composant de recherche à partir d'un input existant.
+       * @param input Instance de HTMLBnumInput à convertir.
+       * @returns {HTMLBnumInputSearch} Nouvelle instance de recherche.
+       */
+      static FromInput(input) {
+          let init = {};
+          // Copier les attributs pertinents de l'input d'origine dans l'objet init
+          for (const attr of input.attributes) {
+              switch (attr.name) {
+                  case HTMLBnumInput.ATTRIBUTE_PLACEHOLDER:
+                  case HTMLBnumInput.ATTRIBUTE_NAME:
+                  case HTMLBnumInput.ATTRIBUTE_DISABLED:
+                  case HTMLBnumInput.ATTRIBUTE_REQUIRED:
+                  case HTMLBnumInput.ATTRIBUTE_READONLY:
+                  case HTMLBnumInput.ATTRIBUTE_PATTERN:
+                  case HTMLBnumInput.ATTRIBUTE_MINLENGTH:
+                  case HTMLBnumInput.ATTRIBUTE_MAXLENGTH:
+                  case HTMLBnumInput.ATTRIBUTE_AUTOCOMPLETE:
+                  case HTMLBnumInput.ATTRIBUTE_INPUTMODE:
+                  case HTMLBnumInput.ATTRIBUTE_SPELLCHECK:
+                  case HTMLBnumInput.ATTRIBUTE_DATA_VALUE:
+                      init = { ...init, [attr.name]: attr.value };
+                      break;
+              }
+          }
+          // On recherche les slots dans l'input d'origine et on l'ajoute dans l'init.
+          const label = input.querySelector(':not([slot])')?.textContent || EMPTY_STRING;
+          const hint = input.querySelector(`[slot="${HTMLBnumInput.SLOT_HINT}"]`)?.textContent;
+          const success = input.querySelector(`[slot="${HTMLBnumInput.SLOT_SUCCESS}"]`)?.textContent;
+          const error = input.querySelector(`[slot="${HTMLBnumInput.SLOT_ERROR}"]`)?.textContent;
+          const btnText = input.querySelector(`[slot="${HTMLBnumInput.SLOT_BUTTON}"]`)?.textContent;
+          if (hint)
+              init = { ...init, hint };
+          if (success)
+              init = { ...init, success };
+          if (error)
+              init = { ...init, error };
+          if (btnText)
+              init = { ...init, btnText };
+          return HTMLBnumInputSearch.Create(label, init);
+      }
+      /**
+       * Retourne le tag HTML du composant.
+       */
+      static get TAG() {
+          return 'bnum-input-search';
+      }
+  }
+  //#region TryDefine
+  HTMLBnumInputSearch.TryDefine();
+  //#endregion TryDefine
+
   // Auto-init au chargement
   if (typeof window !== 'undefined' && window.DsBnumConfig) {
       BnumConfig.Initialize(window.DsBnumConfig);
@@ -16119,6 +16425,7 @@ var Bnum = (function (exports) {
   exports.HTMLBnumInput = HTMLBnumInput;
   exports.HTMLBnumInputDate = HTMLBnumInputDate;
   exports.HTMLBnumInputNumber = HTMLBnumInputNumber;
+  exports.HTMLBnumInputSearch = HTMLBnumInputSearch;
   exports.HTMLBnumInputText = HTMLBnumInputText;
   exports.HTMLBnumInputTime = HTMLBnumInputTime;
   exports.HTMLBnumPicture = HTMLBnumPicture;
