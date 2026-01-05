@@ -1409,9 +1409,9 @@ class SchedulerArray {
     }
 }
 
-var css_248z$g = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+var css_248z$h = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
 
-var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+var css_248z$g = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
 
 /**
  * Classe interne étendant BnumElement pour gérer les états personnalisés via ElementInternals.
@@ -1510,8 +1510,8 @@ const ICON_CLASS = 'material-symbols-outlined';
 /**
  * Feuille de style CSS pour les icônes Material Symbols.
  */
-const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$g.replaceAll(`.${ICON_CLASS}`, ':host'));
-const STYLE$1 = BnumElement.ConstructCSSStyleSheet(css_248z$f);
+const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$h.replaceAll(`.${ICON_CLASS}`, ':host'));
+const STYLE$1 = BnumElement.ConstructCSSStyleSheet(css_248z$g);
 /**
  * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
  *
@@ -1788,13 +1788,13 @@ HTMLBnumIcon.TryDefine();
 const REG_LIGHT_PICTURE_NAME = /(-light)\.(([\w\d]+)|\1?.+)$/;
 const REG_XSS_SAFE = /^[-.\w\s%()]+$/;
 
-var css_248z$e = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+var css_248z$f = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
 //#region External Constants
 /**
  * Style CSS du composant bouton.
  */
-const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$e);
+const SHEET$e = BnumElement.ConstructCSSStyleSheet(css_248z$f);
 // Constantes pour les tags des différents types de boutons
 /**
  * Tag du bouton Bnum.
@@ -2185,7 +2185,7 @@ class HTMLBnumButton extends BnumElement {
      * @returns Template utiliser pour le composant
      */
     _p_fromTemplate() {
-        return TEMPLATE$9;
+        return TEMPLATE$a;
     }
     /**
      * Construit le DOM du composant bouton.
@@ -2208,7 +2208,7 @@ class HTMLBnumButton extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$d];
+        return [SHEET$e];
     }
     //#endregion Lifecycle
     //#region Private methods
@@ -2422,7 +2422,7 @@ class HTMLBnumButton extends BnumElement {
 /**
  * Template HTML du composant bouton.
  */
-const TEMPLATE$9 = BnumElement.CreateTemplate(`
+const TEMPLATE$a = BnumElement.CreateTemplate(`
   <div class="${HTMLBnumButton.CLASS_WRAPPER}">
     <span class="${HTMLBnumButton.CLASS_SLOT}">
       <slot></slot>
@@ -2534,10 +2534,10 @@ class HTMLBnumDangerButton extends HTMLBnumButton {
 }
 HTMLBnumDangerButton.TryDefine();
 
-var css_248z$d = ":host{border-bottom:thin dotted;cursor:help}";
+var css_248z$e = ":host{border-bottom:thin dotted;cursor:help}";
 
 // bnum-helper.ts
-const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$d);
+const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$e);
 /**
  * Constante représentant l'icône utilisée par défaut.
  */
@@ -2582,7 +2582,7 @@ class HTMLBnumHelper extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$c];
+        return [SHEET$d];
     }
     /**
      * Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.
@@ -2605,12 +2605,12 @@ class HTMLBnumHelper extends BnumElement {
 }
 HTMLBnumHelper.TryDefine();
 
-var css_248z$c = ":host{--_image-url:var(--_image-light);display:inline-block}img{content:var(--_image-url);height:100%;width:100%}";
+var css_248z$d = ":host{--_image-url:var(--_image-light);display:inline-block}img{content:var(--_image-url);height:100%;width:100%}";
 
 /**
  * Feuille de style CSS pour le composant BnumHTMLPicture.
  */
-const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$c);
+const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$d);
 /**
  * Élément web personnalisé permettant d'afficher une image qui s'adapte automatiquement au mode sombre ou clair de l'interface.
  *
@@ -2738,7 +2738,7 @@ class HTMLBnumPicture extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$b];
+        return [SHEET$c];
     }
     /**
      * Construit le DOM du composant.
@@ -2845,9 +2845,9 @@ class HTMLBnumPicture extends BnumElement {
 HTMLBnumPicture.TryDefine();
 //#endregion
 
-var css_248z$b = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
+var css_248z$c = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
 
-const SHEET$a = BnumElement.ConstructCSSStyleSheet(css_248z$b);
+const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$c);
 /**
  * Composant représentant le titre d'une carte, pouvant inclure une icône et un lien.
  * Permet d'afficher un titre enrichi avec une icône et éventuellement un lien cliquable.
@@ -3000,10 +3000,10 @@ class HTMLBnumCardTitle extends BnumElement {
         super();
     }
     _p_getStylesheets() {
-        return [SHEET$a];
+        return [SHEET$b];
     }
     _p_fromTemplate() {
-        return TEMPLATE$8;
+        return TEMPLATE$9;
     }
     /**
      * Construit le DOM du composant dans le conteneur donné.
@@ -3160,7 +3160,7 @@ class HTMLBnumCardTitle extends BnumElement {
         return TAG_CARD_TITLE;
     }
 }
-const TEMPLATE$8 = BnumElement.CreateTemplate(`
+const TEMPLATE$9 = BnumElement.CreateTemplate(`
       <h2><a class="${HTMLBnumCardTitle.CLASS_LINK}">
         <span class="container">
           <slot id="${HTMLBnumCardTitle.ID_SLOT_ICON}" name="${HTMLBnumCardTitle.SLOT_NAME_ICON}"></slot>
@@ -3199,9 +3199,9 @@ function removeButtonRole(element) {
     return element;
 }
 
-var css_248z$a = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-border-on-surface-bottom,solid 4px #000091);border-left:var(--bnum-border-on-surface-left,none);border-right:var(--bnum-border-on-surface-right,none);border-top:var(--bnum-border-on-surface-top,none);display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
+var css_248z$b = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-border-on-surface-bottom,solid 4px #000091);border-left:var(--bnum-border-on-surface-left,none);border-right:var(--bnum-border-on-surface-right,none);border-top:var(--bnum-border-on-surface-top,none);display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
 
-const SHEET$9 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$a);
+const SHEET$a = BnumElementInternal.ConstructCSSStyleSheet(css_248z$b);
 /**
  * Élément à ajouter dans un slot avec un nom de slot optionnel.
  */
@@ -3489,7 +3489,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         this.addEventListener('click', this.#_handleClick.bind(this));
     }
     _p_fromTemplate() {
-        return TEMPLATE$7;
+        return TEMPLATE$8;
     }
     /**
      * Construit le DOM interne du composant.
@@ -3525,7 +3525,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         this.#_updateDOM();
     }
     _p_getStylesheets() {
-        return [SHEET$9];
+        return [SHEET$a];
     }
     //#endregion Lifecycle
     //#region Private methods
@@ -3718,7 +3718,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         return TAG_CARD;
     }
 }
-const TEMPLATE$7 = BnumElementInternal.CreateTemplate(`
+const TEMPLATE$8 = BnumElementInternal.CreateTemplate(`
       <div class="${HTMLBnumCardElement.CSS_CLASS_TITLE}">
         <slot name="${HTMLBnumCardElement.SLOT_TITLE}"></slot>
       </div>
@@ -3728,9 +3728,9 @@ const TEMPLATE$7 = BnumElementInternal.CreateTemplate(`
     `);
 HTMLBnumCardElement.TryDefine();
 
-var css_248z$9 = ":host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
+var css_248z$a = ":host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
 
-const SHEET$8 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$9);
+const SHEET$9 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$a);
 /**
  * Représente un item d'une carte `<bnum-card>` qui peut être mis dans un `bnum-card-list`.
  *
@@ -3809,7 +3809,7 @@ class HTMLBnumCardItem extends BnumElementInternal {
         });
     }
     _p_fromTemplate() {
-        return BASE_TEMPLATE;
+        return BASE_TEMPLATE$1;
     }
     /**
      * Construit le DOM interne du composant.
@@ -3851,7 +3851,7 @@ class HTMLBnumCardItem extends BnumElementInternal {
         return true;
     }
     _p_getStylesheets() {
-        return [SHEET$8];
+        return [SHEET$9];
     }
     static CreateChildTemplate(childTemplate, { defaultSlot = true, slotName = EMPTY_STRING, } = {}) {
         const template = document.createElement('template');
@@ -3866,7 +3866,7 @@ class HTMLBnumCardItem extends BnumElementInternal {
         return TAG_CARD_ITEM;
     }
 }
-const BASE_TEMPLATE = HTMLBnumCardItem.CreateChildTemplate(EMPTY_STRING);
+const BASE_TEMPLATE$1 = HTMLBnumCardItem.CreateChildTemplate(EMPTY_STRING);
 HTMLBnumCardItem.TryDefine();
 
 /**
@@ -10477,12 +10477,12 @@ class HTMLBnumDate extends BnumElementInternal {
 // Auto-définition du composant
 HTMLBnumDate.TryDefine();
 
-var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
+var css_248z$9 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
 
 const EVENT_DEFAULT = 'default';
 
 // --- Importe tes dépendances (date-fns, BnumCardItem, etc.) ---
-const SHEET$7 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$8);
+const SHEET$8 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$9);
 /**
  * Composant HTML personnalisé représentant un élément de carte mail.
  *
@@ -10779,7 +10779,7 @@ class HTMLBnumCardItemMail extends HTMLBnumCardItem {
      * @returns Liste des CSSStyleSheet à appliquer.
      */
     _p_getStylesheets() {
-        return [...super._p_getStylesheets(), SHEET$7];
+        return [...super._p_getStylesheets(), SHEET$8];
     }
     /**
      * Méthode appelée lors de la mise à jour d'un attribut observé.
@@ -10797,7 +10797,7 @@ class HTMLBnumCardItemMail extends HTMLBnumCardItem {
      * @returns Le template HTML.
      */
     _p_fromTemplate() {
-        return TEMPLATE$6;
+        return TEMPLATE$7;
     }
     //#endregion Lifecycle
     //#region Public methods
@@ -11036,7 +11036,7 @@ class HTMLBnumCardItemMail extends HTMLBnumCardItem {
         return TAG_CARD_ITEM_MAIL;
     }
 }
-const TEMPLATE$6 = HTMLBnumCardItem.CreateChildTemplate(`
+const TEMPLATE$7 = HTMLBnumCardItem.CreateChildTemplate(`
   <div class="${HTMLBnumCardItemMail.CLASS_MAIN_CONTENT}">
     <div class="${HTMLBnumCardItemMail.CLASS_SENDER}">
       <slot id="${HTMLBnumCardItemMail.ID_SENDER_SLOT}" name="${HTMLBnumCardItemMail.SLOT_SENDER_NAME}"></slot>
@@ -11058,9 +11058,9 @@ const TEMPLATE$6 = HTMLBnumCardItem.CreateChildTemplate(`
 HTMLBnumCardItemMail.TryDefine();
 //#endregion
 
-var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,.75rem))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
+var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,.75rem))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
 
-const SHEET$6 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$7);
+const SHEET$7 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$8);
 /**
  * Item de carte agenda
  *
@@ -11397,7 +11397,7 @@ class HTMLBnumCardItemAgenda extends HTMLBnumCardItem {
      * @returns Chaîne de style CSS à appliquer au composant.
      */
     _p_getStylesheets() {
-        return [...super._p_getStylesheets(), SHEET$6];
+        return [...super._p_getStylesheets(), SHEET$7];
     }
     /**
      * Précharge les données nécessaires à l'initialisation du composant.
@@ -11559,7 +11559,7 @@ class HTMLBnumCardItemAgenda extends HTMLBnumCardItem {
             this.#_privateIcon.hidden = true;
     }
     _p_fromTemplate() {
-        return TEMPLATE$5;
+        return TEMPLATE$6;
     }
     //#endregion
     //#region Public Methods
@@ -11843,17 +11843,17 @@ const AGENDA = `
   <${HTMLBnumIcon.TAG} class="${HTMLBnumCardItemAgenda.CLASS_BNUM_CARD_ITEM_AGENDA_PRIVATE_ICON}" hidden>${HTMLBnumCardItemAgenda.ICON_PRIVATE}</${HTMLBnumIcon.TAG}>
 `;
 // Optimisation : Le HTML est parsé une seule fois ici.
-const TEMPLATE$5 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
+const TEMPLATE$6 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
     defaultSlot: false,
 });
 HTMLBnumCardItemAgenda.TryDefine();
 
-var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
+var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
 
 /**
  * Feuille de style CSS pour le composant liste de cartes.
  */
-const SHEET$5 = BnumElement.ConstructCSSStyleSheet(css_248z$6);
+const SHEET$6 = BnumElement.ConstructCSSStyleSheet(css_248z$7);
 /**
  * Composant liste de cartes Bnum.
  * Permet d'afficher une liste d'éléments de type carte.
@@ -11927,7 +11927,7 @@ class HTMLBnumCardList extends BnumElement {
      * @returns {CSSStyleSheet[]} Feuilles de style CSS
      */
     _p_getStylesheets() {
-        return [SHEET$5];
+        return [SHEET$6];
     }
     /**
      * Construit le DOM interne du composant.
@@ -11990,9 +11990,9 @@ class HTMLBnumCardList extends BnumElement {
 }
 HTMLBnumCardList.TryDefine();
 
-var css_248z$5 = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
+var css_248z$6 = ":host{display:var(--bnum-card-email-display,block)}[hidden]{display:none}";
 
-const SHEET$4 = BnumElement.ConstructCSSStyleSheet(css_248z$5);
+const SHEET$5 = BnumElement.ConstructCSSStyleSheet(css_248z$6);
 /**
  * Organisme qui permet d'afficher simplement une liste de mails dans une carte.
  *
@@ -12110,10 +12110,10 @@ class HTMLBnumCardEmail extends BnumElement {
         super();
     }
     get _p_styleSheets() {
-        return [SHEET$4];
+        return [SHEET$5];
     }
     _p_fromTemplate() {
-        return TEMPLATE$4;
+        return TEMPLATE$5;
     }
     _p_buildDOM(container) {
         this.#_cardTitle = container.querySelector(`#${HTMLBnumCardEmail.ID_CARD_TITLE}`);
@@ -12254,7 +12254,7 @@ class HTMLBnumCardEmail extends BnumElement {
         return TAG_CARD_EMAIL;
     }
 }
-const TEMPLATE$4 = BnumElement.CreateTemplate(`
+const TEMPLATE$5 = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardEmail.ID_CARD_TITLE}" slot="title" data-icon="mail">${BnumConfig.Get('local_keys').last_mails}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
@@ -12267,7 +12267,7 @@ const TEMPLATE$4 = BnumElement.CreateTemplate(`
 HTMLBnumCardEmail.TryDefine();
 //#endregion TryDefine
 
-var css_248z$4 = ":host{display:var(--bnum-card-agenda-display,block)}[hidden]{display:none}";
+var css_248z$5 = ":host{display:var(--bnum-card-agenda-display,block)}[hidden]{display:none}";
 
 var constants;
 var hasRequiredConstants;
@@ -13691,7 +13691,7 @@ function requireJsEnumerable () {
 var JsEnumerableExports = requireJsEnumerable();
 var JsEnumerable = /*@__PURE__*/getDefaultExportFromCjs(JsEnumerableExports);
 
-const SHEET$3 = BnumElement.ConstructCSSStyleSheet(css_248z$4);
+const SHEET$4 = BnumElement.ConstructCSSStyleSheet(css_248z$5);
 /**
  * Organisme qui permet d'afficher simplement une liste d'évènements dans une carte.
  *
@@ -13820,10 +13820,10 @@ class HTMLBnumCardAgenda extends BnumElement {
         super();
     }
     get _p_styleSheets() {
-        return [SHEET$3];
+        return [SHEET$4];
     }
     _p_fromTemplate() {
-        return TEMPLATE$3;
+        return TEMPLATE$4;
     }
     _p_buildDOM(container) {
         this.#_cardTitle = container.querySelector(`#${HTMLBnumCardAgenda.ID_CARD_TITLE}`);
@@ -13971,7 +13971,7 @@ class HTMLBnumCardAgenda extends BnumElement {
         return TAG_CARD_AGENDA;
     }
 }
-const TEMPLATE$3 = BnumElement.CreateTemplate(`
+const TEMPLATE$4 = BnumElement.CreateTemplate(`
     <${HTMLBnumCardElement.TAG}>
       <${HTMLBnumCardTitle.TAG} id="${HTMLBnumCardAgenda.ID_CARD_TITLE}" slot="title" data-icon="today">${BnumConfig.Get('local_keys').last_events}</${HTMLBnumCardTitle.TAG}>
         <${HTMLBnumCardList.TAG}>
@@ -13984,9 +13984,9 @@ const TEMPLATE$3 = BnumElement.CreateTemplate(`
 HTMLBnumCardAgenda.TryDefine();
 //#endregion TryDefine
 
-var css_248z$3 = ":host{cursor:pointer;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){font-variation-settings:\"FILL\" 1}:host(:active){font-variation-settings:\"FILL\" 1,\"wght\" 700,\"GRAD\" 200,\"opsz\" 20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+var css_248z$4 = ":host{cursor:pointer;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){font-variation-settings:\"FILL\" 1}:host(:active){font-variation-settings:\"FILL\" 1,\"wght\" 700,\"GRAD\" 200,\"opsz\" 20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
-const SHEET$2 = BnumElement.ConstructCSSStyleSheet(css_248z$3);
+const SHEET$3 = BnumElement.ConstructCSSStyleSheet(css_248z$4);
 /**
  * Button contenant une icône.
  *
@@ -14054,13 +14054,13 @@ class HTMLBnumButtonIcon extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$2];
+        return [SHEET$3];
     }
     /**
      * @inheritdoc
      */
     _p_fromTemplate() {
-        return TEMPLATE$2;
+        return TEMPLATE$3;
     }
     /**
      * @inheritdoc
@@ -14092,22 +14092,36 @@ class HTMLBnumButtonIcon extends BnumElement {
         return node;
     }
     /**
+     * Génère le code HTML d'un bouton icône avec l'icône spécifiée.
+     * @param icon Icône à afficher dans le bouton.
+     * @returns Code HTML créée.
+     */
+    static Write(icon, attrs = {}) {
+        return `<${this.TAG} ${JsEnumerable.from(attrs)
+            .select((x) => {
+            const tmp = x;
+            return `${tmp.key}="${tmp.value}"`;
+        })
+            .toArray()
+            .join(' ')}>${icon}</${this.TAG}>`;
+    }
+    /**
      * Tag de l'élément.
      */
     static get TAG() {
         return TAG_ICON_BUTTON;
     }
 }
-const TEMPLATE$2 = HTMLBnumButtonIcon.CreateTemplate(`
+const TEMPLATE$3 = HTMLBnumButtonIcon.CreateTemplate(`
     <${HTMLBnumIcon.TAG} id="${HTMLBnumButtonIcon.ID_ICON}"><slot></slot></${HTMLBnumIcon.TAG}>
     `);
 //#region TryDefine
 HTMLBnumButtonIcon.TryDefine();
 //#endregion TryDefine
 
-var css_248z$2 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host #hint-text{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}:host #hint-text__label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}:host #hint-text__hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}:host .addons__inner{position:relative;width:100%}:host input{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091;border-top-right-radius:0}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+var css_248z$3 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host #hint-text{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}:host #hint-text__label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}:host #hint-text__hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}:host .addons__inner{position:relative;width:100%}:host input{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
 
-const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$2);
+const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$3);
 /**
  * Composant Input du design system Bnum.
  * Permet de gérer un champ de saisie enrichi avec gestion d'états, d'icônes, de bouton et d'accessibilité.
@@ -14445,7 +14459,10 @@ class HTMLBnumInput extends BnumElementInternal {
             this.setAttribute(HTMLBnumInput.ATTRIBUTE_DATA_VALUE, val);
         else {
             this.#_input.value = val;
-            this._p_internal.setFormValue(val);
+            try {
+                this._p_internal.setFormValue(val);
+            }
+            catch (error) { }
         }
     }
     /**
@@ -14485,7 +14502,7 @@ class HTMLBnumInput extends BnumElementInternal {
      * Retourne le template HTML utilisé pour le composant.
      */
     _p_fromTemplate() {
-        return TEMPLATE$1;
+        return TEMPLATE$2;
     }
     /**
      * Construit le DOM interne et attache les écouteurs d'événements.
@@ -14677,6 +14694,8 @@ class HTMLBnumInput extends BnumElementInternal {
      */
     #_update() {
         this._p_clearStates();
+        if (this.#_input?.value || false)
+            this._p_addState('value');
         const btnValue = this.attr(HTMLBnumInput.ATTRIBUTE_BUTTON);
         if (btnValue !== null) {
             this._p_addState(HTMLBnumInput.STATE_BUTTON);
@@ -15019,6 +15038,9 @@ class HTMLBnumInput extends BnumElementInternal {
         }
         return el;
     }
+    static CreateTemplate(html = EMPTY_STRING) {
+        return BnumElementInternal.CreateTemplate(BASE_TEMPLATE.replace('<!-- {{addoninner}} -->', html));
+    }
     /**
      * Tag HTML du composant.
      */
@@ -15027,7 +15049,7 @@ class HTMLBnumInput extends BnumElementInternal {
     }
 }
 // Utilisation des constantes dans le template
-const TEMPLATE$1 = BnumElementInternal.CreateTemplate(`
+const BASE_TEMPLATE = `
   <label id="${HTMLBnumInput.ID_HINT_TEXT}" for="${HTMLBnumInput.ID_INPUT}">
     <span id="${HTMLBnumInput.ID_HINT_TEXT_LABEL}">
       <slot></slot>
@@ -15039,6 +15061,7 @@ const TEMPLATE$1 = BnumElementInternal.CreateTemplate(`
   <div class="container">
     <div class="addons">
       <div class="addons__inner">
+        <!-- {{addoninner}} -->
         <${HTMLBnumIcon.TAG} id="${HTMLBnumInput.ID_INPUT_ICON}"></${HTMLBnumIcon.TAG}>
           <input id="${HTMLBnumInput.ID_INPUT}" type="${HTMLBnumInput.DEFAULT_INPUT_TYPE}" />
         </div>
@@ -15050,7 +15073,8 @@ const TEMPLATE$1 = BnumElementInternal.CreateTemplate(`
         <span id="${HTMLBnumInput.ID_ERROR_TEXT}" class="${HTMLBnumInput.CLASS_STATE_TEXT_ERROR}"><slot name="${HTMLBnumInput.SLOT_ERROR}">${HTMLBnumInput.TEXT_INVALID_INPUT}</slot></span>
     </span>
   </div>
-    `);
+    `;
+const TEMPLATE$2 = HTMLBnumInput.CreateTemplate();
 //#region TryDefine
 HTMLBnumInput.TryDefine();
 //#endregion TryDefine
@@ -15223,9 +15247,9 @@ class HTMLBnumInputText extends HTMLBnumInput {
 }
 HTMLBnumInputText.TryDefine();
 
-var css_248z$1 = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
+var css_248z$2 = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
 
-const SHEET$1 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$1);
+const SHEET$2 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$2);
 /**
  * Input nombre.
  *
@@ -15299,7 +15323,7 @@ class HTMLBnumInputNumber extends HTMLBnumInput {
         super();
     }
     _p_getStylesheets() {
-        return [...super._p_getStylesheets(), SHEET$1];
+        return [...super._p_getStylesheets(), SHEET$2];
     }
     _p_preload() {
         this.setAttribute(HTMLBnumInputNumber.ATTRIBUTE_TYPE, HTMLBnumInputNumber.TYPE);
@@ -15401,7 +15425,7 @@ class HTMLBnumInputNumber extends HTMLBnumInput {
         return 'bnum-input-number';
     }
     static get AdditionnalStylesheet() {
-        return SHEET$1;
+        return SHEET$2;
     }
 }
 HTMLBnumInputNumber.TryDefine();
@@ -15766,9 +15790,9 @@ class HTMLBnumInputTime extends HTMLBnumInput {
 }
 HTMLBnumInputTime.TryDefine();
 
-var css_248z = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{align-items:center;display:flex;line-height:1.2;margin:0 0 -10px}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}::slotted(bnum-secondary-button){--bnum-button-padding:var(--bnum-header-background-button-padding,5px 3px)}::slotted(.main-action-button){-padding:var(--bnum-header-background-button-padding,5px 3px)}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:var(--bnum-header-main-action-border-color,#fff);color:var(--bnum-header-main-action-color,#fff)}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
+var css_248z$1 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{align-items:center;display:flex;line-height:1.2;margin:0 0 -10px}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}::slotted(bnum-secondary-button){--bnum-button-padding:var(--bnum-header-background-button-padding,5px 3px)}::slotted(.main-action-button){-padding:var(--bnum-header-background-button-padding,5px 3px)}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:var(--bnum-header-main-action-border-color,#fff);color:var(--bnum-header-main-action-color,#fff)}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
 
-const SHEET = BnumElementInternal.ConstructCSSStyleSheet(css_248z);
+const SHEET$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$1);
 /**
  * Composant Header du Bnum
  *
@@ -15970,13 +15994,13 @@ class HTMLBnumHeader extends BnumElementInternal {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET];
+        return [SHEET$1];
     }
     /**
      * @inheritdoc
      */
     _p_fromTemplate() {
-        return TEMPLATE;
+        return TEMPLATE$1;
     }
     /**
      * @inheritdoc
@@ -16102,7 +16126,7 @@ class HTMLBnumHeader extends BnumElementInternal {
         return 'bnum-header';
     }
 }
-const TEMPLATE = BnumElementInternal.CreateTemplate(`
+const TEMPLATE$1 = BnumElementInternal.CreateTemplate(`
   <div class="${HTMLBnumHeader.CLASS_HEADER_MODIFIER}">
     <div  part="${HTMLBnumHeader.PART_HEADER_CONTAINER}" class="${HTMLBnumHeader.CLASS_HEADER_CONTAINER}">
       <div part="${HTMLBnumHeader.PART_HEADER_LEFT}" class="${HTMLBnumHeader.CLASS_HEADER_LEFT}">
@@ -16126,6 +16150,9 @@ const TEMPLATE = BnumElementInternal.CreateTemplate(`
 HTMLBnumHeader.TryDefine();
 //#endregion TryDefine
 
+var css_248z = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
+
+const SHEET = HTMLBnumInput.ConstructCSSStyleSheet(css_248z);
 /**
  * Composant d'input de recherche.
  *
@@ -16145,7 +16172,15 @@ HTMLBnumHeader.TryDefine();
  *   Label du champ
  * </bnum-input-search>
  *
+ * @structure Avec des boutons custom
+ * <bnum-input-search placeholder="Recherche avec des boutons">
+ *   Label du champ
+ *   <bnum-icon-button slot="actions">filter_list</bnum-icon-button>
+ *
+ * </bnum-input-search>
+ *
  * @slot button - Contenu du bouton de recherche (texte ou icône). (Inutilisé)
+ * @slot actions - Contenu des actions personnalisées à droite du champ de recherche.
  *
  */
 class HTMLBnumInputSearch extends HTMLBnumInput {
@@ -16180,16 +16215,48 @@ class HTMLBnumInputSearch extends HTMLBnumInput {
      */
     static EVENT_SEARCH = 'bnum-input-search:search';
     /**
+     * Événement déclenché lors du clic sur le bouton de vidage du champ de recherche.
+     * @event bnum-input-search:clear
+     * @detail { caller: HTMLBnumInputSearch }
+     */
+    static EVENT_CLEAR = 'bnum-input-search:clear';
+    /**
      * Icône du bouton de recherche.
      */
     static BUTTON_ICON = 'search';
+    /**
+     * ID du conteneur des actions de recherche.
+     */
+    static ID_ACTIONS_CONTAINER = 'input-search-actions-container';
+    /**
+     * ID du bouton pour vider le champ de recherche.
+     */
+    static ID_CLEAR_BUTTON = 'input-clear-button';
+    /**
+     * Nom du slot pour les actions personnalisées.
+     */
+    static SLOT_ACTIONS = 'actions';
     //#endregion Constants
+    //#region Private fields
+    /**
+     * Bouton interne pour vider le champ de recherche.
+     * @private
+     * @type {HTMLBnumButtonIcon | null}
+     */
+    #_emptyButton = null;
+    //#endregion Private fields
     //#region Lifecycle
     /**
      * Constructeur du composant de recherche.
      */
     constructor() {
         super();
+    }
+    _p_fromTemplate() {
+        return TEMPLATE;
+    }
+    _p_getStylesheets() {
+        return [...super._p_getStylesheets(), SHEET];
     }
     /**
      * Précharge les attributs spécifiques à l'input de recherche.
@@ -16200,6 +16267,16 @@ class HTMLBnumInputSearch extends HTMLBnumInput {
             this.attr(HTMLBnumInput.ATTRIBUTE_PLACEHOLDER, HTMLBnumInputSearch.TEXT_SEARCH_FIELD);
         }
         this.setAttribute(HTMLBnumInput.ATTRIBUTE_BUTTON_ICON, HTMLBnumInputSearch.BUTTON_ICON);
+    }
+    _p_buildDOM(container) {
+        super._p_buildDOM(container);
+        this.#_emptyButton = container.querySelector(`#${HTMLBnumInputSearch.ID_ACTIONS_CONTAINER} ${HTMLBnumButtonIcon.TAG}`);
+        this.#_emptyButton.addEventListener('click', () => {
+            this.value = EMPTY_STRING;
+            this._p_inputValueChangedCallback(new Event('input'));
+            this.#_triggerEventSearch();
+            this.trigger(HTMLBnumInputSearch.EVENT_CLEAR, { caller: this });
+        });
     }
     /**
      * Attache les événements nécessaires au composant.
@@ -16395,6 +16472,15 @@ class HTMLBnumInputSearch extends HTMLBnumInput {
         return 'bnum-input-search';
     }
 }
+/**
+ * Modèle HTML du composant, incluant le bouton de suppression et le slot d'actions.
+ * @private
+ * @constant
+ */
+const TEMPLATE = HTMLBnumInput.CreateTemplate(`<div id="${HTMLBnumInputSearch.ID_ACTIONS_CONTAINER}">
+      ${HTMLBnumButtonIcon.Write('close', { id: HTMLBnumInputSearch.ID_CLEAR_BUTTON })}
+      <slot name="${HTMLBnumInputSearch.SLOT_ACTIONS}"></slot>
+    </div>`);
 //#region TryDefine
 HTMLBnumInputSearch.TryDefine();
 //#endregion TryDefine
@@ -16405,4 +16491,3 @@ if (typeof window !== 'undefined' && window.DsBnumConfig) {
 }
 
 export { BnumElement, BnumConfig as Config, EButtonType, EHideOn, EIconPosition, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumHeader, HTMLBnumHelper, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPicture, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton };
-//# sourceMappingURL=ds-module-bnum.js.map

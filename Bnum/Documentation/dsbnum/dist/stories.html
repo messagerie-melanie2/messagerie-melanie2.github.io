@@ -6963,6 +6963,19 @@ Label du champ
 Label du champ
 &lt;/bnum-input-search&gt;</code></pre>
   </div>
+  
+      <div class="structure-block">
+    <h4>Avec des boutons custom</h4>
+    <div><bnum-input-search placeholder="Recherche avec des boutons">
+Label du champ
+<bnum-icon-button slot="actions">filter_list</bnum-icon-button>
+
+</bnum-input-search></div><pre><code>&lt;bnum-input-search placeholder=&quot;Recherche avec des boutons&quot;&gt;
+Label du champ
+&lt;bnum-icon-button slot=&quot;actions&quot;&gt;filter_list&lt;/bnum-icon-button&gt;
+
+&lt;/bnum-input-search&gt;</code></pre>
+  </div>
   </div>
       
       <h2 >Utilisation (Playground)</h2>
@@ -7046,7 +7059,7 @@ Label du champ
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
       <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr><tr><td><code>bnum-input-search:search</code></td><td><code>{ value: string; name: string; caller: HTMLBnumInputSearch }</code></td><td>Événement déclenché au clic par le bouton interne ou à la validation par la touche "Entrée".
-Envoie la valeur actuelle de l'input de recherche.</td></tr></tbody>
+Envoie la valeur actuelle de l'input de recherche.</td></tr><tr><td><code>bnum-input-search:clear</code></td><td><code>{ caller: HTMLBnumInputSearch }</code></td><td>Événement déclenché lors du clic sur le bouton de vidage du champ de recherche.</td></tr></tbody>
     </table>
   
       
@@ -7054,7 +7067,7 @@ Envoie la valeur actuelle de l'input de recherche.</td></tr></tbody>
       
     <table>
       <thead><tr><th>Nom</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton de recherche (texte ou icône). (Inutilisé)</td></tr></tbody>
+      <tbody><tr><td><code>(defaut)</code></td><td>Contenu du label principal du champ.</td></tr><tr><td><code>hint</code></td><td>Contenu de l'indice d'utilisation (hint) du champ.</td></tr><tr><td><code>success</code></td><td>Contenu du message de succès du champ.</td></tr><tr><td><code>error</code></td><td>Contenu du message d'erreur du champ.</td></tr><tr><td><code>button</code></td><td>Contenu du bouton de recherche (texte ou icône). (Inutilisé)</td></tr><tr><td><code>actions</code></td><td>Contenu des actions personnalisées à droite du champ de recherche.</td></tr></tbody>
     </table>
   
 
@@ -7314,6 +7327,9 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 </td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
 </td></tr><tr><td><code>TEXT_SEARCH_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché dans le champ de recherche.</p>
 </td></tr><tr><td><code>BUTTON_ICON</code></td><td><code>"search"</code></td><td>Oui</td><td><p>Icône du bouton de recherche.</p>
+</td></tr><tr><td><code>ID_ACTIONS_CONTAINER</code></td><td><code>"input-search-actions-container"</code></td><td>Oui</td><td><p>ID du conteneur des actions de recherche.</p>
+</td></tr><tr><td><code>ID_CLEAR_BUTTON</code></td><td><code>"input-clear-button"</code></td><td>Oui</td><td><p>ID du bouton pour vider le champ de recherche.</p>
+</td></tr><tr><td><code>SLOT_ACTIONS</code></td><td><code>"actions"</code></td><td>Oui</td><td><p>Nom du slot pour les actions personnalisées.</p>
 </td></tr></tbody>
     </table>
   
@@ -9234,6 +9250,17 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <li><code>icon</code>: Icône à afficher dans le bouton.</li>
     </ul>
         <p><strong>Retourne :</strong> Node créée.</p>
+      </div>
+    <hr class="api-separator">
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Write</strong>(icon: string, attrs: Record<string, string>) : <code>string</code></code></h4>
+        <p>Génère le code HTML d'un bouton icône avec l'icône spécifiée.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Icône à afficher dans le bouton.</li>
+    
+      <li><code>attrs</code>: N/A</li>
+    </ul>
+        <p><strong>Retourne :</strong> Code HTML créée.</p>
       </div>
     
 

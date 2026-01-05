@@ -1,0 +1,17 @@
+export declare const TAG_ICON: string;
+export declare const TAG_BUTTON: string;
+export declare const TAG_PRIMARY: string;
+export declare const TAG_SECONDARY: string;
+export declare const TAG_DANGER: string;
+export declare const TAG_HELPER: string;
+export declare const TAG_PICTURE: string;
+export declare const TAG_CARD_TITLE: string;
+export declare const TAG_CARD: string;
+export declare const TAG_CARD_EMAIL: string;
+export declare const TAG_CARD_AGENDA: string;
+export declare const TAG_CARD_ITEM: string;
+export declare const TAG_CARD_ITEM_MAIL: string;
+export declare const TAG_CARD_ITEM_AGENDA: string;
+export declare const TAG_CARD_LIST: string;
+export declare const TAG_DATE: string;
+export declare const TAG_ICON_BUTTON: string;
