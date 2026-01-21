@@ -278,7 +278,81 @@ html.dark body {
   }
 </style>
   </head>
-    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-header" data-target="story-bnum-header">bnum-header</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-input-time" data-target="story-bnum-input-time">bnum-input-time</a></li><li><a href="#bnum-input-text" data-target="story-bnum-input-text">bnum-input-text</a></li><li><a href="#bnum-input-search" data-target="story-bnum-input-search">bnum-input-search</a></li><li><a href="#bnum-input-number" data-target="story-bnum-input-number">bnum-input-number</a></li><li><a href="#bnum-input-date" data-target="story-bnum-input-date">bnum-input-date</a></li><li><a href="#bnum-input" data-target="story-bnum-input">bnum-input</a></li><li><a href="#bnum-icon-button" data-target="story-bnum-icon-button">bnum-icon-button</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-header" class="story-content" >
+    <body><div class="story-container"><nav class="story-sidebar"><h3>Composants</h3><ul><li><a href="#bnum-column" data-target="story-bnum-column">bnum-column</a></li><li><a href="#bnum-header" data-target="story-bnum-header">bnum-header</a></li><li><a href="#bnum-card-email" data-target="story-bnum-card-email">bnum-card-email</a></li><li><a href="#bnum-card-agenda" data-target="story-bnum-card-agenda">bnum-card-agenda</a></li><li><a href="#bnum-card" data-target="story-bnum-card">bnum-card</a></li><li><a href="#bnum-card-title" data-target="story-bnum-card-title">bnum-card-title</a></li><li><a href="#bnum-hide" data-target="story-bnum-hide">bnum-hide</a></li><li><a href="#bnum-card-list" data-target="story-bnum-card-list">bnum-card-list</a></li><li><a href="#bnum-card-item-mail" data-target="story-bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="#bnum-card-item-agenda" data-target="story-bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="#bnum-card-item" data-target="story-bnum-card-item">bnum-card-item</a></li><li><a href="#bnum-secondary-button" data-target="story-bnum-secondary-button">bnum-secondary-button</a></li><li><a href="#bnum-primary-button" data-target="story-bnum-primary-button">bnum-primary-button</a></li><li><a href="#bnum-img" data-target="story-bnum-img">bnum-img</a></li><li><a href="#bnum-input-time" data-target="story-bnum-input-time">bnum-input-time</a></li><li><a href="#bnum-input-text" data-target="story-bnum-input-text">bnum-input-text</a></li><li><a href="#bnum-input-search" data-target="story-bnum-input-search">bnum-input-search</a></li><li><a href="#bnum-input-number" data-target="story-bnum-input-number">bnum-input-number</a></li><li><a href="#bnum-input-date" data-target="story-bnum-input-date">bnum-input-date</a></li><li><a href="#bnum-input" data-target="story-bnum-input">bnum-input</a></li><li><a href="#bnum-icon-button" data-target="story-bnum-icon-button">bnum-icon-button</a></li><li><a href="#bnum-icon" data-target="story-bnum-icon">bnum-icon</a></li><li><a href="#bnum-helper" data-target="story-bnum-helper">bnum-helper</a></li><li><a href="#bnum-date" data-target="story-bnum-date">bnum-date</a></li><li><a href="#bnum-danger-button" data-target="story-bnum-danger-button">bnum-danger-button</a></li><li><a href="#bnum-button" data-target="story-bnum-button">bnum-button</a></li></ul></nav><main class="story-main"><div id="story-bnum-column" class="story-content" >
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-column&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Permet de structurer une colonne avec un en-tête, un corps et un pied de page.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures">
+      <div class="structure-block">
+    <h4>Colonne</h4>
+    <div><bnum-column>
+<div slot="header">En-tête de la colonne</div>
+<div>Contenu principal de la colonne</div>
+<div slot="footer">Pied de page de la colonne</div>
+</bnum-column></div><pre><code>&lt;bnum-column&gt;
+&lt;div slot=&quot;header&quot;&gt;En-tête de la colonne&lt;/div&gt;
+&lt;div&gt;Contenu principal de la colonne&lt;/div&gt;
+&lt;div slot=&quot;footer&quot;&gt;Pied de page de la colonne&lt;/div&gt;
+&lt;/bnum-column&gt;</code></pre>
+  </div>
+  </div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      <p>N/A</p>
+      
+      <h2>Slots</h2>
+      <p>N/A</p>
+
+      <h2>Attributs de Données</h2>
+      <p>N/A</p>
+
+      <h2>Variables CSS</h2>
+      <p>N/A</p>
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      <p>N/A</p>
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      <p>N/A</p>
+
+      <h3>Variables d'instance</h3>
+      <p>N/A</p>
+
+      <h3>Variables statiques</h3>
+      <p>N/A</p>
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-column)
+        </a>
+      </p>
+    
+        </div>
+      </div><div id="story-bnum-header" class="story-content" hidden>
         <div class="story-wrapper">
           
       
@@ -3030,6 +3104,67 @@ Permet d&#39;obtenir le nom du composant pour l&#39;utiliser dans le DOM.</p>
       </p>
     
         </div>
+      </div><div id="story-bnum-hide" class="story-content" hidden>
+        <div class="story-wrapper">
+          
+      
+      <h1><code>&lt;bnum-hide&gt;</code></h1>
+      
+      <h2>Description</h2>
+      <p><p>Classe interne étendant BnumElement pour gérer les états personnalisés via ElementInternals.</p>
+</p>
+      
+      <h2>Structure</h2>
+      <div class="structures"><p>N/A</p></div>
+      
+      <h2 style="display:none;">Utilisation (Playground)</h2>
+      <div style="display:none;" class="playground-demo-box">
+        <p>Playground non disponible.</p>
+      </div>
+      
+      <h3 style="display:none;">Code HTML</h3>
+      <pre style="display:none;"><code class="demo-code"></code></pre>
+      <h3 style="display:none;">Code JS</h3>
+      <pre style="display:none;"><code class="demo-code">// Fichier .playground.js non trouvé</code></pre>
+      <script style="display:none;">// Fichier .playground.js non trouvé</script>
+      
+      <!--<h2>Propriétés (API Principale)</h2>
+      <p>N/A</p>-->
+      
+      <h2>Événements</h2>
+      <p>N/A</p>
+      
+      <h2>Slots</h2>
+      <p>N/A</p>
+
+      <h2>Attributs de Données</h2>
+      <p>N/A</p>
+
+      <h2>Variables CSS</h2>
+      <p>N/A</p>
+
+      <h2>État internes <bnum-helper>Ces états peuvent être utilisés pour appliquer des styles conditionnels via des sélecteurs d'attributs.
+Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>element.hasState('nom-de-l-etat')</code> en JS.</h2>
+      <p>N/A</p>
+
+      <h2>API Publique</h2>
+      <h3>Méthodes</h3>
+      <p>N/A</p>
+
+      <h3>Variables d'instance</h3>
+      <p>N/A</p>
+
+      <h3>Variables statiques</h3>
+      <p>N/A</p>
+
+      <h2>Code source</h2>
+      <p>
+        <a href="https://github.com/votre-projet/..." target="_blank">
+          Voir le code source sur GitHub (components/bnum-hide)
+        </a>
+      </p>
+    
+        </div>
       </div><div id="story-bnum-card-list" class="story-content" hidden>
         <div class="story-wrapper">
           
@@ -5058,7 +5193,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-button-icon-margin, 20px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -5168,7 +5303,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 </td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
 </td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
 </td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-button-icon-margin, 20px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
+</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
 </td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
 </td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
 </td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
@@ -5665,7 +5800,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-button-icon-margin, 20px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -5775,7 +5910,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 </td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
 </td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
 </td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-button-icon-margin, 20px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
+</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
 </td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
 </td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
 </td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
@@ -10097,7 +10232,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-button-icon-margin, 20px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -10207,7 +10342,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 </td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
 </td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
 </td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-button-icon-margin, 20px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
+</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
 </td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
 </td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
 </td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
@@ -10757,7 +10892,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-button-icon-margin, 20px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -10867,7 +11002,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 </td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
 </td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
 </td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-button-icon-margin, 20px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
+</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
 </td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
 </td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
 </td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>

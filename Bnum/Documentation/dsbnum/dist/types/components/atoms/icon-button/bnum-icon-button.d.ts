@@ -1,4 +1,5 @@
 import BnumElement from '../../bnum-element';
+import { Nullable } from '../../../core/utils/types';
 /**
  * Button contenant une icône.
  *
@@ -41,7 +42,12 @@ export declare class HTMLBnumButtonIcon extends BnumElement {
     /**
      * @inheritdoc
      */
-    protected _p_buildDOM(container: ShadowRoot | HTMLElement): void;
+    protected _p_buildDOM(_: ShadowRoot | HTMLElement): void;
+    protected _p_update(name: string, oldVal: string | null, newVal: string | null): void | Nullable<'break'>;
+    /**
+     * Retourne la liste des attributs observés par le composant.
+     */
+    static _p_observedAttributes(): string[];
     /**
      * Génère un bouton icône avec l'icône spécifiée.
      * @param icon Icône à afficher dans le bouton.

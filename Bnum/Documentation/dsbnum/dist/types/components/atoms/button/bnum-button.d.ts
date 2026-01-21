@@ -168,7 +168,7 @@ export declare class HTMLBnumButton extends BnumElement {
     static readonly ATTR_ICON_POS = "icon-pos";
     /**
      * Attribut de marge de l'icône dans le bouton.
-     * @attr {string | undefined} (optional) (default: var（--custom-button-icon-margin, 20px）) data-icon-margin - Marge de l'icône (gauche, droite)
+     * @attr {string | undefined} (optional) (default: var（--custom-bnum-button-icon-margin, 10px）) data-icon-margin - Marge de l'icône (gauche, droite)
      */
     static readonly ATTR_ICON_MARGIN = "icon-margin";
     /**
@@ -223,7 +223,7 @@ export declare class HTMLBnumButton extends BnumElement {
     /**
      * Valeur par défaut de la marge de l'icône dans le bouton.
      */
-    static readonly DEFAULT_CSS_VAR_ICON_MARGIN = "var(--custom-button-icon-margin, 20px)";
+    static readonly DEFAULT_CSS_VAR_ICON_MARGIN = "var(--custom-bnum-button-icon-margin, 10px)";
     /**
      * Nom de la propriété de l'icône pour la position.
      */
@@ -260,6 +260,7 @@ export declare class HTMLBnumButton extends BnumElement {
      * Événement déclenché lors du changement de variation du bouton.
      */
     onvariationchange: JsEvent<(newVariation: ButtonVariation, oldVariation: ButtonVariation) => void>;
+    get linkedClickEvent(): JsEvent<(click: string) => void>;
     /**
      * Variation du bouton (primary, secondary, etc.).
      */

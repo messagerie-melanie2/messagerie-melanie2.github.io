@@ -158,6 +158,8 @@ class Log {
     }
 }
 
+var css_248z$i = ":host([block]){display:block;flex:1;width:100%}";
+
 /**
  * Classe de base pour les composants bnum personnalisés.
  *
@@ -769,7 +771,7 @@ class BnumElement extends HTMLElement {
      * @returns Tableau de feuilles de style CSS.
      */
     _p_getStylesheets() {
-        return [];
+        return [BASE_STYLE];
     }
     /**
      * Hook appelé avant le rendu du composant.
@@ -876,6 +878,10 @@ class BnumElement extends HTMLElement {
         }
     }
 }
+/**
+ * Style commun à tous les BnumElement.
+ */
+const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$i);
 
 function getDefaultExportFromCjs (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
@@ -1611,7 +1617,7 @@ class HTMLBnumIcon extends BnumElementInternal {
      * @returns {CSSStyleSheet[]} Les feuilles de style.
      */
     _p_getStylesheets() {
-        return [SYMBOLS, STYLE$1];
+        return [...super._p_getStylesheets(), SYMBOLS, STYLE$1];
     }
     /**
      * Construit le DOM interne du composant.
@@ -1788,7 +1794,7 @@ HTMLBnumIcon.TryDefine();
 const REG_LIGHT_PICTURE_NAME = /(-light)\.(([\w\d]+)|\1?.+)$/;
 const REG_XSS_SAFE = /^[-.\w\s%()]+$/;
 
-var css_248z$f = ":host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-button-icon-margin,20px)}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);height:-moz-fit-content;height:fit-content;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
 //#region External Constants
 /**
@@ -1799,7 +1805,7 @@ const SHEET$e = BnumElement.ConstructCSSStyleSheet(css_248z$f);
 /**
  * Tag du bouton Bnum.
  */
-const TAG = TAG_BUTTON;
+const TAG$1 = TAG_BUTTON;
 /**
  * Icône de chargement utilisée dans le bouton.
  */
@@ -1967,7 +1973,7 @@ class HTMLBnumButton extends BnumElement {
     static ATTR_ICON_POS = 'icon-pos';
     /**
      * Attribut de marge de l'icône dans le bouton.
-     * @attr {string | undefined} (optional) (default: var（--custom-button-icon-margin, 20px）) data-icon-margin - Marge de l'icône (gauche, droite)
+     * @attr {string | undefined} (optional) (default: var（--custom-bnum-button-icon-margin, 10px）) data-icon-margin - Marge de l'icône (gauche, droite)
      */
     static ATTR_ICON_MARGIN = 'icon-margin';
     /**
@@ -2022,7 +2028,7 @@ class HTMLBnumButton extends BnumElement {
     /**
      * Valeur par défaut de la marge de l'icône dans le bouton.
      */
-    static DEFAULT_CSS_VAR_ICON_MARGIN = 'var(--custom-button-icon-margin, 20px)';
+    static DEFAULT_CSS_VAR_ICON_MARGIN = 'var(--custom-bnum-button-icon-margin, 10px)';
     /**
      * Nom de la propriété de l'icône pour la position.
      */
@@ -2053,6 +2059,8 @@ class HTMLBnumButton extends BnumElement {
     #_wrapper;
     #_iconEl;
     #_renderScheduler = null;
+    #_onClick = null;
+    #_lastClick = null;
     //#endregion Private fields
     //#region Public fields
     /**
@@ -2071,6 +2079,15 @@ class HTMLBnumButton extends BnumElement {
      * Événement déclenché lors du changement de variation du bouton.
      */
     onvariationchange = new JsEvent();
+    get linkedClickEvent() {
+        if (this.#_onClick === null) {
+            this.#_onClick = new JsEvent();
+            this.addEventListener('click', () => {
+                this.#_onClick?.call?.();
+            });
+        }
+        return this.#_onClick;
+    }
     //#endregion Public fields
     //#region Getter/setter
     /**
@@ -2198,6 +2215,7 @@ class HTMLBnumButton extends BnumElement {
             this.style.setProperty(HTMLBnumButton.CSS_PROPERTY_ICON_MARGIN, this.data(HTMLBnumButton.ATTR_ICON_MARGIN));
         }
         this.#_updateDOM();
+        HTMLBnumButton.ToButton(this);
     }
     _p_update(name, oldVal, newVal) {
         if (!this.#_wrapper)
@@ -2208,7 +2226,7 @@ class HTMLBnumButton extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$e];
+        return [...super._p_getStylesheets(), SHEET$e];
     }
     //#endregion Lifecycle
     //#region Private methods
@@ -2259,6 +2277,30 @@ class HTMLBnumButton extends BnumElement {
         // Accessibilité (Internals gère aria-disabled, mais tabindex doit être géré ici)
         this.#_internals.ariaDisabled = String(isDisabled || isLoading);
         this.tabIndex = isDisabled || isLoading ? -1 : 0;
+        if (this.hasAttribute('click')) {
+            const click = this.getAttribute('click');
+            if (click !== this.#_lastClick) {
+                if (this.linkedClickEvent.has('click'))
+                    this.linkedClickEvent.remove('click');
+                if (click && REG_XSS_SAFE.test(click)) {
+                    this.#_lastClick = click;
+                    this.linkedClickEvent.add('click', (click) => {
+                        // Si c'est un id unique
+                        var elementToClick = document.getElementById(click);
+                        if (elementToClick)
+                            elementToClick.click();
+                        else {
+                            // Sinon on part du principe que c'est un sélecteur CSS
+                            const elements = document.querySelector(click);
+                            if (elements)
+                                elements.click();
+                            else
+                                throw new Error(`[${TAG$1}] L'attribut 'click' ne référence aucun élément.`);
+                        }
+                    }, click);
+                }
+            }
+        }
     }
     /**
      * Indique si le bouton est arrondi.
@@ -2331,6 +2373,7 @@ class HTMLBnumButton extends BnumElement {
             HTMLBnumButton.ATTR_ROUNDED,
             HTMLBnumButton.ATTR_LOADING,
             HTMLBnumButton.ATTR_DISABLED,
+            'click',
         ];
     }
     /**
@@ -2415,7 +2458,7 @@ class HTMLBnumButton extends BnumElement {
      * @returns Nom du tag HTML
      */
     static get TAG() {
-        return TAG;
+        return TAG$1;
     }
 }
 //#region Template
@@ -2582,7 +2625,7 @@ class HTMLBnumHelper extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$d];
+        return [...super._p_getStylesheets(), SHEET$d];
     }
     /**
      * Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.
@@ -2738,7 +2781,7 @@ class HTMLBnumPicture extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$c];
+        return [...super._p_getStylesheets(), SHEET$c];
     }
     /**
      * Construit le DOM du composant.
@@ -3000,7 +3043,7 @@ class HTMLBnumCardTitle extends BnumElement {
         super();
     }
     _p_getStylesheets() {
-        return [SHEET$b];
+        return [...super._p_getStylesheets(), SHEET$b];
     }
     _p_fromTemplate() {
         return TEMPLATE$9;
@@ -3525,7 +3568,7 @@ class HTMLBnumCardElement extends BnumElementInternal {
         this.#_updateDOM();
     }
     _p_getStylesheets() {
-        return [SHEET$a];
+        return [...super._p_getStylesheets(), SHEET$a];
     }
     //#endregion Lifecycle
     //#region Private methods
@@ -3851,7 +3894,7 @@ class HTMLBnumCardItem extends BnumElementInternal {
         return true;
     }
     _p_getStylesheets() {
-        return [SHEET$9];
+        return [...super._p_getStylesheets(), SHEET$9];
     }
     static CreateChildTemplate(childTemplate, { defaultSlot = true, slotName = EMPTY_STRING, } = {}) {
         const template = document.createElement('template');
@@ -11927,7 +11970,7 @@ class HTMLBnumCardList extends BnumElement {
      * @returns {CSSStyleSheet[]} Feuilles de style CSS
      */
     _p_getStylesheets() {
-        return [SHEET$6];
+        return [...super._p_getStylesheets(), SHEET$6];
     }
     /**
      * Construit le DOM interne du composant.
@@ -13984,7 +14027,7 @@ const TEMPLATE$4 = BnumElement.CreateTemplate(`
 HTMLBnumCardAgenda.TryDefine();
 //#endregion TryDefine
 
-var css_248z$4 = ":host{cursor:pointer;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+var css_248z$4 = ":host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
 const SHEET$3 = BnumElement.ConstructCSSStyleSheet(css_248z$4);
 /**
@@ -14018,8 +14061,19 @@ class HTMLBnumButtonIcon extends BnumElement {
      * Référence vers l'élément icône à l'intérieur du bouton
      */
     #_icon = null;
+    #_onClick = null;
+    #_lastClick = null;
     //#endregion Private fields
     //#region Getters/Setters
+    get #_linkedClickEvent() {
+        if (this.#_onClick === null) {
+            this.#_onClick = new JsEvent();
+            this.addEventListener('click', () => {
+                this.#_onClick?.call?.();
+            });
+        }
+        return this.#_onClick;
+    }
     /**
      * Référence vers l'élément icône à l'intérieur du bouton.
      *
@@ -14054,7 +14108,7 @@ class HTMLBnumButtonIcon extends BnumElement {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$3];
+        return [...super._p_getStylesheets(), SHEET$3];
     }
     /**
      * @inheritdoc
@@ -14065,13 +14119,47 @@ class HTMLBnumButtonIcon extends BnumElement {
     /**
      * @inheritdoc
      */
-    _p_buildDOM(container) {
+    _p_buildDOM(_) {
         HTMLBnumButton.ToButton(this);
         if (this.title === EMPTY_STRING)
             console.warn('Icon button should have a title for accessibility purposes');
+        if (this.hasAttribute('click')) {
+            const click = this.getAttribute('click');
+            this.#_updateAttributeClick(click ?? EMPTY_STRING);
+        }
+    }
+    _p_update(name, oldVal, newVal) {
+        if (oldVal === newVal)
+            return;
+        if (name === 'click') {
+            this.#_updateAttributeClick(newVal ?? EMPTY_STRING);
+        }
     }
     //#endregion Lifecycle
     //#region Private methods
+    #_updateAttributeClick(val) {
+        if (val !== this.#_lastClick) {
+            this.#_lastClick = val;
+            if (this.#_linkedClickEvent.has('click'))
+                this.#_linkedClickEvent.remove('click');
+            if (val && REG_XSS_SAFE.test(val)) {
+                this.#_linkedClickEvent.add('click', (click) => {
+                    // Si c'est un id unique
+                    var elementToClick = document.getElementById(click);
+                    if (elementToClick)
+                        elementToClick.click();
+                    else {
+                        // Sinon on part du principe que c'est un sélecteur CSS
+                        const elements = document.querySelector(click);
+                        if (elements)
+                            elements.click();
+                        else
+                            throw new Error(`[${HTMLBnumButtonIcon.TAG}] L'attribut 'click' ne référence aucun élément.`);
+                    }
+                }, val);
+            }
+        }
+    }
     /**
      * Permet de lancer une erreur avec un message spécifique dans une expression inline.
      * @param msg Message à envoyer dans l'erreur.
@@ -14081,6 +14169,12 @@ class HTMLBnumButtonIcon extends BnumElement {
     }
     //#endregion Private methods
     //#region Static methods
+    /**
+     * Retourne la liste des attributs observés par le composant.
+     */
+    static _p_observedAttributes() {
+        return ['click'];
+    }
     /**
      * Génère un bouton icône avec l'icône spécifiée.
      * @param icon Icône à afficher dans le bouton.
@@ -14496,7 +14590,7 @@ class HTMLBnumInput extends BnumElementInternal {
      * @returns Liste de stylesheet
      */
     _p_getStylesheets() {
-        return [STYLE];
+        return [...super._p_getStylesheets(), STYLE];
     }
     /**
      * Retourne le template HTML utilisé pour le composant.
@@ -15994,7 +16088,7 @@ class HTMLBnumHeader extends BnumElementInternal {
      * @inheritdoc
      */
     _p_getStylesheets() {
-        return [SHEET$1];
+        return [...super._p_getStylesheets(), SHEET$1];
     }
     /**
      * @inheritdoc
@@ -16485,10 +16579,195 @@ const TEMPLATE = HTMLBnumInput.CreateTemplate(`<div id="${HTMLBnumInputSearch.ID
 HTMLBnumInputSearch.TryDefine();
 //#endregion TryDefine
 
+/**
+ *  Permet de structurer une colonne avec un en-tête, un corps et un pied de page.
+ *
+ * @structure Colonne
+ * <bnum-column>
+ *  <div slot="header">En-tête de la colonne</div>
+ *   <div>Contenu principal de la colonne</div>
+ *  <div slot="footer">Pied de page de la colonne</div>
+ * </bnum-column>
+ */
+class HTMLBnumColumn extends BnumElement {
+    // Permet de définir le type de colonne (ex: "sidebar", "main", "tools")
+    // Utile pour le CSS qui va définir la largeur
+    get type() {
+        return this.getAttribute('type') || 'default';
+    }
+    constructor() {
+        super();
+    }
+    _p_isShadowElement() {
+        return false;
+    }
+    /**
+     * Logique de rendu Light DOM
+     * On récupère les enfants existants et on les réorganise.
+     */
+    _p_buildDOM(container) {
+        // 1. Sauvegarde des enfants actuels (ce que l'utilisateur a mis dans la balise)
+        // On convertit en Array pour figer la liste car childNodes est "live"
+        const children = Array.from(this.childNodes);
+        // 2. Création de la structure interne
+        // On vide l'élément pour reconstruire proprement
+        this.innerHTML = '';
+        this.classList.add('bnum-column', `bnum-column--${this.type}`);
+        // Création des conteneurs
+        const [headerContainer, bodyContainer, footerContainer] = this._p_createDivs({
+            classes: ['bnum-column__header', 'header'],
+        }, {
+            classes: ['bnum-column__body'],
+        }, {
+            classes: ['bnum-column__footer', 'footer'],
+        });
+        // 3. Distribution des enfants (Slotting manuel)
+        let hasHeader = false;
+        let hasFooter = false;
+        children.forEach((node) => {
+            // Si c'est un noeud texte vide, on ignore
+            if (node.nodeType === Node.TEXT_NODE && !node.textContent?.trim())
+                return;
+            const element = node;
+            const slotName = element.getAttribute
+                ? element.getAttribute('slot')
+                : null;
+            if (slotName === 'header') {
+                const nodeElment = node;
+                nodeElment.removeAttribute('slot');
+                nodeElment.classList.add('bnum-column__header__content', 'from-slot');
+                if (nodeElment.classList.contains('header')) {
+                    // Évite la duplication de la classe "header"
+                    nodeElment.classList.remove('header');
+                    nodeElment.classList.add('old-header');
+                }
+                headerContainer.appendChild(node);
+                hasHeader = true;
+            }
+            else if (slotName === 'footer') {
+                node.removeAttribute('slot');
+                node.classList.add('bnum-column__footer__content', 'from-slot');
+                footerContainer.appendChild(node);
+                hasFooter = true;
+            }
+            else {
+                // Tout ce qui n'a pas de slot va dans le body
+                if (node instanceof HTMLElement)
+                    node.classList.add('bnum-column__body__content', 'from-slot');
+                bodyContainer.appendChild(node);
+            }
+        });
+        // 4. Injection conditionnelle dans le DOM
+        if (hasHeader)
+            container.appendChild(headerContainer);
+        container.append(...bodyContainer.childNodes); // Le body est obligatoire ou vide
+        if (hasFooter)
+            container.appendChild(footerContainer);
+    }
+    static get TAG() {
+        return 'bnum-column';
+    }
+}
+// Définition automatique
+HTMLBnumColumn.TryDefine();
+
+const TAG = 'bnum-hide';
+const BREAKPOINTS = {
+    phone: 480,
+    small: 768, // Tablet portrait
+    touch: 1024, // Tablet landscape / Touch laptops
+    normal: 1200, // Desktop
+};
+class HTMLBnumHide extends BnumElementInternal {
+    // --- Propriétés Privées ---
+    #_mediaQueryList = null;
+    #_boundHandleChange;
+    constructor() {
+        super();
+        // On lie la fonction une seule fois pour pouvoir la retirer proprement
+        this.#_boundHandleChange = this.#_handleChange.bind(this);
+    }
+    static get TAG() {
+        return TAG;
+    }
+    static get observedAttributes() {
+        return ['breakpoint', 'mode'];
+    }
+    _p_isShadowElement() {
+        return false;
+    }
+    // --- Cycle de vie ---
+    connectedCallback() {
+        super.connectedCallback?.();
+        this.#_setupListener();
+    }
+    disconnectedCallback() {
+        this.#_removeListener();
+        super.disconnectedCallback?.();
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+        super.attributeChangedCallback?.(name, oldVal, newVal);
+        if (oldVal === newVal)
+            return;
+        // Si on change les paramètres, on refait l'écouteur
+        this.#_setupListener();
+    }
+    // --- Logique Métier ---
+    /**
+     * Configure le listener matchMedia selon les attributs
+     */
+    #_setupListener() {
+        this.#_removeListener(); // Nettoyage préalable
+        const breakpointKey = this.getAttribute('breakpoint') || 'touch';
+        const mode = this.getAttribute('mode') || 'down'; // 'down' (défaut) ou 'up'
+        const width = BREAKPOINTS[breakpointKey];
+        if (!width) {
+            console.warn(`[${TAG}] Breakpoint inconnu : ${breakpointKey}. Utilisez: ${Object.keys(BREAKPOINTS).join(', ')}`);
+            return;
+        }
+        // Construction de la requête média
+        // mode 'down' : cache si l'écran est PLUS PETIT que la valeur (max-width)
+        // mode 'up'   : cache si l'écran est PLUS GRAND que la valeur (min-width)
+        const query = mode === 'up'
+            ? `(min-width: ${width}px)`
+            : `(max-width: ${width - 0.02}px)`; // -0.02px évite le conflit exact au pixel
+        this.#_mediaQueryList = window.matchMedia(query);
+        // Initialisation immédiate de l'état
+        this.#_handleChange(this.#_mediaQueryList);
+        // Abonnement aux changements
+        this.#_mediaQueryList.addEventListener('change', this.#_boundHandleChange);
+    }
+    #_removeListener() {
+        if (this.#_mediaQueryList) {
+            this.#_mediaQueryList.removeEventListener('change', this.#_boundHandleChange);
+            this.#_mediaQueryList = null;
+        }
+    }
+    /**
+     * Réaction au changement de breakpoint
+     * Si la media query match, c'est qu'on est dans la zone "à cacher".
+     */
+    #_handleChange(mq) {
+        const shouldHide = mq.matches;
+        // Mise à jour de l'état interne (si ton BnumElementInternal gère un state 'hidden')
+        // Sinon, on manipule directement l'attribut hidden natif HTML
+        if (shouldHide) {
+            this.setAttribute('hidden', '');
+            this.style.display = 'none'; // Sécurité CSS inline
+        }
+        else {
+            this.removeAttribute('hidden');
+            this.style.removeProperty('display');
+        }
+    }
+}
+// Enregistrement
+HTMLBnumHide.TryDefine();
+
 // Auto-init au chargement
 if (typeof window !== 'undefined' && window.DsBnumConfig) {
     BnumConfig.Initialize(window.DsBnumConfig);
 }
 
-export { BnumElement, BnumConfig as Config, EButtonType, EHideOn, EIconPosition, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumHeader, HTMLBnumHelper, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPicture, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton };
+export { BnumElement, BnumConfig as Config, EButtonType, EHideOn, EIconPosition, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumColumn, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumHeader, HTMLBnumHelper, HTMLBnumHide, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPicture, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton };
 //# sourceMappingURL=ds-module-bnum.js.map

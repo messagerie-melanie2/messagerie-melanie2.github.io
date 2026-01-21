@@ -25,9 +25,11 @@ import { HTMLBnumInputDate } from '../components/atoms/input-date/bnum-input-dat
 import { HTMLBnumInputTime } from '../components/atoms/input-time/bnum-input-time';
 import { HTMLBnumHeader } from '../components/organisms/header/bnum-header';
 import { HTMLBnumInputSearch } from '../components/atoms/input-search/bnum-input-search';
+import { HTMLBnumColumn } from '../components/template/bnum-column';
+import { HTMLBnumHide } from '../components/molecules/bnum-hide/bnum-hide';
 declare global {
     interface Window {
         DsBnumConfig?: Partial<BnumConfigOptions>;
     }
 }
-export { EHideOn, EButtonType, EIconPosition, BnumElement, HTMLBnumIcon, HTMLBnumButton, HTMLBnumDangerButton, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton, HTMLBnumButtonIcon, HTMLBnumHelper, HTMLBnumPicture, HTMLBnumCardTitle, HTMLBnumCardElement, HTMLBnumCardItem, HTMLBnumCardList, HTMLBnumDate, HTMLBnumCardItemMail, HTMLBnumCardItemAgenda, HTMLBnumCardEmail, HTMLBnumCardAgenda, HTMLBnumInput, HTMLBnumInputText, HTMLBnumInputNumber, HTMLBnumInputDate, HTMLBnumInputTime, HTMLBnumHeader, HTMLBnumInputSearch, BnumConfig as Config, };
+export { EHideOn, EButtonType, EIconPosition, BnumElement, HTMLBnumIcon, HTMLBnumButton, HTMLBnumDangerButton, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton, HTMLBnumButtonIcon, HTMLBnumHelper, HTMLBnumPicture, HTMLBnumCardTitle, HTMLBnumCardElement, HTMLBnumCardItem, HTMLBnumCardList, HTMLBnumDate, HTMLBnumCardItemMail, HTMLBnumCardItemAgenda, HTMLBnumCardEmail, HTMLBnumCardAgenda, HTMLBnumInput, HTMLBnumInputText, HTMLBnumInputNumber, HTMLBnumInputDate, HTMLBnumInputTime, HTMLBnumHeader, HTMLBnumInputSearch, HTMLBnumColumn, HTMLBnumHide, BnumConfig as Config, };

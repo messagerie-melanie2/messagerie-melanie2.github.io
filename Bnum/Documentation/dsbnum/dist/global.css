@@ -44,6 +44,7 @@
   --bnum-color-input-active: #c1c1c1;
   --bnum-color-input-border: #3a3a3a;
   /* Bordure des champs input */
+  --bnum-color-left-column: #f6f6f6;
   /* Texte */
   --bnum-text-primary: #3a3a3a;
   /* Texte principal */
@@ -177,10 +178,6 @@
      ================================= */
   --bnum-animation-rotate360: rotate360 1s linear infinite;
 }
-body {
-  font-size: var(--bnum-font-size-s, 0.875rem);
-  font-family: var(--bnum-font-family-primary);
-}
 .hidden {
   display: none;
 }
@@ -193,4 +190,16 @@ html.touch {
   --size-display-state: none;
   --size-margin-right-state: 0;
   --size-margin-left-state: 0;
+}
+body {
+  font-size: var(--bnum-font-size-s, 0.875rem);
+  font-family: var(--bnum-font-family-primary);
+}
+.ds-block {
+  display: block;
+  width: 100%;
+  flex: 1;
+}
+bnum-hide {
+  display: contents;
 }
