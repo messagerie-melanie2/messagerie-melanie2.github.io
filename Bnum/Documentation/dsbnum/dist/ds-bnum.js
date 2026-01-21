@@ -18123,7 +18123,7 @@ var Bnum = (function (exports) {
         }
         /**
          * Nom de l'attribut pour le type de colonne.
-         * @attr {string} type - Le type de colonne (ex: "sidebar", "main", "tools")
+         * @attr {string} (optional) (default: 'default') type - Le type de colonne (ex: "sidebar", "main", "tools")
          */
         static ATTR_TYPE = 'type';
         /**

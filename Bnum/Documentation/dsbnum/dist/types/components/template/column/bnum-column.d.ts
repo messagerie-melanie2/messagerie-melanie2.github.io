@@ -31,7 +31,7 @@ export declare class HTMLBnumColumn extends BnumElement {
     static get TAG(): typeof COMPONENT_TAG;
     /**
      * Nom de l'attribut pour le type de colonne.
-     * @attr {string} type - Le type de colonne (ex: "sidebar", "main", "tools")
+     * @attr {string} (optional) (default: 'default') type - Le type de colonne (ex: "sidebar", "main", "tools")
      */
     static readonly ATTR_TYPE = "type";
     /**
