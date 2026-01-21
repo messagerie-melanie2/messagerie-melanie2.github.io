@@ -73,6 +73,7 @@ export declare class HTMLBnumIcon extends BnumElementInternal {
      * @returns {HTMLBnumIcon} L'élément créé.
      */
     static Create(icon: string): HTMLBnumIcon;
+    static Write(icon: string, attribs?: Record<string, string>): string;
     /**
      * Retourne le tag HTML utilisé pour ce composant.
      * @returns {string}

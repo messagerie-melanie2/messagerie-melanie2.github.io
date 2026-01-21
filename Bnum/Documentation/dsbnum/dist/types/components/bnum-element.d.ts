@@ -94,6 +94,12 @@ export default abstract class BnumElement extends HTMLElement {
     attr(name: string): string | null;
     attr(name: string, value: string | boolean | number): this;
     /**
+     * Définit plusieurs attributs HTML à la fois.
+     * @param attribs Objet contenant les paires nom-valeur des attributs à définir.
+     * @returns L'instance courante pour le chaînage.
+     */
+    attrs(attribs: Record<string, string | boolean | number>): this;
+    /**
      * Essaye de définir un attribut html
      * @param doSomething true pour le définir
      * @param name Nom de l'attribut
@@ -153,7 +159,7 @@ export default abstract class BnumElement extends HTMLElement {
      * @param detail Détail de l'événement.
      * @returns L'instance courante.
      */
-    trigger(type: string, detail?: any): this;
+    trigger(type: string, detail?: any, options?: CustomEventInit): this;
     /**
      * Ajoute un ou plusieurs nœuds ou chaînes HTML à la fin de l'élément.
      * @param nodes Nœuds ou chaînes HTML à ajouter.
@@ -382,6 +388,7 @@ export default abstract class BnumElement extends HTMLElement {
      * @returns Vrai si Shadow DOM.
      */
     protected _p_isShadowElement(): boolean;
+    protected static _p_WriteAttributes(attrs: Record<string, string>): string;
     /**
      * Méthode statique pour créer une instance du composant.
      * Doit être implémentée dans les classes dérivées.

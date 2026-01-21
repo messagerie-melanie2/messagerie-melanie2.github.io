@@ -7,6 +7,11 @@
 /*  - Padding interne des cartes            */
 /*  - Espace entre les cartes (organismes)  */
 /* - Espace entre sections                 */
+/* Padding par défaut des dossiers */
+/* Padding plus large pour les dossiers */
+/* Padding plus petit pour les dossiers */
+/* Padding par défaut des dossiers racines */
+/* Padding plus large pour les dossiers racines */
 /* Composites */
 @keyframes rotate360 {
   from {
@@ -45,6 +50,13 @@
   --bnum-color-input-border: #3a3a3a;
   /* Bordure des champs input */
   --bnum-color-left-column: #f6f6f6;
+  /* Les items d'une liste ont forcément un fond transparent, 
+     donc on se base sur le classique pour le selected,
+     sur le hover pour le hover
+     et le selected pour le drag and drop*/
+  --bnum-color-list: #e3e3fd;
+  --bnum-color-list-hover: #c1c1fb;
+  --bnum-color-list-drag: #adadf9;
   /* Texte */
   --bnum-text-primary: #3a3a3a;
   /* Texte principal */
@@ -95,6 +107,8 @@
   --bnum-font-size-title-m: 4rem;
   --bnum-font-size-title-s: 3.5rem;
   --bnum-font-size-title-xs: 3rem;
+  --bnum-font-badge-s: 0.5625rem;
+  --bnum-body-font-size: var(--bnum-font-size-m, 1rem);
   /* Line heights */
   --bnum-font-height-h1: 48px;
   --bnum-font-height-h1-mobile: 40px;
@@ -144,6 +158,12 @@
   --bnum-space-title: var(--bnum-space-l);
   --bnum-space-alternate-title: var(--bnum-space-xl);
   --bnum-space-text: var(--bnum-space-l);
+  --bnum-folder-title-padding: var(--bnum-space-s) var(--bnum-space-m);
+  --bnum-folder-title-padding-larger: var(--bnum-space-m) var(--bnum-space-m);
+  --bnum-folder-title-padding-smaller: var(--bnum-space-xs) var(--bnum-space-m);
+  --bnum-folder-bal-title-padding: var(--bnum-space-m) var(--bnum-space-m);
+  --bnum-folder-bal-title-padding-larger: var(--bnum-space-l) var(--bnum-space-m);
+  --bnum-folder-bal-title-padding-smaller: var(--bnum-space-s) var(--bnum-space-m);
   /* =================================
      4. Bordures et Ombres
      ================================= */
@@ -164,6 +184,8 @@
   --bnum-border-in-surface-hover: var(--bnum-border-style-default) var(--bnum-border-width-s) var(--bnum-border-in-surface-hover);
   --bnum-border-in-surface-active: var(--bnum-border-style-default) var(--bnum-border-width-s) var(--bnum-border-in-surface-active);
   --bnum-border-surface: var(--bnum-border-style-default) var(--bnum-border-width-s) var(--bnum-color-primary);
+  --bnum-border-column: var(--bnum-border-style-default) var(--bnum-border-width-s) #ddd;
+  --bnum-border-in-column: var(--bnum-border-column);
   /* Ombres (pour élever les cartes) */
   --bnum-shadow-s: 0 1px 2px rgba(0, 0, 0, 0.05);
   --bnum-shadow-m: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -192,8 +214,47 @@ html.touch {
   --size-margin-left-state: 0;
 }
 body {
-  font-size: var(--bnum-font-size-s, 0.875rem);
+  font-size: var(--bnum-font-size-m, 1rem);
   font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+h1 {
+  font-size: var(--bnum-font-size-h1, 2.5rem);
+  line-height: var(--bnum-font-height-h1, 48px);
+  margin-bottom: var(--bnum-space-xl);
+}
+h2 {
+  font-size: var(--bnum-font-size-h2, 2rem);
+  line-height: var(--bnum-font-height-h2, 40px);
+  margin-bottom: var(--bnum-space-xl);
+}
+h3 {
+  font-size: var(--bnum-font-size-h3, 1.75rem);
+  line-height: var(--bnum-font-height-h3, 36px);
+  margin-bottom: var(--bnum-space-xl);
+}
+h4 {
+  font-size: var(--bnum-font-size-h4, 1.5rem);
+  line-height: var(--bnum-font-height-h4, 32px);
+  margin-bottom: var(--bnum-space-xl);
+}
+h5 {
+  font-size: var(--bnum-font-size-h5, 1.375rem);
+  line-height: var(--bnum-font-height-h5, 28px);
+  margin-bottom: var(--bnum-space-xl);
+}
+h6 {
+  font-size: var(--bnum-font-size-h6, 1.25rem);
+  line-height: var(--bnum-font-height-h6, 28px);
+  margin-bottom: var(--bnum-space-xl);
+}
+h1.no-margin,
+h2.no-margin,
+h3.no-margin,
+h4.no-margin,
+h5.no-margin,
+h6.no-margin {
+  margin-bottom: 0;
 }
 .ds-block {
   display: block;
@@ -202,4 +263,45 @@ body {
 }
 bnum-hide {
   display: contents;
+}
+.ghost-container {
+  width: 180px;
+  background: var(--bnum-color-surface);
+  border: var(--bnum-border-surface);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  font-family: var(--bnum-font-family-primary);
+}
+.ghost-sender {
+  font-size: 11px;
+  color: var(--bnum-text-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ghost-subject {
+  font-size: 13px;
+  color: var(--bnum-text-primary);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  /* Limite à 2 lignes */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ghost-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--bnum-color-primary);
+  color: var(--bnum-text-on-primary);
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: var(--bnum-border-in-surface);
 }
