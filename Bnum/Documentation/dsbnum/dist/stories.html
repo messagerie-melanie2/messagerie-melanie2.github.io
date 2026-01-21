@@ -325,7 +325,12 @@ html.dark body {
       <p>N/A</p>
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>type</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Le type de colonne (ex: "sidebar", "main", "tools")</td></tr><tr><td><code>data-keep-body</code></td><td><code>boolean</code></td><td><code>true</code></td><td>✅</td><td>Indique si le corps doit être conservé</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       <p>N/A</p>
@@ -339,10 +344,41 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <p>N/A</p>
 
       <h3>Variables d'instance</h3>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>type</code></td><td><code>string</code></td><td>Oui</td><td><p>Permet de définir le type de colonne (ex: &quot;sidebar&quot;, &quot;main&quot;, &quot;tools&quot;)
+Utile pour le CSS qui va définir la largeur</p>
+</td></tr><tr><td><code>#_keepBody</code></td><td><code>boolean</code></td><td>Oui</td><td><p>Indique si le corps de la colonne doit être conservé lors de certaines opérations.</p>
+<p>Rappel: data- ne sert qu&#39;à stocker des informations avant la création du composant.</p>
+</td></tr></tbody>
+    </table>
+  
 
       <h3>Variables statiques</h3>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>TAG</code></td><td><code>"bnum-column"</code></td><td>Oui</td><td><p>Tag HTML personnalisé utilisé pour ce composant.</p>
+</td></tr><tr><td><code>DEFAULT_COLUMN_TYPE</code></td><td><code>"default"</code></td><td>Oui</td><td><p>Valeur par défaut pour le type de colonne.</p>
+</td></tr><tr><td><code>CLASS_PREFIX</code></td><td><code>"bnum-column"</code></td><td>Oui</td><td><p>Préfixe commun pour les classes CSS de la colonne.</p>
+</td></tr><tr><td><code>CLASS_HEADER</code></td><td><code>"bnum-column__header"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;en-tête de la colonne.</p>
+</td></tr><tr><td><code>CLASS_RC_HEADER</code></td><td><code>"header"</code></td><td>Oui</td><td><p>Classe CSS &quot;legacy&quot; pour l&#39;en-tête (compatibilité).</p>
+</td></tr><tr><td><code>CLASS_RC_HEADER_OLD</code></td><td><code>"old-header"</code></td><td>Oui</td><td><p>Ancienne classe CSS pour l&#39;en-tête (pour rétrocompatibilité).</p>
+</td></tr><tr><td><code>CLASS_BODY</code></td><td><code>"bnum-column__body"</code></td><td>Oui</td><td><p>Classe CSS pour le corps de la colonne.</p>
+</td></tr><tr><td><code>CLASS_FOOTER</code></td><td><code>"bnum-column__footer"</code></td><td>Oui</td><td><p>Classe CSS pour le pied de page de la colonne.</p>
+</td></tr><tr><td><code>CLASS_RC_FOOTER</code></td><td><code>"footer"</code></td><td>Oui</td><td><p>Classe CSS &quot;legacy&quot; pour le pied de page (compatibilité).</p>
+</td></tr><tr><td><code>CLASS_FROM_SLOT</code></td><td><code>"from-slot"</code></td><td>Oui</td><td><p>Classe CSS indiquant qu&#39;un élément provient d&#39;un slot.</p>
+</td></tr><tr><td><code>CLASS_CONTENT_PREFIX</code></td><td><code>"bnum-column"</code></td><td>Oui</td><td><p>Préfixe pour les classes CSS de contenu.</p>
+</td></tr><tr><td><code>CLASS_CONTENT_POSTFIX</code></td><td><code>"content"</code></td><td>Oui</td><td><p>Suffixe pour les classes CSS de contenu.</p>
+</td></tr><tr><td><code>CLASS_CONTENT_HEADER</code></td><td><code>"bnum-column__header__content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu de l&#39;en-tête.</p>
+</td></tr><tr><td><code>CLASS_CONTENT_BODY</code></td><td><code>"bnum-column__body__content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu du corps.</p>
+</td></tr><tr><td><code>CLASS_CONTENT_FOOTER</code></td><td><code>"bnum-column__footer__content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu du pied de page.</p>
+</td></tr><tr><td><code>SLOT_HEADER</code></td><td><code>"header"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;en-tête.</p>
+</td></tr><tr><td><code>SLOT_FOOTER</code></td><td><code>"footer"</code></td><td>Oui</td><td><p>Nom du slot pour le pied de page.</p>
+</td></tr></tbody>
+    </table>
+  
 
       <h2>Code source</h2>
       <p>
@@ -9867,7 +9903,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag de l&#39;élément.</p>
+      <tbody><tr><td><code>TAG</code></td><td><code>"bnum-icon-button"</code></td><td>Oui</td><td><p>Tag de l&#39;élément.</p>
 </td></tr><tr><td><code>ID_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Id de l&#39;icône à l&#39;intérieur du bouton</p>
 </td></tr></tbody>
     </table>

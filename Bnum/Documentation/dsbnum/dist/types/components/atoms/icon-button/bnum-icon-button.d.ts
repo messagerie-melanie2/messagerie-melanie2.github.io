@@ -63,5 +63,5 @@ export declare class HTMLBnumButtonIcon extends BnumElement {
     /**
      * Tag de l'élément.
      */
-    static get TAG(): string;
+    static get TAG(): "bnum-icon-button";
 }

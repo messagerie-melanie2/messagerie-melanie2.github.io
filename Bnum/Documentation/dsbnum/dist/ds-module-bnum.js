@@ -3662,23 +3662,24 @@ class HTMLBnumBadge extends BnumElementInternal {
 }
 HTMLBnumBadge.TryDefine();
 
-const TAG_ICON = `${BnumConfig.Get('tag_prefix')}-icon`;
-const TAG_BUTTON = `${BnumConfig.Get('tag_prefix')}-button`;
-const TAG_PRIMARY = `${BnumConfig.Get('tag_prefix')}-primary-button`;
-const TAG_SECONDARY = `${BnumConfig.Get('tag_prefix')}-secondary-button`;
-const TAG_DANGER = `${BnumConfig.Get('tag_prefix')}-danger-button`;
-const TAG_HELPER = `${BnumConfig.Get('tag_prefix')}-helper`;
-`${BnumConfig.Get('tag_prefix')}-img`;
-const TAG_CARD_TITLE = `${BnumConfig.Get('tag_prefix')}-card-title`;
-const TAG_CARD = `${BnumConfig.Get('tag_prefix')}-card`;
-const TAG_CARD_EMAIL = `${BnumConfig.Get('tag_prefix')}-card-email`;
-const TAG_CARD_AGENDA = `${BnumConfig.Get('tag_prefix')}-card-agenda`;
-const TAG_CARD_ITEM = `${BnumConfig.Get('tag_prefix')}-card-item`;
-const TAG_CARD_ITEM_MAIL = `${BnumConfig.Get('tag_prefix')}-card-item-mail`;
-const TAG_CARD_ITEM_AGENDA = `${BnumConfig.Get('tag_prefix')}-card-item-agenda`;
-const TAG_CARD_LIST = `${BnumConfig.Get('tag_prefix')}-card-list`;
-const TAG_DATE = `${BnumConfig.Get('tag_prefix')}-date`;
-const TAG_ICON_BUTTON = `${BnumConfig.Get('tag_prefix')}-icon-button`;
+const TAG_PREFIX = BnumConfig.Get('tag_prefix');
+const TAG_ICON = `${TAG_PREFIX}-icon`;
+const TAG_BUTTON = `${TAG_PREFIX}-button`;
+const TAG_PRIMARY = `${TAG_PREFIX}-primary-button`;
+const TAG_SECONDARY = `${TAG_PREFIX}-secondary-button`;
+const TAG_DANGER = `${TAG_PREFIX}-danger-button`;
+const TAG_HELPER = `${TAG_PREFIX}-helper`;
+const TAG_CARD_TITLE = `${TAG_PREFIX}-card-title`;
+const TAG_CARD = `${TAG_PREFIX}-card`;
+const TAG_CARD_EMAIL = `${TAG_PREFIX}-card-email`;
+const TAG_CARD_AGENDA = `${TAG_PREFIX}-card-agenda`;
+const TAG_CARD_ITEM = `${TAG_PREFIX}-card-item`;
+const TAG_CARD_ITEM_MAIL = `${TAG_PREFIX}-card-item-mail`;
+const TAG_CARD_ITEM_AGENDA = `${TAG_PREFIX}-card-item-agenda`;
+const TAG_CARD_LIST = `${TAG_PREFIX}-card-list`;
+const TAG_DATE = `${TAG_PREFIX}-date`;
+const TAG_ICON_BUTTON = `${TAG_PREFIX}-icon-button`;
+const TAG_COLUMN = `${TAG_PREFIX}-column`;
 
 /**
  * RegEx qui permet de vérifier si un texte possède uniquement des charactères alphanumériques.
@@ -18094,6 +18095,12 @@ class HTMLBnumTree extends BnumElementInternal {
 HTMLBnumTree.TryDefine();
 
 /**
+ * Tag HTML personnalisé interne utilisé pour ce composant.
+ *
+ * Source de vérité pour la lisibilités des autres constantes liées à la classe et au tag de celle-ci.
+ */
+const COMPONENT_TAG = TAG_COLUMN;
+/**
  *  Permet de structurer une colonne avec un en-tête, un corps et un pied de page.
  *
  * @structure Colonne
@@ -18104,82 +18111,280 @@ HTMLBnumTree.TryDefine();
  * </bnum-column>
  */
 class HTMLBnumColumn extends BnumElement {
-    // Permet de définir le type de colonne (ex: "sidebar", "main", "tools")
-    // Utile pour le CSS qui va définir la largeur
-    get type() {
-        return this.getAttribute('type') || 'default';
+    //#region Constantes statiques
+    /**
+     * Tag HTML personnalisé utilisé pour ce composant.
+     */
+    static get TAG() {
+        return COMPONENT_TAG;
     }
+    /**
+     * Nom de l'attribut pour le type de colonne.
+     * @attr {string} type - Le type de colonne (ex: "sidebar", "main", "tools")
+     */
+    static ATTR_TYPE = 'type';
+    /**
+     * Valeur par défaut pour le type de colonne.
+     */
+    static DEFAULT_COLUMN_TYPE = 'default';
+    /**
+     * Préfixe commun pour les classes CSS de la colonne.
+     */
+    static CLASS_PREFIX = HTMLBnumColumn.TAG;
+    /**
+     * Classe CSS pour l'en-tête de la colonne.
+     */
+    static CLASS_HEADER = `${HTMLBnumColumn.CLASS_PREFIX}__header`;
+    /**
+     * Classe CSS "legacy" pour l'en-tête (compatibilité).
+     */
+    static CLASS_RC_HEADER = 'header';
+    /**
+     * Ancienne classe CSS pour l'en-tête (pour rétrocompatibilité).
+     */
+    static CLASS_RC_HEADER_OLD = `old-${HTMLBnumColumn.CLASS_RC_HEADER}`;
+    /**
+     * Classe CSS pour le corps de la colonne.
+     */
+    static CLASS_BODY = `${HTMLBnumColumn.CLASS_PREFIX}__body`;
+    /**
+     * Classe CSS pour le pied de page de la colonne.
+     */
+    static CLASS_FOOTER = `${HTMLBnumColumn.CLASS_PREFIX}__footer`;
+    /**
+     * Classe CSS "legacy" pour le pied de page (compatibilité).
+     */
+    static CLASS_RC_FOOTER = 'footer';
+    /**
+     * Classe CSS indiquant qu'un élément provient d'un slot.
+     */
+    static CLASS_FROM_SLOT = 'from-slot';
+    /**
+     * Préfixe pour les classes CSS de contenu.
+     */
+    static CLASS_CONTENT_PREFIX = this.CLASS_PREFIX;
+    /**
+     * Suffixe pour les classes CSS de contenu.
+     */
+    static CLASS_CONTENT_POSTFIX = 'content';
+    /**
+     * Classe CSS pour le contenu de l'en-tête.
+     */
+    static CLASS_CONTENT_HEADER = `${HTMLBnumColumn.CLASS_CONTENT_PREFIX}__header__${HTMLBnumColumn.CLASS_CONTENT_POSTFIX}`;
+    /**
+     * Classe CSS pour le contenu du corps.
+     */
+    static CLASS_CONTENT_BODY = `${HTMLBnumColumn.CLASS_CONTENT_PREFIX}__body__${HTMLBnumColumn.CLASS_CONTENT_POSTFIX}`;
+    /**
+     * Classe CSS pour le contenu du pied de page.
+     */
+    static CLASS_CONTENT_FOOTER = `${HTMLBnumColumn.CLASS_CONTENT_PREFIX}__footer__${HTMLBnumColumn.CLASS_CONTENT_POSTFIX}`;
+    /**
+     * Nom du slot pour l'en-tête.
+     */
+    static SLOT_HEADER = 'header';
+    /**
+     * Nom du slot pour le pied de page.
+     */
+    static SLOT_FOOTER = 'footer';
+    /**
+     * Nom de l'attribut de données pour conserver le corps.
+     * @attr {boolean} (optional) (default: true) data-keep-body - Indique si le corps doit être conservé
+     */
+    static DATA_KEEP_BODY = 'keep-body';
+    //#endregion Constantes statiques
+    //#region Constants Map
+    /**
+     * Regroupe les différentes classes CSS utilisées par le composant.
+     * @private
+     */
+    static #_CLASSES = {
+        HOST: HTMLBnumColumn.TAG,
+        HEADER: {
+            MAIN: HTMLBnumColumn.CLASS_HEADER,
+            RC: HTMLBnumColumn.CLASS_RC_HEADER,
+            OLD: HTMLBnumColumn.CLASS_RC_HEADER_OLD,
+        },
+        BODY: HTMLBnumColumn.CLASS_BODY,
+        FOOTER: {
+            MAIN: HTMLBnumColumn.CLASS_FOOTER,
+            RC: HTMLBnumColumn.CLASS_RC_FOOTER,
+        },
+        CONTENT_PREFIX: HTMLBnumColumn.TAG,
+        FROM_SLOT: HTMLBnumColumn.CLASS_FROM_SLOT,
+        CONTENT: {
+            HEADER: HTMLBnumColumn.CLASS_CONTENT_HEADER,
+            BODY: HTMLBnumColumn.CLASS_CONTENT_BODY,
+            FOOTER: HTMLBnumColumn.CLASS_CONTENT_FOOTER,
+        },
+    };
+    /**
+     * Regroupe les noms de slots utilisés.
+     * @private
+     */
+    static #_SLOTS = {
+        HEADER: HTMLBnumColumn.SLOT_HEADER,
+        FOOTER: HTMLBnumColumn.SLOT_FOOTER,
+    };
+    /**
+     * Regroupe les noms d'attributs utilisés.
+     * @private
+     */
+    static #_ATTRIBUTES = {
+        TYPE: HTMLBnumColumn.ATTR_TYPE,
+        DATA: {
+            KEEP_BODY: HTMLBnumColumn.DATA_KEEP_BODY,
+        },
+    };
+    //#endregion Constants Map
+    //#region Getters/Setters
+    /**
+     * Permet de définir le type de colonne (ex: "sidebar", "main", "tools")
+     * Utile pour le CSS qui va définir la largeur
+     */
+    get type() {
+        return (this.getAttribute(HTMLBnumColumn.#_ATTRIBUTES.TYPE) ||
+            HTMLBnumColumn.DEFAULT_COLUMN_TYPE);
+    }
+    /**
+     * Indique si le corps de la colonne doit être conservé lors de certaines opérations.
+     *
+     * Rappel: data- ne sert qu'à stocker des informations avant la création du composant.
+     */
+    get #_keepBody() {
+        return this.data(HTMLBnumColumn.#_ATTRIBUTES.DATA.KEEP_BODY) === 'true';
+    }
+    //#endregion Getters/Setters
+    //#region LifeCycle
+    /**
+     * Constructeur de la colonne Bnum.
+     */
     constructor() {
         super();
     }
+    /**
+     * On désactive le shadow-dom pour cette élément.
+     * @protected
+     */
     _p_isShadowElement() {
         return false;
     }
     /**
      * Logique de rendu Light DOM
      * On récupère les enfants existants et on les réorganise.
+     * @param {HTMLElement} container Le conteneur dans lequel injecter le DOM reconstruit
+     * @protected
      */
     _p_buildDOM(container) {
-        // 1. Sauvegarde des enfants actuels (ce que l'utilisateur a mis dans la balise)
-        // On convertit en Array pour figer la liste car childNodes est "live"
-        const children = Array.from(this.childNodes);
-        // 2. Création de la structure interne
-        // On vide l'élément pour reconstruire proprement
-        this.innerHTML = '';
-        this.classList.add('bnum-column', `bnum-column--${this.type}`);
+        // Sauvegarde des enfants actuels
+        const originalChildren = Array.from(this.childNodes);
+        // Fragment temporaire pour construire le DOM avant injection
+        const fragment = document.createDocumentFragment();
         // Création des conteneurs
         const [headerContainer, bodyContainer, footerContainer] = this._p_createDivs({
-            classes: ['bnum-column__header', 'header'],
+            classes: [
+                HTMLBnumColumn.#_CLASSES.HEADER.MAIN,
+                HTMLBnumColumn.#_CLASSES.HEADER.RC,
+            ],
         }, {
-            classes: ['bnum-column__body'],
+            classes: [HTMLBnumColumn.#_CLASSES.BODY],
         }, {
-            classes: ['bnum-column__footer', 'footer'],
+            classes: [
+                HTMLBnumColumn.#_CLASSES.FOOTER.MAIN,
+                HTMLBnumColumn.#_CLASSES.FOOTER.RC,
+            ],
         });
-        // 3. Distribution des enfants (Slotting manuel)
+        // Distribution des enfants (Slotting manuel)
         let hasHeader = false;
         let hasFooter = false;
-        children.forEach((node) => {
+        for (const node of originalChildren) {
             // Si c'est un noeud texte vide, on ignore
-            if (node.nodeType === Node.TEXT_NODE && !node.textContent?.trim())
-                return;
-            const element = node;
-            const slotName = element.getAttribute
-                ? element.getAttribute('slot')
+            if (node.nodeType === Node.TEXT_NODE) {
+                if (node.textContent?.trim())
+                    bodyContainer.appendChild(node);
+                continue;
+            }
+            const nodeElement = node.nodeType === Node.ELEMENT_NODE ? node : null;
+            if (!nodeElement)
+                continue;
+            const slotName = nodeElement.getAttribute
+                ? nodeElement.getAttribute('slot')
                 : null;
-            if (slotName === 'header') {
-                const nodeElment = node;
-                nodeElment.removeAttribute('slot');
-                nodeElment.classList.add('bnum-column__header__content', 'from-slot');
-                if (nodeElment.classList.contains('header')) {
-                    // Évite la duplication de la classe "header"
-                    nodeElment.classList.remove('header');
-                    nodeElment.classList.add('old-header');
-                }
-                headerContainer.appendChild(node);
-                hasHeader = true;
+            switch (slotName) {
+                case HTMLBnumColumn.#_SLOTS.HEADER:
+                    this.#_processNode(nodeElement, HTMLBnumColumn.#_CLASSES.CONTENT.HEADER);
+                    headerContainer.appendChild(node);
+                    if (!hasHeader)
+                        hasHeader = true;
+                    break;
+                case HTMLBnumColumn.#_SLOTS.FOOTER:
+                    this.#_processNode(nodeElement, HTMLBnumColumn.#_CLASSES.CONTENT.FOOTER);
+                    footerContainer.appendChild(node);
+                    if (!hasFooter)
+                        hasFooter = true;
+                    break;
+                default:
+                    this.#_processNode(nodeElement, HTMLBnumColumn.#_CLASSES.CONTENT.BODY);
+                    bodyContainer.appendChild(node);
+                    break;
             }
-            else if (slotName === 'footer') {
-                node.removeAttribute('slot');
-                node.classList.add('bnum-column__footer__content', 'from-slot');
-                footerContainer.appendChild(node);
-                hasFooter = true;
-            }
-            else {
-                // Tout ce qui n'a pas de slot va dans le body
-                if (node instanceof HTMLElement)
-                    node.classList.add('bnum-column__body__content', 'from-slot');
-                bodyContainer.appendChild(node);
-            }
-        });
-        // 4. Injection conditionnelle dans le DOM
+        }
+        // Nettoyage du container principal
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        // Ajout des classes principales
+        this.classList.add(HTMLBnumColumn.#_CLASSES.HOST, `${HTMLBnumColumn.#_CLASSES.CONTENT_PREFIX}--${this.type}`);
+        // Injection conditionnelle dans le DOM
         if (hasHeader)
-            container.appendChild(headerContainer);
-        container.append(...bodyContainer.childNodes); // Le body est obligatoire ou vide
+            fragment.appendChild(headerContainer);
+        if (this.#_keepBody)
+            fragment.appendChild(bodyContainer);
+        else
+            fragment.append(...bodyContainer.childNodes);
         if (hasFooter)
-            container.appendChild(footerContainer);
+            fragment.appendChild(footerContainer);
+        container.appendChild(fragment);
     }
-    static get TAG() {
-        return 'bnum-column';
+    /**
+     * Reactivity for Type attribute change
+     */
+    _p_update(name, oldVal, newVal) {
+        if (oldVal === newVal)
+            return;
+        if (name === HTMLBnumColumn.#_ATTRIBUTES.TYPE && this.alreadyLoaded) {
+            if (oldVal)
+                this.classList.remove(`${HTMLBnumColumn.#_CLASSES.CONTENT_PREFIX}--${oldVal}`);
+            if (newVal)
+                this.classList.add(`${HTMLBnumColumn.#_CLASSES.CONTENT_PREFIX}--${newVal}`);
+        }
+    }
+    //#endregion LifeCycle
+    //#region Méthodes privées
+    /**
+     * Traite un élément enfant : supprime l'attribut slot, ajoute les classes CSS nécessaires,
+     * et gère la rétrocompatibilité des classes "header".
+     * @param {HTMLElement} element L'élément à traiter
+     * @param {string} specificClass Classe CSS spécifique à ajouter
+     * @private
+     */
+    #_processNode(element, specificClass) {
+        element.removeAttribute('slot');
+        element.classList.add(specificClass, HTMLBnumColumn.#_CLASSES.FROM_SLOT);
+        // Gestion legacy "header" class duplication
+        if (element.classList.contains(HTMLBnumColumn.#_CLASSES.HEADER.RC)) {
+            element.classList.remove(HTMLBnumColumn.#_CLASSES.HEADER.RC);
+            element.classList.add(HTMLBnumColumn.#_CLASSES.HEADER.OLD);
+        }
+    }
+    //#endregion Méthodes privées
+    //#region Static Methods
+    /**
+     * Méthode interne pour définir les attributs observés.
+     * @returns Attributs à observer
+     */
+    static _p_observedAttributes() {
+        return [HTMLBnumColumn.#_ATTRIBUTES.TYPE];
     }
 }
 // Définition automatique

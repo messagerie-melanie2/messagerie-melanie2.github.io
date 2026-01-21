@@ -1,1 +1,1 @@
-export * from './bnum-column';
+export * from './column/bnum-column';
