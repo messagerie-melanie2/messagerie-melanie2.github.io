@@ -39,8 +39,9 @@
   /* Le fond de la page */
   --bnum-color-surface: #f6f6f6;
   /* Le fond des surfaces */
-  --bnum-color-in-surface-border: #ddd;
+  --bnum-color-border: #ddd;
   /* Bordure des surfaces */
+  --bnum-color-in-surface-border: var(--bnum-color-border);
   --bnum-color-in-surface-hover: #dfdfdf;
   --bnum-color-in-surface-active: #cfcfcf;
   --bnum-color-input: #eee;
