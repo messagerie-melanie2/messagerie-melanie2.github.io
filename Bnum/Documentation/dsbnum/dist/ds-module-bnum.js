@@ -576,6 +576,11 @@ let BnumConfig = (() => {
 
 const EMPTY_STRING = '';
 
+//#region MiscFunctions
+function isNullOrUndefined(item) {
+    return item !== null || item !== undefined;
+}
+
 function Capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1)
 }
@@ -586,7 +591,7 @@ function CapitalizeLine(line) {
           .join(' ');
 }
 
-var css_248z$l = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
+var css_248z$n = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
 
 class BnumDOM {
     /**
@@ -1281,7 +1286,7 @@ class BnumElement extends HTMLElement {
         const sheets = [BASE_STYLE];
         const componentStyle = this.constructor.__CACHE_STYLE__;
         if (componentStyle)
-            sheets.push(componentStyle);
+            sheets.push(...(Array.isArray(componentStyle) ? componentStyle : [componentStyle]));
         return sheets;
     }
     /**
@@ -1397,7 +1402,7 @@ class BnumElement extends HTMLElement {
 /**
  * Style commun à tous les BnumElement.
  */
-const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$l);
+const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$n);
 
 class Log {
     static trace(context, ...args) {
@@ -2529,7 +2534,7 @@ class SchedulerArray {
     }
 }
 
-var css_248z$k = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
+var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
 
 /**
  * Décorateur de classe pour définir un Web Component.
@@ -2598,11 +2603,8 @@ function Define(options = {}) {
             // ---------------------------------------------------------
             // 3. COMPILATION UNIQUE DES STYLES (CACHE)
             // ---------------------------------------------------------
-            if (options.styles) {
-                const sheet = new CSSStyleSheet();
-                sheet.replaceSync(options.styles);
-                clazz.__CACHE_STYLE__ = sheet;
-            }
+            if (options.styles)
+                initStyle(clazz, options.styles);
             // ---------------------------------------------------------
             // 4. ENREGISTREMENT DU WEB COMPONENT
             // ---------------------------------------------------------
@@ -2611,6 +2613,24 @@ function Define(options = {}) {
             }
         });
     };
+}
+function initStyle(clazz, styles) {
+    var strStyles;
+    const array = Array.isArray(styles) ? styles : [styles];
+    clazz.__CACHE_STYLE__ = [];
+    for (const style of array) {
+        if (style instanceof CSSStyleSheet)
+            clazz.__CACHE_STYLE__.push(style);
+        else if (!strStyles)
+            strStyles = style;
+        else
+            strStyles += style;
+    }
+    if (strStyles && strStyles !== EMPTY_STRING) {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(strStyles);
+        clazz.__CACHE_STYLE__.push(sheet);
+    }
 }
 
 /**
@@ -2789,7 +2809,7 @@ function Self(_value, context) {
     });
 }
 
-const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$k);
+const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$m);
 /**
  * Badge d'information.
  *
@@ -3088,6 +3108,7 @@ const TAG_FOLDER_LIST = `${TAG_PREFIX}-folder-list`;
 const TAG_HEADER = `${TAG_PREFIX}-header`;
 const TAG_SEGMENTED_ITEM$1 = `${TAG_PREFIX}-segmented-item`;
 const TAG_SEGMENTED_CONTROL = `${TAG_PREFIX}-segmented-control`;
+const TAG_SELECT = `${TAG_PREFIX}-select`;
 
 /**
  * RegEx qui permet de vérifier si un texte possède uniquement des charactères alphanumériques.
@@ -3136,9 +3157,9 @@ class ElementChangedEvent extends CustomEvent {
     }
 }
 
-var css_248z$j = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+var css_248z$l = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
 
-var css_248z$i = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+var css_248z$k = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
 
 /**
  * Classe CSS utilisée pour les icônes Material Symbols.
@@ -3147,8 +3168,8 @@ const ICON_CLASS = 'material-symbols-outlined';
 /**
  * Feuille de style CSS pour les icônes Material Symbols.
  */
-const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$j.replaceAll(`.${ICON_CLASS}`, ':host'));
-const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$i);
+const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$l.replaceAll(`.${ICON_CLASS}`, ':host'));
+const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$k);
 /**
  * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
  *
@@ -3446,13 +3467,13 @@ let HTMLBnumIcon = (() => {
     return _classThis;
 })();
 
-var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
 //#region External Constants
 /**
  * Style CSS du composant bouton.
  */
-const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$h);
+const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$j);
 // Constantes pour les tags des différents types de boutons
 /**
  * Icône de chargement utilisée dans le bouton.
@@ -3499,7 +3520,7 @@ const TAG$1 = TAG_BUTTON;
 /**
  * Template HTML du composant bouton.
  */
-const TEMPLATE$c = BnumElement.CreateTemplate(`
+const TEMPLATE$d = BnumElement.CreateTemplate(`
   <div class="${CLASS_WRAPPER}">
     <span class="${CLASS_SLOT}">
       <slot></slot>
@@ -3899,7 +3920,7 @@ let HTMLBnumButton = (() => {
          * @returns Template utiliser pour le composant
          */
         _p_fromTemplate() {
-            return TEMPLATE$c;
+            return TEMPLATE$d;
         }
         /**
          * Construit le DOM du composant bouton.
@@ -4904,10 +4925,10 @@ let HTMLBnumDate = (() => {
     return HTMLBnumDate = _classThis;
 })();
 
-var css_248z$g = ":host{border-bottom:thin dotted;cursor:help}";
+var css_248z$i = ":host{border-bottom:thin dotted;cursor:help}";
 
 // bnum-helper.ts
-const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$g);
+const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$i);
 /**
  * Constante représentant l'icône utilisée par défaut.
  */
@@ -4984,13 +5005,13 @@ const ICON = 'help';
     return _classThis;
 })();
 
-var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
 //#region Global Constants
 const ID_ICON$1 = 'icon';
 //#endregion Global Constants
-const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$f);
-const TEMPLATE$b = BnumElement.CreateTemplate(`
+const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$h);
+const TEMPLATE$c = BnumElement.CreateTemplate(`
     <${HTMLBnumIcon.TAG} id="${ID_ICON$1}"><slot></slot></${HTMLBnumIcon.TAG}>
     `);
 /**
@@ -5098,7 +5119,7 @@ let HTMLBnumButtonIcon = (() => {
          * @inheritdoc
          */
         _p_fromTemplate() {
-            return TEMPLATE$b;
+            return TEMPLATE$c;
         }
         /**
          * @inheritdoc
@@ -5192,9 +5213,12 @@ let HTMLBnumButtonIcon = (() => {
 
 const EVENT_DEFAULT = 'default';
 
-var css_248z$e = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host #hint-text{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}:host #hint-text__label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}:host #hint-text__hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}:host .addons__inner{position:relative;width:100%}:host input{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+var css_248z$g = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
 
-const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$e);
+var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+
+const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$g);
+const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$f);
 //#region Global Constants
 const ID_INPUT = 'bnum-input';
 const ID_HINT_TEXT = 'hint-text';
@@ -5220,11 +5244,11 @@ const TEXT_INVALID_INPUT = BnumConfig.Get('local_keys')?.invalid_input || 'Le ch
 //#region Template
 // Utilisation des constantes dans le template
 const BASE_TEMPLATE = `
-  <label id="${ID_HINT_TEXT}" for="${ID_INPUT}">
-    <span id="${ID_HINT_TEXT_LABEL}">
+  <label id="${ID_HINT_TEXT}" class="label-container" for="${ID_INPUT}">
+    <span id="${ID_HINT_TEXT_LABEL}" class="label-container--label">
       <slot></slot>
     </span>
-    <span id="${ID_HINT_TEXT_HINT}">
+    <span id="${ID_HINT_TEXT_HINT}" class="label-container--hint">
       <slot name="${SLOT_HINT}"></slot>
     </span>
   </label>
@@ -5233,7 +5257,7 @@ const BASE_TEMPLATE = `
       <div class="addons__inner">
         <!-- {{addoninner}} -->
         <${HTMLBnumIcon.TAG} id="${ID_INPUT_ICON}"></${HTMLBnumIcon.TAG}>
-          <input id="${ID_INPUT}" type="${DEFAULT_INPUT_TYPE}" />
+          <input id="${ID_INPUT}" class="input-like" type="${DEFAULT_INPUT_TYPE}" />
         </div>
         <${HTMLBnumButton.TAG} id="${ID_INPUT_BUTTON}" rounded data-variation="${DEFAULT_BUTTON_VARIATION}"><slot name="${SLOT_BUTTON}"></slot></${HTMLBnumButton.TAG}>
     </div>
@@ -5672,7 +5696,7 @@ let HTMLBnumInput = (() => {
          * @returns Liste de stylesheet
          */
         _p_getStylesheets() {
-            return [...super._p_getStylesheets(), STYLE$1];
+            return [...super._p_getStylesheets(), INPUT_BASE_STYLE, STYLE$1];
         }
         /**
          * Retourne le template HTML utilisé pour le composant.
@@ -5712,7 +5736,7 @@ let HTMLBnumInput = (() => {
                         break;
                     }
                     if (newVal !== null) {
-                        this._p_internal.setFormValue(newVal);
+                        this.#_setFormValue(newVal);
                         if (this.#_input)
                             this.#_input.value = newVal;
                         this.setAttribute(this._.ATTRIBUTE_IGNOREVALUE, 'true');
@@ -6262,9 +6286,9 @@ let HTMLBnumInput = (() => {
     return HTMLBnumInput = _classThis;
 })();
 
-var css_248z$d = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
+var css_248z$e = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
 
-const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$d);
+const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$e);
 /**
  * Input nombre.
  *
@@ -6675,9 +6699,9 @@ let HTMLBnumInputDate = (() => {
     return _classThis;
 })();
 
-var css_248z$c = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
+var css_248z$d = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
 
-const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$c);
+const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$d);
 //#region Global Constants
 const ID_ACTIONS_CONTAINER = 'input-search-actions-container';
 const ID_CLEAR_BUTTON = 'input-clear-button';
@@ -6685,7 +6709,7 @@ const SLOT_ACTIONS = 'actions';
 const EVENT_SEARCH = 'bnum-input-search:search';
 //#endregion Global Constants
 //#region Template
-const TEMPLATE$a = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
+const TEMPLATE$b = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
       ${HTMLBnumButtonIcon.Write('close', { id: ID_CLEAR_BUTTON })}
       <slot name="${SLOT_ACTIONS}"></slot>
     </div>`);
@@ -6822,7 +6846,7 @@ let HTMLBnumInputSearch = (() => {
             __runInitializers(this, ____extraInitializers);
         }
         _p_fromTemplate() {
-            return TEMPLATE$a;
+            return TEMPLATE$b;
         }
         _p_getStylesheets() {
             return [...super._p_getStylesheets(), SHEET$9];
@@ -7531,6 +7555,627 @@ let HTMLBnumSecondaryButton = (() => {
         }
         static get TAG() {
             return TAG_SECONDARY;
+        }
+    });
+    return _classThis;
+})();
+
+// core/jsx/index.ts
+const VOID_TAGS = new Set([
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
+]);
+function h(tag, props, ...argsChildren) {
+    if (typeof tag === 'function' && 'TAG' in tag) {
+        tag = tag.TAG;
+    }
+    if (typeof tag === 'function') {
+        const children = argsChildren.length ? argsChildren : props?.children || [];
+        return tag({ ...props, children });
+    }
+    let attrs = EMPTY_STRING;
+    if (props) {
+        for (const key in props) {
+            const value = props[key];
+            if (key === 'children' || value == null || value === false)
+                continue;
+            const name = key === 'className' ? 'class' : key;
+            if (key === 'style' && typeof value === 'object') {
+                let styleStr = EMPTY_STRING;
+                for (const sKey in value) {
+                    styleStr += `${sKey}:${value[sKey]};`;
+                }
+                attrs += ` ${name}="${styleStr}"`;
+            }
+            else if (value === true) {
+                attrs += ` ${name}`;
+            }
+            else {
+                attrs += ` ${name}="${value}"`;
+            }
+        }
+    }
+    const open = `<${tag}${attrs}>`;
+    if (VOID_TAGS.has(tag))
+        return open;
+    const rawChildren = argsChildren.length > 0 ? argsChildren : props?.children;
+    const content = renderChildren(rawChildren);
+    return `${open}${content}</${tag}>`;
+}
+// Helper récursif ultra-rapide pour les enfants
+function renderChildren(child) {
+    if (child == null || child === false || child === true)
+        return EMPTY_STRING;
+    if (Array.isArray(child)) {
+        let str = EMPTY_STRING;
+        for (let i = 0; i < child.length; i++) {
+            str += renderChildren(child[i]);
+        }
+        return str;
+    }
+    return String(child);
+}
+
+const schedulersKey = Symbol('schedulers');
+function Schedule() {
+    return function (target, context) {
+        const sKey = Symbol(String(context.name));
+        return function (...args) {
+            const caches = (this[schedulersKey] ??= new Map());
+            let scheduler;
+            if (caches.has(sKey))
+                scheduler = caches.get(sKey);
+            else
+                scheduler = new Scheduler(target.apply(this, ...args));
+            if (scheduler)
+                scheduler.schedule(args[0]);
+        };
+    };
+}
+
+// core/decorators/ui.ts
+function UI(selectorMap, options) {
+    const { shadowRoot = true } = options || {};
+    return function (target, context) {
+        const name = String(context.name);
+        // Symbole pour stocker l'objet UI une fois créé
+        const uiCacheKey = Symbol(name);
+        return {
+            get() {
+                // 1. Si l'objet UI existe déjà, on le retourne
+                if (this[uiCacheKey]) {
+                    return this[uiCacheKey];
+                }
+                const root = shadowRoot ? this.shadowRoot || this : this;
+                // 2. On crée un objet vide
+                const uiObject = {};
+                // 3. On utilise un Map interne pour stocker les résultats des querySelector
+                //    pour ne pas les refaire à chaque accès (Cache granulaire)
+                const domCache = new Map();
+                // 4. On définit dynamiquement des getters pour chaque clé
+                for (const [key, selector] of Object.entries(selectorMap)) {
+                    Object.defineProperty(uiObject, key, {
+                        configurable: true,
+                        enumerable: true,
+                        get: () => {
+                            // A. Si on a déjà cherché cet élément précis, on le rend
+                            if (domCache.has(key)) {
+                                return domCache.get(key);
+                            }
+                            // B. Sinon, on fait le querySelector (LAZY)
+                            const element = root.querySelector(selector);
+                            // C. On le met en cache
+                            domCache.set(key, element);
+                            return element;
+                        },
+                        // Permet d'écraser manuellement si besoin : this.#_ui.icon = ...
+                        set: (value) => {
+                            domCache.set(key, value);
+                        },
+                    });
+                }
+                // 5. On stocke l'objet configuré sur l'instance et on le retourne
+                this[uiCacheKey] = uiObject;
+                return uiObject;
+            },
+        };
+    };
+}
+
+/**
+ * Décorateur de classe.
+ * Indique que ce composant doit déclencher une mise à jour complète (`_p_update`)
+ * à chaque modification d'un attribut observé.
+ *  Cela évite d'avoir à surcharger manuellement `_p_isUpdateForAllAttributes`.
+ * @example
+ * ```tsx
+ * // imports ...
+ *
+ * @Define({ ... })
+ * @UpdateAll()
+ * export class MyComponent extends BnumElementInternal { ... }
+ * ```
+ */
+function UpdateAll() {
+    return function (target, context) {
+        if (context.kind !== 'class') {
+            throw new Error('@UpdateAll ne peut être utilisé que sur une classe.');
+        }
+        context.addInitializer(function () {
+            this.__CONFIG_UPDATE_ALL__ = true;
+        });
+    };
+}
+
+var css_248z$c = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{cursor:pointer}";
+
+//#endregon Types
+//#region Global Constants
+const SYNCED_ATTRIBUTES = [
+    'autocomplete',
+    'autofocus',
+    'disabled',
+    'form',
+    'multiple',
+    'required',
+    'size',
+    'name',
+    'value',
+];
+const TEMPLATE$a = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("select", { id: "select", class: "bnum-select__container__select input-like" })] }));
+//#endregion Global Constants
+/**
+ * @structure Defaut
+ * <bnum-select>
+ *   <span slot="label">Un select</span>
+ *   <option value="none" selected disabled>Choisissez une option</option>
+ *   <option value="a">a</option>
+ *   <option value="b">b</option>
+ * </bnum-select>
+ *
+ * @structure Avec des optgroup
+ * <bnum-select>
+ *   <span slot="label">Un select</span>
+ *   <optgroup label="yolo">
+ *   <option value="none" selected disabled>Choisissez une option</option>
+ *   <option value="a">a</option>
+ *   <option value="b">b</option>
+ *   </optgroup>
+ *   <optgroup label="swag">
+ *   <option value="c">c</option>
+ *   <option value="d">d</option>
+ *   <option value="e">e</option>
+ *   </optgroup>
+ * </bnum-select>
+ *
+ * @structure Avec des data
+ * <bnum-select data-legend="Legende data" data-hint="Indice !" data-default-value="none" data-default-text="Choisissez un option">
+ * <option value="a">a</option>
+ * <option value="b">b</option>
+ * </bnum-select>
+ *
+ * @structure Sans légendes
+ * <bnum-select no-legend data-legend="Legende data" data-hint="Indice !" data-default-value="none" data-default-text="Choisissez un option">
+ * <option value="a">a</option>
+ * <option value="b">b</option>
+ * </bnum-select>
+ *
+ * @slot label - Légende du select
+ * @slot hint - Légende additionnel
+ *
+ * @attr {undefined | boolean} (optional) no-legend - Cache visuellement la légende. (Ne dispence pas d'en mettre une.)
+ * @attr {undefined | string} (optional) name - Nom de l'élément
+ * @attr {undefined | string} (optional) data-legend - Texte de la légende. Est écrasé si le slot est défini.
+ * @attr {undefined | string} (optional) data-hint - Texte additionnel de la légende. Est écrasé si le slot est défini.
+ * @attr {undefined | string} (optional) data-default-value - Génère une option par défaut avec cette valeur.
+ * @attr {undefined | string} (optional) data-default-text - Génère une option par défaut avec ce texte.
+ *
+ * @event {CustomEvent<{innerEvent: Event, caller: HTMLBnumSelect}>} change - Lorsque le select change de valeur.
+ */
+let HTMLBnumSelect = (() => {
+    let _classDecorators = [Define({
+            tag: TAG_SELECT,
+            template: TEMPLATE$a,
+            styles: [INPUT_BASE_STYLE, css_248z$c],
+        }), UpdateAll()];
+    let _classDescriptor;
+    let _classExtraInitializers = [];
+    let _classThis;
+    let _classSuper = BnumElementInternal;
+    let _staticExtraInitializers = [];
+    let _instanceExtraInitializers = [];
+    let _static__p_observedAttributes_decorators;
+    let _private__ui_decorators;
+    let _private__ui_initializers = [];
+    let _private__ui_extraInitializers = [];
+    let _private__ui_descriptor;
+    let _private__legend_decorators;
+    let _private__legend_initializers = [];
+    let _private__legend_extraInitializers = [];
+    let _private__legend_descriptor;
+    let _private__hint_decorators;
+    let _private__hint_initializers = [];
+    let _private__hint_extraInitializers = [];
+    let _private__hint_descriptor;
+    let _private__defaultValue_decorators;
+    let _private__defaultValue_initializers = [];
+    let _private__defaultValue_extraInitializers = [];
+    let _private__defaultValue_descriptor;
+    let _private__defaultText_decorators;
+    let _private__defaultText_initializers = [];
+    let _private__defaultText_extraInitializers = [];
+    let _private__defaultText_descriptor;
+    let _name_decorators;
+    let _name_initializers = [];
+    let _name_extraInitializers = [];
+    let _noLegend_decorators;
+    let _noLegend_initializers = [];
+    let _noLegend_extraInitializers = [];
+    let _private__obserse_decorators;
+    let _private__obserse_descriptor;
+    let _private__scheduleMoveOptions_decorators;
+    let _private__scheduleMoveOptions_descriptor;
+    let _private__tryInitValue_decorators;
+    let _private__tryInitValue_descriptor;
+    let _private__setFormValue_decorators;
+    let _private__setFormValue_descriptor;
+    let _private__fireSelect_decorators;
+    let _private__fireSelect_descriptor;
+    (class extends _classSuper {
+        static { _classThis = this; }
+        static {
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+            _private__ui_decorators = [UI({
+                    slotLabel: '#select-label slot[name="label"]',
+                    slotHint: '#select-label slot[name="hint"]',
+                    select: '#select',
+                })];
+            _private__legend_decorators = [Data({ setter: false })];
+            _private__hint_decorators = [Data({ setter: false })];
+            _private__defaultValue_decorators = [Data('default-value', { setter: false })];
+            _private__defaultText_decorators = [Data('default-text', { setter: false })];
+            _name_decorators = [Attr()];
+            _noLegend_decorators = [Attr('no-legend')];
+            _private__obserse_decorators = [Autobind];
+            _private__scheduleMoveOptions_decorators = [Schedule()];
+            _private__tryInitValue_decorators = [Risky()];
+            _private__setFormValue_decorators = [Risky()];
+            _private__fireSelect_decorators = [Autobind, Fire('change')];
+            _static__p_observedAttributes_decorators = [NonStd('Deprecated')];
+            __esDecorate(this, null, _static__p_observedAttributes_decorators, { kind: "method", name: "_p_observedAttributes", static: true, private: false, access: { has: obj => "_p_observedAttributes" in obj, get: obj => obj._p_observedAttributes }, metadata: _metadata }, null, _staticExtraInitializers);
+            __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+            __esDecorate(this, _private__legend_descriptor = { get: __setFunctionName(function () { return this.#_legend_accessor_storage; }, "#_legend", "get"), set: __setFunctionName(function (value) { this.#_legend_accessor_storage = value; }, "#_legend", "set") }, _private__legend_decorators, { kind: "accessor", name: "#_legend", static: false, private: true, access: { has: obj => #_legend in obj, get: obj => obj.#_legend, set: (obj, value) => { obj.#_legend = value; } }, metadata: _metadata }, _private__legend_initializers, _private__legend_extraInitializers);
+            __esDecorate(this, _private__hint_descriptor = { get: __setFunctionName(function () { return this.#_hint_accessor_storage; }, "#_hint", "get"), set: __setFunctionName(function (value) { this.#_hint_accessor_storage = value; }, "#_hint", "set") }, _private__hint_decorators, { kind: "accessor", name: "#_hint", static: false, private: true, access: { has: obj => #_hint in obj, get: obj => obj.#_hint, set: (obj, value) => { obj.#_hint = value; } }, metadata: _metadata }, _private__hint_initializers, _private__hint_extraInitializers);
+            __esDecorate(this, _private__defaultValue_descriptor = { get: __setFunctionName(function () { return this.#_defaultValue_accessor_storage; }, "#_defaultValue", "get"), set: __setFunctionName(function (value) { this.#_defaultValue_accessor_storage = value; }, "#_defaultValue", "set") }, _private__defaultValue_decorators, { kind: "accessor", name: "#_defaultValue", static: false, private: true, access: { has: obj => #_defaultValue in obj, get: obj => obj.#_defaultValue, set: (obj, value) => { obj.#_defaultValue = value; } }, metadata: _metadata }, _private__defaultValue_initializers, _private__defaultValue_extraInitializers);
+            __esDecorate(this, _private__defaultText_descriptor = { get: __setFunctionName(function () { return this.#_defaultText_accessor_storage; }, "#_defaultText", "get"), set: __setFunctionName(function (value) { this.#_defaultText_accessor_storage = value; }, "#_defaultText", "set") }, _private__defaultText_decorators, { kind: "accessor", name: "#_defaultText", static: false, private: true, access: { has: obj => #_defaultText in obj, get: obj => obj.#_defaultText, set: (obj, value) => { obj.#_defaultText = value; } }, metadata: _metadata }, _private__defaultText_initializers, _private__defaultText_extraInitializers);
+            __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+            __esDecorate(this, null, _noLegend_decorators, { kind: "accessor", name: "noLegend", static: false, private: false, access: { has: obj => "noLegend" in obj, get: obj => obj.noLegend, set: (obj, value) => { obj.noLegend = value; } }, metadata: _metadata }, _noLegend_initializers, _noLegend_extraInitializers);
+            __esDecorate(this, _private__obserse_descriptor = { value: __setFunctionName(function (mutations) {
+                    const hasOptionMutation = mutations.some((m) => Array.from(m.addedNodes).some((n) => n instanceof HTMLOptionElement || n instanceof HTMLOptGroupElement));
+                    if (hasOptionMutation) {
+                        this.#_scheduleMoveOptions();
+                    }
+                }, "#_obserse") }, _private__obserse_decorators, { kind: "method", name: "#_obserse", static: false, private: true, access: { has: obj => #_obserse in obj, get: obj => obj.#_obserse }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private__scheduleMoveOptions_descriptor = { value: __setFunctionName(function () {
+                    this.#_moveOptions();
+                }, "#_scheduleMoveOptions") }, _private__scheduleMoveOptions_decorators, { kind: "method", name: "#_scheduleMoveOptions", static: false, private: true, access: { has: obj => #_scheduleMoveOptions in obj, get: obj => obj.#_scheduleMoveOptions }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private__tryInitValue_descriptor = { value: __setFunctionName(function ({ ignoreSelectedValue = false, } = {}) {
+                    if (isNullOrUndefined(this.#_initValue))
+                        this.#_initValue =
+                            this.#_defaultValue ?? (ignoreSelectedValue ? null : this.value);
+                    return ATresult.Ok();
+                }, "#_tryInitValue") }, _private__tryInitValue_decorators, { kind: "method", name: "#_tryInitValue", static: false, private: true, access: { has: obj => #_tryInitValue in obj, get: obj => obj.#_tryInitValue }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private__setFormValue_descriptor = { value: __setFunctionName(function (value) {
+                    this._p_internal.setFormValue(value);
+                    return ATresult.Ok();
+                }, "#_setFormValue") }, _private__setFormValue_decorators, { kind: "method", name: "#_setFormValue", static: false, private: true, access: { has: obj => #_setFormValue in obj, get: obj => obj.#_setFormValue }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, _private__fireSelect_descriptor = { value: __setFunctionName(function (event) {
+                    return { innerEvent: event, caller: this };
+                }, "#_fireSelect") }, _private__fireSelect_decorators, { kind: "method", name: "#_fireSelect", static: false, private: true, access: { has: obj => #_fireSelect in obj, get: obj => obj.#_fireSelect }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+        }
+        //#region Constants
+        /**
+         * Required to participate in HTMLFormElement
+         */
+        static formAssociated = (__runInitializers(_classThis, _staticExtraInitializers), true);
+        //#endregion Constants
+        //#region Private fields
+        #_observer = (__runInitializers(this, _instanceExtraInitializers), null);
+        #_initValue = null;
+        #_ui_accessor_storage = __runInitializers(this, _private__ui_initializers, void 0);
+        //#endregion Private fields
+        //#region Getters/Setters
+        /**
+         * Elements d'interface interne
+         */
+        get #_ui() { return _private__ui_descriptor.get.call(this); }
+        set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
+        #_legend_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _private__legend_initializers, null));
+        /**
+         * Récupère l'information du data-legend.
+         *
+         * @remark
+         * `data-legend` correspond à la légende affiché par défaut.
+         */
+        get #_legend() { return _private__legend_descriptor.get.call(this); }
+        set #_legend(value) { return _private__legend_descriptor.set.call(this, value); }
+        #_hint_accessor_storage = (__runInitializers(this, _private__legend_extraInitializers), __runInitializers(this, _private__hint_initializers, null));
+        /**
+         * Récupère l'information du data-hint.
+         *
+         * @remark
+         * `data-hint` correspond à l'indice affiché par défaut.
+         */
+        get #_hint() { return _private__hint_descriptor.get.call(this); }
+        set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
+        #_defaultValue_accessor_storage = (__runInitializers(this, _private__hint_extraInitializers), __runInitializers(this, _private__defaultValue_initializers, null));
+        /**
+         * Récupère l'information du data-default-value.
+         *
+         * @remark
+         * `data-default-value` génère un élément `<option value="${this.#_defaultValue}" selected disabled>${this.#_defaultText}</option>`
+         */
+        get #_defaultValue() { return _private__defaultValue_descriptor.get.call(this); }
+        set #_defaultValue(value) { return _private__defaultValue_descriptor.set.call(this, value); }
+        #_defaultText_accessor_storage = (__runInitializers(this, _private__defaultValue_extraInitializers), __runInitializers(this, _private__defaultText_initializers, null));
+        /**
+         * Récupère l'information du data-default-text.
+         *
+         * @remark
+         * `data-default-text` génère un élément `<option value="${this.#_defaultValue}" selected disabled>${this.#_defaultText}</option>`
+         */
+        get #_defaultText() { return _private__defaultText_descriptor.get.call(this); }
+        set #_defaultText(value) { return _private__defaultText_descriptor.set.call(this, value); }
+        #name_accessor_storage = (__runInitializers(this, _private__defaultText_extraInitializers), __runInitializers(this, _name_initializers, EMPTY_STRING));
+        /**
+         * Nom de l'input
+         */
+        get name() { return this.#name_accessor_storage; }
+        set name(value) { this.#name_accessor_storage = value; }
+        #noLegend_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _noLegend_initializers, true));
+        /**
+         * Si l'attribut `no-legend` est actif, la légende ne s'affichera pas (seulement pour les lecteurs d'écrans).
+         */
+        get noLegend() { return this.#noLegend_accessor_storage; }
+        set noLegend(value) { this.#noLegend_accessor_storage = value; }
+        /**
+         * Valeur du select
+         */
+        get value() {
+            return this.#_ui.select.value;
+        }
+        set value(value) {
+            this.#_setFormValue(value);
+            this.#_ui.select.value = value;
+        }
+        /**
+         * Tout les options disponibles
+         */
+        get options() {
+            return Array.from((this.shadowRoot || this).querySelectorAll('option'));
+        }
+        /**
+         * Select dans le shadow-root
+         */
+        get select() {
+            return this.#_ui.select;
+        }
+        /**
+         * Récupère les options et optgroup du light-dom.
+         */
+        get #_lightOptions() {
+            return Array.from(this.querySelectorAll(':scope > option, :scope > optgroup'));
+        }
+        //#endregion Getters/Setters
+        //#region Lifecycle
+        constructor() {
+            super();
+            __runInitializers(this, _noLegend_extraInitializers);
+            this.#_tryInitValue({ ignoreSelectedValue: true }).tapError((error) => {
+                Log.error('HTMLBnumSelectElement', 'Impossible d\'initialiser la valeur par défaut !', error);
+            });
+        }
+        /**
+         * Callback appelée lorsque le composant est ajouté au DOM.
+         *
+         * Déclenche le rendu du composant.
+         *
+         * @override Pour pouvoir ajouter un observer et observer le light-dom.
+         */
+        connectedCallback() {
+            super.connectedCallback();
+            (this.#_observer ??= new MutationObserver(this.#_obserse)).observe(this, {
+                childList: true,
+            });
+            Log.debug('HTMLBnumSelect', `Ìnitvalue : ${this.#_initValue}`, this);
+        }
+        /**
+         * On attache un shadow-dom custom pour pouvoir déléger le focus.
+         * @returns ShadowRoot ouvert avec le focus délégué.
+         */
+        _p_attachCustomShadow() {
+            return this.attachShadow({ mode: 'open', delegatesFocus: true });
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_preload() {
+            this.#_setDefault();
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_buildDOM() {
+            this.#_moveOptions();
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_attach() {
+            this.#_tryInitValue().match({
+                Ok: () => {
+                    this.#_setDataLegend().#_setDataHint().#_initListeners().#_sync();
+                    if (!this.#_hasLegend) {
+                        Log.warn('HTMLBnumSelect', 'Vous devez mettre un libellé !');
+                    }
+                },
+                Err: (error) => {
+                    Log.error('HTMLBnumSelect', 'Impossible d\'initialiser la valeur du select !', error, this);
+                },
+            });
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_detach() {
+            this.#_observer?.disconnect?.();
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_update() {
+            this.#_sync();
+        }
+        //#endregion Lifecycle
+        //#region Publics Methods
+        /**
+         * Ajoute un groupe d'option
+         * @param group Groupe à ajouter
+         * @returns Le groupe ajouté au shadow-dom
+         */
+        addOptGroup(group) {
+            this.appendChild(group);
+            return group;
+        }
+        /**
+         * Ajoute une option dans le select
+         * @param opt Option à ajouter
+         * @param param1
+         * @returns Chaîne ou option créée
+         */
+        addOption(opt, { prepend = false } = {}) {
+            let returnElement;
+            let option;
+            if (opt instanceof HTMLOptionElement) {
+                option = opt;
+                returnElement = this;
+            }
+            else {
+                option = document.createElement('option');
+                if (opt.value !== null && opt.value !== undefined)
+                    option.value = String(opt.value);
+                option.text = opt.text;
+                prepend = prepend || opt.prepend || false;
+                returnElement = option;
+            }
+            if (prepend)
+                this.prepend(option);
+            else
+                this.appendChild(option);
+            return returnElement;
+        }
+        // --- Formulaire --
+        /**
+         * Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.
+         */
+        formResetCallback() {
+            this.value = this.#_defaultValue ?? EMPTY_STRING;
+        }
+        /**
+         * Active ou désactive le champ selon l'état du fieldset parent.
+         */
+        formDisabledCallback(disabled) {
+            if (disabled)
+                this.setAttribute('disabled', 'disabled');
+            this.#_sync();
+        }
+        //#endregion Publics Methods
+        //#region Private methods
+        #_initListeners() {
+            return this.#_onInnerSelect();
+        }
+        get #_obserse() { return _private__obserse_descriptor.value; }
+        get #_scheduleMoveOptions() { return _private__scheduleMoveOptions_descriptor.value; }
+        #_moveOptions() {
+            this.#_ui.select.append(...this.#_lightOptions);
+            return this;
+        }
+        #_setDataLegend() {
+            return this.#_setLabelPart(this.#_legend, this.#_ui.slotLabel);
+        }
+        #_setDataHint() {
+            return this.#_setLabelPart(this.#_hint, this.#_ui.slotHint);
+        }
+        #_setLabelPart(what, slot) {
+            if (what)
+                slot.appendChild(this._p_createTextNode(what));
+            return this;
+        }
+        #_hasLegend() {
+            const hasLabel = this.querySelectorAll('[slot="label"]').length > 0 || this.#_legend;
+            const hasHint = this.querySelectorAll('[slot="hint"]').length > 0 || this.#_hint;
+            return hasLabel || hasHint;
+        }
+        #_setDefault() {
+            const value = this.#_defaultValue;
+            const text = this.#_defaultText;
+            if (value || text) {
+                const effectiveValue = value || text;
+                const effectiveText = text || value;
+                const createdOption = this.addOption({
+                    value: effectiveValue,
+                    text: effectiveText,
+                    prepend: true,
+                });
+                createdOption.setAttribute('selected', 'true');
+                createdOption.setAttribute('disabled', 'disabled');
+            }
+            return this;
+        }
+        #_sync() {
+            const select = this.#_ui.select;
+            for (const attr of SYNCED_ATTRIBUTES) {
+                if (this.hasAttribute(attr))
+                    select.setAttribute(attr, this.getAttribute(attr));
+                else if (select.hasAttribute(attr))
+                    select.removeAttribute(attr);
+            }
+        }
+        get #_tryInitValue() { return _private__tryInitValue_descriptor.value; }
+        get #_setFormValue() { return _private__setFormValue_descriptor.value; }
+        get #_fireSelect() { return _private__fireSelect_descriptor.value; }
+        #_onInnerSelect() {
+            this.#_ui.select.addEventListener('change', this.#_fireSelect);
+            return this;
+        }
+        //#endregion Private methods
+        //#region Static
+        /**
+         * Méthode interne pour définir les attributs observés.
+         * @returns Attributs à observer
+         * @deprecated Utilisez le décorateur {@link Observe} du commit 3e38db0162eef596874dbe32490d9e96b09fb1c0
+         * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
+         */
+        static _p_observedAttributes() {
+            return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES];
+        }
+        static {
+            __runInitializers(_classThis, _classExtraInitializers);
         }
     });
     return _classThis;
@@ -10510,123 +11155,6 @@ let HTMLBnumHide = (() => {
     return _classThis;
 })();
 
-// core/jsx/index.ts
-const VOID_TAGS = new Set([
-    'area',
-    'base',
-    'br',
-    'col',
-    'embed',
-    'hr',
-    'img',
-    'input',
-    'link',
-    'meta',
-    'param',
-    'source',
-    'track',
-    'wbr',
-]);
-function h(tag, props, ...argsChildren) {
-    if (typeof tag === 'function' && 'TAG' in tag) {
-        tag = tag.TAG;
-    }
-    if (typeof tag === 'function') {
-        const children = argsChildren.length ? argsChildren : props?.children || [];
-        return tag({ ...props, children });
-    }
-    let attrs = EMPTY_STRING;
-    if (props) {
-        for (const key in props) {
-            const value = props[key];
-            if (key === 'children' || value == null || value === false)
-                continue;
-            const name = key === 'className' ? 'class' : key;
-            if (key === 'style' && typeof value === 'object') {
-                let styleStr = EMPTY_STRING;
-                for (const sKey in value) {
-                    styleStr += `${sKey}:${value[sKey]};`;
-                }
-                attrs += ` ${name}="${styleStr}"`;
-            }
-            else if (value === true) {
-                attrs += ` ${name}`;
-            }
-            else {
-                attrs += ` ${name}="${value}"`;
-            }
-        }
-    }
-    const open = `<${tag}${attrs}>`;
-    if (VOID_TAGS.has(tag))
-        return open;
-    const rawChildren = argsChildren.length > 0 ? argsChildren : props?.children;
-    const content = renderChildren(rawChildren);
-    return `${open}${content}</${tag}>`;
-}
-// Helper récursif ultra-rapide pour les enfants
-function renderChildren(child) {
-    if (child == null || child === false || child === true)
-        return EMPTY_STRING;
-    if (Array.isArray(child)) {
-        let str = EMPTY_STRING;
-        for (let i = 0; i < child.length; i++) {
-            str += renderChildren(child[i]);
-        }
-        return str;
-    }
-    return String(child);
-}
-
-// core/decorators/ui.ts
-function UI(selectorMap, options) {
-    const { shadowRoot = true } = options || {};
-    return function (target, context) {
-        const name = String(context.name);
-        // Symbole pour stocker l'objet UI une fois créé
-        const uiCacheKey = Symbol(name);
-        return {
-            get() {
-                // 1. Si l'objet UI existe déjà, on le retourne
-                if (this[uiCacheKey]) {
-                    return this[uiCacheKey];
-                }
-                const root = shadowRoot ? this.shadowRoot || this : this;
-                // 2. On crée un objet vide
-                const uiObject = {};
-                // 3. On utilise un Map interne pour stocker les résultats des querySelector
-                //    pour ne pas les refaire à chaque accès (Cache granulaire)
-                const domCache = new Map();
-                // 4. On définit dynamiquement des getters pour chaque clé
-                for (const [key, selector] of Object.entries(selectorMap)) {
-                    Object.defineProperty(uiObject, key, {
-                        configurable: true,
-                        enumerable: true,
-                        get: () => {
-                            // A. Si on a déjà cherché cet élément précis, on le rend
-                            if (domCache.has(key)) {
-                                return domCache.get(key);
-                            }
-                            // B. Sinon, on fait le querySelector (LAZY)
-                            const element = root.querySelector(selector);
-                            // C. On le met en cache
-                            domCache.set(key, element);
-                            return element;
-                        },
-                        // Permet d'écraser manuellement si besoin : this.#_ui.icon = ...
-                        set: (value) => {
-                            domCache.set(key, value);
-                        },
-                    });
-                }
-                // 5. On stocke l'objet configuré sur l'instance et on le retourne
-                this[uiCacheKey] = uiObject;
-                return uiObject;
-            },
-        };
-    };
-}
-
 // type: functions
 // descriptions: Fonctions utilitaires pour la gestion des événements DOM
 /**
@@ -10717,31 +11245,6 @@ var States;
 })(States || (States = {}));
 
 var css_248z$5 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal_font_size:var(--bnum-segmented-item-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-background-color:var(--bnum-segmented-item-background-color,var(--bnum-color-secondary-alt,transparent));--_internal-background-color-hover:var(--bnum-segmented-item-background-color-hover,var(--bnum-color-secondary-hover,#f6f6f6));--_internal-background-color-active:var(--bnum-segmented-item-background-color-active,var(--bnum-color-secondary-active,#ededed));--_internal-background-color-selected:var(--bnum-segmented-item-background-color-selected,var(--bnum-segmented-item-background-color,var(--bnum-color-secondary,transparent)));--_internal-color-selected:var(--bnum-segmented-item-color-selected,var(--bnum-color-primary,#000091));--_internal-gap:var(--bnum-segmented-item-gap,var(--bnum-space-s,10px));--_internal-padding:var(--bnum-segmented-item-padding,var(--bnum-space-s,10px) var(--bnum-space-m,15px));--_internal-border-radius:var(--bnum-segmented-item-border-radius,var(--bnum-radius-m,5px));--_internal-border-color-active:var(--bnum-segmented-item-border-color-active,var(--bnum-color-primary,#000091));--_internal-border-shadow-active:inset 0 0 0 1px var(--_internal-border-color-active);--_internal-border-color:none;--_internal-border-shadow:none;--bnum-icon-font-size:var(--_internal_font_size);cursor:pointer;display:inline-block;font-size:var(--_internal_font_size);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host .segmented-item__container{align-items:center;background-color:var(--_internal-background-color);border-radius:var(--_internal-border-radius);box-shadow:var(--_internal-border-shadow);display:inline-flex;gap:var(--_internal-gap);justify-content:center;padding:var(--_internal-padding)}:host .segmented-item__container__icon{display:none}:host(:hover){--_internal-background-color:var(--_internal-background-color-hover)}:host(:active){--_internal-background-color:var(--_internal-background-color-active)}:host(:state(selected)){--_internal-background-color:var(--_internal-background-color-selected);color:var(--_internal-color-selected);cursor:default}:host(:state(selected)) .segmented-item__container{box-shadow:var(--_internal-border-shadow-active)}:host(:state(icon)) .segmented-item__container__icon{display:inline-block}:host(:state(disabled)){cursor:not-allowed;opacity:.5;pointer-events:none}";
-
-/**
- * Décorateur de classe.
- * Indique que ce composant doit déclencher une mise à jour complète (`_p_update`)
- * à chaque modification d'un attribut observé.
- *  Cela évite d'avoir à surcharger manuellement `_p_isUpdateForAllAttributes`.
- * @example
- * ```tsx
- * // imports ...
- *
- * @Define({ ... })
- * @UpdateAll()
- * export class MyComponent extends BnumElementInternal { ... }
- * ```
- */
-function UpdateAll() {
-    return function (target, context) {
-        if (context.kind !== 'class') {
-            throw new Error('@UpdateAll ne peut être utilisé que sur une classe.');
-        }
-        context.addInitializer(function () {
-            this.__CONFIG_UPDATE_ALL__ = true;
-        });
-    };
-}
 
 //#region Global constants
 // --- FLAT CONSTANTS ---
@@ -13826,5 +14329,5 @@ if (typeof window !== 'undefined' && window.DsBnumConfig) {
     });
 }
 
-export { BnumElement, BnumConfig as Config, RotomecaCssProperty as DsCssProperty, RotomecaCssRule as DsCssRule, RotomecaDocument as DsDocument, EButtonType, EHideOn, EIconPosition, HTMLBnumBadge, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumColumn, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumFolder, HTMLBnumFolderList, HTMLBnumHeader, HTMLBnumHide, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton, HTMLBnumSegmentedControl, HTMLBnumSegmentedItem, HTMLBnumTree };
+export { BnumElement, BnumConfig as Config, RotomecaCssProperty as DsCssProperty, RotomecaCssRule as DsCssRule, RotomecaDocument as DsDocument, EButtonType, EHideOn, EIconPosition, HTMLBnumBadge, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumColumn, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumFolder, HTMLBnumFolderList, HTMLBnumHeader, HTMLBnumHide, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPrimaryButton, HTMLBnumSecondaryButton, HTMLBnumSegmentedControl, HTMLBnumSegmentedItem, HTMLBnumSelect, HTMLBnumTree, INPUT_BASE_STYLE };
 //# sourceMappingURL=ds-module-bnum.js.map
