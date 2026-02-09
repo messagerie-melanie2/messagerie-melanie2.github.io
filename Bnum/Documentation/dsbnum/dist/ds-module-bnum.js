@@ -7719,7 +7719,7 @@ function UpdateAll() {
     };
 }
 
-var css_248z$c = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{cursor:pointer}";
+var css_248z$c = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer}.icon-arrow-down{position:absolute;right:5px;top:50%;transform:translateY(-50%);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.select-container{position:relative}";
 
 //#endregon Types
 //#region Global Constants
@@ -7734,7 +7734,7 @@ const SYNCED_ATTRIBUTES = [
     'name',
     'value',
 ];
-const TEMPLATE$a = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("select", { id: "select", class: "bnum-select__container__select input-like" })] }));
+const TEMPLATE$a = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("div", { class: "select-container", children: [h("select", { id: "select", class: "bnum-select__container__select input-like" }), h(HTMLBnumIcon, { "data-icon": "keyboard_arrow_down", class: "icon-arrow-down" })] })] }));
 //#endregion Global Constants
 /**
  * @structure Defaut
