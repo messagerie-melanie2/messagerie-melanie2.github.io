@@ -131,6 +131,15 @@ var Bnum = (function (exports) {
         static Fail(error) {
             return Fail.Create(error ?? new Error("An error occurred"));
         }
+        /**
+         * Throw an error from an Error object or a text.
+         * @param error Error to throw
+         * @throws An Error
+         */
+        static Throw(error = undefined) {
+            const err = typeof error === 'string' ? new Error(error) : error;
+            this.Fail(err).throwIfError();
+        }
     }
 
     // type: class
@@ -580,7 +589,7 @@ var Bnum = (function (exports) {
     const EMPTY_STRING = '';
 
     //#region MiscFunctions
-    function isNullOrUndefined(item) {
+    function isNullOrUndefined$1(item) {
         return item !== null || item !== undefined;
     }
 
@@ -594,7 +603,7 @@ var Bnum = (function (exports) {
               .join(' ');
     }
 
-    var css_248z$n = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
+    var css_248z$o = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
 
     class BnumDOM {
         /**
@@ -1341,7 +1350,7 @@ var Bnum = (function (exports) {
          * @returns Vrai si Shadow DOM.
          */
         _p_isShadowElement() {
-            return true;
+            return this.constructor.__CONFIG_SHADOW__ ?? true;
         }
         //#endregion
         // ======================
@@ -1405,7 +1414,7 @@ var Bnum = (function (exports) {
     /**
      * Style commun à tous les BnumElement.
      */
-    const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$n);
+    const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$o);
 
     class Log {
         static trace(context, ...args) {
@@ -2537,7 +2546,7 @@ var Bnum = (function (exports) {
         }
     }
 
-    var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
+    var css_248z$n = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
 
     /**
      * Décorateur de classe pour définir un Web Component.
@@ -2796,6 +2805,48 @@ var Bnum = (function (exports) {
             };
         };
     }
+    /**
+     * @CustomFire : Décorateur de méthode (Stage 3).
+     * Déclenche un événement d'une classe spécifique lors de l'appel de la méthode.
+     * * @param EventClass La classe de l'événement à instancier (doit étendre CustomEvent).
+     * @param eventName Optionnel : Force un nom d'événement spécifique.
+     * @param options Options d'initialisation (bubbles, composed, etc.).
+     */
+    function CustomFire(EventClass, eventName, options = { bubbles: true, composed: true }) {
+        return function (originalMethod, context) {
+            if (context.kind !== 'method')
+                return;
+            return function (...args) {
+                const result = originalMethod.apply(this, args);
+                const detail = result ?? args[0];
+                const eventInit = { ...options, detail };
+                const event = _____StCustomFire
+                    .tryInitEvent(EventClass, eventName, eventInit)
+                    .unwrapOr(new EventClass(result));
+                this.dispatchEvent(event);
+                return result;
+            };
+        };
+    }
+    let _____StCustomFire = (() => {
+        let _staticExtraInitializers = [];
+        let _static_tryInitEvent_decorators;
+        return class _____StCustomFire {
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+                _static_tryInitEvent_decorators = [Risky()];
+                __esDecorate(this, null, _static_tryInitEvent_decorators, { kind: "method", name: "tryInitEvent", static: true, private: false, access: { has: obj => "tryInitEvent" in obj, get: obj => obj.tryInitEvent }, metadata: _metadata }, null, _staticExtraInitializers);
+                if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(this, _staticExtraInitializers);
+            }
+            static tryInitEvent(EventClass, eventName, eventInit) {
+                const event = eventName
+                    ? new EventClass(eventName, eventInit)
+                    : new EventClass(eventInit);
+                return ATresult.Ok(event);
+            }
+        };
+    })();
 
     /**
      * @Self : Injecte la classe (le constructeur) dans la propriété.
@@ -2812,7 +2863,20 @@ var Bnum = (function (exports) {
         });
     }
 
-    const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$m);
+    function Light() {
+        return function (target, context) {
+            if (context.kind !== 'class') {
+                throw new Error('@Light ne peut être utilisé que sur une classe.');
+            }
+            if (!(target.prototype instanceof BnumElement))
+                throw new Error('@Light ne peut être utiliser sur une classe qui hérite de BnumElement');
+            context.addInitializer(function () {
+                this.__CONFIG_SHADOW__ = false;
+            });
+        };
+    }
+
+    const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$n);
     /**
      * Badge d'information.
      *
@@ -3112,6 +3176,7 @@ var Bnum = (function (exports) {
     const TAG_SEGMENTED_ITEM$1 = `${TAG_PREFIX}-segmented-item`;
     const TAG_SEGMENTED_CONTROL = `${TAG_PREFIX}-segmented-control`;
     const TAG_SELECT = `${TAG_PREFIX}-select`;
+    const TAG_FRAGMENT = `${TAG_PREFIX}-fragment`;
 
     /**
      * RegEx qui permet de vérifier si un texte possède uniquement des charactères alphanumériques.
@@ -3160,9 +3225,9 @@ var Bnum = (function (exports) {
         }
     }
 
-    var css_248z$l = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+    var css_248z$m = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
 
-    var css_248z$k = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
 
     /**
      * Classe CSS utilisée pour les icônes Material Symbols.
@@ -3171,8 +3236,8 @@ var Bnum = (function (exports) {
     /**
      * Feuille de style CSS pour les icônes Material Symbols.
      */
-    const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$l.replaceAll(`.${ICON_CLASS}`, ':host'));
-    const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$k);
+    const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$m.replaceAll(`.${ICON_CLASS}`, ':host'));
+    const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$l);
     /**
      * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
      *
@@ -3470,13 +3535,13 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+    var css_248z$k = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
     //#region External Constants
     /**
      * Style CSS du composant bouton.
      */
-    const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$j);
+    const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$k);
     // Constantes pour les tags des différents types de boutons
     /**
      * Icône de chargement utilisée dans le bouton.
@@ -3523,7 +3588,7 @@ var Bnum = (function (exports) {
     /**
      * Template HTML du composant bouton.
      */
-    const TEMPLATE$d = BnumElement.CreateTemplate(`
+    const TEMPLATE$e = BnumElement.CreateTemplate(`
   <div class="${CLASS_WRAPPER}">
     <span class="${CLASS_SLOT}">
       <slot></slot>
@@ -3923,7 +3988,7 @@ var Bnum = (function (exports) {
              * @returns Template utiliser pour le composant
              */
             _p_fromTemplate() {
-                return TEMPLATE$d;
+                return TEMPLATE$e;
             }
             /**
              * Construit le DOM du composant bouton.
@@ -4928,10 +4993,56 @@ var Bnum = (function (exports) {
         return HTMLBnumDate = _classThis;
     })();
 
-    var css_248z$i = ":host{border-bottom:thin dotted;cursor:help}";
+    /**
+     * Composant Web Component utilitaire "Fragment".
+     * * Ce composant agit comme un conteneur logique pour regrouper des éléments du DOM
+     * sans introduire de boîte de rendu visuelle supplémentaire (via `display: contents` généralement défini dans le style).
+     *
+     * @remarks
+     * Il permet de contourner la règle "un seul élément racine" ou de grouper des éléments
+     * pour des traitements logiques (boucles, conditions) sans briser le contexte de formatage
+     * CSS du parent (ex: `display: grid` ou `display: flex`).
+     *
+     * @example
+     * ```html
+     * <div class="grid-container">
+     * <bnum-fragment>
+     * <div class="cell-1">Item A</div>
+     * <div class="cell-2">Item B</div>
+     * </bnum-fragment>
+     * </div>
+     * ```
+     */
+    let HTMLBnumFragment = (() => {
+        let _classDecorators = [Define({ tag: TAG_FRAGMENT }), Light()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElement;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            constructor() {
+                super();
+            }
+            connectedCallback() {
+                if (this.style.display !== 'contents')
+                    this.style.display = 'contents';
+            }
+        });
+        return _classThis;
+    })();
+
+    var css_248z$j = ":host{border-bottom:thin dotted;cursor:help}";
 
     // bnum-helper.ts
-    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$i);
+    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$j);
     /**
      * Constante représentant l'icône utilisée par défaut.
      */
@@ -5008,13 +5119,13 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+    var css_248z$i = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
     //#region Global Constants
     const ID_ICON$1 = 'icon';
     //#endregion Global Constants
-    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$h);
-    const TEMPLATE$c = BnumElement.CreateTemplate(`
+    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$i);
+    const TEMPLATE$d = BnumElement.CreateTemplate(`
     <${HTMLBnumIcon.TAG} id="${ID_ICON$1}"><slot></slot></${HTMLBnumIcon.TAG}>
     `);
     /**
@@ -5122,7 +5233,7 @@ var Bnum = (function (exports) {
              * @inheritdoc
              */
             _p_fromTemplate() {
-                return TEMPLATE$c;
+                return TEMPLATE$d;
             }
             /**
              * @inheritdoc
@@ -5216,14 +5327,14 @@ var Bnum = (function (exports) {
 
     const EVENT_DEFAULT = 'default';
 
-    var css_248z$g = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
+    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
 
-    var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+    var css_248z$g = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
 
-    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$g);
-    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$f);
+    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$h);
+    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$g);
     //#region Global Constants
-    const ID_INPUT = 'bnum-input';
+    const ID_INPUT$1 = 'bnum-input';
     const ID_HINT_TEXT = 'hint-text';
     const ID_HINT_TEXT_LABEL = 'hint-text__label';
     const ID_HINT_TEXT_HINT = 'hint-text__hint';
@@ -5247,7 +5358,7 @@ var Bnum = (function (exports) {
     //#region Template
     // Utilisation des constantes dans le template
     const BASE_TEMPLATE = `
-  <label id="${ID_HINT_TEXT}" class="label-container" for="${ID_INPUT}">
+  <label id="${ID_HINT_TEXT}" class="label-container" for="${ID_INPUT$1}">
     <span id="${ID_HINT_TEXT_LABEL}" class="label-container--label">
       <slot></slot>
     </span>
@@ -5260,7 +5371,7 @@ var Bnum = (function (exports) {
       <div class="addons__inner">
         <!-- {{addoninner}} -->
         <${HTMLBnumIcon.TAG} id="${ID_INPUT_ICON}"></${HTMLBnumIcon.TAG}>
-          <input id="${ID_INPUT}" class="input-like" type="${DEFAULT_INPUT_TYPE}" />
+          <input id="${ID_INPUT$1}" class="input-like" type="${DEFAULT_INPUT_TYPE}" />
         </div>
         <${HTMLBnumButton.TAG} id="${ID_INPUT_BUTTON}" rounded data-variation="${DEFAULT_BUTTON_VARIATION}"><slot name="${SLOT_BUTTON}"></slot></${HTMLBnumButton.TAG}>
     </div>
@@ -5512,7 +5623,7 @@ var Bnum = (function (exports) {
             /** ID du hint */
             static ID_HINT_TEXT_HINT = ID_HINT_TEXT_HINT;
             /** ID de l'input */
-            static ID_INPUT = ID_INPUT;
+            static ID_INPUT = ID_INPUT$1;
             /** ID du bouton */
             static ID_INPUT_BUTTON = ID_INPUT_BUTTON;
             /** ID de l'icône d'état */
@@ -5604,6 +5715,7 @@ var Bnum = (function (exports) {
              */
             static TEXT_ERROR_FIELD = BnumConfig.Get('local_keys')?.error_field ||
                 'Ce champ contient une erreur.';
+            static formAssociated = true;
             //#endregion Constants
             //#region Private fields
             /**
@@ -6289,9 +6401,9 @@ var Bnum = (function (exports) {
         return HTMLBnumInput = _classThis;
     })();
 
-    var css_248z$e = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
+    var css_248z$f = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
 
-    const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$e);
+    const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$f);
     /**
      * Input nombre.
      *
@@ -6702,9 +6814,9 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$d = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
+    var css_248z$e = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
 
-    const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$d);
+    const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$e);
     //#region Global Constants
     const ID_ACTIONS_CONTAINER = 'input-search-actions-container';
     const ID_CLEAR_BUTTON = 'input-clear-button';
@@ -6712,7 +6824,7 @@ var Bnum = (function (exports) {
     const EVENT_SEARCH = 'bnum-input-search:search';
     //#endregion Global Constants
     //#region Template
-    const TEMPLATE$b = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
+    const TEMPLATE$c = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
       ${HTMLBnumButtonIcon.Write('close', { id: ID_CLEAR_BUTTON })}
       <slot name="${SLOT_ACTIONS}"></slot>
     </div>`);
@@ -6849,7 +6961,7 @@ var Bnum = (function (exports) {
                 __runInitializers(this, ____extraInitializers);
             }
             _p_fromTemplate() {
-                return TEMPLATE$b;
+                return TEMPLATE$c;
             }
             _p_getStylesheets() {
                 return [...super._p_getStylesheets(), SHEET$9];
@@ -7515,54 +7627,6 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    /**
-     * Bouton Bnum de type "Secondary".
-     *
-     * @structure Cas standard
-     * <bnum-secondary-button>Texte du bouton</bnum-secondary-button>
-     *
-     * @structure Bouton avec icône
-     * <bnum-secondary-button data-icon="home">Texte du bouton</bnum-secondary-button>
-     *
-     * @structure Bouton avec une icône à gauche
-     * <bnum-secondary-button data-icon="home" data-icon-pos="left">Texte du bouton</bnum-secondary-button>
-     *
-     * @structure Bouton en état de chargement
-     * <bnum-secondary-button loading>Texte du bouton</bnum-secondary-button>
-     *
-     * @structure Bouton arrondi
-     * <bnum-secondary-button rounded>Texte du bouton</bnum-secondary-button>
-     *
-     * @structure Bouton cachant le texte sur les petits layouts
-     * <bnum-secondary-button data-hide="small" data-icon="menu">Menu</bnum-secondary-button>
-     */
-    let HTMLBnumSecondaryButton = (() => {
-        let _classDecorators = [Define()];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = HTMLBnumButton;
-        (class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-            constructor() {
-                super();
-                const fromAttribute = false;
-                this.data(HTMLBnumButton.ATTR_VARIATION, exports.EButtonType.SECONDARY, fromAttribute);
-            }
-            static get TAG() {
-                return TAG_SECONDARY;
-            }
-        });
-        return _classThis;
-    })();
-
     // core/jsx/index.ts
     const VOID_TAGS = new Set([
         'area',
@@ -7631,23 +7695,6 @@ var Bnum = (function (exports) {
         return String(child);
     }
 
-    const schedulersKey = Symbol('schedulers');
-    function Schedule() {
-        return function (target, context) {
-            const sKey = Symbol(String(context.name));
-            return function (...args) {
-                const caches = (this[schedulersKey] ??= new Map());
-                let scheduler;
-                if (caches.has(sKey))
-                    scheduler = caches.get(sKey);
-                else
-                    scheduler = new Scheduler(target.apply(this, ...args));
-                if (scheduler)
-                    scheduler.schedule(args[0]);
-            };
-        };
-    }
-
     // core/decorators/ui.ts
     function UI(selectorMap, options) {
         const { shadowRoot = true } = options || {};
@@ -7693,6 +7740,837 @@ var Bnum = (function (exports) {
                     this[uiCacheKey] = uiObject;
                     return uiObject;
                 },
+            };
+        };
+    }
+
+    const PropertyMode = {
+        default: 'rw',
+        readonly: 'readonly',
+        init: 'init',
+    };
+    /**
+     * @Property Gère la réactivité et les droits d'accès des Auto-Accessors.
+     * Simule les comportements C# { get; set; }, { get; init; } et { get; }.
+     */
+    function Property(options = {}) {
+        const { mode = PropertyMode.default, reactive = false } = options;
+        return function (target, context) {
+            const name = String(context.name);
+            return {
+                // Init: Appelé lors de l'initialisation de la classe (ex: accessor x = 10)
+                init(initialValue) {
+                    return initialValue;
+                },
+                // Get: Lecture standard via le backing field natif
+                get() {
+                    return target.get.call(this);
+                },
+                // Set: Logique de protection et réactivité
+                set(newValue) {
+                    const oldValue = target.get.call(this);
+                    // 1. Gestion des Modes (Runtime Security)
+                    if (mode === 'readonly') {
+                        // Note: L'initialisation via "accessor x = val" passe par init(), pas set().
+                        // Donc ici, c'est une tentative de modification ultérieure.
+                        throw new Error(`[Property] '${name}' is ReadOnly ({ get; }).`);
+                    }
+                    if (mode === 'init') {
+                        // Pattern { get; init; }
+                        // On autorise si la valeur actuelle est undefined/null (premier set)
+                        // Ou si on est techniquement encore dans la phase de construction (dur à détecter parfaitement en JS pur sans état,
+                        // mais on suppose que si oldValue existe, c'est trop tard).
+                        if (oldValue !== undefined && oldValue !== null) {
+                            throw new Error(`[Property] '${name}' is InitOnly ({ get; init; }).`);
+                        }
+                    }
+                    // 2. Optimisation : Pas de changement, pas d'event
+                    if (oldValue === newValue)
+                        return;
+                    // 3. Mise à jour du backing field natif
+                    target.set.call(this, newValue);
+                    // 4. Réactivité (Appel du moteur de rendu Bnum)
+                    if (reactive && typeof this._p_update === 'function') {
+                        this._p_update();
+                    }
+                },
+            };
+        };
+    }
+
+    let CheckedChangeEvent = (() => {
+        let _classSuper = CustomEvent;
+        let _value_decorators;
+        let _value_initializers = [];
+        let _value_extraInitializers = [];
+        let _name_decorators;
+        let _name_initializers = [];
+        let _name_extraInitializers = [];
+        let _checked_decorators;
+        let _checked_initializers = [];
+        let _checked_extraInitializers = [];
+        let _caller_decorators;
+        let _caller_initializers = [];
+        let _caller_extraInitializers = [];
+        return class CheckedChangeEvent extends _classSuper {
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _value_decorators = [Property({ mode: PropertyMode.init })];
+                _name_decorators = [Property({ mode: PropertyMode.init })];
+                _checked_decorators = [Property({ mode: PropertyMode.init })];
+                _caller_decorators = [Property({ mode: PropertyMode.init })];
+                __esDecorate(this, null, _value_decorators, { kind: "accessor", name: "value", static: false, private: false, access: { has: obj => "value" in obj, get: obj => obj.value, set: (obj, value) => { obj.value = value; } }, metadata: _metadata }, _value_initializers, _value_extraInitializers);
+                __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+                __esDecorate(this, null, _checked_decorators, { kind: "accessor", name: "checked", static: false, private: false, access: { has: obj => "checked" in obj, get: obj => obj.checked, set: (obj, value) => { obj.checked = value; } }, metadata: _metadata }, _checked_initializers, _checked_extraInitializers);
+                __esDecorate(this, null, _caller_decorators, { kind: "accessor", name: "caller", static: false, private: false, access: { has: obj => "caller" in obj, get: obj => obj.caller, set: (obj, value) => { obj.caller = value; } }, metadata: _metadata }, _caller_initializers, _caller_extraInitializers);
+                if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            #value_accessor_storage = __runInitializers(this, _value_initializers, void 0);
+            get value() { return this.#value_accessor_storage; }
+            set value(value) { this.#value_accessor_storage = value; }
+            #name_accessor_storage = (__runInitializers(this, _value_extraInitializers), __runInitializers(this, _name_initializers, void 0));
+            get name() { return this.#name_accessor_storage; }
+            set name(value) { this.#name_accessor_storage = value; }
+            #checked_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _checked_initializers, void 0));
+            get checked() { return this.#checked_accessor_storage; }
+            set checked(value) { this.#checked_accessor_storage = value; }
+            #caller_accessor_storage = (__runInitializers(this, _checked_extraInitializers), __runInitializers(this, _caller_initializers, void 0));
+            get caller() { return this.#caller_accessor_storage; }
+            set caller(value) { this.#caller_accessor_storage = value; }
+            constructor(options) {
+                super(`${options.caller.constructor.TAG}:change`, options.details ?? {});
+                __runInitializers(this, _caller_extraInitializers);
+                this.value = options.value;
+                this.name = options.name;
+                this.checked = options.checked;
+                this.caller = options.caller;
+            }
+        };
+    })();
+
+    var css_248z$d = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal-color:var(--bnum-radio-color,var(--bnum-color-primary,#000091));--_internal-font-size:var(--bnum-radio-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-radio-outer-size:var(--_internal-font-size);--_internal-radio-inner-size:calc(var(--_internal-radio-outer-size)*0.6);--_internal-border-size:var(--bnum-radio-border-size,1px);--_internal-border-radius:var(--bnum-radio-border-radius,var(--bnum-radius-circle,50%));position:relative}.radio{height:0;opacity:0;position:absolute;width:0}.radio__label{display:flex;flex-direction:column;margin-left:calc(var(--_internal-radio-outer-size) + 10px)}.radio__label--legend{font-size:var(--_internal-font-size)}.radio__label:before{border:solid var(--_internal-border-size) var(--_internal-color);box-sizing:border-box;height:var(--_internal-radio-outer-size);left:0;top:0;width:var(--_internal-radio-outer-size)}.radio__label:after,.radio__label:before{border-radius:var(--_internal-border-radius);content:\"\";position:absolute}.radio__label:after{--_internal-pos:calc(var(--_internal-radio-outer-size)/2);background:var(--_internal-color);display:none;height:var(--_internal-radio-inner-size);left:var(--_internal-pos);top:var(--_internal-pos);transform:translate(-50%,-50%);width:var(--_internal-radio-inner-size)}.radio:checked~.radio__label:after{display:block}.radio:focus~.radio__label:before,:host(:focus-visible) .radio__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}:host(:focus-visible){outline:none}:host(:disabled),:host([disabled]){opacity:.6;pointer-events:none}";
+
+    const listenersCacheKey = Symbol('listenersCache');
+    function Listener(initilizator) {
+        return function (_target, context) {
+            const methodName = String(context.name);
+            const listenerCacheKey = Symbol(`listener_${methodName}`);
+            return {
+                get() {
+                    const self = this;
+                    if (!self[listenersCacheKey])
+                        self[listenersCacheKey] = new Map();
+                    if (self[listenersCacheKey].has(listenerCacheKey)) {
+                        return self[listenersCacheKey].get(listenerCacheKey);
+                    }
+                    const event = new JsEvent();
+                    if (initilizator) {
+                        initilizator(event, this);
+                    }
+                    self[listenersCacheKey].set(listenerCacheKey, event);
+                    return self[listenersCacheKey].get(listenerCacheKey);
+                },
+            };
+        };
+    }
+
+    //#region Utilities
+    /**
+     * Vérifie si une valeur est null ou undefined.
+     *
+     * @template T - Le type de la valeur à vérifier
+     * @param newVal - La valeur à tester
+     * @returns `true` si la valeur est null ou undefined, `false` sinon
+     *
+     * @example
+     * ```ts
+     * isNullOrUndefined(null); // true
+     * isNullOrUndefined(undefined); // true
+     * isNullOrUndefined("test"); // false
+     * ```
+     */
+    function isNullOrUndefined(newVal) {
+        return newVal === null || newVal === undefined;
+    }
+    /**
+     * Vérifie si une clé correspond à une clé valide d'actions.
+     *
+     * @param key - La clé à vérifier
+     * @returns `true` si la clé fait partie des actions disponibles, `false` sinon
+     *
+     * @remarks
+     * Les clés valides sont : 'checked', 'value', 'name', 'disabled'
+     */
+    function isOnActionKey(key) {
+        return ['checked', 'value', 'name', 'disabled'].includes(key);
+    }
+    /**
+     * Ajoute un listener sur l'instance qui active l'évènement
+     * @param event Evènement qui est initialisé
+     * @param instance Elément qui contient l'évènement
+     */
+    function onStateChangeInitializer(event, instance) {
+        instance.addEventListener('bnum-radio:change', (e) => event.call(e));
+    }
+    /**
+     * Événement personnalisé déclenché lors du changement d'état d'un bouton radio.
+     *
+     * @remarks
+     * Cet événement encapsule les informations sur le changement d'état (coché/décoché)
+     * d'un élément radio personnalisé.
+     */
+    class BnumRadioCheckedChangeEvent extends CheckedChangeEvent {
+    }
+    //#endregion Internals Types
+    //#region Global Constants
+    /**
+     * Identifiant de l'élément input radio interne.
+     * @internal
+     */
+    const ID_INPUT = 'radio';
+    /**
+     * Nom de l'attribut 'checked'.
+     * @internal
+     */
+    const ATTRIBUTE_CHECKED = 'checked';
+    /**
+     * Nom de l'attribut 'value'.
+     * @internal
+     */
+    const ATTRIBUTE_VALUE = 'value';
+    /**
+     * Liste des attributs synchronisés entre l'élément hôte et l'input interne.
+     *
+     * @remarks
+     * Ces attributs sont automatiquement propagés de l'élément personnalisé vers l'input natif.
+     * @internal
+     */
+    const SYNCED_ATTRIBUTES$1 = ['name', 'checked', 'value', 'disabled'];
+    /**
+     * Template HTML du composant radio.
+     *
+     * @remarks
+     * Structure DOM utilisée pour créer le shadow DOM du composant.
+     * Comprend un input radio natif et un label avec des slots pour le contenu et l'indice.
+     * @internal
+     */
+    const TEMPLATE$b = (h(HTMLBnumFragment, { children: [h("input", { type: "radio", id: ID_INPUT, class: "radio" }), h("label", { part: "label", for: "radio", class: "radio__label", children: [h("span", { class: "radio__label--legend", children: h("slot", { id: "legend" }) }), h("span", { class: "radio--hint label-container--hint", children: h("slot", { id: "hint", name: "hint" }) })] })] }));
+    //#endregion Global Constants
+    /**
+     * Composant personnalisé représentant un bouton radio avec support de formulaire.
+     *
+     * @remarks
+     * Ce composant Web étend {@link BnumElementInternal} et fournit un bouton radio personnalisé
+     * avec support complet des formulaires HTML, gestion d'état et accessibilité.
+     *
+     * Le composant utilise le Shadow DOM pour encapsuler son style et sa structure,
+     * et synchronise automatiquement ses attributs avec un input radio natif sous-jacent.
+     *
+     * @example
+     * Structure simple :
+     * ```html
+     * <bnum-radio name="rotomeca" value="valeur 1">
+     *   Mon élément
+     * </bnum-radio>
+     * ```
+     *
+     * @example
+     * Structure avec indice :
+     * ```html
+     * <bnum-radio name="rotomeca" value="valeur 2">
+     *   Mon élément
+     *   <span slot="hint">Indice !</span>
+     * </bnum-radio>
+     * ```
+     *
+     * @fires BnumRadioCheckedChangeEvent - Déclenché lorsque l'état coché du radio change
+     *
+     * @public
+     *
+     * @structure Structure simple
+     * <bnum-radio name="rotomeca" value="valeur 1">
+     *   Mon élément
+     * </bnum-radio>
+     *
+     * @structure Structure avec indice
+     * <bnum-radio name="rotomeca" value="valeur 2">
+     *   Mon élément
+     *   <span slot="hint">Indice !</span>
+     * </bnum-radio>
+     *
+     * @structure Disabled
+     * <bnum-radio name="radio" value="valeur x" data-legend="Mon élément" data-hint="Indice !" checked disabled></bnum-radio>
+     *
+     * @slot (default) - Légende de l'élément
+     * @slot hint - Aide supplémentaire dans la légende
+     *
+     * @event {BnumRadioCheckedChangeEvent} bnum-radio:change - Lorsque l'élément change d'état
+     *
+     * @attr {string} value - Valeur de l'élément
+     * @attr {string} name - Nom de l'élément, permet de gérer les interactions des radio ayant le même nom
+     * @attr {'disabled' | '' | undefined} (optional) disabled - Désactive l'élément
+     * @attr {'' | undefined} (optional) checked - Si l'élément est actif ou non
+     * @attr {string | undefined} (optional) data-legend - Label de l'élément. Est écraser si un slot est défini.
+     * @attr {string | undefined} (optional) data-hint - Aide supplémentaire pour le label. Est écraser si un slot est défini.
+     *
+     * @cssvar {#000091} --bnum-radio-color - Couleur du radio
+     * @cssvar {1rem} --bnum-radio-font-size - Taille du label principal
+     * @cssvar {1px} --bnum-radio-border-size - Taille du countour du radio
+     * @cssvar {50%} --bnum-radio-border-radius - "border-radius" de l'élément
+     */
+    let HTMLBnumRadio = (() => {
+        let _classDecorators = [Define({
+                template: TEMPLATE$b,
+                tag: 'bnum-radio',
+                styles: [INPUT_BASE_STYLE, css_248z$d],
+            })];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElementInternal;
+        let _staticExtraInitializers = [];
+        let _instanceExtraInitializers = [];
+        let _static__p_observedAttributes_decorators;
+        let _private__ui_decorators;
+        let _private__ui_initializers = [];
+        let _private__ui_extraInitializers = [];
+        let _private__ui_descriptor;
+        let _name_decorators;
+        let _name_initializers = [];
+        let _name_extraInitializers = [];
+        let _value_decorators;
+        let _value_initializers = [];
+        let _value_extraInitializers = [];
+        let _checked_decorators;
+        let _checked_initializers = [];
+        let _checked_extraInitializers = [];
+        let _disabled_decorators;
+        let _disabled_initializers = [];
+        let _disabled_extraInitializers = [];
+        let _private__legend_decorators;
+        let _private__legend_initializers = [];
+        let _private__legend_extraInitializers = [];
+        let _private__legend_descriptor;
+        let _onstatechange_decorators;
+        let _onstatechange_initializers = [];
+        let _onstatechange_extraInitializers = [];
+        let _private__hint_decorators;
+        let _private__hint_initializers = [];
+        let _private__hint_extraInitializers = [];
+        let _private__hint_descriptor;
+        let __p_buildDOM_decorators;
+        let _private__update_decorators;
+        let _private__update_descriptor;
+        let _private__fireChange_decorators;
+        let _private__fireChange_descriptor;
+        let _private__setFormValue_decorators;
+        let _private__setFormValue_descriptor;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _private__ui_decorators = [UI({
+                        input: `#${ID_INPUT}`,
+                        slotLegend: '#legend',
+                        slotHint: '#hint',
+                    })];
+                _name_decorators = [Attr()];
+                _value_decorators = [Attr()];
+                _checked_decorators = [Attr()];
+                _disabled_decorators = [Attr()];
+                _private__legend_decorators = [Data({ setter: false })];
+                _onstatechange_decorators = [Listener(onStateChangeInitializer)];
+                _private__hint_decorators = [Data({ setter: false })];
+                __p_buildDOM_decorators = [SetAttr('role', 'radio')];
+                _private__update_decorators = [Risky()];
+                _private__fireChange_decorators = [CustomFire(BnumRadioCheckedChangeEvent)];
+                _private__setFormValue_decorators = [Risky()];
+                _static__p_observedAttributes_decorators = [NonStd('Deprecated')];
+                __esDecorate(this, null, _static__p_observedAttributes_decorators, { kind: "method", name: "_p_observedAttributes", static: true, private: false, access: { has: obj => "_p_observedAttributes" in obj, get: obj => obj._p_observedAttributes }, metadata: _metadata }, null, _staticExtraInitializers);
+                __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+                __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+                __esDecorate(this, null, _value_decorators, { kind: "accessor", name: "value", static: false, private: false, access: { has: obj => "value" in obj, get: obj => obj.value, set: (obj, value) => { obj.value = value; } }, metadata: _metadata }, _value_initializers, _value_extraInitializers);
+                __esDecorate(this, null, _checked_decorators, { kind: "accessor", name: "checked", static: false, private: false, access: { has: obj => "checked" in obj, get: obj => obj.checked, set: (obj, value) => { obj.checked = value; } }, metadata: _metadata }, _checked_initializers, _checked_extraInitializers);
+                __esDecorate(this, null, _disabled_decorators, { kind: "accessor", name: "disabled", static: false, private: false, access: { has: obj => "disabled" in obj, get: obj => obj.disabled, set: (obj, value) => { obj.disabled = value; } }, metadata: _metadata }, _disabled_initializers, _disabled_extraInitializers);
+                __esDecorate(this, _private__legend_descriptor = { get: __setFunctionName(function () { return this.#_legend_accessor_storage; }, "#_legend", "get"), set: __setFunctionName(function (value) { this.#_legend_accessor_storage = value; }, "#_legend", "set") }, _private__legend_decorators, { kind: "accessor", name: "#_legend", static: false, private: true, access: { has: obj => #_legend in obj, get: obj => obj.#_legend, set: (obj, value) => { obj.#_legend = value; } }, metadata: _metadata }, _private__legend_initializers, _private__legend_extraInitializers);
+                __esDecorate(this, null, _onstatechange_decorators, { kind: "accessor", name: "onstatechange", static: false, private: false, access: { has: obj => "onstatechange" in obj, get: obj => obj.onstatechange, set: (obj, value) => { obj.onstatechange = value; } }, metadata: _metadata }, _onstatechange_initializers, _onstatechange_extraInitializers);
+                __esDecorate(this, _private__hint_descriptor = { get: __setFunctionName(function () { return this.#_hint_accessor_storage; }, "#_hint", "get"), set: __setFunctionName(function (value) { this.#_hint_accessor_storage = value; }, "#_hint", "set") }, _private__hint_decorators, { kind: "accessor", name: "#_hint", static: false, private: true, access: { has: obj => #_hint in obj, get: obj => obj.#_hint, set: (obj, value) => { obj.#_hint = value; } }, metadata: _metadata }, _private__hint_initializers, _private__hint_extraInitializers);
+                __esDecorate(this, null, __p_buildDOM_decorators, { kind: "method", name: "_p_buildDOM", static: false, private: false, access: { has: obj => "_p_buildDOM" in obj, get: obj => obj._p_buildDOM }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__update_descriptor = { value: __setFunctionName(function (name, newVal, onactions) {
+                        if (onactions && isOnActionKey(name)) {
+                            const callback = onactions[name];
+                            if (callback) {
+                                const plugin = callback({
+                                    name,
+                                    val: newVal,
+                                });
+                                if (plugin) {
+                                    name = plugin.name;
+                                    newVal = plugin.val;
+                                }
+                            }
+                        }
+                        if (isNullOrUndefined(newVal))
+                            this.#_ui.input.removeAttribute(name);
+                        else
+                            this.#_ui.input.setAttribute(name, newVal);
+                        return ATresult.Ok();
+                    }, "#_update") }, _private__update_decorators, { kind: "method", name: "#_update", static: false, private: true, access: { has: obj => #_update in obj, get: obj => obj.#_update }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__fireChange_descriptor = { value: __setFunctionName(function (ev) {
+                        ev.stopPropagation();
+                        this.#_updateInternal();
+                        const details = { inner: ev };
+                        const options = {
+                            value: this.value,
+                            checked: this.checked,
+                            name: this.name,
+                            caller: this,
+                            details,
+                        };
+                        return options;
+                    }, "#_fireChange") }, _private__fireChange_decorators, { kind: "method", name: "#_fireChange", static: false, private: true, access: { has: obj => #_fireChange in obj, get: obj => obj.#_fireChange }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setFormValue_descriptor = { value: __setFunctionName(function (value) {
+                        this._p_internal.setFormValue(value);
+                        return ATresult.Ok();
+                    }, "#_setFormValue") }, _private__setFormValue_decorators, { kind: "method", name: "#_setFormValue", static: false, private: true, access: { has: obj => #_setFormValue in obj, get: obj => obj.#_setFormValue }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            //#region Constants
+            /**
+             * Indique que ce composant peut être associé à un formulaire.
+             *
+             * @remarks
+             * Permet au composant de participer au cycle de vie des formulaires HTML,
+             * notamment la soumission et la validation.
+             *
+             * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals#instance_properties | ElementInternals}
+             */
+            static formAssociated = (__runInitializers(_classThis, _staticExtraInitializers), true);
+            #_ui_accessor_storage = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _private__ui_initializers, void 0));
+            //#endregion Constants
+            //#region Getters/Setters
+            /**
+             * Références aux éléments du DOM interne.
+             *
+             * @remarks
+             * Injecté automatiquement par le décorateur {@link UI}.
+             * Fournit un accès typé à l'input radio natif et aux slots de contenu.
+             *
+             * @internal
+             */
+            get #_ui() { return _private__ui_descriptor.get.call(this); }
+            set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
+            #name_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _name_initializers, EMPTY_STRING));
+            /**
+             * Le nom du groupe de boutons radio.
+             *
+             * @remarks
+             * Les boutons radio partageant le même nom forment un groupe mutuellement exclusif.
+             * Un seul bouton peut être sélectionné à la fois dans un groupe.
+             *
+             * @defaultValue Chaîne vide
+             */
+            get name() { return this.#name_accessor_storage; }
+            set name(value) { this.#name_accessor_storage = value; }
+            #value_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _value_initializers, EMPTY_STRING));
+            /**
+             * La valeur associée au bouton radio.
+             *
+             * @remarks
+             * Cette valeur est envoyée lors de la soumission du formulaire si le radio est coché.
+             *
+             * @defaultValue Chaîne vide
+             */
+            get value() { return this.#value_accessor_storage; }
+            set value(value) { this.#value_accessor_storage = value; }
+            #checked_accessor_storage = (__runInitializers(this, _value_extraInitializers), __runInitializers(this, _checked_initializers, true));
+            /**
+             * Indique si le bouton radio est coché.
+             *
+             * @remarks
+             * Contrôle l'état de sélection du bouton radio.
+             *
+             * @defaultValue `true`
+             */
+            get checked() { return this.#checked_accessor_storage; }
+            set checked(value) { this.#checked_accessor_storage = value; }
+            #disabled_accessor_storage = (__runInitializers(this, _checked_extraInitializers), __runInitializers(this, _disabled_initializers, false));
+            /**
+             * Indique si le bouton radio est désactivé.
+             *
+             * @remarks
+             * Un bouton radio désactivé ne peut pas être sélectionné ni recevoir le focus.
+             *
+             * @defaultValue `false`
+             */
+            get disabled() { return this.#disabled_accessor_storage; }
+            set disabled(value) { this.#disabled_accessor_storage = value; }
+            #_legend_accessor_storage = (__runInitializers(this, _disabled_extraInitializers), __runInitializers(this, _private__legend_initializers, EMPTY_STRING));
+            /**
+             * Texte de la légende principale du bouton radio.
+             *
+             * @remarks
+             * Stocke le contenu textuel qui sera affiché comme label principal du radio.
+             * Cette propriété est en lecture seule (pas de setter) et est initialisée
+             * lors de la construction du composant.
+             *
+             * @defaultValue Chaîne vide
+             * @internal
+             */
+            get #_legend() { return _private__legend_descriptor.get.call(this); }
+            set #_legend(value) { return _private__legend_descriptor.set.call(this, value); }
+            #onstatechange_accessor_storage = (__runInitializers(this, _private__legend_extraInitializers), __runInitializers(this, _onstatechange_initializers, void 0));
+            /**
+             * Appelé lorsque l'état de l'élément change
+             */
+            get onstatechange() { return this.#onstatechange_accessor_storage; }
+            set onstatechange(value) { this.#onstatechange_accessor_storage = value; }
+            #_hint_accessor_storage = (__runInitializers(this, _onstatechange_extraInitializers), __runInitializers(this, _private__hint_initializers, EMPTY_STRING));
+            /**
+             * Texte de l'indice/aide du bouton radio.
+             *
+             * @remarks
+             * Stocke le contenu textuel qui sera affiché comme information complémentaire.
+             * Cette propriété est en lecture seule (pas de setter) et est initialisée
+             * lors de la construction du composant.
+             *
+             * @defaultValue Chaîne vide
+             * @internal
+             */
+            get #_hint() { return _private__hint_descriptor.get.call(this); }
+            set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
+            //#endregion Getters/Setters
+            //#region Lifecycle
+            /**
+             * Constructeur du composant HTMLBnumRadio.
+             *
+             * @remarks
+             * Initialise l'instance du composant en appelant le constructeur parent.
+             */
+            constructor() {
+                super();
+                __runInitializers(this, _private__hint_extraInitializers);
+            }
+            /**
+             * Attache un Shadow DOM au composant.
+             *
+             * @returns La racine du Shadow DOM créée
+             *
+             * @remarks
+             * Configure le Shadow DOM en mode 'open' avec délégation du focus.
+             * Cela permet au focus de se déplacer automatiquement vers l'input interne.
+             *
+             * @protected
+             * @override
+             */
+            _p_attachCustomShadow() {
+                return this.attachShadow({ mode: 'open', delegatesFocus: true });
+            }
+            /**
+             * Construit le DOM du composant après son attachement.
+             *
+             * @remarks
+             * Configure le rôle ARIA, initialise les écouteurs d'événements,
+             * initialise le contenu des slots et synchronise l'état initial avec les attributs.
+             *
+             * @protected
+             * @override
+             */
+            _p_buildDOM() {
+                this.#_setupListeners().#_init().#_sync();
+            }
+            /**
+             * Gère la mise à jour d'un attribut observé.
+             *
+             * @param name - Le nom de l'attribut modifié
+             * @param oldVal - L'ancienne valeur de l'attribut
+             * @param newVal - La nouvelle valeur de l'attribut
+             *
+             * @remarks
+             * Cette méthode est appelée automatiquement lorsqu'un attribut observé change.
+             * Elle détermine si une mise à jour est nécessaire et la déclenche si besoin.
+             *
+             * Pour l'attribut 'checked', compare l'état booléen plutôt que la chaîne.
+             * Pour l'attribut 'value', compare avec la valeur de l'input interne.
+             *
+             * @protected
+             * @override
+             */
+            _p_update(name, oldVal, newVal) {
+                let needUpdate = oldVal !== newVal;
+                if (name === ATTRIBUTE_CHECKED) {
+                    const isChecked = this.#_ui.input.checked;
+                    const willBeChecked = newVal !== null && newVal !== 'false';
+                    needUpdate = isChecked !== willBeChecked;
+                }
+                else if (name === ATTRIBUTE_VALUE) {
+                    needUpdate = this.#_ui.input.value !== newVal;
+                }
+                if (needUpdate) {
+                    this.#_update(name, newVal, {
+                        checked: this.#_onUpdateChecked.bind(this),
+                    }).tapError((error) => Log.error('HTMLBnumRadio/_p_update', error.message, error));
+                }
+            }
+            //#endregion Lifecycle
+            //#region Private methods
+            /**
+             * Initialise le contenu des slots avec les valeurs de légende et d'indice.
+             *
+             * @returns L'instance courante pour chaînage de méthodes
+             *
+             * @remarks
+             * Cette méthode remplit les slots du Shadow DOM avec le contenu textuel
+             * stocké dans les propriétés privées `#_legend` et `#_hint`.
+             * Elle n'affecte les slots que si les valeurs correspondantes sont définies.
+             *
+             * @private
+             */
+            #_init() {
+                const legend = this.#_legend;
+                const hint = this.#_hint;
+                const hasLegend = !!legend;
+                const hasHint = !!hint;
+                if (hasLegend)
+                    this.#_ui.slotLegend.innerText = legend;
+                if (hasHint)
+                    this.#_ui.slotHint.innerText = hint;
+                return this;
+            }
+            /**
+             * Callback exécuté lors de la mise à jour de l'attribut 'checked'.
+             *
+             * @param options - Les paramètres de l'action contenant le nom et la valeur
+             * @returns Les paramètres modifiés après traitement
+             *
+             * @remarks
+             * Met à jour l'état coché de l'input interne, l'attribut ARIA et la valeur du formulaire.
+             * Si le radio n'est pas coché, la valeur est définie à null pour le formulaire.
+             *
+             * @private
+             */
+            #_onUpdateChecked(options) {
+                const { val: newVal } = options;
+                const isChecked = !(isNullOrUndefined(newVal) || newVal === 'false');
+                const input = this.#_ui.input;
+                if (input.checked !== isChecked) {
+                    input.checked = isChecked;
+                }
+                this._p_internal.ariaChecked = String(isChecked);
+                this.#_setFormValue(isChecked ? this.value : null);
+                if (!isChecked)
+                    options.val = null;
+                return options;
+            }
+            /**
+             * Met à jour un attribut de l'input interne avec gestion des callbacks.
+             *
+             * @param name - Le nom de l'attribut à mettre à jour
+             * @param newVal - La nouvelle valeur de l'attribut
+             * @param onactions - Callbacks optionnels à exécuter avant la mise à jour
+             * @returns Un {@link Result} indiquant le succès ou l'échec de l'opération
+             *
+             * @remarks
+             * Si un callback est défini pour l'attribut concerné, il est exécuté avant la mise à jour.
+             * Le callback peut modifier le nom et la valeur avant leur application.
+             *
+             * Si la nouvelle valeur est null ou undefined, l'attribut est supprimé de l'input.
+             *
+             * @private
+             */
+            get #_update() { return _private__update_descriptor.value; }
+            /**
+             * Configure l'écouteur d'événement pour les changements de l'input interne.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Écoute l'événement 'change' de l'input natif et déclenche l'événement personnalisé.
+             *
+             * @private
+             */
+            #_handleInnerChange() {
+                this.#_ui.input.addEventListener('change', (ev) => {
+                    this.#_fireChange(ev);
+                });
+                return this;
+            }
+            /**
+             * Déclenche l'événement personnalisé de changement d'état.
+             *
+             * @param ev - L'événement natif ayant déclenché le changement
+             * @returns Les options de construction de l'événement personnalisé
+             *
+             * @remarks
+             * Stoppe la propagation de l'événement natif, met à jour l'état interne,
+             * puis construit et déclenche un {@link BnumRadioCheckedChangeEvent}.
+             *
+             * Le décorateur {@link CustomFire} gère automatiquement la création et le dispatch
+             * de l'événement à partir des options retournées.
+             *
+             * @fires BnumRadioCheckedChangeEvent
+             * @private
+             */
+            get #_fireChange() { return _private__fireChange_descriptor.value; }
+            /**
+             * Met à jour l'état interne du composant à partir de l'input natif.
+             *
+             * @remarks
+             * Synchronise les propriétés `checked` et `value` du composant
+             * avec celles de l'input interne, et met à jour l'attribut ARIA correspondant.
+             *
+             * @private
+             */
+            #_updateInternal() {
+                const input = this.#_ui.input;
+                this.checked = !!input.checked;
+                this._p_internal.ariaChecked = this.checked;
+                this.value = input.value;
+            }
+            /**
+             * Configure tous les écouteurs d'événements du composant.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Actuellement configure uniquement l'écouteur de changement de l'input interne.
+             *
+             * @private
+             */
+            #_setupListeners() {
+                this.#_handleInnerChange();
+                return this;
+            }
+            /**
+             * Synchronise les attributs entre l'élément hôte et l'input interne.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Parcourt tous les {@link SYNCED_ATTRIBUTES} et applique leurs valeurs à l'input.
+             *
+             * Cas particulier : si l'attribut 'checked' n'est pas présent mais que la propriété
+             * `checked` est à `true`, l'attribut est défini explicitement.
+             *
+             * @private
+             */
+            #_sync() {
+                for (const attr of SYNCED_ATTRIBUTES$1) {
+                    if (this.hasAttribute(attr)) {
+                        this._p_update(attr, null, this.getAttribute(attr));
+                    }
+                    else {
+                        if (attr === ATTRIBUTE_CHECKED && this.checked) {
+                            this._p_update(ATTRIBUTE_CHECKED, null, 'true');
+                        }
+                    }
+                }
+                return this;
+            }
+            /**
+             * Définit la valeur du composant dans le formulaire parent.
+             *
+             * @param value - La valeur à définir (null si le radio n'est pas coché)
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Utilise l'API ElementInternals pour intégrer le composant dans le système de formulaires.
+             * La valeur est null lorsque le radio n'est pas coché, et correspond à la propriété
+             * `value` lorsqu'il est coché.
+             *
+             * @private
+             */
+            get #_setFormValue() { return _private__setFormValue_descriptor.value; }
+            //#endregion Private methods
+            //#region Static
+            /**
+             * Retourne la liste des attributs observés par le composant.
+             *
+             * @returns Un tableau contenant tous les noms d'attributs observés
+             *
+             * @remarks
+             * Combine les attributs observés du parent avec les {@link SYNCED_ATTRIBUTES} spécifiques
+             * à ce composant. Les changements de ces attributs déclencheront {@link _p_update}.
+             *
+             * @protected
+             * @static
+             * @override
+             * @deprecated Utilisez le décorateur {@link Observe} du commit 3e38db0162eef596874dbe32490d9e96b09fb1c0
+             * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
+             */
+            static _p_observedAttributes() {
+                return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES$1];
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        });
+        return _classThis;
+    })();
+
+    /**
+     * Bouton Bnum de type "Secondary".
+     *
+     * @structure Cas standard
+     * <bnum-secondary-button>Texte du bouton</bnum-secondary-button>
+     *
+     * @structure Bouton avec icône
+     * <bnum-secondary-button data-icon="home">Texte du bouton</bnum-secondary-button>
+     *
+     * @structure Bouton avec une icône à gauche
+     * <bnum-secondary-button data-icon="home" data-icon-pos="left">Texte du bouton</bnum-secondary-button>
+     *
+     * @structure Bouton en état de chargement
+     * <bnum-secondary-button loading>Texte du bouton</bnum-secondary-button>
+     *
+     * @structure Bouton arrondi
+     * <bnum-secondary-button rounded>Texte du bouton</bnum-secondary-button>
+     *
+     * @structure Bouton cachant le texte sur les petits layouts
+     * <bnum-secondary-button data-hide="small" data-icon="menu">Menu</bnum-secondary-button>
+     */
+    let HTMLBnumSecondaryButton = (() => {
+        let _classDecorators = [Define()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = HTMLBnumButton;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            constructor() {
+                super();
+                const fromAttribute = false;
+                this.data(HTMLBnumButton.ATTR_VARIATION, exports.EButtonType.SECONDARY, fromAttribute);
+            }
+            static get TAG() {
+                return TAG_SECONDARY;
+            }
+        });
+        return _classThis;
+    })();
+
+    const schedulersKey = Symbol('schedulers');
+    function Schedule() {
+        return function (target, context) {
+            const sKey = Symbol(String(context.name));
+            return function (...args) {
+                const caches = (this[schedulersKey] ??= new Map());
+                let scheduler;
+                if (caches.has(sKey))
+                    scheduler = caches.get(sKey);
+                else
+                    scheduler = new Scheduler(target.apply(this, ...args));
+                if (scheduler)
+                    scheduler.schedule(args[0]);
             };
         };
     }
@@ -7875,7 +8753,7 @@ var Bnum = (function (exports) {
                         this.#_moveOptions();
                     }, "#_scheduleMoveOptions") }, _private__scheduleMoveOptions_decorators, { kind: "method", name: "#_scheduleMoveOptions", static: false, private: true, access: { has: obj => #_scheduleMoveOptions in obj, get: obj => obj.#_scheduleMoveOptions }, metadata: _metadata }, null, _instanceExtraInitializers);
                 __esDecorate(this, _private__tryInitValue_descriptor = { value: __setFunctionName(function ({ ignoreSelectedValue = false, } = {}) {
-                        if (isNullOrUndefined(this.#_initValue))
+                        if (isNullOrUndefined$1(this.#_initValue))
                             this.#_initValue =
                                 this.#_defaultValue ?? (ignoreSelectedValue ? null : this.value);
                         return ATresult.Ok();
@@ -11211,30 +12089,6 @@ var Bnum = (function (exports) {
         };
     }
 
-    const listenersCacheKey = Symbol('listenersCache');
-    function Listener(initilizator) {
-        return function (_target, context) {
-            const methodName = String(context.name);
-            const listenerCacheKey = Symbol(`listener_${methodName}`);
-            return {
-                get() {
-                    const self = this;
-                    if (!self[listenersCacheKey])
-                        self[listenersCacheKey] = new Map();
-                    if (self[listenersCacheKey].has(listenerCacheKey)) {
-                        return self[listenersCacheKey].get(listenerCacheKey);
-                    }
-                    const event = new JsEvent();
-                    if (initilizator) {
-                        initilizator(event, this);
-                    }
-                    self[listenersCacheKey].set(listenerCacheKey, event);
-                    return self[listenersCacheKey].get(listenerCacheKey);
-                },
-            };
-        };
-    }
-
     //type: enum
     //description: États internes pour bnum-segmented-item
     /**
@@ -14353,6 +15207,7 @@ var Bnum = (function (exports) {
     exports.HTMLBnumDate = HTMLBnumDate;
     exports.HTMLBnumFolder = HTMLBnumFolder;
     exports.HTMLBnumFolderList = HTMLBnumFolderList;
+    exports.HTMLBnumFragment = HTMLBnumFragment;
     exports.HTMLBnumHeader = HTMLBnumHeader;
     exports.HTMLBnumHide = HTMLBnumHide;
     exports.HTMLBnumIcon = HTMLBnumIcon;
@@ -14363,6 +15218,7 @@ var Bnum = (function (exports) {
     exports.HTMLBnumInputText = HTMLBnumInputText;
     exports.HTMLBnumInputTime = HTMLBnumInputTime;
     exports.HTMLBnumPrimaryButton = HTMLBnumPrimaryButton;
+    exports.HTMLBnumRadio = HTMLBnumRadio;
     exports.HTMLBnumSecondaryButton = HTMLBnumSecondaryButton;
     exports.HTMLBnumSegmentedControl = HTMLBnumSegmentedControl;
     exports.HTMLBnumSegmentedItem = HTMLBnumSegmentedItem;
