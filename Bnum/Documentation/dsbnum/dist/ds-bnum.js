@@ -12171,7 +12171,7 @@ var Bnum = (function (exports) {
         };
     }
 
-    var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--internal-gap:var(--bnum-radio-group-gap,var(--bnum-space-m,15px))}.group__label__group{display:flex;flex-direction:column;gap:var(--internal-gap)}:host(:state(inline)) .group__label__group{flex-direction:row}";
+    var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--internal-gap:var(--bnum-radio-group-gap,var(--bnum-space-m,15px))}.group__label__group{display:flex;flex-direction:column;gap:var(--internal-gap)}:host(:state(inline)) .group__label__group{flex-direction:row}::slotted(bnum-radio){user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}";
 
     //#endregion Types
     //#region Global constants
