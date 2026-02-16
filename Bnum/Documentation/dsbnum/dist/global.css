@@ -215,7 +215,7 @@ html.touch {
   --size-margin-left-state: 0;
 }
 body {
-  font-size: var(--bnum-font-size-m, 1rem);
+  font-size: var(--bnum-body-font-size, var(--bnum-font-size-m, 1rem));
   font-family: var(--bnum-font-family-primary);
   color: var(--bnum-text-primary);
 }

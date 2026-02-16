@@ -603,7 +603,7 @@ var Bnum = (function (exports) {
               .join(' ');
     }
 
-    var css_248z$o = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
+    var css_248z$p = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
 
     class BnumDOM {
         /**
@@ -1414,7 +1414,7 @@ var Bnum = (function (exports) {
     /**
      * Style commun à tous les BnumElement.
      */
-    const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$o);
+    const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$p);
 
     class Log {
         static trace(context, ...args) {
@@ -2546,7 +2546,7 @@ var Bnum = (function (exports) {
         }
     }
 
-    var css_248z$n = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
+    var css_248z$o = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
 
     /**
      * Décorateur de classe pour définir un Web Component.
@@ -2729,6 +2729,17 @@ var Bnum = (function (exports) {
             };
         };
     }
+    /**
+     * Option pour Data pour indiquer qu'un accessor ne devrait pas avoir de setter.
+     *
+     * @example
+     * ```typescript
+     * ///
+     * @Data(NO_SETTER)
+     * accessor #_label!: string;
+     * ```
+     */
+    const NO_SETTER = { setter: false };
 
     /**
      * @SetAttr : Ajoute un attribut avec une valeur fixe à un élément.
@@ -2876,7 +2887,7 @@ var Bnum = (function (exports) {
         };
     }
 
-    const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$n);
+    const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$o);
     /**
      * Badge d'information.
      *
@@ -3177,6 +3188,8 @@ var Bnum = (function (exports) {
     const TAG_SEGMENTED_CONTROL = `${TAG_PREFIX}-segmented-control`;
     const TAG_SELECT = `${TAG_PREFIX}-select`;
     const TAG_FRAGMENT = `${TAG_PREFIX}-fragment`;
+    const TAG_RADIO = `${TAG_PREFIX}-radio`;
+    const TAG_RADIO_GROUP = `${TAG_PREFIX}-radio-group`;
 
     /**
      * RegEx qui permet de vérifier si un texte possède uniquement des charactères alphanumériques.
@@ -3225,9 +3238,9 @@ var Bnum = (function (exports) {
         }
     }
 
-    var css_248z$m = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+    var css_248z$n = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
 
-    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+    var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
 
     /**
      * Classe CSS utilisée pour les icônes Material Symbols.
@@ -3236,8 +3249,8 @@ var Bnum = (function (exports) {
     /**
      * Feuille de style CSS pour les icônes Material Symbols.
      */
-    const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$m.replaceAll(`.${ICON_CLASS}`, ':host'));
-    const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$l);
+    const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$n.replaceAll(`.${ICON_CLASS}`, ':host'));
+    const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$m);
     /**
      * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
      *
@@ -3535,13 +3548,13 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$k = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
     //#region External Constants
     /**
      * Style CSS du composant bouton.
      */
-    const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$k);
+    const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$l);
     // Constantes pour les tags des différents types de boutons
     /**
      * Icône de chargement utilisée dans le bouton.
@@ -3588,7 +3601,7 @@ var Bnum = (function (exports) {
     /**
      * Template HTML du composant bouton.
      */
-    const TEMPLATE$e = BnumElement.CreateTemplate(`
+    const TEMPLATE$f = BnumElement.CreateTemplate(`
   <div class="${CLASS_WRAPPER}">
     <span class="${CLASS_SLOT}">
       <slot></slot>
@@ -3988,7 +4001,7 @@ var Bnum = (function (exports) {
              * @returns Template utiliser pour le composant
              */
             _p_fromTemplate() {
-                return TEMPLATE$e;
+                return TEMPLATE$f;
             }
             /**
              * Construit le DOM du composant bouton.
@@ -5039,10 +5052,10 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$j = ":host{border-bottom:thin dotted;cursor:help}";
+    var css_248z$k = ":host{border-bottom:thin dotted;cursor:help}";
 
     // bnum-helper.ts
-    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$j);
+    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$k);
     /**
      * Constante représentant l'icône utilisée par défaut.
      */
@@ -5119,13 +5132,13 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$i = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+    var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
     //#region Global Constants
     const ID_ICON$1 = 'icon';
     //#endregion Global Constants
-    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$i);
-    const TEMPLATE$d = BnumElement.CreateTemplate(`
+    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$j);
+    const TEMPLATE$e = BnumElement.CreateTemplate(`
     <${HTMLBnumIcon.TAG} id="${ID_ICON$1}"><slot></slot></${HTMLBnumIcon.TAG}>
     `);
     /**
@@ -5233,7 +5246,7 @@ var Bnum = (function (exports) {
              * @inheritdoc
              */
             _p_fromTemplate() {
-                return TEMPLATE$d;
+                return TEMPLATE$e;
             }
             /**
              * @inheritdoc
@@ -5327,12 +5340,12 @@ var Bnum = (function (exports) {
 
     const EVENT_DEFAULT = 'default';
 
-    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
+    var css_248z$i = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
 
-    var css_248z$g = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
 
-    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$h);
-    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$g);
+    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$i);
+    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$h);
     //#region Global Constants
     const ID_INPUT$1 = 'bnum-input';
     const ID_HINT_TEXT = 'hint-text';
@@ -6401,9 +6414,9 @@ var Bnum = (function (exports) {
         return HTMLBnumInput = _classThis;
     })();
 
-    var css_248z$f = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
+    var css_248z$g = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
 
-    const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$f);
+    const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$g);
     /**
      * Input nombre.
      *
@@ -6814,9 +6827,9 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$e = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
+    var css_248z$f = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
 
-    const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$e);
+    const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$f);
     //#region Global Constants
     const ID_ACTIONS_CONTAINER = 'input-search-actions-container';
     const ID_CLEAR_BUTTON = 'input-clear-button';
@@ -6824,7 +6837,7 @@ var Bnum = (function (exports) {
     const EVENT_SEARCH = 'bnum-input-search:search';
     //#endregion Global Constants
     //#region Template
-    const TEMPLATE$c = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
+    const TEMPLATE$d = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
       ${HTMLBnumButtonIcon.Write('close', { id: ID_CLEAR_BUTTON })}
       <slot name="${SLOT_ACTIONS}"></slot>
     </div>`);
@@ -6961,7 +6974,7 @@ var Bnum = (function (exports) {
                 __runInitializers(this, ____extraInitializers);
             }
             _p_fromTemplate() {
-                return TEMPLATE$c;
+                return TEMPLATE$d;
             }
             _p_getStylesheets() {
                 return [...super._p_getStylesheets(), SHEET$9];
@@ -7838,7 +7851,7 @@ var Bnum = (function (exports) {
             get caller() { return this.#caller_accessor_storage; }
             set caller(value) { this.#caller_accessor_storage = value; }
             constructor(options) {
-                super(`${options.caller.constructor.TAG}:change`, options.details ?? {});
+                super(`${options.caller.constructor.TAG}:change`, options.details ?? { bubbles: true, cancelable: true });
                 __runInitializers(this, _caller_extraInitializers);
                 this.value = options.value;
                 this.name = options.name;
@@ -7848,7 +7861,7 @@ var Bnum = (function (exports) {
         };
     })();
 
-    var css_248z$d = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal-color:var(--bnum-radio-color,var(--bnum-color-primary,#000091));--_internal-font-size:var(--bnum-radio-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-radio-outer-size:var(--_internal-font-size);--_internal-radio-inner-size:calc(var(--_internal-radio-outer-size)*0.6);--_internal-border-size:var(--bnum-radio-border-size,1px);--_internal-border-radius:var(--bnum-radio-border-radius,var(--bnum-radius-circle,50%));position:relative}.radio{height:0;opacity:0;position:absolute;width:0}.radio__label{display:flex;flex-direction:column;margin-left:calc(var(--_internal-radio-outer-size) + 10px)}.radio__label--legend{font-size:var(--_internal-font-size)}.radio__label:before{border:solid var(--_internal-border-size) var(--_internal-color);box-sizing:border-box;height:var(--_internal-radio-outer-size);left:0;top:0;width:var(--_internal-radio-outer-size)}.radio__label:after,.radio__label:before{border-radius:var(--_internal-border-radius);content:\"\";position:absolute}.radio__label:after{--_internal-pos:calc(var(--_internal-radio-outer-size)/2);background:var(--_internal-color);display:none;height:var(--_internal-radio-inner-size);left:var(--_internal-pos);top:var(--_internal-pos);transform:translate(-50%,-50%);width:var(--_internal-radio-inner-size)}.radio:checked~.radio__label:after{display:block}.radio:focus~.radio__label:before,:host(:focus-visible) .radio__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}:host(:focus-visible){outline:none}:host(:disabled),:host([disabled]){opacity:.6;pointer-events:none}";
+    var css_248z$e = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal-color:var(--bnum-radio-color,var(--bnum-color-primary,#000091));--_internal-font-size:var(--bnum-radio-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-radio-outer-size:var(--_internal-font-size);--_internal-radio-inner-size:calc(var(--_internal-radio-outer-size)*0.6);--_internal-border-size:var(--bnum-radio-border-size,1px);--_internal-border-radius:var(--bnum-radio-border-radius,var(--bnum-radius-circle,50%));position:relative}.radio{height:0;opacity:0;position:absolute;width:0}.radio__label{display:flex;flex-direction:column;margin-left:calc(var(--_internal-radio-outer-size) + 10px)}.radio__label--legend{font-size:var(--_internal-font-size)}.radio__label:before{border:solid var(--_internal-border-size) var(--_internal-color);box-sizing:border-box;height:var(--_internal-radio-outer-size);left:0;top:0;width:var(--_internal-radio-outer-size)}.radio__label:after,.radio__label:before{border-radius:var(--_internal-border-radius);content:\"\";position:absolute}.radio__label:after{--_internal-pos:calc(var(--_internal-radio-outer-size)/2);background:var(--_internal-color);display:none;height:var(--_internal-radio-inner-size);left:var(--_internal-pos);top:var(--_internal-pos);transform:translate(-50%,-50%);width:var(--_internal-radio-inner-size)}.radio:checked~.radio__label:after{display:block}.radio:focus~.radio__label:before,:host(:focus-visible) .radio__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}:host(:focus-visible){outline:none}:host(:disabled),:host([disabled]){opacity:.6;pointer-events:none}";
 
     const listenersCacheKey = Symbol('listenersCache');
     function Listener(initilizator) {
@@ -7939,6 +7952,11 @@ var Bnum = (function (exports) {
      */
     const ATTRIBUTE_VALUE = 'value';
     /**
+     * Nom de l'événement 'change'.
+     * @internal
+     */
+    const EVENT_CHANGE$2 = 'bnum-radio:change';
+    /**
      * Liste des attributs synchronisés entre l'élément hôte et l'input interne.
      *
      * @remarks
@@ -7954,7 +7972,7 @@ var Bnum = (function (exports) {
      * Comprend un input radio natif et un label avec des slots pour le contenu et l'indice.
      * @internal
      */
-    const TEMPLATE$b = (h(HTMLBnumFragment, { children: [h("input", { type: "radio", id: ID_INPUT, class: "radio" }), h("label", { part: "label", for: "radio", class: "radio__label", children: [h("span", { class: "radio__label--legend", children: h("slot", { id: "legend" }) }), h("span", { class: "radio--hint label-container--hint", children: h("slot", { id: "hint", name: "hint" }) })] })] }));
+    const TEMPLATE$c = (h(HTMLBnumFragment, { children: [h("input", { type: "radio", id: ID_INPUT, class: "radio" }), h("label", { part: "label", for: "radio", class: "radio__label", children: [h("span", { class: "radio__label--legend", children: h("slot", { id: "legend" }) }), h("span", { class: "radio--hint label-container--hint", children: h("slot", { id: "hint", name: "hint" }) })] })] }));
     //#endregion Global Constants
     /**
      * Composant personnalisé représentant un bouton radio avec support de formulaire.
@@ -8004,14 +8022,14 @@ var Bnum = (function (exports) {
      * @slot (default) - Légende de l'élément
      * @slot hint - Aide supplémentaire dans la légende
      *
-     * @event {BnumRadioCheckedChangeEvent} bnum-radio:change - Lorsque l'élément change d'état
+     * @event {CustomEvent<{ inner: BnumRadioCheckedChangeEvent }>} bnum-radio:change - Lorsque l'élément change d'état
      *
      * @attr {string} value - Valeur de l'élément
      * @attr {string} name - Nom de l'élément, permet de gérer les interactions des radio ayant le même nom
      * @attr {'disabled' | '' | undefined} (optional) disabled - Désactive l'élément
      * @attr {'' | undefined} (optional) checked - Si l'élément est actif ou non
      * @attr {string | undefined} (optional) data-legend - Label de l'élément. Est écraser si un slot est défini.
-     * @attr {string | undefined} (optional) data-hint - Aide supplémentaire pour le label. Est écraser si un slot est défini.
+     * @attr {string | undefined} (optional) data-hint - Aide supplémentaire pour le label. Est écraser si un slot est défini.
      *
      * @cssvar {#000091} --bnum-radio-color - Couleur du radio
      * @cssvar {1rem} --bnum-radio-font-size - Taille du label principal
@@ -8020,9 +8038,9 @@ var Bnum = (function (exports) {
      */
     let HTMLBnumRadio = (() => {
         let _classDecorators = [Define({
-                template: TEMPLATE$b,
-                tag: 'bnum-radio',
-                styles: [INPUT_BASE_STYLE, css_248z$d],
+                template: TEMPLATE$c,
+                tag: TAG_RADIO,
+                styles: [INPUT_BASE_STYLE, css_248z$e],
             })];
         let _classDescriptor;
         let _classExtraInitializers = [];
@@ -8119,7 +8137,11 @@ var Bnum = (function (exports) {
                 __esDecorate(this, _private__fireChange_descriptor = { value: __setFunctionName(function (ev) {
                         ev.stopPropagation();
                         this.#_updateInternal();
-                        const details = { inner: ev };
+                        const details = {
+                            inner: ev,
+                            bubbles: true,
+                            cancelable: true,
+                        };
                         const options = {
                             value: this.value,
                             checked: this.checked,
@@ -8241,6 +8263,17 @@ var Bnum = (function (exports) {
              */
             get #_hint() { return _private__hint_descriptor.get.call(this); }
             set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
+            /**
+             * Récupère l'input radio interne.
+             *
+             * @remarks
+             * Permet d'accéder à l'input radio natif pour des opérations spécifiques.
+             *
+             * @returns L'input radio interne
+             */
+            get internalCheckbox() {
+                return this.#_ui.input;
+            }
             //#endregion Getters/Setters
             //#region Lifecycle
             /**
@@ -8311,10 +8344,20 @@ var Bnum = (function (exports) {
                 if (needUpdate) {
                     this.#_update(name, newVal, {
                         checked: this.#_onUpdateChecked.bind(this),
-                    }).tapError((error) => Log.error('HTMLBnumRadio/_p_update', error.message, error));
+                    }).tapError(error => Log.error('HTMLBnumRadio/_p_update', error.message, error));
                 }
             }
             //#endregion Lifecycle
+            //#region Public methods
+            /**
+             * Update l'état du radio et déclenche l'événement bnum-radio:change
+             * @param checked - L'état à appliquer
+             */
+            updateCheckAndFire(checked) {
+                this.internalCheckbox.checked = checked;
+                this.#_fireChange(new Event('change', { bubbles: true, composed: true }));
+            }
+            //#endregion Public methods
             //#region Private methods
             /**
              * Initialise le contenu des slots avec les valeurs de légende et d'indice.
@@ -8392,7 +8435,7 @@ var Bnum = (function (exports) {
              * @private
              */
             #_handleInnerChange() {
-                this.#_ui.input.addEventListener('change', (ev) => {
+                this.#_ui.input.addEventListener('change', ev => {
                     this.#_fireChange(ev);
                 });
                 return this;
@@ -8503,6 +8546,14 @@ var Bnum = (function (exports) {
             static _p_observedAttributes() {
                 return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES$1];
             }
+            /**
+             * Retourne le nom de l'événement 'change'.
+             *
+             * @returns Le nom de l'événement 'change'
+             */
+            static get EVENT_CHANGE() {
+                return EVENT_CHANGE$2;
+            }
             static {
                 __runInitializers(_classThis, _classExtraInitializers);
             }
@@ -8559,6 +8610,38 @@ var Bnum = (function (exports) {
     })();
 
     const schedulersKey = Symbol('schedulers');
+    /**
+     * Décorateur permettant de planifier l'exécution d'une méthode via un {@link Scheduler}.
+     *
+     * Ce décorateur modifie le comportement de la méthode cible pour qu'elle agisse comme un initialiseur de `Scheduler`.
+     * La méthode originale ne sera appelée qu'une seule fois par instance de classe pour configurer le callback du `Scheduler`.
+     * Les appels subséquents à la méthode décorée déclencheront la planification (`schedule`) sur l'instance de `Scheduler` mise en cache,
+     * en passant le premier argument de l'appel comme valeur à planifier.
+     *
+     * Le `Scheduler` utilise généralement `requestAnimationFrame` pour différer et regrouper l'exécution,
+     * ce qui est utile pour des mises à jour d'interface ou des opérations coûteuses qui peuvent être regroupées.
+     *
+     * @returns Une fonction décoratrice de méthode.
+     *
+     * @example
+     * ```typescript
+     * class Composant {
+     *   @Schedule()
+     *   protected onUpdate(initValue: number) {
+     *     // Cette méthode retourne le callback exécuté par le Scheduler.
+     *     // Elle est appelée une seule fois à la première exécution.
+     *     return (val: number | null) => {
+     *       console.log('Valeur traitée :', val);
+     *     };
+     *   }
+     *
+     *   trigger() {
+     *     this.onUpdate(1); // Initialise le scheduler et planifie 1
+     *     this.onUpdate(2); // Planifie 2 (l'exécution réelle se fera plus tard avec la dernière valeur)
+     *   }
+     * }
+     * ```
+     */
     function Schedule() {
         return function (target, context) {
             const sKey = Symbol(String(context.name));
@@ -8568,7 +8651,7 @@ var Bnum = (function (exports) {
                 if (caches.has(sKey))
                     scheduler = caches.get(sKey);
                 else
-                    scheduler = new Scheduler(target.apply(this, ...args));
+                    scheduler = new Scheduler(target.bind(this, ...args));
                 if (scheduler)
                     scheduler.schedule(args[0]);
             };
@@ -8600,7 +8683,7 @@ var Bnum = (function (exports) {
         };
     }
 
-    var css_248z$c = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer}.icon-arrow-down{position:absolute;right:5px;top:50%;transform:translateY(-50%);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.select-container{position:relative}";
+    var css_248z$d = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer}.icon-arrow-down{position:absolute;right:5px;top:50%;transform:translateY(-50%);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.select-container{position:relative}";
 
     //#endregon Types
     //#region Global Constants
@@ -8615,7 +8698,7 @@ var Bnum = (function (exports) {
         'name',
         'value',
     ];
-    const TEMPLATE$a = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("div", { class: "select-container", children: [h("select", { id: "select", class: "bnum-select__container__select input-like" }), h(HTMLBnumIcon, { "data-icon": "keyboard_arrow_down", class: "icon-arrow-down" })] })] }));
+    const TEMPLATE$b = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("div", { class: "select-container", children: [h("select", { id: "select", class: "bnum-select__container__select input-like" }), h(HTMLBnumIcon, { "data-icon": "keyboard_arrow_down", class: "icon-arrow-down" })] })] }));
     //#endregion Global Constants
     /**
      * @structure Defaut
@@ -8668,8 +8751,8 @@ var Bnum = (function (exports) {
     let HTMLBnumSelect = (() => {
         let _classDecorators = [Define({
                 tag: TAG_SELECT,
-                template: TEMPLATE$a,
-                styles: [INPUT_BASE_STYLE, css_248z$c],
+                template: TEMPLATE$b,
+                styles: [INPUT_BASE_STYLE, css_248z$d],
             }), UpdateAll()];
         let _classDescriptor;
         let _classExtraInitializers = [];
@@ -8883,7 +8966,6 @@ var Bnum = (function (exports) {
                 (this.#_observer ??= new MutationObserver(this.#_obserse)).observe(this, {
                     childList: true,
                 });
-                Log.debug('HTMLBnumSelect', `Ìnitvalue : ${this.#_initValue}`, this);
             }
             /**
              * On attache un shadow-dom custom pour pouvoir déléger le focus.
@@ -9062,9 +9144,9 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$b = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
+    var css_248z$c = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-item-background-color,var(--bnum-color-surface,#f6f6f7));cursor:var(--bnum-card-item-cursor,pointer);display:var(--bnum-card-item-display,block);padding:var(--bnum-card-item-padding,15px);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;width:calc(var(--bnum-card-item-width-percent, 100%) - var(--bnum-card-item-width-modifier, 30px))}:host(:hover){background-color:var(--bnum-card-item-background-color-hover,var(--bnum-color-surface-hover,#eaeaea))}:host(:active){background-color:var(--bnum-card-item-background-color-active,var(--bnum-color-surface-active,#dfdfdf))}:host(:disabled),:host(:state(disabled)),:host([disabled]){cursor:not-allowed;opacity:.6;pointer-events:none}";
 
-    const SHEET$8 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$b);
+    const SHEET$8 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$c);
     /**
      * Représente un item d'une carte `<bnum-card>` qui peut être mis dans un `bnum-card-list`.
      *
@@ -9231,9 +9313,9 @@ var Bnum = (function (exports) {
     })();
     HTMLBnumCardItem.TryDefine();
 
-    var css_248z$a = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,.75rem))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
+    var css_248z$b = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.bold{font-weight:var(--bnum-card-item-agenda-date-bold,var(--bnum-font-weight-bold,bold))}.bold-500{font-weight:var(--bnum-card-item-agenda-date-bold-medium,var(--bnum-font-weight-medium,500))}:host{display:flex;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));position:relative}:host .bnum-card-item-agenda-horizontal{display:flex;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));justify-content:space-between}:host .bnum-card-item-agenda-vertical{display:flex;flex:1;flex-direction:column;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-block{display:flex;flex:1;flex-direction:row;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));min-width:0}:host .bnum-card-item-agenda-hour{border-bottom:var(--bnum-card-item-agenda-date-border-bottom,none);border-left:var(--bnum-card-item-agenda-date-border-left,none);border-right:var(--bnum-card-item-agenda-date-border-right,var(--bnum-border-surface,solid 4px #000091));border-top:var(--bnum-card-item-agenda-date-border-top,none);display:flex;flex-direction:column;flex-shrink:0;gap:var(--bnum-card-item-agenda-gap,var(--bnum-space-s,10px));padding:var(--bnum-card-item-agenda-padding-top-hour,0) var(--bnum-card-item-agenda-padding-right-hour,var(--bnum-space-s,10px)) var(--bnum-card-item-agenda-padding-bottom-hour,0) var(--bnum-card-item-agenda-padding-left-hour,0)}:host .bnum-card-item-agenda-location{font-size:var(--bnum-card-item-agenda-location-font-size,var(--bnum-font-size-xs,.75rem))}:host .bnum-card-item-agenda-location{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .bnum-card-item-agenda-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host [hidden]{display:none}:host(:state(private)) .bnum-card-item-agenda-private-icon{position:absolute;right:var(--bnum-card-item-agenda-private-icon-right,10px);top:var(--bnum-card-item-agenda-private-icon-top,10px)}:host(:state(all-day)) .bnum-card-item-agenda-hour .bnum-card-item-agenda-all-day{margin-bottom:auto;margin-top:auto}:host(:state(mode-telework)){font-style:var(--bnum-card-item-agenda-telework-font-style,italic)}:host(:state(mode-telework)):before{bottom:var(--bnum-card-item-agenda-telework-icon-bottom,10px);content:var(--bnum-card-item-agenda-telework-icon-content,\"\\e88a\");font-family:var(--bnum-card-item-agenda-telework-icon-font-family,var(--bnum-icon-font-family,\"Material Symbols Outlined\"));font-size:var(--bnum-card-item-agenda-telework-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-style:normal;position:absolute;right:var(--bnum-card-item-agenda-telework-icon-right,10px)}:host(:state(mode-telework):state(action)) .bnum-card-item-agenda-action{margin-right:var(--bnum-card-item-agenda-telework-action-margin-right,20px)}";
 
-    const SHEET$7 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$a);
+    const SHEET$7 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$b);
     //#region Global Constants
     const CLASS_DAY = 'bnum-card-item-agenda-day';
     const CLASS_HORIZONTAL = 'bnum-card-item-agenda-horizontal';
@@ -9277,7 +9359,7 @@ var Bnum = (function (exports) {
   </div>
   <${HTMLBnumIcon.TAG} class="${CLASS_PRIVATE_ICON}" hidden>${ICON_PRIVATE}</${HTMLBnumIcon.TAG}>
 `;
-    const TEMPLATE$9 = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
+    const TEMPLATE$a = HTMLBnumCardItem.CreateChildTemplate(AGENDA, {
         defaultSlot: false,
     });
     //#endregion Template
@@ -9822,7 +9904,7 @@ var Bnum = (function (exports) {
                     this.#_privateIcon.hidden = true;
             }
             _p_fromTemplate() {
-                return TEMPLATE$9;
+                return TEMPLATE$a;
             }
             //#endregion
             //#region Public Methods
@@ -10067,9 +10149,9 @@ var Bnum = (function (exports) {
         return HTMLBnumCardItemAgenda = _classThis;
     })();
 
-    var css_248z$9 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
+    var css_248z$a = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{align-items:center;display:flex;justify-content:space-between}:host .sender{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-m);font-weight:var(--bnum-card-item-mail-font-weight-bold,var(--bnum-font-weight-bold,bold));margin-bottom:var(--bnum-card-item-mail-margin-bottom,var(--bnum-space-s,10px));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host .subject{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-size-s);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}:host(:state(read)) .sender{font-weight:var(--bnum-card-item-mail-sender-read-font-weight,initial)}:host(:state(read)) .subject{font-style:var(--bnum-card-item-mail-subject-read-font-style,italic)}";
 
-    const SHEET$6 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$9);
+    const SHEET$6 = HTMLBnumCardItem.ConstructCSSStyleSheet(css_248z$a);
     //#region Global Constants
     const CLASS_MAIN_CONTENT = 'main-content';
     const CLASS_SENDER = 'sender';
@@ -10087,7 +10169,7 @@ var Bnum = (function (exports) {
     const ID_DATE_ELEMENT_OVERRIDE = 'date-element-override';
     //#endregion Global Constants
     //#region Template
-    const TEMPLATE$8 = HTMLBnumCardItem.CreateChildTemplate(`
+    const TEMPLATE$9 = HTMLBnumCardItem.CreateChildTemplate(`
   <div class="${CLASS_MAIN_CONTENT}">
     <div class="${CLASS_SENDER}">
       <slot id="${ID_SENDER_SLOT}" name="${SLOT_SENDER_NAME}"></slot>
@@ -10441,7 +10523,7 @@ var Bnum = (function (exports) {
              * @returns Le template HTML.
              */
             _p_fromTemplate() {
-                return TEMPLATE$8;
+                return TEMPLATE$9;
             }
             //#endregion Lifecycle
             //#region Public methods
@@ -10679,12 +10761,12 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
+    var css_248z$9 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{padding:var(--bnum-space-s,10px)}:host ::slotted([role=listitem]){border-bottom:var(--bnum-border-in-surface,solid 1px #ddd)}:host ::slotted([role=listitem]:last-child){border-bottom:none}:host ::slotted([hidden]),:host [hidden]{display:none}";
 
     /**
      * Feuille de style CSS pour le composant liste de cartes.
      */
-    const SHEET$5 = BnumElement.ConstructCSSStyleSheet(css_248z$8);
+    const SHEET$5 = BnumElement.ConstructCSSStyleSheet(css_248z$9);
     /**
      * Composant liste de cartes Bnum.
      * Permet d'afficher une liste d'éléments de type carte.
@@ -10850,9 +10932,9 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
+    var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host a{align-items:var(--bnum-card-title-align-items,center);display:var(--bnum-card-title-display,flex);gap:var(--bnum-card-title-gap,var(--bnum-space-s,10px))}:host(:state(url)) a{color:var(--a-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-text-decoration,none);text-decoration:var(--a-text-decoration,none)}:host(:state(url)) a:hover{color:var(--a-hover-color,var(--bnum-text-primary,#000));-webkit-text-decoration:var(--a-hover-text-decoration,underline);text-decoration:var(--a-hover-text-decoration,underline)}h2{font-size:var(--bnum-card-title-font-size,var(--bnum-font-size-h6,1.25rem));margin:var(--bnum-card-title-margin,0)}";
 
-    const SHEET$4 = BnumElement.ConstructCSSStyleSheet(css_248z$7);
+    const SHEET$4 = BnumElement.ConstructCSSStyleSheet(css_248z$8);
     //#region Global Constants
     const ATTRIBUTE_URL = 'url';
     const ATTRIBUTE_DATA_ICON = 'icon';
@@ -10866,7 +10948,7 @@ var Bnum = (function (exports) {
     const ID_CUSTOM_BODY = 'custombody';
     //#endregion Global Constants
     //#region Template
-    const TEMPLATE$7 = BnumElement.CreateTemplate(`
+    const TEMPLATE$8 = BnumElement.CreateTemplate(`
       <h2><a class="${CLASS_LINK}">
         <span class="container">
           <slot id="${ID_SLOT_ICON}" name="${SLOT_NAME_ICON}"></slot>
@@ -11055,7 +11137,7 @@ var Bnum = (function (exports) {
                 return [...super._p_getStylesheets(), SHEET$4];
             }
             _p_fromTemplate() {
-                return TEMPLATE$7;
+                return TEMPLATE$8;
             }
             /**
              * Construit le DOM du composant dans le conteneur donné.
@@ -11256,11 +11338,11 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_local-indent:calc(var(--bnum-folder-indentation-base, 0.5em)*var(--internal-bnum-folder-level, 0));display:var(--bnum-folder-display,block);padding-left:var(--bnum-folder-indentation,var(--_local-indent));width:var(--bnum-folder-width,100%)}:host .bal-container{display:flex;justify-content:space-between;padding:var(--bnum-folder-title-padding,10px 15px);transition:background-color .2s ease}:host .bal-container__left,:host .bal-container__title{align-content:center;align-items:center;display:flex;gap:var(--bnum-folder-gap,var(--bnum-space-s,10px))}:host .bal-container__title__name{text-wrap:nowrap;max-width:var(--bnum-folder-text-ellipisis-max-width,125px);overflow:hidden;pointer-events:none;text-overflow:ellipsis}:host .bal-container__title__icon{color:var(--bnum-folder-icon-color,inherit);flex-shrink:0}:host bnum-badge{height:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);transition:all .2s ease;width:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host bnum-badge.is-cumulative{background-color:var(--bnum-color-primary-active)}:host bnum-badge:state(no-value){display:none}:host([level=\"0\"]){border-bottom:var(--bnum-border-in-column)}:host([level=\"0\"]) .bal-container{padding:var(--bnum-folder-bal-title-padding,15px 15px)}:host(:state(no-subfolders)) .bal-container__toggle{display:none}:host(:state(double-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem)}:host(:state(triple-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem);height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host([is-collapsed=true]) .bal-sub-folders{display:none}:host([is-virtual=false]){cursor:pointer}:host([is-virtual=false]) .bal-container__title__name{pointer-events:all}:host([is-virtual=false]:hover) .bal-container{background-color:var(--bnum-color-list-hover)}:host([is-selected=true]) .bal-container{background-color:var(--bnum-color-list);cursor:default}:host([is-selected=true]:hover) .bal-container{background-color:var(--bnum-color-list)}:host(.dragover) .bal-container{background-color:var(--bnum-color-list-drag)}";
+    var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_local-indent:calc(var(--bnum-folder-indentation-base, 0.5em)*var(--internal-bnum-folder-level, 0));display:var(--bnum-folder-display,block);padding-left:var(--bnum-folder-indentation,var(--_local-indent));width:var(--bnum-folder-width,100%)}:host .bal-container{display:flex;justify-content:space-between;padding:var(--bnum-folder-title-padding,10px 15px);transition:background-color .2s ease}:host .bal-container__left,:host .bal-container__title{align-content:center;align-items:center;display:flex;gap:var(--bnum-folder-gap,var(--bnum-space-s,10px))}:host .bal-container__title__name{text-wrap:nowrap;max-width:var(--bnum-folder-text-ellipisis-max-width,125px);overflow:hidden;pointer-events:none;text-overflow:ellipsis}:host .bal-container__title__icon{color:var(--bnum-folder-icon-color,inherit);flex-shrink:0}:host bnum-badge{height:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);transition:all .2s ease;width:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host bnum-badge.is-cumulative{background-color:var(--bnum-color-primary-active)}:host bnum-badge:state(no-value){display:none}:host([level=\"0\"]){border-bottom:var(--bnum-border-in-column)}:host([level=\"0\"]) .bal-container{padding:var(--bnum-folder-bal-title-padding,15px 15px)}:host(:state(no-subfolders)) .bal-container__toggle{display:none}:host(:state(double-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem)}:host(:state(triple-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem);height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host([is-collapsed=true]) .bal-sub-folders{display:none}:host([is-virtual=false]){cursor:pointer}:host([is-virtual=false]) .bal-container__title__name{pointer-events:all}:host([is-virtual=false]:hover) .bal-container{background-color:var(--bnum-color-list-hover)}:host([is-selected=true]) .bal-container{background-color:var(--bnum-color-list);cursor:default}:host([is-selected=true]:hover) .bal-container{background-color:var(--bnum-color-list)}:host(.dragover) .bal-container{background-color:var(--bnum-color-list-drag)}";
 
-    const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$6);
+    const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$7);
     //#region Template
-    const TEMPLATE$6 = BnumElementInternal.CreateTemplate(`
+    const TEMPLATE$7 = BnumElementInternal.CreateTemplate(`
     <div class="bal-container">
       <div class="bal-container__title">
         ${HTMLBnumIcon.Write('square', { class: 'bal-container__title__icon' })}
@@ -11578,7 +11660,7 @@ var Bnum = (function (exports) {
              * @returns {HTMLTemplateElement | null} Le template.
              */
             _p_fromTemplate() {
-                return TEMPLATE$6;
+                return TEMPLATE$7;
             }
             /**
              * Construit le DOM et initialise les références UI et les écouteurs d'événements internes.
@@ -12088,6 +12170,543 @@ var Bnum = (function (exports) {
             });
         };
     }
+
+    var css_248z$6 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--internal-gap:var(--bnum-radio-group-gap,var(--bnum-space-m,15px))}.group__label__group{display:flex;flex-direction:column;gap:var(--internal-gap)}:host(:state(inline)) .group__label__group{flex-direction:row}";
+
+    //#endregion Types
+    //#region Global constants
+    // eslint-disable-next-line quotes
+    const DEFAULT_LABEL = "Perdu dans l'arbre";
+    const DEFAULT_HINT = EMPTY_STRING;
+    const ID_GROUP = 'group';
+    const ID_LEGEND = 'legend';
+    const ID_HINT = 'hint';
+    const DATA_INLINE = 'inline';
+    const STATE_INLINE = DATA_INLINE;
+    const ATTR_NAME = 'name';
+    const EVENT_CHANGE$1 = 'change';
+    //#endregion Global constants
+    //#region Template
+    const TEMPLATE$6 = (h(HTMLBnumFragment, { children: [h("div", { class: "group__label label-container", id: "label", children: [h("div", { class: "group__label--legend label-container--label", children: h("slot", { id: ID_LEGEND, name: "legend", children: DEFAULT_LABEL }) }), h("div", { class: "group__label--hint label-container--hint", children: h("slot", { id: ID_HINT, name: "hint", children: DEFAULT_HINT }) })] }), h("div", { id: ID_GROUP, role: "radiogroup", class: "group__label__group", "aria-describedby": "label", children: h("slot", {}) })] }));
+    //#endregion Template
+    /**
+     * Composant `bnum-radio-group`
+     *
+     * Ce composant représente un groupe de boutons radio. Il gère la sélection unique parmi ses enfants `bnum-radio`,
+     * la navigation au clavier, et l'accessibilité (via `role="radiogroup"`).
+     *
+     * @structure Structure de base
+     * <bnum-radio-group id="groupe1" name="choix" data-label="Faites un choix" data-hint="Indice !">
+     *   <bnum-radio value="1">Choix 1</bnum-radio>
+     *   <bnum-radio value="2">Choix 2</bnum-radio>
+     * </bnum-radio-group>
+     *
+     * @structure Structure en ligne (inline)
+     * <bnum-radio-group id="groupe2" name="inline" data-inline="true" data-label="Choix en ligne">
+     *   <bnum-radio value="A">Choix A</bnum-radio>
+     *   <bnum-radio value="B">Choix B</bnum-radio>
+     * </bnum-radio-group>
+     *
+     * @slot legend - Description du groupe
+     * @slot hint - Indice ou aide pour le groupe
+     * @slot (default) - Boutons radio
+     *
+     * @state inline - Indique si le groupe doit afficher ses options en ligne
+     *
+     * @attr {string} name - Le nom du groupe de boutons radio. Cet attribut est appliqué à tous les boutons radio enfants pour assurer qu'ils appartiennent au même groupe logique.
+     * @attr {string} data-label - Le libellé du groupe.
+     * @attr {string} data-hint - L'indice ou l'aide pour le groupe.
+     *
+     * @event {CustomEvent<{inner:BnumRadioCheckedChangeEvent, caller: HTMLBnumRadioGroup}>} change - Lorsque la valeur change
+     *
+     * @cssvar {15px} --bnum-radio-group-gap - Espacement entre les boutons radio
+     * @cssvar {#666} --bnum-input-hint-text-color - Couleur du texte d'indice ou d'aide
+     */
+    let HTMLBnumRadioGroup = (() => {
+        let _classDecorators = [Define({
+                tag: TAG_RADIO_GROUP,
+                template: TEMPLATE$6,
+                styles: [INPUT_BASE_STYLE, css_248z$6],
+            })];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElementInternal;
+        let _staticExtraInitializers = [];
+        let _instanceExtraInitializers = [];
+        let _static__p_observedAttributes_decorators;
+        let _private__ui_decorators;
+        let _private__ui_initializers = [];
+        let _private__ui_extraInitializers = [];
+        let _private__ui_descriptor;
+        let _name_decorators;
+        let _name_initializers = [];
+        let _name_extraInitializers = [];
+        let _private__label_decorators;
+        let _private__label_initializers = [];
+        let _private__label_extraInitializers = [];
+        let _private__label_descriptor;
+        let _private__hint_decorators;
+        let _private__hint_initializers = [];
+        let _private__hint_extraInitializers = [];
+        let _private__hint_descriptor;
+        let _private__value_decorators;
+        let _private__value_initializers = [];
+        let _private__value_extraInitializers = [];
+        let _private__value_descriptor;
+        let _private__setDefaultRadioFromValue_decorators;
+        let _private__setDefaultRadioFromValue_descriptor;
+        let _private__listenRadioChange_decorators;
+        let _private__listenRadioChange_descriptor;
+        let _private__handleKeyboardNavigation_decorators;
+        let _private__handleKeyboardNavigation_descriptor;
+        let _private__handleRadioChange_decorators;
+        let _private__handleRadioChange_descriptor;
+        let _private__fireChange_decorators;
+        let _private__fireChange_descriptor;
+        let _private__scheduleSetupRadios_decorators;
+        let _private__scheduleSetupRadios_descriptor;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _private__ui_decorators = [UI({
+                        group: `#${ID_GROUP}`,
+                        legend: `#${ID_LEGEND}`,
+                        hint: `#${ID_HINT}`,
+                    })];
+                _name_decorators = [Attr()];
+                _private__label_decorators = [Data(NO_SETTER)];
+                _private__hint_decorators = [Data(NO_SETTER)];
+                _private__value_decorators = [Data(NO_SETTER)];
+                _private__setDefaultRadioFromValue_decorators = [Risky()];
+                _private__listenRadioChange_decorators = [Listen(HTMLBnumRadio.EVENT_CHANGE, { selector: HTMLBnumRadio.TAG })];
+                _private__handleKeyboardNavigation_decorators = [Listen('keydown')];
+                _private__handleRadioChange_decorators = [Autobind];
+                _private__fireChange_decorators = [Fire('change')];
+                _private__scheduleSetupRadios_decorators = [Schedule()];
+                _static__p_observedAttributes_decorators = [NonStd('Deprecated')];
+                __esDecorate(this, null, _static__p_observedAttributes_decorators, { kind: "method", name: "_p_observedAttributes", static: true, private: false, access: { has: obj => "_p_observedAttributes" in obj, get: obj => obj._p_observedAttributes }, metadata: _metadata }, null, _staticExtraInitializers);
+                __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+                __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+                __esDecorate(this, _private__label_descriptor = { get: __setFunctionName(function () { return this.#_label_accessor_storage; }, "#_label", "get"), set: __setFunctionName(function (value) { this.#_label_accessor_storage = value; }, "#_label", "set") }, _private__label_decorators, { kind: "accessor", name: "#_label", static: false, private: true, access: { has: obj => #_label in obj, get: obj => obj.#_label, set: (obj, value) => { obj.#_label = value; } }, metadata: _metadata }, _private__label_initializers, _private__label_extraInitializers);
+                __esDecorate(this, _private__hint_descriptor = { get: __setFunctionName(function () { return this.#_hint_accessor_storage; }, "#_hint", "get"), set: __setFunctionName(function (value) { this.#_hint_accessor_storage = value; }, "#_hint", "set") }, _private__hint_decorators, { kind: "accessor", name: "#_hint", static: false, private: true, access: { has: obj => #_hint in obj, get: obj => obj.#_hint, set: (obj, value) => { obj.#_hint = value; } }, metadata: _metadata }, _private__hint_initializers, _private__hint_extraInitializers);
+                __esDecorate(this, _private__value_descriptor = { get: __setFunctionName(function () { return this.#_value_accessor_storage; }, "#_value", "get"), set: __setFunctionName(function (value) { this.#_value_accessor_storage = value; }, "#_value", "set") }, _private__value_decorators, { kind: "accessor", name: "#_value", static: false, private: true, access: { has: obj => #_value in obj, get: obj => obj.#_value, set: (obj, value) => { obj.#_value = value; } }, metadata: _metadata }, _private__value_initializers, _private__value_extraInitializers);
+                __esDecorate(this, _private__setDefaultRadioFromValue_descriptor = { value: __setFunctionName(function () {
+                        const value = this.#_value;
+                        if (!value)
+                            return ATresult.Ok();
+                        const radio = this.radios.find(r => r.value === value);
+                        if (radio) {
+                            this.#_check(radio);
+                            return ATresult.Ok();
+                        }
+                        throw new Error(`Aucun radio trouvé avec la valeur "${value}"`);
+                    }, "#_setDefaultRadioFromValue") }, _private__setDefaultRadioFromValue_decorators, { kind: "method", name: "#_setDefaultRadioFromValue", static: false, private: true, access: { has: obj => #_setDefaultRadioFromValue in obj, get: obj => obj.#_setDefaultRadioFromValue }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__listenRadioChange_descriptor = { value: __setFunctionName(function () {
+                        return this.#_handleRadioChange;
+                    }, "#_listenRadioChange") }, _private__listenRadioChange_decorators, { kind: "method", name: "#_listenRadioChange", static: false, private: true, access: { has: obj => #_listenRadioChange in obj, get: obj => obj.#_listenRadioChange }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__handleKeyboardNavigation_descriptor = { value: __setFunctionName(function () {
+                        return (e) => {
+                            const isRTL = getComputedStyle(this).direction === 'rtl';
+                            const KEY_NEXT = ['ArrowDown', isRTL ? 'ArrowLeft' : 'ArrowRight'];
+                            const KEY_PREV = ['ArrowUp', isRTL ? 'ArrowRight' : 'ArrowLeft'];
+                            const ALL_KEYS = [...KEY_NEXT, ...KEY_PREV];
+                            if (!ALL_KEYS.includes(e.key))
+                                return;
+                            e.preventDefault();
+                            const radios = this.radios;
+                            if (radios.length === 0)
+                                return;
+                            const currentRadio = radios.find(r => r.checked);
+                            const currentIndex = currentRadio ? radios.indexOf(currentRadio) : -1;
+                            const direction = KEY_PREV.includes(e.key) ? -1 : 1;
+                            const nextIndex = (currentIndex + direction + radios.length) % radios.length;
+                            const targetRadio = radios[nextIndex];
+                            if (targetRadio) {
+                                this.#_check(targetRadio, { fire: true });
+                                targetRadio.internalCheckbox.focus();
+                            }
+                        };
+                    }, "#_handleKeyboardNavigation") }, _private__handleKeyboardNavigation_decorators, { kind: "method", name: "#_handleKeyboardNavigation", static: false, private: true, access: { has: obj => #_handleKeyboardNavigation in obj, get: obj => obj.#_handleKeyboardNavigation }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__handleRadioChange_descriptor = { value: __setFunctionName(function (e) {
+                        e.stopPropagation();
+                        const { innerEvent: inner } = e.detail;
+                        if (inner.checked)
+                            this.#_check(inner.caller).#_fireChange(inner);
+                    }, "#_handleRadioChange") }, _private__handleRadioChange_decorators, { kind: "method", name: "#_handleRadioChange", static: false, private: true, access: { has: obj => #_handleRadioChange in obj, get: obj => obj.#_handleRadioChange }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__fireChange_descriptor = { value: __setFunctionName(function (e) {
+                        return { inner: e, caller: this };
+                    }, "#_fireChange") }, _private__fireChange_decorators, { kind: "method", name: "#_fireChange", static: false, private: true, access: { has: obj => #_fireChange in obj, get: obj => obj.#_fireChange }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__scheduleSetupRadios_descriptor = { value: __setFunctionName(function () {
+                        this.#_setupRadios();
+                    }, "#_scheduleSetupRadios") }, _private__scheduleSetupRadios_decorators, { kind: "method", name: "#_scheduleSetupRadios", static: false, private: true, access: { has: obj => #_scheduleSetupRadios in obj, get: obj => obj.#_scheduleSetupRadios }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _staticExtraInitializers);
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            //#region Private fields
+            /**
+             * Instance de MutationObserver pour surveiller les changements dans les enfants du groupe.
+             * @private
+             */
+            #_observer = (__runInitializers(this, _instanceExtraInitializers), null);
+            #_ui_accessor_storage = __runInitializers(this, _private__ui_initializers, void 0);
+            //#endregion Private fields
+            //#region Getters/Setters
+            /**
+             * Références aux éléments du DOM interne.
+             * @private
+             */
+            get #_ui() { return _private__ui_descriptor.get.call(this); }
+            set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
+            #name_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _name_initializers, EMPTY_STRING));
+            /**
+             * Le nom du groupe de boutons radio.
+             * Cet attribut est appliqué à tous les boutons radio enfants pour assurer qu'ils appartiennent au même groupe logique.
+             */
+            get name() { return this.#name_accessor_storage; }
+            set name(value) { this.#name_accessor_storage = value; }
+            #_label_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _private__label_initializers, EMPTY_STRING));
+            /**
+             * Le libellé du groupe.
+             * @private
+             */
+            get #_label() { return _private__label_descriptor.get.call(this); }
+            set #_label(value) { return _private__label_descriptor.set.call(this, value); }
+            #_hint_accessor_storage = (__runInitializers(this, _private__label_extraInitializers), __runInitializers(this, _private__hint_initializers, EMPTY_STRING));
+            /**
+             * Le texte d'indice ou d'aide pour le groupe.
+             * @private
+             */
+            get #_hint() { return _private__hint_descriptor.get.call(this); }
+            set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
+            #_value_accessor_storage = (__runInitializers(this, _private__hint_extraInitializers), __runInitializers(this, _private__value_initializers, null));
+            /**
+             * La valeur initiale sélectionnée du groupe.
+             * @private
+             */
+            get #_value() { return _private__value_descriptor.get.call(this); }
+            set #_value(value) { return _private__value_descriptor.set.call(this, value); }
+            /**
+             * Indique si le groupe doit afficher ses options en ligne (horizontalement).
+             *
+             * @returns {boolean} `true` si le mode inline est activé, sinon `false`.
+             */
+            get inline() {
+                return this.data(DATA_INLINE);
+            }
+            /**
+             * Définit si le groupe doit afficher ses options en ligne.
+             *
+             * @param {boolean} value - La nouvelle valeur pour le mode inline.
+             */
+            set inline(value) {
+                this.data(DATA_INLINE, value).#_setInlineState();
+            }
+            /**
+             * Récupère la liste de tous les éléments `bnum-radio` enfants directs du groupe.
+             *
+             * @returns {HTMLBnumRadio[]} Un tableau contenant les éléments `HTMLBnumRadio`.
+             */
+            get radios() {
+                return Array.from(this.querySelectorAll(HTMLBnumRadio.TAG));
+            }
+            //#endregion Getters/Setters
+            //#region Lifecycle
+            constructor() {
+                super();
+                __runInitializers(this, _private__value_extraInitializers);
+            }
+            /**
+             * Appelée lorsque le composant est inséré dans le DOM.
+             * Initialise l'observateur de mutations pour détecter l'ajout ou la suppression de boutons radio.
+             */
+            connectedCallback() {
+                super.connectedCallback();
+                (this.#_observer ??= new MutationObserver(e => this.#_obserse(e))).observe(this, {
+                    childList: true,
+                });
+            }
+            /**
+             * Méthode protégée pour construire le DOM initial.
+             * @protected
+             */
+            _p_buildDOM() {
+                this.#_init();
+            }
+            /**
+             * Méthode protégée appelée lorsqu'un attribut observé change.
+             *
+             * @param {string} name - Le nom de l'attribut modifié.
+             * @param {string | null} oldVal - L'ancienne valeur de l'attribut.
+             * @param {string | null} newVal - La nouvelle valeur de l'attribut.
+             * @returns {void | Nullable<'break'>}
+             * @protected
+             */
+            _p_update(name, oldVal, newVal) {
+                if (name === ATTR_NAME && oldVal !== newVal) {
+                    this.#_setName();
+                }
+            }
+            /**
+             * Appelée lorsque le composant est retiré du DOM.
+             * Nettoie l'observateur de mutations.
+             * @protected
+             */
+            _p_detach() {
+                this.#_observer?.disconnect?.();
+            }
+            //#endregion Lifecycle
+            //#region Private methods
+            /**
+             * Initialise le composant.
+             * Configure les écouteurs, les données par défaut, la valeur par défaut et les états.
+             * @private
+             */
+            #_init() {
+                return this.#_setListeners()
+                    .#_setDefaultData()
+                    .#_setDefaultValue()
+                    .#_initStates();
+            }
+            /**
+             * Propage le nom du groupe à tous les boutons radio enfants.
+             * @private
+             */
+            #_setName() {
+                for (const radio of this.radios) {
+                    radio.name = this.name;
+                }
+                return this;
+            }
+            /**
+             * Initialise le libellé (légende) du groupe dans le slot correspondant.
+             * @private
+             */
+            #_setLegend() {
+                return this.#_initData(this.#_label, this.#_ui.legend);
+            }
+            /**
+             * Initialise l'indice (hint) du groupe dans le slot correspondant.
+             * @private
+             */
+            #_setHint() {
+                return this.#_initData(this.#_hint, this.#_ui.hint);
+            }
+            /**
+             * Helper pour initialiser le contenu textuel d'un slot si des données sont fournies.
+             * @private
+             */
+            #_initData(data, slot) {
+                if (data)
+                    slot.textContent = data;
+                return this;
+            }
+            /**
+             * Initialise les états visuels du composant (ex: inline).
+             * @private
+             */
+            #_initStates() {
+                return this.#_initInline();
+            }
+            /**
+             * Applique l'état initial pour le mode inline.
+             * @private
+             */
+            #_initInline() {
+                if (this.inline)
+                    this.#_setInlineState();
+                return this;
+            }
+            /**
+             * Définit les données par défaut (nom, légende, indice).
+             * @private
+             */
+            #_setDefaultData() {
+                return this.#_setName().#_setLegend().#_setHint();
+            }
+            /**
+             * Définit la sélection initiale basée sur la valeur par défaut.
+             * Si la valeur par défaut ne correspond à aucun radio, enregistre une erreur ou sélectionne le premier par défaut.
+             * @private
+             */
+            #_setDefaultValue() {
+                this.#_setDefaultRadioFromValue().match({
+                    Ok: () => this.#_setDefaultRadio(),
+                    Err: e => Log.error(this.constructor.name, e.message, e),
+                });
+                return this;
+            }
+            /**
+             * Tente de définir le bouton radio sélectionné en fonction de `_value`.
+             * @returns {Result<void>} Résultat de l'opération.
+             * @private
+             */
+            get #_setDefaultRadioFromValue() { return _private__setDefaultRadioFromValue_descriptor.value; }
+            /**
+             * Sélectionne le premier bouton radio par défaut si aucun n'est déjà sélectionné.
+             * @private
+             */
+            #_setDefaultRadio() {
+                if (this.radios.length > 0 && !this.radios.find(x => x.checked)) {
+                    this.#_check(this.radios[0]);
+                }
+            }
+            /**
+             * Configure les écouteurs d'événements pour le changement de radio et la navigation clavier.
+             * @private
+             */
+            #_setListeners() {
+                this.#_listenRadioChange();
+                this.#_handleKeyboardNavigation();
+                return this;
+            }
+            /**
+             * Écoute l'événement de changement d'un bouton radio enfant.
+             * @private
+             */
+            get #_listenRadioChange() { return _private__listenRadioChange_descriptor.value; }
+            /**
+             * Gère la navigation au clavier (flèches directionnelles) entre les boutons radio.
+             * @private
+             */
+            get #_handleKeyboardNavigation() { return _private__handleKeyboardNavigation_descriptor.value; }
+            /**
+             * Gère le changement d'état d'un bouton radio.
+             * Assure qu'un seul radio est sélectionné à la fois.
+             *
+             * @param {CustomEvent} e - L'événement de changement.
+             * @private
+             */
+            get #_handleRadioChange() { return _private__handleRadioChange_descriptor.value; }
+            /**
+             * Notifie les écouteurs externes qu'un changement de sélection a eu lieu.
+             *
+             * @param {BnumRadioCheckedChangeEvent} e - L'événement interne du radio.
+             * @returns L'événement formaté.
+             * @private
+             */
+            get #_fireChange() { return _private__fireChange_descriptor.value; }
+            /**
+             * Marque un bouton radio comme sélectionné et désélectionne les autres.
+             * Met à jour les attributs `tabindex` pour la navigation clavier.
+             *
+             * @param {HTMLBnumRadio} radio - Le bouton radio à sélectionner.
+             * @param {object} options - Options supplémentaires.
+             * @param {boolean} [options.fire=false] - Si `true`, déclenche l'événement de changement sur le radio.
+             * @private
+             */
+            #_check(radio, { fire = false } = {}) {
+                for (const r of this.radios) {
+                    if (r !== radio) {
+                        r.checked = false;
+                        this.#_stopFocus(r);
+                    }
+                }
+                if (fire)
+                    radio.updateCheckAndFire(true);
+                else
+                    radio.checked = true;
+                this.#_canFocus(radio);
+                return this;
+            }
+            /**
+             * Fonction de rappel pour l'observateur de mutations.
+             * Détecte si de nouveaux boutons radio sont ajoutés et planifie leur initialisation.
+             * @private
+             */
+            #_obserse(mutations) {
+                const hasOptionMutation = mutations.some(m => Array.from(m.addedNodes).some(n => n instanceof HTMLBnumRadio));
+                if (hasOptionMutation) {
+                    this.#_scheduleSetupRadios();
+                }
+            }
+            /**
+             * Planifie la configuration des radios (utilisé lors de mutations dynamiques).
+             * @private
+             */
+            get #_scheduleSetupRadios() { return _private__scheduleSetupRadios_descriptor.value; }
+            /**
+             * Configure l'état initial des boutons radio (nom, sélection, focus).
+             * @private
+             */
+            #_setupRadios() {
+                let hasChecked = false;
+                for (const radio of this.radios) {
+                    if (radio.name !== this.name)
+                        radio.name = this.name;
+                    if (radio.checked) {
+                        if (!hasChecked) {
+                            hasChecked = true;
+                            this.#_canFocus(radio);
+                        }
+                        else {
+                            radio.checked = false;
+                            this.#_stopFocus(radio);
+                        }
+                    }
+                    else
+                        this.#_stopFocus(radio);
+                }
+                return this;
+            }
+            /**
+             * Autorise le focus sur le radio.
+             * @param radio Bouton radio concerné.
+             * @returns Chaîne
+             */
+            #_canFocus(radio) {
+                radio.setAttribute('tabindex', '0');
+                return this;
+            }
+            /**
+             * Retire le focus du radio.
+             * @param radio Bouton radio concerné.
+             * @returns Chaîne
+             */
+            #_stopFocus(radio) {
+                radio.setAttribute('tabindex', '-1');
+                return this;
+            }
+            /**
+             * Applique ou retire l'état visuel "inline" sur le composant.
+             * @private
+             */
+            #_setInlineState() {
+                if (this.inline)
+                    this._p_addState(STATE_INLINE);
+                else
+                    this._p_removeState(STATE_INLINE);
+            }
+            //#endregion Private methods
+            //#region Static
+            /**
+             * Liste des attributs observés par le composant.
+             * @returns {string[]} Liste des noms d'attributs.
+             * @protected
+             * @static
+             * @override
+             * @deprecated Utilisez le décorateur {@link Observe} du commit 3e38db0162eef596874dbe32490d9e96b09fb1c0
+             * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
+             */
+            static _p_observedAttributes() {
+                return [ATTR_NAME];
+            }
+            /**
+             * Evènements disponibles pour ce composant.
+             * @readonly
+             */
+            static get EVENTS() {
+                return {
+                    [EVENT_CHANGE$1]: EVENT_CHANGE$1,
+                };
+            }
+        });
+        return _classThis;
+    })();
 
     //type: enum
     //description: États internes pour bnum-segmented-item
@@ -12742,7 +13361,7 @@ var Bnum = (function (exports) {
                 __esDecorate(this, _private__onItemSelectedAction_descriptor = { value: __setFunctionName(function (e) {
                         const { target } = e.detail;
                         if (!target) {
-                            this.#_onError(new Error('Élément cible manquant dans l\'événement sélectionné.'));
+                            this.#_onError(new Error("Élément cible manquant dans l'événement sélectionné."));
                             return;
                         }
                         this.#_unselectAllItems();
@@ -12841,19 +13460,19 @@ var Bnum = (function (exports) {
                 return this;
             }
             /**
-             * Initialise la sélection du premier item par défaut.
-             *
-             * @description
-             * Si aucun item n'est déjà sélectionné, sélectionne automatiquement
-             * le premier item du contrôle segmenté.
-             *
-             * @remarks
-             * - Garantit qu'au moins un item est toujours sélectionné
-             * - Déclenche l'événement `bnum-segmented-control:change` via `click()`
-             * - Utile pour initialiser le state du composant au chargement
-          
-             * @returns L'instance courante pour le chaînage de méthodes.
-             */
+           * Initialise la sélection du premier item par défaut.
+           *
+           * @description
+           * Si aucun item n'est déjà sélectionné, sélectionne automatiquement
+           * le premier item du contrôle segmenté.
+           *
+           * @remarks
+           * - Garantit qu'au moins un item est toujours sélectionné
+           * - Déclenche l'événement `bnum-segmented-control:change` via `click()`
+           * - Utile pour initialiser le state du composant au chargement
+        
+           * @returns L'instance courante pour le chaînage de méthodes.
+           */
             #_initSelectedItem() {
                 if (!this.selected) {
                     const firstItem = this.querySelector(TAG_SEGMENTED_ITEM);
@@ -15187,6 +15806,7 @@ var Bnum = (function (exports) {
     }
 
     exports.BnumElement = BnumElement;
+    exports.BnumRadioCheckedChangeEvent = BnumRadioCheckedChangeEvent;
     exports.Config = BnumConfig;
     exports.DsCssProperty = RotomecaCssProperty;
     exports.DsCssRule = RotomecaCssRule;
@@ -15219,6 +15839,7 @@ var Bnum = (function (exports) {
     exports.HTMLBnumInputTime = HTMLBnumInputTime;
     exports.HTMLBnumPrimaryButton = HTMLBnumPrimaryButton;
     exports.HTMLBnumRadio = HTMLBnumRadio;
+    exports.HTMLBnumRadioGroup = HTMLBnumRadioGroup;
     exports.HTMLBnumSecondaryButton = HTMLBnumSecondaryButton;
     exports.HTMLBnumSegmentedControl = HTMLBnumSegmentedControl;
     exports.HTMLBnumSegmentedItem = HTMLBnumSegmentedItem;
