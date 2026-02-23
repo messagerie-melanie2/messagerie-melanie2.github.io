@@ -475,7 +475,7 @@ var Bnum = (function (exports) {
 
     const DEFAULT_CONFIG = {
         local_keys: {
-            today: 'Aujourd\'hui',
+            today: "Aujourd'hui",
             tomorrow: 'Demain',
             day: 'Journée',
             invalid_date: 'Date invalide',
@@ -487,6 +487,8 @@ var Bnum = (function (exports) {
             invalid_input: 'Le champs est invalide !',
             error_field: 'Ce champ contient une erreur.',
             search_field: 'Rechercher',
+            active_checkbox: 'Activé',
+            inactive_checkbox: 'Désactivé',
         },
         console_logging: true,
         console_logging_level: LogEnum.TRACE,
@@ -603,7 +605,7 @@ var Bnum = (function (exports) {
               .join(' ');
     }
 
-    var css_248z$p = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
+    var css_248z$r = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
 
     class BnumDOM {
         /**
@@ -1414,7 +1416,7 @@ var Bnum = (function (exports) {
     /**
      * Style commun à tous les BnumElement.
      */
-    const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$p);
+    const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(css_248z$r);
 
     class Log {
         static trace(context, ...args) {
@@ -2546,7 +2548,7 @@ var Bnum = (function (exports) {
         }
     }
 
-    var css_248z$o = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
+    var css_248z$q = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
 
     /**
      * Décorateur de classe pour définir un Web Component.
@@ -2887,7 +2889,7 @@ var Bnum = (function (exports) {
         };
     }
 
-    const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$o);
+    const STYLE$3 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$q);
     /**
      * Badge d'information.
      *
@@ -3238,9 +3240,9 @@ var Bnum = (function (exports) {
         }
     }
 
-    var css_248z$n = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+    var css_248z$p = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
 
-    var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+    var css_248z$o = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,400),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
 
     /**
      * Classe CSS utilisée pour les icônes Material Symbols.
@@ -3249,8 +3251,8 @@ var Bnum = (function (exports) {
     /**
      * Feuille de style CSS pour les icônes Material Symbols.
      */
-    const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$n.replaceAll(`.${ICON_CLASS}`, ':host'));
-    const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$m);
+    const SYMBOLS = BnumElement.ConstructCSSStyleSheet(css_248z$p.replaceAll(`.${ICON_CLASS}`, ':host'));
+    const STYLE$2 = BnumElement.ConstructCSSStyleSheet(css_248z$o);
     /**
      * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
      *
@@ -3548,13 +3550,13 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
+    var css_248z$n = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-body-font-size);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:600;height:-moz-fit-content;height:fit-content;line-height:1.5rem;padding:var(--bnum-button-padding,6px 10px);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:center}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}";
 
     //#region External Constants
     /**
      * Style CSS du composant bouton.
      */
-    const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$l);
+    const SHEET$d = BnumElement.ConstructCSSStyleSheet(css_248z$n);
     // Constantes pour les tags des différents types de boutons
     /**
      * Icône de chargement utilisée dans le bouton.
@@ -3601,7 +3603,7 @@ var Bnum = (function (exports) {
     /**
      * Template HTML du composant bouton.
      */
-    const TEMPLATE$f = BnumElement.CreateTemplate(`
+    const TEMPLATE$g = BnumElement.CreateTemplate(`
   <div class="${CLASS_WRAPPER}">
     <span class="${CLASS_SLOT}">
       <slot></slot>
@@ -4001,7 +4003,7 @@ var Bnum = (function (exports) {
              * @returns Template utiliser pour le composant
              */
             _p_fromTemplate() {
-                return TEMPLATE$f;
+                return TEMPLATE$g;
             }
             /**
              * Construit le DOM du composant bouton.
@@ -4269,6 +4271,2328 @@ var Bnum = (function (exports) {
         return HTMLBnumButton = _classThis;
     })();
 
+    // core/jsx/index.ts
+    const VOID_TAGS = new Set([
+        'area',
+        'base',
+        'br',
+        'col',
+        'embed',
+        'hr',
+        'img',
+        'input',
+        'link',
+        'meta',
+        'param',
+        'source',
+        'track',
+        'wbr',
+    ]);
+    function h(tag, props, ...argsChildren) {
+        if (typeof tag === 'function' && 'TAG' in tag) {
+            tag = tag.TAG;
+        }
+        if (typeof tag === 'function') {
+            const children = argsChildren.length ? argsChildren : props?.children || [];
+            return tag({ ...props, children });
+        }
+        let attrs = EMPTY_STRING;
+        if (props) {
+            for (const key in props) {
+                const value = props[key];
+                if (key === 'children' || value == null || value === false)
+                    continue;
+                const name = key === 'className' ? 'class' : key;
+                if (key === 'style' && typeof value === 'object') {
+                    let styleStr = EMPTY_STRING;
+                    for (const sKey in value) {
+                        styleStr += `${sKey}:${value[sKey]};`;
+                    }
+                    attrs += ` ${name}="${styleStr}"`;
+                }
+                else if (value === true) {
+                    attrs += ` ${name}`;
+                }
+                else {
+                    attrs += ` ${name}="${value}"`;
+                }
+            }
+        }
+        const open = `<${tag}${attrs}>`;
+        if (VOID_TAGS.has(tag))
+            return open;
+        const rawChildren = argsChildren.length > 0 ? argsChildren : props?.children;
+        const content = renderChildren(rawChildren);
+        return `${open}${content}</${tag}>`;
+    }
+    // Helper récursif ultra-rapide pour les enfants
+    function renderChildren(child) {
+        if (child == null || child === false || child === true)
+            return EMPTY_STRING;
+        if (Array.isArray(child)) {
+            let str = EMPTY_STRING;
+            for (let i = 0; i < child.length; i++) {
+                str += renderChildren(child[i]);
+            }
+            return str;
+        }
+        return String(child);
+    }
+
+    /**
+     * Composant Web Component utilitaire "Fragment".
+     * * Ce composant agit comme un conteneur logique pour regrouper des éléments du DOM
+     * sans introduire de boîte de rendu visuelle supplémentaire (via `display: contents` généralement défini dans le style).
+     *
+     * @remarks
+     * Il permet de contourner la règle "un seul élément racine" ou de grouper des éléments
+     * pour des traitements logiques (boucles, conditions) sans briser le contexte de formatage
+     * CSS du parent (ex: `display: grid` ou `display: flex`).
+     *
+     * @example
+     * ```html
+     * <div class="grid-container">
+     * <bnum-fragment>
+     * <div class="cell-1">Item A</div>
+     * <div class="cell-2">Item B</div>
+     * </bnum-fragment>
+     * </div>
+     * ```
+     */
+    let HTMLBnumFragment = (() => {
+        let _classDecorators = [Define({ tag: TAG_FRAGMENT }), Light()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElement;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            constructor() {
+                super();
+            }
+            connectedCallback() {
+                if (this.style.display !== 'contents')
+                    this.style.display = 'contents';
+            }
+        });
+        return _classThis;
+    })();
+
+    // core/decorators/ui.ts
+    function UI(selectorMap, options) {
+        const { shadowRoot = true } = options || {};
+        return function (target, context) {
+            const name = String(context.name);
+            // Symbole pour stocker l'objet UI une fois créé
+            const uiCacheKey = Symbol(name);
+            return {
+                get() {
+                    // 1. Si l'objet UI existe déjà, on le retourne
+                    if (this[uiCacheKey]) {
+                        return this[uiCacheKey];
+                    }
+                    const root = shadowRoot ? this.shadowRoot || this : this;
+                    // 2. On crée un objet vide
+                    const uiObject = {};
+                    // 3. On utilise un Map interne pour stocker les résultats des querySelector
+                    //    pour ne pas les refaire à chaque accès (Cache granulaire)
+                    const domCache = new Map();
+                    // 4. On définit dynamiquement des getters pour chaque clé
+                    for (const [key, selector] of Object.entries(selectorMap)) {
+                        Object.defineProperty(uiObject, key, {
+                            configurable: true,
+                            enumerable: true,
+                            get: () => {
+                                // A. Si on a déjà cherché cet élément précis, on le rend
+                                if (domCache.has(key)) {
+                                    return domCache.get(key);
+                                }
+                                // B. Sinon, on fait le querySelector (LAZY)
+                                const element = root.querySelector(selector);
+                                // C. On le met en cache
+                                domCache.set(key, element);
+                                return element;
+                            },
+                            // Permet d'écraser manuellement si besoin : this.#_ui.icon = ...
+                            set: (value) => {
+                                domCache.set(key, value);
+                            },
+                        });
+                    }
+                    // 5. On stocke l'objet configuré sur l'instance et on le retourne
+                    this[uiCacheKey] = uiObject;
+                    return uiObject;
+                },
+            };
+        };
+    }
+
+    const EVENT_DEFAULT = 'default';
+
+    var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
+
+    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host .state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}";
+
+    var css_248z$k = ":host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) .state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) .state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) .hint-label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .hint-label,:host(:state(state):state(success)) .state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .hint-label,:host(:state(state):state(error)) .state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+
+    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$m);
+    const INPUT_STYLE_STATES = BnumElementInternal.ConstructCSSStyleSheet(css_248z$k);
+    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$l);
+    //#region Global Constants
+    const ID_INPUT$1 = 'bnum-input';
+    const ID_HINT_TEXT = 'hint-text';
+    const ID_HINT_TEXT_LABEL = 'hint-text__label';
+    const ID_HINT_TEXT_HINT = 'hint-text__hint';
+    const ID_INPUT_ICON = 'input__icon';
+    const ID_INPUT_BUTTON = 'input__button';
+    const ID_STATE = 'state';
+    const ID_STATE_ICON = 'state__icon';
+    const ID_SUCCESS_TEXT = 'success-text';
+    const ID_ERROR_TEXT = 'error-text';
+    const CLASS_STATE_TEXT_SUCCESS = 'state__text success';
+    const CLASS_STATE_TEXT_ERROR = 'state__text error';
+    const DEFAULT_INPUT_TYPE = 'text';
+    const DEFAULT_BUTTON_VARIATION = exports.EButtonType.PRIMARY;
+    const SLOT_HINT = 'hint';
+    const SLOT_BUTTON = 'button';
+    const SLOT_SUCCESS = 'success';
+    const SLOT_ERROR = 'error';
+    const TEXT_VALID_INPUT = BnumConfig.Get('local_keys')?.valid_input || 'Le champs est valide !';
+    const TEXT_INVALID_INPUT = BnumConfig.Get('local_keys')?.invalid_input || 'Le champs est invalide !';
+    //#endregion Global Constants
+    //#region Template
+    // Utilisation des constantes dans le template
+    const BASE_TEMPLATE = `
+  <label id="${ID_HINT_TEXT}" class="label-container" for="${ID_INPUT$1}">
+    <span id="${ID_HINT_TEXT_LABEL}" class="label-container--label">
+      <slot></slot>
+    </span>
+    <span id="${ID_HINT_TEXT_HINT}" class="label-container--hint hint-label">
+      <slot name="${SLOT_HINT}"></slot>
+    </span>
+  </label>
+  <div class="container">
+    <div class="addons">
+      <div class="addons__inner">
+        <!-- {{addoninner}} -->
+        <${HTMLBnumIcon.TAG} id="${ID_INPUT_ICON}"></${HTMLBnumIcon.TAG}>
+          <input id="${ID_INPUT$1}" class="input-like" type="${DEFAULT_INPUT_TYPE}" />
+        </div>
+        <${HTMLBnumButton.TAG} id="${ID_INPUT_BUTTON}" rounded data-variation="${DEFAULT_BUTTON_VARIATION}"><slot name="${SLOT_BUTTON}"></slot></${HTMLBnumButton.TAG}>
+    </div>
+    <span id="${ID_STATE}" class="state">
+        <${HTMLBnumIcon.TAG} id="${ID_STATE_ICON}"></${HTMLBnumIcon.TAG}>
+        <span id="${ID_SUCCESS_TEXT}" class="${CLASS_STATE_TEXT_SUCCESS}"><slot name="${SLOT_SUCCESS}">${TEXT_VALID_INPUT}</slot></span>
+        <span id="${ID_ERROR_TEXT}" class="${CLASS_STATE_TEXT_ERROR}"><slot name="${SLOT_ERROR}">${TEXT_INVALID_INPUT}</slot></span>
+    </span>
+  </div>
+    `;
+    //#endregion Template
+    /**
+     * Composant Input du design system Bnum.
+     * Permet de gérer un champ de saisie enrichi avec gestion d'états, d'icônes, de bouton et d'accessibilité.
+     *
+     * @structure Sans rien
+     * <bnum-input></bnum-input>
+     *
+     * @structure Avec une légende
+     * <bnum-input>Label du champ</bnum-input>
+     *
+     * @structure Avec une légende et un indice
+     * <bnum-input>
+     * Label du champ
+     * <span slot="hint">Indice d'utilisation</span>
+     * </bnum-input>
+     *
+     * @structure Avec un bouton
+     * <bnum-input button="true" button-icon="add">Label du champ
+     *   <span slot="button">Ajouter</span>
+     * </bnum-input>
+     *
+     * @structure En erreur
+     * <bnum-input pattern="^[a-zA-Z0-9]+$" data-value="@@@@@">Label du champ
+     * </bnum-input>
+     *
+     * @structure Avec un état de succès
+     * <bnum-input state="success">Label du champ
+     *   <span slot="success">Le champ est valide !</span>
+     * </bnum-input>
+     *
+     * @structure Avec une icône
+     * <bnum-input icon="search">Label du champ</bnum-input>
+     *
+     * @structure Avec un bouton avec icône seulement
+     * <bnum-input placeholder="LA LA !" button-icon="add">Label du champ
+     * </bnum-input>
+     *
+     * @structure Nombre
+     * <bnum-input type="number" data-value="42">Label du champ</bnum-input>
+     *
+     * @structure Désactivé
+     * <bnum-input disabled>
+     *   Label du champ
+     * </bnum-input>
+     *
+     * @structure Complet
+     * <bnum-input
+     *   data-value="Valeur initiale"
+     *   placeholder="Texte indicatif"
+     *   type="text"
+     *   state="error"
+     *   icon="search"
+     *   button="primary"
+     *   button-icon="send"
+     * >
+     *   Label du champ
+     *   <span slot="hint">Indice d'utilisation</span>
+     *   <span slot="success">Le champ est valide !</span>
+     *   <span slot="error">Le champ est invalide !</span>
+     *   <span slot="button">Envoyer</span>
+     * </bnum-input>
+     *
+     * @slot (defaut) - Contenu du label principal du champ.
+     * @slot hint - Contenu de l'indice d'utilisation (hint) du champ.
+     * @slot success - Contenu du message de succès du champ.
+     * @slot error - Contenu du message d'erreur du champ.
+     * @slot button - Contenu du bouton interne (si présent).
+     *
+     * @state success - État de succès.
+     * @state error - État d'erreur.
+     * @state disabled - État désactivé.
+     * @state icon - Présence d'une icône.
+     * @state button - Présence d'un bouton.
+     * @state obi - Bouton avec icône seulement (sans texte).
+     * @state state - Présence d'un état (success / error).
+     *
+     * @cssvar {#666} --bnum-input-hint-text-color - Couleur du texte du hint.
+     * @cssvar {#eee} --bnum-input-background-color - Couleur de fond de l'input.
+     * @cssvar {#666} --bnum-input-color - Couleur du texte de l'input.
+     * @cssvar {#3a3a3a} --bnum-input-line-color - Couleur de la ligne/bordure de l'input.
+     * @cssvar {#36b37e} --bnum-input-state-success-color - Couleur de l'état de succès.
+     * @cssvar {#de350b} --bnum-input-state-error-color - Couleur de l'état d'erreur.
+     * @cssvar {inset 0 -2px 0 0 #3a3a3a} --bnum-input-box-shadow - Ombre portée de l'input.
+     *
+     */
+    let HTMLBnumInput = (() => {
+        let _classDecorators = [Define()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElementInternal;
+        let _instanceExtraInitializers = [];
+        let ___decorators;
+        let ___initializers = [];
+        let ___extraInitializers = [];
+        let __p_inputValueChangedCallback_decorators;
+        let _private__setFormValue_decorators;
+        let _private__setFormValue_descriptor;
+        let _private__internalSetValidity_decorators;
+        let _private__internalSetValidity_descriptor;
+        let _private__safeCheckValidity_decorators;
+        let _private__safeCheckValidity_descriptor;
+        let _private__dispatchEvent_decorators;
+        let _private__dispatchEvent_descriptor;
+        var HTMLBnumInput = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                ___decorators = [Self];
+                __p_inputValueChangedCallback_decorators = [Risky()];
+                _private__setFormValue_decorators = [Risky()];
+                _private__internalSetValidity_decorators = [Risky()];
+                _private__safeCheckValidity_decorators = [Risky()];
+                _private__dispatchEvent_decorators = [Risky()];
+                __esDecorate(this, null, __p_inputValueChangedCallback_decorators, { kind: "method", name: "_p_inputValueChangedCallback", static: false, private: false, access: { has: obj => "_p_inputValueChangedCallback" in obj, get: obj => obj._p_inputValueChangedCallback }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setFormValue_descriptor = { value: __setFunctionName(function (value) {
+                        this._p_internal.setFormValue(value);
+                        return ATresult.Ok();
+                    }, "#_setFormValue") }, _private__setFormValue_decorators, { kind: "method", name: "#_setFormValue", static: false, private: true, access: { has: obj => #_setFormValue in obj, get: obj => obj.#_setFormValue }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__internalSetValidity_descriptor = { value: __setFunctionName(function (flags, message, anchor) {
+                        return this._p_internal.setValidity(flags, message, anchor);
+                    }, "#_internalSetValidity") }, _private__internalSetValidity_decorators, { kind: "method", name: "#_internalSetValidity", static: false, private: true, access: { has: obj => #_internalSetValidity in obj, get: obj => obj.#_internalSetValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__safeCheckValidity_descriptor = { value: __setFunctionName(function () {
+                        return this.#_input.checkValidity();
+                    }, "#_safeCheckValidity") }, _private__safeCheckValidity_decorators, { kind: "method", name: "#_safeCheckValidity", static: false, private: true, access: { has: obj => #_safeCheckValidity in obj, get: obj => obj.#_safeCheckValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__dispatchEvent_descriptor = { value: __setFunctionName(function (e) {
+                        this.dispatchEvent(e);
+                        return ATresult.Ok();
+                    }, "#_dispatchEvent") }, _private__dispatchEvent_decorators, { kind: "method", name: "#_dispatchEvent", static: false, private: true, access: { has: obj => #_dispatchEvent in obj, get: obj => obj.#_dispatchEvent }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                HTMLBnumInput = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            //#region Constants
+            /**
+             * Template de l'élément input.
+             * Dans la classe cette fois si pour éviter les problèmes de scope.
+             */
+            static TEMPLATE = _classThis.CreateTemplate();
+            /**
+             * Événement déclenché au clic sur le bouton interne.
+             *
+             * Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.
+             * @event bnum-input:button.click
+             * @detail MouseEvent
+             */
+            static EVENT_BUTTON_CLICK = 'bnum-input:button.click';
+            /**
+             * Événement déclenché à la saisie dans le champ.
+             * @event input
+             * @detail InputEvent
+             */
+            static EVENT_INPUT = 'input';
+            /**
+             * Événement déclenché au changement de valeur du champ.
+             * @event change
+             * @detail Event
+             */
+            static EVENT_CHANGE = 'change';
+            /**
+             * Attribut data-value du composant.
+             * @attr {string} (optional) (default: undefined) data-value - Valeur initiale du champ.
+             */
+            static ATTRIBUTE_DATA_VALUE = 'data-value';
+            /**
+             * @attr {string} (optional) (default: undefined) placeholder - Texte indicatif du champ.
+             */
+            static ATTRIBUTE_PLACEHOLDER = 'placeholder';
+            /**
+             * @attr {string} (optional) (default: 'text') type - Type de l'input (text, password, email, etc.)
+             */
+            static ATTRIBUTE_TYPE = 'type';
+            /**
+             * @attr {string} (optional) (default: undefined) disabled - Désactive le champ.
+             */
+            static ATTRIBUTE_DISABLED = 'disabled';
+            /**
+             * @attr {string} (optional) (default: undefined) state - État du champ (success, error, etc.).
+             */
+            static ATTRIBUTE_STATE = 'state';
+            /**
+             * @attr {string} (optional) (default: undefined) button - Présence d'un bouton interne (primary, secondary, danger, ...).
+             */
+            static ATTRIBUTE_BUTTON = 'button';
+            /**
+             * @attr {string} (optional) (default: undefined) button-icon - Icône du bouton interne.
+             */
+            static ATTRIBUTE_BUTTON_ICON = 'button-icon';
+            /**
+             * @attr {string} (optional) (default: undefined) icon - Icône à afficher dans le champ.
+             */
+            static ATTRIBUTE_ICON = 'icon';
+            /**
+             * @attr {string} (optional) (default: undefined) required - Champ requis.
+             */
+            static ATTRIBUTE_REQUIRED = 'required';
+            /**
+             * @attr {string} (optional) (default: undefined) readonly - Champ en lecture seule.
+             */
+            static ATTRIBUTE_READONLY = 'readonly';
+            /**
+             * @attr {string} (optional) (default: undefined) pattern - Expression régulière de validation.
+             */
+            static ATTRIBUTE_PATTERN = 'pattern';
+            /**
+             * @attr {string} (optional) (default: undefined) minlength - Longueur minimale du champ.
+             */
+            static ATTRIBUTE_MINLENGTH = 'minlength';
+            /**
+             * @attr {string} (optional) (default: undefined) maxlength - Longueur maximale du champ.
+             */
+            static ATTRIBUTE_MAXLENGTH = 'maxlength';
+            /**
+             * @attr {string} (optional) (default: undefined) autocomplete - Attribut autocomplete HTML.
+             */
+            static ATTRIBUTE_AUTOCOMPLETE = 'autocomplete';
+            /**
+             * @attr {string} (optional) (default: undefined) inputmode - Mode de saisie (mobile).
+             */
+            static ATTRIBUTE_INPUTMODE = 'inputmode';
+            /**
+             * @attr {string} (optional) (default: undefined) spellcheck - Correction orthographique.
+             */
+            static ATTRIBUTE_SPELLCHECK = 'spellcheck';
+            /**
+             * @attr {string} (optional) (default: undefined) ignorevalue - Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.
+             */
+            static ATTRIBUTE_IGNOREVALUE = 'ignorevalue';
+            /**
+             * @attr {string} (optional) (default: undefined) name - Nom du champ (attribut HTML name).
+             */
+            static ATTRIBUTE_NAME = 'name';
+            /** ID du label principal */
+            static ID_HINT_TEXT = ID_HINT_TEXT;
+            /** ID du label du champ */
+            static ID_HINT_TEXT_LABEL = ID_HINT_TEXT_LABEL;
+            /** ID du hint */
+            static ID_HINT_TEXT_HINT = ID_HINT_TEXT_HINT;
+            /** ID de l'input */
+            static ID_INPUT = ID_INPUT$1;
+            /** ID du bouton */
+            static ID_INPUT_BUTTON = ID_INPUT_BUTTON;
+            /** ID de l'icône d'état */
+            static ID_STATE_ICON = ID_STATE_ICON;
+            /** ID de l'icône d'input */
+            static ID_INPUT_ICON = ID_INPUT_ICON;
+            /** ID du texte de succès */
+            static ID_SUCCESS_TEXT = ID_SUCCESS_TEXT;
+            /** ID du texte d'erreur */
+            static ID_ERROR_TEXT = ID_ERROR_TEXT;
+            /** ID du conteneur d'état */
+            static ID_STATE = ID_STATE;
+            /** Classe CSS pour le texte de succès */
+            static CLASS_STATE_TEXT_SUCCESS = CLASS_STATE_TEXT_SUCCESS;
+            /** Classe CSS pour le texte d'erreur */
+            static CLASS_STATE_TEXT_ERROR = CLASS_STATE_TEXT_ERROR;
+            /**
+             * État de succès.
+             */
+            static STATE_SUCCESS = 'success';
+            /**
+             * État d'erreur.
+             */
+            static STATE_ERROR = 'error';
+            /**
+             * État désactivé.
+             */
+            static STATE_DISABLED = 'disabled';
+            /**
+             * État avec icône.
+             */
+            static STATE_ICON = 'icon';
+            /**
+             * État avec bouton.
+             */
+            static STATE_BUTTON = 'button';
+            /**
+             * État bouton avec icône seulement (sans texte).
+             *
+             * (obi = Only Button Icon)
+             */
+            static STATE_OBI = 'obi';
+            /**
+             * État avec état (success / error).
+             */
+            static STATE_STATE = 'state';
+            /**
+             * Icône affichée en cas de succès de validation.
+             */
+            static ICON_SUCCESS = 'check_circle';
+            /**
+             * Icône affichée en cas d'erreur de validation.
+             */
+            static ICON_ERROR = 'cancel';
+            /**
+             * Nom du slot pour le bouton interne.
+             */
+            static SLOT_BUTTON = 'button';
+            /**
+             * Nom du slot pour l'indice d'utilisation (hint).
+             */
+            static SLOT_HINT = 'hint';
+            /**
+             * Nom du slot pour le message de succès.
+             */
+            static SLOT_SUCCESS = 'success';
+            /**
+             * Nom du slot pour le message d'erreur.
+             */
+            static SLOT_ERROR = 'error';
+            /**
+             * Type d'input par défaut.
+             */
+            static DEFAULT_INPUT_TYPE = 'text';
+            /**
+             * Variation du bouton par défaut.
+             */
+            static DEFAULT_BUTTON_VARIATION = DEFAULT_BUTTON_VARIATION;
+            /**
+             * Texte affiché en cas de succès de validation.
+             */
+            static TEXT_VALID_INPUT = TEXT_VALID_INPUT;
+            /**
+             * Texte affiché en cas d'erreur de validation.
+             */
+            static TEXT_INVALID_INPUT = TEXT_INVALID_INPUT;
+            /**
+             * Texte affiché en cas d'erreur de champ.
+             */
+            static TEXT_ERROR_FIELD = BnumConfig.Get('local_keys')?.error_field ||
+                'Ce champ contient une erreur.';
+            static formAssociated = true;
+            //#endregion Constants
+            //#region Private fields
+            /**
+             * Icône d'état (success / error)
+             */
+            #_stateIcon = (__runInitializers(this, _instanceExtraInitializers), null);
+            /**
+             * Input HTML interne
+             */
+            #_input = null;
+            /**
+             * Bouton HTML interne
+             */
+            #_button = null;
+            /**
+             * Icône interne
+             */
+            #_icon = null;
+            /**
+             * Événement déclenché au clic sur le bouton (si présent)
+             */
+            #_onButtonClicked = null;
+            /**
+             * Valeur initiale (pour la réinitialisation du formulaire)
+             */
+            #_initValue = EMPTY_STRING;
+            //#endregion Private fields
+            //#region Getters/Setters
+            /** Référence à la classe HTMLBnumInput */
+            _ = __runInitializers(this, ___initializers, void 0);
+            /**
+             * Permet d'écouter le clic sur le bouton interne.
+             * @returns {JsEvent} Instance d'événement personnalisée.
+             */
+            get onButtonClicked() {
+                if (this.#_onButtonClicked === null) {
+                    this.#_onButtonClicked = new JsEvent();
+                    this.#_onButtonClicked.add(EVENT_DEFAULT, clickEvent => {
+                        this.trigger(this._.EVENT_BUTTON_CLICK, {
+                            innerEvent: clickEvent,
+                        });
+                    });
+                    this.#_initialiseButton();
+                }
+                return this.#_onButtonClicked;
+            }
+            // -- Formulaire --
+            /**
+             * Valeur courante du champ de saisie.
+             */
+            get value() {
+                return (this.#_input?.value ||
+                    this.getAttribute(this._.ATTRIBUTE_DATA_VALUE) ||
+                    EMPTY_STRING);
+            }
+            set value(val) {
+                if (this.#_input === null)
+                    this.setAttribute(this._.ATTRIBUTE_DATA_VALUE, val);
+                else {
+                    this.#_input.value = val;
+                    this.#_setFormValue(val);
+                }
+            }
+            /**
+             * Nom du champ (attribut HTML name).
+             */
+            get name() {
+                return this.getAttribute(this._.ATTRIBUTE_NAME) || EMPTY_STRING;
+            }
+            set name(val) {
+                this.setAttribute(this._.ATTRIBUTE_NAME, val);
+            }
+            //#endregion Getters/Setters
+            //#region Lifecycle
+            /**
+             * Constructeur du composant.
+             * Initialise la valeur initiale à partir de l'attribut data-value.
+             */
+            constructor() {
+                super();
+                __runInitializers(this, ___extraInitializers);
+                this.#_initValue =
+                    this.getAttribute(this._.ATTRIBUTE_DATA_VALUE) ?? EMPTY_STRING;
+            }
+            /**
+             * Attache un Shadow DOM personnalisé.
+             */
+            _p_attachCustomShadow() {
+                return this.attachShadow({ mode: 'open', delegatesFocus: true });
+            }
+            /**
+             * Récupère des stylesheet déjà construites pour le composant.
+             * @returns Liste de stylesheet
+             */
+            _p_getStylesheets() {
+                return [
+                    ...super._p_getStylesheets(),
+                    INPUT_BASE_STYLE,
+                    STYLE$1,
+                    INPUT_STYLE_STATES,
+                ];
+            }
+            /**
+             * Retourne le template HTML utilisé pour le composant.
+             */
+            _p_fromTemplate() {
+                return this._.TEMPLATE;
+            }
+            /**
+             * Construit le DOM interne et attache les écouteurs d'événements.
+             */
+            _p_buildDOM(container) {
+                this.#_input = container.querySelector(`#${this._.ID_INPUT}`);
+                this.#_button = container.querySelector(`#${this._.ID_INPUT_BUTTON}`);
+                this.#_stateIcon = container.querySelector(`#${this._.ID_STATE_ICON}`);
+                this.#_icon = container.querySelector(`#${this._.ID_INPUT_ICON}`);
+                this.#_input.addEventListener(this._.EVENT_INPUT, e => {
+                    this.#_inputValueChangedCallback(e);
+                });
+                this.#_input.addEventListener(this._.EVENT_CHANGE, e => {
+                    this.#_inputValueChangedCallback(e);
+                });
+                this.#_initialiseButton().#_update();
+                this.attr(this._.ATTRIBUTE_IGNOREVALUE, 'true').removeAttribute(this._.ATTRIBUTE_DATA_VALUE);
+            }
+            /**
+             * Met à jour le composant lors d'un changement d'attribut.
+             */
+            _p_update(name, oldVal, newVal) {
+                if (this.alreadyLoaded === false)
+                    return 'break';
+                if (newVal == oldVal)
+                    return;
+                switch (name) {
+                    case this._.ATTRIBUTE_DATA_VALUE:
+                        if (this.attr(this._.ATTRIBUTE_IGNOREVALUE) !== null) {
+                            this.removeAttribute(this._.ATTRIBUTE_IGNOREVALUE);
+                            break;
+                        }
+                        if (newVal !== null) {
+                            this.#_setFormValue(newVal);
+                            if (this.#_input)
+                                this.#_input.value = newVal;
+                            this.setAttribute(this._.ATTRIBUTE_IGNOREVALUE, 'true');
+                            this.removeAttribute(this._.ATTRIBUTE_DATA_VALUE);
+                        }
+                        break;
+                }
+            }
+            /**
+             * Appelé après le flush du DOM pour synchroniser l'état.
+             */
+            _p_postFlush() {
+                this.#_update();
+            }
+            //#endregion Lifecycle
+            //#region Public methods
+            // --- Formulaire --
+            /**
+             * Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.
+             */
+            formResetCallback() {
+                this.value = this.#_initValue;
+            }
+            /**
+             * Active ou désactive le champ selon l'état du fieldset parent.
+             */
+            formDisabledCallback(disabled) {
+                if (disabled)
+                    this.setAttribute(this._.ATTRIBUTE_DISABLED, 'disabled');
+                this.#_sync();
+            }
+            // -- Helper --
+            /**
+             * Active le bouton interne avec texte, icône et variation éventuels.
+             * @param options Objet contenant le texte, l'icône et la variation du bouton.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            enableButton({ text = undefined, icon = undefined, variation = DEFAULT_BUTTON_VARIATION, } = {}) {
+                this.setAttribute(this._.ATTRIBUTE_BUTTON, variation);
+                if (text !== undefined) {
+                    this.querySelector(`slot[name="${this._.SLOT_BUTTON}"]`)?.remove?.();
+                    const span = this._p_createSpan({
+                        child: text,
+                        attributes: { slot: 'button' },
+                    });
+                    this.appendChild(span);
+                }
+                if (icon !== undefined) {
+                    this.setAttribute(this._.ATTRIBUTE_BUTTON_ICON, icon);
+                }
+                return this;
+            }
+            /**
+             * Active uniquement l'icône du bouton interne (sans texte).
+             * @param icon Nom de l'icône à afficher sur le bouton.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            enableButtonIconOnly(icon) {
+                this.querySelector(`slot[name="${this._.SLOT_BUTTON}"]`)?.remove?.();
+                this.removeAttribute(this._.ATTRIBUTE_BUTTON);
+                this.setAttribute(this._.ATTRIBUTE_BUTTON_ICON, icon);
+                return this;
+            }
+            /**
+             * Masque le bouton interne.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            hideButton() {
+                this.removeAttribute(this._.ATTRIBUTE_BUTTON);
+                this.removeAttribute(this._.ATTRIBUTE_BUTTON_ICON);
+                return this;
+            }
+            /**
+             * Définit l'état de succès avec un message optionnel.
+             * @param message Message de succès à afficher.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            setSuccessState(message) {
+                return this.#_setState(this._.SLOT_SUCCESS, message);
+            }
+            /**
+             * Définit l'état d'erreur avec un message optionnel.
+             * @param message Message d'erreur à afficher.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            setErrorState(message) {
+                return this.#_setState(this._.SLOT_ERROR, message);
+            }
+            /**
+             * Définit une icône à afficher dans le champ.
+             * @param icon Nom de l'icône à afficher.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            setIcon(icon) {
+                this.setAttribute(this._.ATTRIBUTE_ICON, icon);
+                return this;
+            }
+            /**
+             * Supprime l'icône affichée dans le champ.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            removeIcon() {
+                this.removeAttribute(this._.ATTRIBUTE_ICON);
+                return this;
+            }
+            /**
+             * Définit un indice d'utilisation (hint) pour le champ.
+             * @param hint Texte de l'indice à afficher.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            setHint(hint) {
+                this.removeHint();
+                const span = this._p_createSpan({
+                    child: hint,
+                    attributes: { slot: this._.SLOT_HINT },
+                });
+                this.appendChild(span);
+                return this;
+            }
+            /**
+             * Supprime l'indice d'utilisation (hint) du champ.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            removeHint() {
+                this.querySelector(`slot[name="${this._.SLOT_HINT}"]`)?.remove?.();
+                return this;
+            }
+            /**
+             * Définit le label principal du champ.
+             * @param label Texte ou élément HTML à utiliser comme label.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            setLabel(label) {
+                // On supprime tout ce qui n'a pas l'attribut slot
+                const nodes = this.childNodes.values();
+                for (const node of nodes) {
+                    if (node instanceof HTMLElement) {
+                        const element = node;
+                        if (!element.hasAttribute('slot'))
+                            this.removeChild(element);
+                    }
+                }
+                if (typeof label === 'string')
+                    this.appendChild(this._p_createTextNode(label));
+                else
+                    this.appendChild(label);
+                return this;
+            }
+            //#endregion Public methods
+            //#region Private methods
+            /**
+             * Met à jour l'état visuel et fonctionnel du composant selon ses attributs.
+             * @private
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_update() {
+                this._p_clearStates();
+                if (this.#_input?.value || false)
+                    this._p_addState('value');
+                const btnValue = this.attr(this._.ATTRIBUTE_BUTTON);
+                if (btnValue !== null) {
+                    this._p_addState(this._.STATE_BUTTON);
+                    switch (btnValue) {
+                        case exports.EButtonType.PRIMARY:
+                            this.#_button.variation = exports.EButtonType.PRIMARY;
+                            break;
+                        case exports.EButtonType.SECONDARY:
+                            this.#_button.variation = exports.EButtonType.SECONDARY;
+                            break;
+                        case exports.EButtonType.DANGER:
+                            this.#_button.variation = exports.EButtonType.DANGER;
+                            break;
+                    }
+                }
+                const button_icon = this.attr(this._.ATTRIBUTE_BUTTON_ICON);
+                if (button_icon !== null) {
+                    this.#_button.icon = button_icon;
+                    if (!this._p_hasState(this._.STATE_BUTTON))
+                        this._p_addStates(this._.STATE_BUTTON, this._.STATE_OBI);
+                    else if (btnValue === EMPTY_STRING)
+                        this._p_addState(this._.STATE_OBI);
+                }
+                const icon = this.attr(this._.ATTRIBUTE_ICON);
+                if (icon !== null) {
+                    this._p_addState(this._.STATE_ICON);
+                    this.#_icon.icon = icon;
+                }
+                if (this.attr(this._.ATTRIBUTE_DISABLED) !== null)
+                    this._p_addState(this._.STATE_DISABLED);
+                return this.#_updateState(this.attr(this._.ATTRIBUTE_STATE)).#_sync();
+            }
+            /**
+             * Synchronise les propriétés et attributs de l'input interne.
+             * Met à jour les propriétés HTML de l'input selon les attributs du composant.
+             * @private
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_sync() {
+                if (!this.#_input)
+                    return this;
+                const input = this.#_input;
+                // 1. Propriétés de base
+                input.value = this.value;
+                input.type =
+                    this.getAttribute(this._.ATTRIBUTE_TYPE) ||
+                        HTMLBnumInput.DEFAULT_INPUT_TYPE;
+                input.placeholder =
+                    this.getAttribute(this._.ATTRIBUTE_PLACEHOLDER) || EMPTY_STRING;
+                // 2. États Booléens (On utilise .disabled / .readOnly pour la réactivité JS)
+                input.disabled =
+                    this.hasAttribute(this._.ATTRIBUTE_DISABLED) ||
+                        this._p_hasState(this._.STATE_DISABLED);
+                input.readOnly = this.hasAttribute(this._.ATTRIBUTE_READONLY);
+                input.required = this.hasAttribute(this._.ATTRIBUTE_REQUIRED);
+                // 3. Validation & UX (On utilise setAttribute pour les attributs HTML5)
+                this.#_setFieldAttr(this._.ATTRIBUTE_PATTERN);
+                this.#_setFieldAttr(this._.ATTRIBUTE_MINLENGTH);
+                this.#_setFieldAttr(this._.ATTRIBUTE_MAXLENGTH);
+                this.#_setFieldAttr(this._.ATTRIBUTE_AUTOCOMPLETE);
+                this.#_setFieldAttr(this._.ATTRIBUTE_INPUTMODE);
+                this.#_setFieldAttr(this._.ATTRIBUTE_SPELLCHECK);
+                this.#_setFieldAttr('min');
+                this.#_setFieldAttr('max');
+                this.#_setFieldAttr('step');
+                return this.#_updateA11y();
+            }
+            /**
+             * Met à jour l'accessibilité (a11y) de l'input selon l'état.
+             * Met à jour les attributs ARIA et la validité de l'input.
+             * @private
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_updateA11y() {
+                if (!this.#_input)
+                    return this;
+                return this.#_setValidity();
+            }
+            /**
+             * Met à jour l'état visuel selon l'état passé en paramètre.
+             * @private
+             * @param state L'état à appliquer (success, error, etc.)
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_updateState(state) {
+                if (state !== null) {
+                    switch (state) {
+                        case this._.STATE_SUCCESS:
+                            this._p_addStates(this._.STATE_STATE, this._.STATE_SUCCESS);
+                            this.#_stateIcon.icon = this._.ICON_SUCCESS;
+                            break;
+                        case this._.STATE_ERROR:
+                            this._p_addStates(this._.STATE_STATE, this._.STATE_ERROR);
+                            this.#_stateIcon.icon = this._.ICON_ERROR;
+                            break;
+                    }
+                }
+                return this;
+            }
+            /**
+             * Définit l'état (succès ou erreur) et le message associé.
+             * @private
+             * @param state Type d'état (success ou error).
+             * @param message Message à afficher.
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_setState(state, message) {
+                this.setAttribute(this._.ATTRIBUTE_STATE, state);
+                if (message) {
+                    this.querySelector(`slot[name="${state}"]`)?.remove?.();
+                    const span = this._p_createSpan({
+                        child: message,
+                        attributes: { slot: state },
+                    });
+                    this.appendChild(span);
+                }
+                return this;
+            }
+            /**
+             * Met à jour la validité de l'input et les messages d'erreur/succès.
+             * Gère également les attributs ARIA liés à la validation.
+             * @private
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_setValidity() {
+                if (!this.#_input)
+                    return this;
+                const stateAttr = this.attr(this._.ATTRIBUTE_STATE);
+                const isManualError = stateAttr === this._.STATE_ERROR;
+                if (isManualError) {
+                    this.#_internalSetValidity({ customError: true }, this._.TEXT_ERROR_FIELD, this.#_input);
+                }
+                else {
+                    this.#_safeCheckValidity().match({
+                        Ok: isValid => {
+                            const isSuccess = isValid && this.#_input.validationMessage === EMPTY_STRING;
+                            if (isSuccess) {
+                                this.#_internalSetValidity({});
+                            }
+                            else {
+                                this.#_internalSetValidity(this.#_input.validity, this.#_input.validationMessage, this.#_input);
+                            }
+                            return void 0;
+                        },
+                        Err: () => this.#_internalSetValidity({}), // Fallback de sécurité
+                    });
+                }
+                return this.#_syncValidationUI(isManualError);
+            }
+            /**
+             * Gère l'interface utilisateur de validation (messages, icônes, ARIA).
+             * @param isManualError Si l'erreur est définie manuellement via l'attribut state.
+             * @returns Cette instance pour chaînage.
+             */
+            #_syncValidationUI(isManualError) {
+                const input = this.#_input;
+                const hasNativeError = input.validationMessage !== EMPTY_STRING;
+                const isError = isManualError || (hasNativeError && !input.validity.valid);
+                const isSuccess = !isManualError && hasNativeError && input.validity.valid;
+                const hasState = isError || isSuccess;
+                if (hasState) {
+                    this._p_addStates(this._.STATE_STATE, isSuccess ? this._.STATE_SUCCESS : this._.STATE_ERROR);
+                    const successText = this.#_input.validationMessage || this._.TEXT_VALID_INPUT;
+                    const errorText = this.#_input.validationMessage || this._.TEXT_INVALID_INPUT;
+                    const validationText = isSuccess ? successText : errorText;
+                    const slotTextId = isSuccess
+                        ? this._.ID_SUCCESS_TEXT
+                        : this._.ID_ERROR_TEXT;
+                    this.shadowRoot.querySelector(`#${slotTextId} slot`).innerText = validationText;
+                    input.setAttribute('aria-invalid', isError ? 'true' : 'false');
+                    const descriptions = [];
+                    if (isError)
+                        descriptions.push(this._.ID_ERROR_TEXT);
+                    if (isSuccess)
+                        descriptions.push(this._.ID_SUCCESS_TEXT);
+                    input.setAttribute('aria-describedby', descriptions.join(' '));
+                }
+                else {
+                    input.removeAttribute('aria-invalid');
+                    input.removeAttribute('aria-describedby');
+                }
+                const finalState = isError
+                    ? this._.STATE_ERROR
+                    : isSuccess
+                        ? this._.STATE_SUCCESS
+                        : null;
+                return this.#_updateState(finalState);
+            }
+            /**
+             * Initialise le bouton interne et son écouteur de clic.
+             * Ajoute un écouteur d'événement sur le bouton si nécessaire.
+             * @private
+             * @returns {this} L'instance courante pour chaînage.
+             */
+            #_initialiseButton() {
+                if (this.#_onButtonClicked !== null && this.#_button !== null) {
+                    this.#_button.addEventListener('click', e => {
+                        this.onButtonClicked.call(e);
+                    });
+                }
+                return this;
+            }
+            /**
+             * Callback appelé lors d'un changement de valeur de l'input.
+             * @private
+             * @param e Evénement de changement de valeur.
+             */
+            #_inputValueChangedCallback(e) {
+                this._p_inputValueChangedCallback(e);
+            }
+            /**
+             * Callback protégé appelé lors d'un changement de valeur de l'input.
+             * @protected
+             * @param e Evénement de changement de valeur.
+             * @returns Résultat de l'opération.
+             */
+            _p_inputValueChangedCallback(e) {
+                this.#_setFormValue(this.#_input.value);
+                this.#_update();
+                return this.#_dispatchEvent(e).tapError(() => {
+                    this.#_dispatchInputEventFallback(e);
+                });
+            }
+            /**
+             * Transfère un attribut du composant vers l'input interne si présent.
+             * @private
+             * @param attrName Nom de l'attribut à synchroniser.
+             */
+            #_setFieldAttr(attrName) {
+                const val = this.getAttribute(attrName);
+                if (val !== null) {
+                    this.#_input.setAttribute(attrName, val);
+                }
+                else {
+                    this.#_input.removeAttribute(attrName);
+                }
+            }
+            /**
+             * Définit la valeur du formulaire interne.
+             * @param value Valeur à définir.
+             * @returns Résultat de l'opération.
+             */
+            get #_setFormValue() { return _private__setFormValue_descriptor.value; }
+            /**
+             * Met à jour la validité interne de l'input.
+             * @param flags Drapeaux de validité.
+             * @param message Message de validation.
+             * @param anchor Ancre HTML pour le message.
+             * @returns Résultat de l'opération.
+             */
+            get #_internalSetValidity() { return _private__internalSetValidity_descriptor.value; }
+            /**
+             * Fait une vérification sécurisée de la validité de l'input.
+             * @returns Résultat de l'opération avec la validité.
+             */
+            get #_safeCheckValidity() { return _private__safeCheckValidity_descriptor.value; }
+            /**
+             * Effectue la dispatch de l'événement passé en paramètre.
+             * @param e Evénement à dispatcher.
+             * @returns Résultat de l'opération.
+             */
+            get #_dispatchEvent() { return _private__dispatchEvent_descriptor.value; }
+            /**
+             * Fallback pour la dispatch des événements input/change.
+             * @param e Evènement qui pose problème
+             */
+            #_dispatchInputEventFallback(e) {
+                this.dispatchEvent(e.type === 'input'
+                    ? new InputEvent('input', {
+                        data: this.value,
+                        inputType: this.attr('type') || 'text',
+                    })
+                    : new Event('change'));
+            }
+            //#endregion Private methods
+            //#region Static methods
+            /**
+             * @inheritdoc
+             */
+            static _p_observedAttributes() {
+                return [
+                    this.ATTRIBUTE_DATA_VALUE,
+                    this.ATTRIBUTE_PLACEHOLDER,
+                    this.ATTRIBUTE_TYPE,
+                    this.ATTRIBUTE_DISABLED,
+                    this.ATTRIBUTE_STATE,
+                    this.ATTRIBUTE_BUTTON,
+                    this.ATTRIBUTE_BUTTON_ICON,
+                    this.ATTRIBUTE_ICON,
+                    this.ATTRIBUTE_REQUIRED,
+                    this.ATTRIBUTE_READONLY,
+                    this.ATTRIBUTE_PATTERN,
+                    this.ATTRIBUTE_MINLENGTH,
+                    this.ATTRIBUTE_MAXLENGTH,
+                    this.ATTRIBUTE_AUTOCOMPLETE,
+                    this.ATTRIBUTE_INPUTMODE,
+                    this.ATTRIBUTE_SPELLCHECK,
+                    'min',
+                    'max',
+                    'step',
+                ];
+            }
+            /**
+             * Crée une instance du composant avec les options fournies.
+             * @param label Texte du label principal.
+             * @param options Options d'initialisation (attributs et slots).
+             * @returns {HTMLBnumInput} Instance du composant.
+             */
+            static Create(label, { 'data-value': dataValue, placeholder, name, type, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, hint, success, error, btnText, } = {}) {
+                const el = document.createElement(this.TAG);
+                // Appliquer chaque attribut si défini
+                if (dataValue !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_DATA_VALUE, dataValue);
+                if (placeholder !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_PLACEHOLDER, placeholder);
+                if (type !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_TYPE, type);
+                if (disabled !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_DISABLED, disabled);
+                if (state !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_STATE, state);
+                if (button !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_BUTTON, button);
+                if (buttonIcon !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_BUTTON_ICON, buttonIcon);
+                if (icon !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_ICON, icon);
+                if (required !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_REQUIRED, required);
+                if (readonly !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_READONLY, readonly);
+                if (pattern !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_PATTERN, pattern);
+                if (minlength !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_MINLENGTH, minlength);
+                if (maxlength !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_MAXLENGTH, maxlength);
+                if (autocomplete !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
+                if (inputmode !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_INPUTMODE, inputmode);
+                if (spellcheck !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_SPELLCHECK, spellcheck);
+                if (name !== undefined)
+                    el.setAttribute(this.ATTRIBUTE_NAME, name);
+                // Slot par défaut (label)
+                el.textContent = label;
+                // Slots nommés
+                if (hint) {
+                    const hintSlot = document.createElement('span');
+                    hintSlot.slot = this.SLOT_HINT;
+                    hintSlot.textContent = hint;
+                    el.appendChild(hintSlot);
+                }
+                if (success) {
+                    const successSlot = document.createElement('span');
+                    successSlot.slot = this.SLOT_SUCCESS;
+                    successSlot.textContent = success;
+                    el.appendChild(successSlot);
+                }
+                if (error) {
+                    const errorSlot = document.createElement('span');
+                    errorSlot.slot = this.SLOT_ERROR;
+                    errorSlot.textContent = error;
+                    el.appendChild(errorSlot);
+                }
+                if (btnText) {
+                    const buttonSlot = document.createElement('span');
+                    buttonSlot.slot = this.SLOT_BUTTON;
+                    buttonSlot.textContent = btnText;
+                    el.appendChild(buttonSlot);
+                }
+                return el;
+            }
+            static CreateTemplate(html = EMPTY_STRING) {
+                return BnumElementInternal.CreateTemplate(BASE_TEMPLATE.replace('<!-- {{addoninner}} -->', html));
+            }
+            /**
+             * Tag HTML du composant.
+             */
+            static get TAG() {
+                return TAG_INPUT;
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        };
+        return HTMLBnumInput = _classThis;
+    })();
+
+    var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_color:var(--bnum-checkbox-color,var(--bnum-primary-color,#000091));--_background-color:var(--bnum-checkbox-background-color,var(--bnum-color-background,#fff));--_internal-border-color:var(--_color);--_internal-error:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host .checkbox__label{align-content:center;align-items:center;display:inline-flex;flex-direction:row;position:relative;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host .checkbox__label:before{background:var(--_background-color);border:thin solid var(--_internal-border-color);border-radius:500px;box-sizing:border-box;content:\"\";cursor:pointer;display:inline-block;height:1.5rem;width:2.5rem}:host .checkbox__label:after{background-color:var(--_background-color);border:thin solid var(--_internal-border-color);border-radius:100%;box-sizing:border-box;content:\"\";cursor:pointer;display:block;height:1.5rem;left:0;position:absolute;top:0;width:1.5rem}:host .checkbox__label__desc{color:var(--_color)!important;display:none;left:0;position:absolute;top:24px}:host .checkbox__state{display:none}:host .checkbox__label--hint{display:block;margin-top:1rem;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}#native-input{height:0;opacity:0;position:absolute;width:0}#native-input:focus-visible~.checkbox__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}#native-input:checked~.checkbox__label:before{background:var(--_color)}#native-input:checked~.checkbox__label:after{color:var(--_color);content:\"\\e5ca\";font-family:var(--bnum-icon-font-family);font-size:21px;line-height:22px;transform:translateX(1rem)}:host(:state(state)) .checkbox__state{display:block}:host(:state(state):state(error)){--_internal-border-color:var(--_internal-error)}:host(:state(state):state(error)) #active-text,:host(:state(state):state(error)) #inactive-text{color:var(--_internal-error)!important}:host(:state(helper)) #inactive-text{display:block}:host(:state(helper)) #active-text{display:none}:host(:state(helper)) #native-input:checked #inactive-text,:host([checked]:state(helper)) #inactive-text{display:none}:host(:state(helper)) #native-input:checked #active-text,:host([checked]:state(helper)) #active-text{display:block}:host([disabled]){opacity:.5;pointer-events:none}";
+
+    const listenersCacheKey = Symbol('listenersCache');
+    function Listener(initilizator) {
+        return function (_target, context) {
+            const methodName = String(context.name);
+            const listenerCacheKey = Symbol(`listener_${methodName}`);
+            return {
+                get() {
+                    const self = this;
+                    if (!self[listenersCacheKey])
+                        self[listenersCacheKey] = new Map();
+                    if (self[listenersCacheKey].has(listenerCacheKey)) {
+                        return self[listenersCacheKey].get(listenerCacheKey);
+                    }
+                    const event = new JsEvent();
+                    if (initilizator) {
+                        initilizator(event, this);
+                    }
+                    self[listenersCacheKey].set(listenerCacheKey, event);
+                    return self[listenersCacheKey].get(listenerCacheKey);
+                },
+            };
+        };
+    }
+
+    function NonStd(reason, fatal = false) {
+        // On accepte 'any' pour la value (car ça peut être une classe, une fonction, undefined pour un champ...)
+        // On utilise notre type GenericContext
+        return function (value, context) {
+            // On construit un message propre selon le type (classe, méthode, field...)
+            const typeLabel = {
+                class: 'La classe',
+                method: 'La méthode',
+                getter: 'Le getter',
+                setter: 'Le setter',
+                field: 'Le champ',
+                accessor: 'L\'accesseur',
+            }[context.kind] || 'L\'élément';
+            const name = String(context.name);
+            const message = `${typeLabel} '${name}' est non standard${reason ? ` : ${reason}` : ''}.`;
+            // addInitializer fonctionne partout !
+            // - Pour une classe : s'exécute à la définition de la classe.
+            // - Pour un membre (méthode/champ) : s'exécute à la création de l'instance.
+            context.addInitializer(function () {
+                if (fatal) {
+                    throw new Error(message);
+                }
+                else {
+                    Log.warn(name, message);
+                }
+            });
+        };
+    }
+
+    //#region Utilities
+    /**
+     * Initialise l'écouteur d'événement `change` sur l'instance du checkbox.
+     *
+     * @remarks
+     * Ajoute un listener natif `change` sur l'élément hôte et appelle le callback
+     * de l'événement personnalisé {@link OnCheckedChangeEvent} lorsqu'il y a des abonnés.
+     *
+     * @param event - L'événement personnalisé à déclencher
+     * @param instance - L'instance du composant {@link HTMLBnumCheckbox}
+     *
+     * @internal
+     */
+    function OnCheckedChangeInitializer(event, instance) {
+        instance.addEventListener(EVENT_CHANGE$3, (e) => {
+            if (event.haveEvents())
+                event.call(e);
+        });
+    }
+    //#endregion Internal Types
+    //#region Global Constants
+    /**
+     * Icônes utilisées pour les états du checkbox.
+     *
+     * @remarks
+     * Associe chaque état de validation à une icône Material Icons correspondante.
+     *
+     * @internal
+     */
+    const BnumCheckBoxIcon = {
+        SUCCESS: 'check_circle',
+        ERROR: 'cancel',
+    };
+    /**
+     * Nom de l'attribut 'checked'.
+     * @internal
+     */
+    const ATTRIBUTE_CHECKED$1 = 'checked';
+    /**
+     * Nom de l'attribut 'helper'.
+     * @internal
+     */
+    const ATTRIBUTE_HELPER = 'helper';
+    /**
+     * Nom de l'événement 'change'.
+     * @internal
+     */
+    const EVENT_CHANGE$3 = 'change';
+    /**
+     * Tag utilisé pour les messages de log du composant.
+     * @internal
+     */
+    const LOG_TAG = 'BnumCheckbox';
+    /**
+     * Message d'avertissement affiché lorsqu'aucun label n'est trouvé.
+     * @internal
+     */
+    const WARN_NO_LABEL = "Aucun texte de description ou d'aide n'a été trouvé";
+    /**
+     * Message de validité par défaut lorsqu'aucun message natif n'est disponible.
+     * @internal
+     */
+    const DEFAULT_VALIDITY_MESSAGE = 'Certaines conditions ne sont pas satisfaites';
+    /**
+     * Nom de l'état interne 'state'.
+     * @internal
+     */
+    const STATE_STATE = 'state';
+    /**
+     * Nom de l'état interne 'error'.
+     * @internal
+     */
+    const STATE_ERROR = 'error';
+    /**
+     * Nom de l'attribut ARIA 'aria-checked'.
+     * @internal
+     */
+    const ARIA_CHECKED = 'aria-checked';
+    /**
+     * Nom de l'attribut ARIA 'aria-required'.
+     * @internal
+     */
+    const ARIA_REQUIRED = 'aria-required';
+    /**
+     * Nom de l'attribut ARIA 'aria-disabled'.
+     * @internal
+     */
+    const ARIA_DISABLED = 'aria-disabled';
+    /**
+     * Nom de l'attribut ARIA 'aria-invalid'.
+     * @internal
+     */
+    const ARIA_INVALID = 'aria-invalid';
+    /**
+     * Nom de l'attribut ARIA 'aria-describedby'.
+     * @internal
+     */
+    const ARIA_DESCRIBEDBY = 'aria-describedby';
+    /**
+     * Identifiant du slot d'indice.
+     * @internal
+     */
+    const ID_HINT$1 = 'hint';
+    /**
+     * Identifiant de l'élément affichant le texte de validité.
+     * @internal
+     */
+    const ID_VALIDITY_TEXT = 'validity-text';
+    /**
+     * Valeur booléenne 'true' sous forme de chaîne.
+     * @internal
+     */
+    const ARIA_TRUE = 'true';
+    /**
+     * Texte par défaut pour l'état actif.
+     * @internal
+     */
+    const TEXT_ACTIVE_DEFAULT = BnumConfig.Get('local_keys')?.active_checkbox ?? 'Activé';
+    /**
+     * Texte par défaut pour l'état inactif.
+     * @internal
+     */
+    const TEXT_INACTIVE_DEFAULT = BnumConfig.Get('local_keys')?.inactive_checkbox ?? 'Désactivé';
+    /**
+     * Liste des attributs synchronisés entre l'élément hôte et l'input interne.
+     *
+     * @remarks
+     * Ces attributs sont automatiquement propagés de l'élément personnalisé vers l'input natif.
+     * @internal
+     */
+    const SYNCED_ATTRIBUTES$2 = ['name', 'checked', 'value', 'disabled', 'required'];
+    //#endregion Global Constants
+    //#region Template
+    /**
+     * Template HTML du composant checkbox.
+     *
+     * @remarks
+     * Structure DOM utilisée pour créer le shadow DOM du composant.
+     * Comprend un input checkbox natif configuré en rôle `switch`, un label
+     * avec des slots pour le contenu actif/inactif, et une zone d'état de validation.
+     *
+     * @internal
+     */
+    const TEMPLATE$f = (h(HTMLBnumFragment, { children: [h("input", { id: "native-input", type: "checkbox", role: "switch" }), h("label", { class: "checkbox__label label-container hint-label", for: "native-input", children: [h("span", { class: "checkbox__label--legend label-container--label ", children: h("slot", { id: "legend" }) }), h("span", { id: "active-text", class: "checkbox__label__desc checkbox__label__desc--ok label-container--hint", children: h("slot", { name: "activeText", children: TEXT_ACTIVE_DEFAULT }) }), h("span", { id: "inactive-text", class: "checkbox__label__desc checkbox__label__desc--no label-container--hint", children: h("slot", { name: "inactiveText", children: TEXT_INACTIVE_DEFAULT }) })] }), h("span", { class: "checkbox__label--hint hint-label label-container--hint", children: h("slot", { id: ID_HINT$1, name: ID_HINT$1 }) }), h("div", { class: "checkbox__state state", children: [h(HTMLBnumIcon, { id: "icon" }), h("span", { id: ID_VALIDITY_TEXT })] })] }));
+    //#endregion Template
+    /**
+     * Composant personnalisé représentant un checkbox avec support de formulaire.
+     *
+     * @remarks
+     * Ce composant Web étend {@link BnumElementInternal} et fournit un checkbox personnalisé
+     * avec support complet des formulaires HTML, gestion d'état, validation et accessibilité.
+     *
+     * Le composant utilise le Shadow DOM pour encapsuler son style et sa structure,
+     * et synchronise automatiquement ses attributs avec un input checkbox natif sous-jacent.
+     * Il fonctionne en mode `switch` (interrupteur on/off) avec des textes configurables
+     * pour les états actif et inactif.
+     *
+     * @example
+     * Structure simple :
+     * ```html
+     * <bnum-checkbox>Click me !</bnum-checkbox>
+     * ```
+     *
+     * @example
+     * Structure avec indice :
+     * ```html
+     * <bnum-checkbox>Click me !<span slot="hint">Indice</span></bnum-checkbox>
+     * ```
+     *
+     * @example
+     * Structure required avec helper :
+     * ```html
+     * <bnum-checkbox helper required>Click me !<span slot="hint">Indice</span></bnum-checkbox>
+     * ```
+     *
+     * @fires CustomEvent<BnumCheckBoxDetail> - Déclenché lorsque l'état coché du checkbox change
+     *
+     * @public
+     *
+     * @structure Classique
+     * <bnum-checkbox>Click me !</bnum-checkbox>
+     *
+     * @structure Avec indice
+     * <bnum-checkbox checked>Click me !<span slot="hint">Indice</span></bnum-checkbox>
+     *
+     * @structure Requis
+     * <bnum-checkbox required>Click me !<span slot="hint">Indice</span></bnum-checkbox>
+     *
+     * @structure Avec un texte d'aide
+     * <bnum-checkbox helper>Click me !<span slot="hint">Indice</span></bnum-checkbox>
+     *
+     * @slot (default) - Légende de l'élément
+     * @slot activeText - Texte affiché lorsque le checkbox est activé
+     * @slot inactiveText - Texte affiché lorsque le checkbox est désactivé
+     * @slot hint - Aide supplémentaire dans la légende
+     *
+     * @event {CustomEvent<BnumCheckBoxDetail>} change - Lorsque l'élément change d'état
+     *
+     * @attr {boolean} (optional) (default: false) checked - Si l'élément est coché ou non
+     * @attr {string} (optional) name - Nom de l'élément pour les formulaires
+     * @attr {string} (optional) (default: 'on') value - Valeur de l'élément
+     * @attr {boolean} (optional) (default: false) disabled - Désactive l'élément
+     * @attr {boolean} (optional) (default: false) required - Rend le champ obligatoire
+     * @attr {boolean} (optional) (default: false) helper - Active le mode d'aide visuelle
+     *
+     * @state error - Lorsque la validation échoue
+     * @state helper - Lorsque l'attribut helper est actif
+     *
+     * @cssvar {#000091} --bnum-checkbox-color - Couleur du checkbox
+     * @cssvar {white} --bnum-checkbox-background-color - Couleur de fond du checkbox
+     * @cssvar {#de350b} --bnum-input-state-error-color - Couleur de l'erreur
+     */
+    let HTMLBnumCheckbox = (() => {
+        let _classDecorators = [Define({
+                tag: 'bnum-checkbox',
+                template: TEMPLATE$f,
+                styles: [INPUT_BASE_STYLE, INPUT_STYLE_STATES, css_248z$j],
+            })];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElementInternal;
+        let _staticExtraInitializers = [];
+        let _instanceExtraInitializers = [];
+        let _static__p_observedAttributes_decorators;
+        let _private__ui_decorators;
+        let _private__ui_initializers = [];
+        let _private__ui_extraInitializers = [];
+        let _private__ui_descriptor;
+        let _checked_decorators;
+        let _checked_initializers = [];
+        let _checked_extraInitializers = [];
+        let _name_decorators;
+        let _name_initializers = [];
+        let _name_extraInitializers = [];
+        let _value_decorators;
+        let _value_initializers = [];
+        let _value_extraInitializers = [];
+        let _disabled_decorators;
+        let _disabled_initializers = [];
+        let _disabled_extraInitializers = [];
+        let _required_decorators;
+        let _required_initializers = [];
+        let _required_extraInitializers = [];
+        let _helper_decorators;
+        let _helper_initializers = [];
+        let _helper_extraInitializers = [];
+        let _private__legend_decorators;
+        let _private__legend_initializers = [];
+        let _private__legend_extraInitializers = [];
+        let _private__legend_descriptor;
+        let _private__hint_decorators;
+        let _private__hint_initializers = [];
+        let _private__hint_extraInitializers = [];
+        let _private__hint_descriptor;
+        let _oncheckedchange_decorators;
+        let _oncheckedchange_initializers = [];
+        let _oncheckedchange_extraInitializers = [];
+        let _private__checkValidity_decorators;
+        let _private__checkValidity_descriptor;
+        let _private__reportValidity_decorators;
+        let _private__reportValidity_descriptor;
+        let _private__change_decorators;
+        let _private__change_descriptor;
+        let _private__setText_decorators;
+        let _private__setText_descriptor;
+        let _private__setInternalError_decorators;
+        let _private__setInternalError_descriptor;
+        let _private__setValidity_decorators;
+        let _private__setValidity_descriptor;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _private__ui_decorators = [UI({
+                        input: '#native-input',
+                        textActive: '#active-text',
+                        textInactive: '#inactive-text',
+                        slotLegend: '#legend',
+                        slotHint: `#${ID_HINT$1}`,
+                        validityText: `#${ID_VALIDITY_TEXT}`,
+                        icon: '#icon',
+                    })];
+                _checked_decorators = [Attr()];
+                _name_decorators = [Attr()];
+                _value_decorators = [Attr()];
+                _disabled_decorators = [Attr()];
+                _required_decorators = [Attr()];
+                _helper_decorators = [Attr()];
+                _private__legend_decorators = [Data()];
+                _private__hint_decorators = [Data()];
+                _oncheckedchange_decorators = [Listener(OnCheckedChangeInitializer)];
+                _private__checkValidity_decorators = [Risky()];
+                _private__reportValidity_decorators = [Risky()];
+                _private__change_decorators = [Fire(EVENT_CHANGE$3)];
+                _private__setText_decorators = [Risky()];
+                _private__setInternalError_decorators = [Risky()];
+                _private__setValidity_decorators = [Risky()];
+                _static__p_observedAttributes_decorators = [NonStd('Deprecated')];
+                __esDecorate(this, null, _static__p_observedAttributes_decorators, { kind: "method", name: "_p_observedAttributes", static: true, private: false, access: { has: obj => "_p_observedAttributes" in obj, get: obj => obj._p_observedAttributes }, metadata: _metadata }, null, _staticExtraInitializers);
+                __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+                __esDecorate(this, null, _checked_decorators, { kind: "accessor", name: "checked", static: false, private: false, access: { has: obj => "checked" in obj, get: obj => obj.checked, set: (obj, value) => { obj.checked = value; } }, metadata: _metadata }, _checked_initializers, _checked_extraInitializers);
+                __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+                __esDecorate(this, null, _value_decorators, { kind: "accessor", name: "value", static: false, private: false, access: { has: obj => "value" in obj, get: obj => obj.value, set: (obj, value) => { obj.value = value; } }, metadata: _metadata }, _value_initializers, _value_extraInitializers);
+                __esDecorate(this, null, _disabled_decorators, { kind: "accessor", name: "disabled", static: false, private: false, access: { has: obj => "disabled" in obj, get: obj => obj.disabled, set: (obj, value) => { obj.disabled = value; } }, metadata: _metadata }, _disabled_initializers, _disabled_extraInitializers);
+                __esDecorate(this, null, _required_decorators, { kind: "accessor", name: "required", static: false, private: false, access: { has: obj => "required" in obj, get: obj => obj.required, set: (obj, value) => { obj.required = value; } }, metadata: _metadata }, _required_initializers, _required_extraInitializers);
+                __esDecorate(this, null, _helper_decorators, { kind: "accessor", name: "helper", static: false, private: false, access: { has: obj => "helper" in obj, get: obj => obj.helper, set: (obj, value) => { obj.helper = value; } }, metadata: _metadata }, _helper_initializers, _helper_extraInitializers);
+                __esDecorate(this, _private__legend_descriptor = { get: __setFunctionName(function () { return this.#_legend_accessor_storage; }, "#_legend", "get"), set: __setFunctionName(function (value) { this.#_legend_accessor_storage = value; }, "#_legend", "set") }, _private__legend_decorators, { kind: "accessor", name: "#_legend", static: false, private: true, access: { has: obj => #_legend in obj, get: obj => obj.#_legend, set: (obj, value) => { obj.#_legend = value; } }, metadata: _metadata }, _private__legend_initializers, _private__legend_extraInitializers);
+                __esDecorate(this, _private__hint_descriptor = { get: __setFunctionName(function () { return this.#_hint_accessor_storage; }, "#_hint", "get"), set: __setFunctionName(function (value) { this.#_hint_accessor_storage = value; }, "#_hint", "set") }, _private__hint_decorators, { kind: "accessor", name: "#_hint", static: false, private: true, access: { has: obj => #_hint in obj, get: obj => obj.#_hint, set: (obj, value) => { obj.#_hint = value; } }, metadata: _metadata }, _private__hint_initializers, _private__hint_extraInitializers);
+                __esDecorate(this, null, _oncheckedchange_decorators, { kind: "accessor", name: "oncheckedchange", static: false, private: false, access: { has: obj => "oncheckedchange" in obj, get: obj => obj.oncheckedchange, set: (obj, value) => { obj.oncheckedchange = value; } }, metadata: _metadata }, _oncheckedchange_initializers, _oncheckedchange_extraInitializers);
+                __esDecorate(this, _private__checkValidity_descriptor = { value: __setFunctionName(function () {
+                        return this.#_ui.input.checkValidity();
+                    }, "#_checkValidity") }, _private__checkValidity_decorators, { kind: "method", name: "#_checkValidity", static: false, private: true, access: { has: obj => #_checkValidity in obj, get: obj => obj.#_checkValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__reportValidity_descriptor = { value: __setFunctionName(function () {
+                        return this.#_ui.input.reportValidity();
+                    }, "#_reportValidity") }, _private__reportValidity_decorators, { kind: "method", name: "#_reportValidity", static: false, private: true, access: { has: obj => #_reportValidity in obj, get: obj => obj.#_reportValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__change_descriptor = { value: __setFunctionName(function (event) {
+                        this.checked = this.#_ui.input.checked;
+                        return { inner: event, caller: this };
+                    }, "#_change") }, _private__change_decorators, { kind: "method", name: "#_change", static: false, private: true, access: { has: obj => #_change in obj, get: obj => obj.#_change }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setText_descriptor = { value: __setFunctionName(function () {
+                        if (this.#_ui.validityText.textContent !== this.#_ui.input.validationMessage)
+                            this.#_ui.validityText.textContent = this.#_ui.input.validationMessage;
+                        return null;
+                    }, "#_setText") }, _private__setText_decorators, { kind: "method", name: "#_setText", static: false, private: true, access: { has: obj => #_setText in obj, get: obj => obj.#_setText }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setInternalError_descriptor = { value: __setFunctionName(function () {
+                        if (!this.checkValidity()) {
+                            this._p_internal.setValidity(this.#_ui.input.validity, this.#_ui.input.validationMessage, this.#_ui.input);
+                        }
+                        return null;
+                    }, "#_setInternalError") }, _private__setInternalError_decorators, { kind: "method", name: "#_setInternalError", static: false, private: true, access: { has: obj => #_setInternalError in obj, get: obj => obj.#_setInternalError }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setValidity_descriptor = { value: __setFunctionName(function () {
+                        if (this.checkValidity()) {
+                            this._p_internal.setValidity({});
+                        }
+                        return null;
+                    }, "#_setValidity") }, _private__setValidity_decorators, { kind: "method", name: "#_setValidity", static: false, private: true, access: { has: obj => #_setValidity in obj, get: obj => obj.#_setValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _staticExtraInitializers);
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            //#region Private Fields
+            /**
+             * État initial du checkbox lors du chargement.
+             *
+             * @remarks
+             * Stocké lors du préchargement pour pouvoir restaurer l'état initial
+             * lors d'un reset du formulaire via {@link formResetCallback}.
+             *
+             * @internal
+             */
+            #_initState = __runInitializers(this, _instanceExtraInitializers);
+            #_ui_accessor_storage = __runInitializers(this, _private__ui_initializers, void 0);
+            /**
+             * Références aux éléments du DOM interne.
+             *
+             * @remarks
+             * Injecté automatiquement par le décorateur {@link UI}.
+             * Fournit un accès typé à l'input checkbox natif, aux slots de contenu
+             * et aux éléments d'état de validation.
+             *
+             * @internal
+             */
+            get #_ui() { return _private__ui_descriptor.get.call(this); }
+            set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
+            #checked_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _checked_initializers, false));
+            //#endregion Private Fields
+            //#region Public Fields
+            /**
+             * Indique si le checkbox est coché.
+             *
+             * @remarks
+             * Contrôle l'état de sélection du checkbox.
+             *
+             * @defaultValue `false`
+             */
+            get checked() { return this.#checked_accessor_storage; }
+            set checked(value) { this.#checked_accessor_storage = value; }
+            #name_accessor_storage = (__runInitializers(this, _checked_extraInitializers), __runInitializers(this, _name_initializers, undefined));
+            /**
+             * Le nom du checkbox pour les formulaires.
+             *
+             * @remarks
+             * Permet d'identifier le champ lors de la soumission du formulaire.
+             *
+             * @defaultValue `undefined`
+             */
+            get name() { return this.#name_accessor_storage; }
+            set name(value) { this.#name_accessor_storage = value; }
+            #value_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _value_initializers, 'on'));
+            /**
+             * La valeur associée au checkbox.
+             *
+             * @remarks
+             * Cette valeur est envoyée lors de la soumission du formulaire si le checkbox est coché.
+             *
+             * @defaultValue `'on'`
+             */
+            get value() { return this.#value_accessor_storage; }
+            set value(value) { this.#value_accessor_storage = value; }
+            #disabled_accessor_storage = (__runInitializers(this, _value_extraInitializers), __runInitializers(this, _disabled_initializers, false));
+            /**
+             * Indique si le checkbox est désactivé.
+             *
+             * @remarks
+             * Un checkbox désactivé ne peut pas être sélectionné ni recevoir le focus.
+             *
+             * @defaultValue `false`
+             */
+            get disabled() { return this.#disabled_accessor_storage; }
+            set disabled(value) { this.#disabled_accessor_storage = value; }
+            #required_accessor_storage = (__runInitializers(this, _disabled_extraInitializers), __runInitializers(this, _required_initializers, false));
+            /**
+             * Indique si le checkbox est obligatoire.
+             *
+             * @remarks
+             * Un checkbox obligatoire doit être coché pour que le formulaire soit valide.
+             *
+             * @defaultValue `false`
+             */
+            get required() { return this.#required_accessor_storage; }
+            set required(value) { this.#required_accessor_storage = value; }
+            #helper_accessor_storage = (__runInitializers(this, _required_extraInitializers), __runInitializers(this, _helper_initializers, false));
+            /**
+             * Active le mode d'aide visuelle.
+             *
+             * @remarks
+             * Lorsque activé, ajoute l'état `helper` au composant pour un rendu visuel spécifique.
+             *
+             * @defaultValue `false`
+             */
+            get helper() { return this.#helper_accessor_storage; }
+            set helper(value) { this.#helper_accessor_storage = value; }
+            #_legend_accessor_storage = (__runInitializers(this, _helper_extraInitializers), __runInitializers(this, _private__legend_initializers, undefined));
+            /**
+             * Texte de la légende principale du checkbox.
+             *
+             * @remarks
+             * Stocke le contenu textuel provenant de l'attribut `data-legend`.
+             * Utilisé pour initialiser le slot de légende si défini.
+             *
+             * @defaultValue `undefined`
+             * @internal
+             */
+            get #_legend() { return _private__legend_descriptor.get.call(this); }
+            set #_legend(value) { return _private__legend_descriptor.set.call(this, value); }
+            #_hint_accessor_storage = (__runInitializers(this, _private__legend_extraInitializers), __runInitializers(this, _private__hint_initializers, undefined));
+            /**
+             * Texte de l'indice/aide du checkbox.
+             *
+             * @remarks
+             * Stocke le contenu textuel provenant de l'attribut `data-hint`.
+             * Utilisé pour initialiser le slot d'indice si défini.
+             *
+             * @defaultValue `undefined`
+             * @internal
+             */
+            get #_hint() { return _private__hint_descriptor.get.call(this); }
+            set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
+            #oncheckedchange_accessor_storage = (__runInitializers(this, _private__hint_extraInitializers), __runInitializers(this, _oncheckedchange_initializers, void 0));
+            /**
+             * Événement personnalisé déclenché lors du changement d'état coché.
+             *
+             * @remarks
+             * Initialisé par {@link OnCheckedChangeInitializer} via le décorateur {@link Listener}.
+             * Permet de s'abonner aux changements d'état du checkbox.
+             */
+            get oncheckedchange() { return this.#oncheckedchange_accessor_storage; }
+            set oncheckedchange(value) { this.#oncheckedchange_accessor_storage = value; }
+            //#endregion Public Fields
+            //#region Lifecycle
+            /**
+             * Constructeur du composant HTMLBnumCheckbox.
+             *
+             * @remarks
+             * Initialise l'instance du composant en appelant le constructeur parent.
+             */
+            constructor() {
+                super();
+                __runInitializers(this, _oncheckedchange_extraInitializers);
+            }
+            /**
+             * Précharge l'état initial du checkbox.
+             *
+             * @remarks
+             * Sauvegarde l'état coché initial pour permettre la restauration
+             * lors d'un reset de formulaire.
+             *
+             * @protected
+             * @override
+             */
+            _p_preload() {
+                this.#_initState = !!(this.checked || false);
+            }
+            /**
+             * Attache le composant au DOM et initialise son comportement.
+             *
+             * @remarks
+             * Initialise les données des slots, synchronise les attributs avec l'input natif,
+             * vérifie la présence d'un label et gère l'état d'erreur initial.
+             * Ajoute l'état `helper` si l'attribut correspondant est défini.
+             *
+             * @protected
+             * @override
+             */
+            _p_attach() {
+                this.#_init().#_sync().#_checkLabel().#_ifOnErrorSet();
+                if (this.helper)
+                    this._p_addState(ATTRIBUTE_HELPER);
+            }
+            /**
+             * Gère la mise à jour d'un attribut observé.
+             *
+             * @param name - Le nom de l'attribut modifié
+             * @param oldVal - L'ancienne valeur de l'attribut
+             * @param newVal - La nouvelle valeur de l'attribut
+             * @returns `void` ou `'break'` pour interrompre le traitement
+             *
+             * @remarks
+             * Cette méthode est appelée automatiquement lorsqu'un attribut observé change.
+             * Elle traite spécifiquement les attributs `checked` et `helper`,
+             * et délègue les autres attributs à l'input natif.
+             *
+             * @protected
+             * @override
+             */
+            _p_update(name, oldVal, newVal) {
+                if (newVal === EMPTY_STRING)
+                    newVal = ARIA_TRUE;
+                if (oldVal === newVal)
+                    return;
+                switch (name) {
+                    case ATTRIBUTE_CHECKED$1:
+                        if (this.#_ui.input.checked !== this.checked) {
+                            this.#_ui.input.checked = this.checked;
+                            this.#_ui.input.setAttribute(ARIA_CHECKED, String(this.checked));
+                        }
+                        break;
+                    case ATTRIBUTE_HELPER:
+                        if (newVal)
+                            this._p_addState(ATTRIBUTE_HELPER);
+                        else
+                            this._p_removeState(ATTRIBUTE_HELPER);
+                        break;
+                    default:
+                        if (newVal)
+                            this.#_ui.input.setAttribute(name, newVal);
+                        else
+                            this.#_ui.input.removeAttribute(name);
+                        break;
+                }
+            }
+            /**
+             * Effectue les opérations post-flush du composant.
+             *
+             * @remarks
+             * Vérifie l'état d'erreur et resynchronise les attributs après un flush.
+             *
+             * @protected
+             * @override
+             */
+            _p_postFlush() {
+                this.#_ifOnErrorSet().#_sync();
+            }
+            /**
+             * Callback de réinitialisation du formulaire.
+             *
+             * @remarks
+             * Restaure l'état coché initial du checkbox lorsque le formulaire est réinitialisé.
+             */
+            formResetCallback() {
+                this.checked = this.#_initState;
+            }
+            /**
+             * Active ou désactive le champ selon l'état du fieldset parent.
+             *
+             * @param disabled - `true` pour désactiver, `false` pour activer
+             */
+            formDisabledCallback(disabled) {
+                this.disabled = disabled;
+            }
+            /**
+             * Met à jour l'état coché du checkbox et déclenche l'événement de changement.
+             *
+             * @param checked - L'état coché à définir
+             *
+             * @remarks
+             * Cette méthode est utilisée en interne pour mettre à jour l'état coché
+             * et déclencher l'événement de changement correspondant.
+             */
+            updateCheckedAndFire(checked) {
+                this.checked = checked;
+                this.#_change(new Event('change'));
+            }
+            //#endregion Lifecycle
+            //#region Public Methods
+            /**
+             * Vérifie la validité du checkbox sans afficher de message.
+             *
+             * @returns `true` si le checkbox est valide, `false` sinon
+             *
+             * @remarks
+             * Délègue la vérification à l'input natif sous-jacent.
+             * En cas d'erreur, retourne `true` par défaut.
+             */
+            checkValidity() {
+                return this.#_checkValidity().unwrapOr(true);
+            }
+            /**
+             * Vérifie la validité du checkbox et affiche le message de validation.
+             *
+             * @returns `true` si le checkbox est valide, `false` sinon
+             *
+             * @remarks
+             * Délègue la vérification à l'input natif sous-jacent et déclenche
+             * l'affichage du message de validation natif si invalide.
+             * En cas d'erreur, retourne `true` par défaut.
+             */
+            reportValidity() {
+                return this.#_reportValidity().unwrapOr(true);
+            }
+            //#endregion Public Methods
+            //#region Private Methods
+            /**
+             * Vérifie la validité de l'input natif sans rapport.
+             *
+             * @returns Un {@link Result} contenant le résultat de la vérification
+             *
+             * @private
+             */
+            get #_checkValidity() { return _private__checkValidity_descriptor.value; }
+            /**
+             * Vérifie la validité de l'input natif avec rapport.
+             *
+             * @returns Un {@link Result} contenant le résultat de la vérification
+             *
+             * @private
+             */
+            get #_reportValidity() { return _private__reportValidity_descriptor.value; }
+            /**
+             * Initialise les données internes du composant.
+             *
+             * @returns L'instance courante pour chaînage de méthodes
+             *
+             * @remarks
+             * Initialise les données des slots de légende et d'indice,
+             * puis configure les écouteurs d'événements.
+             *
+             * @private
+             */
+            #_init() {
+                return this.#_initDataLegend().#_initDataHint().#_setListeners();
+            }
+            /**
+             * Initialise le slot de légende avec la donnée correspondante.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @private
+             */
+            #_initDataLegend() {
+                return this.#_initData(this.#_legend, this.#_ui.slotLegend);
+            }
+            /**
+             * Initialise le slot d'indice avec la donnée correspondante.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @private
+             */
+            #_initDataHint() {
+                return this.#_initData(this.#_hint, this.#_ui.slotHint);
+            }
+            /**
+             * Initialise un slot avec une donnée textuelle.
+             *
+             * @param data - La donnée textuelle à insérer dans le slot
+             * @param slot - Le slot cible dans lequel insérer la donnée
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * N'affecte le slot que si la donnée est définie et non vide.
+             *
+             * @private
+             */
+            #_initData(data, slot) {
+                if (data)
+                    slot.textContent = data;
+                return this;
+            }
+            /**
+             * Configure tous les écouteurs d'événements du composant.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Actuellement configure uniquement l'écouteur de changement de l'input interne.
+             *
+             * @private
+             */
+            #_setListeners() {
+                return this.#_listenChange();
+            }
+            /**
+             * Configure l'écouteur d'événement pour les changements de l'input interne.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Écoute l'événement `change` de l'input natif et déclenche
+             * la méthode {@link #_change} pour propager le changement.
+             *
+             * @private
+             */
+            #_listenChange() {
+                this.#_ui.input.addEventListener(EVENT_CHANGE$3, e => {
+                    this.#_change(e);
+                });
+                return this;
+            }
+            /**
+             * Traite le changement d'état du checkbox et déclenche l'événement personnalisé.
+             *
+             * @param event - L'événement natif de changement
+             * @returns Les détails de l'événement contenant la référence à l'instance
+             *
+             * @remarks
+             * Met à jour la propriété `checked` à partir de l'input natif,
+             * puis retourne les détails nécessaires au décorateur {@link Fire}
+             * pour dispatcher l'événement `change`.
+             *
+             * @fires CustomEvent<BnumCheckBoxDetail>
+             * @private
+             */
+            get #_change() { return _private__change_descriptor.value; }
+            /**
+             * Vérifie et applique l'état d'erreur si nécessaire.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Si la validation échoue, applique l'état d'erreur via {@link #_setOnError}.
+             * Si la validation réussit et que l'état d'erreur est actif,
+             * le supprime et réinitialise la validité.
+             *
+             * @private
+             */
+            #_ifOnErrorSet() {
+                if (!this.checkValidity()) {
+                    this.#_setOnError();
+                }
+                else if (this._p_hasState(STATE_ERROR)) {
+                    this._p_removeStates([STATE_STATE, STATE_ERROR]).#_setValidity();
+                    this.#_ui.input.removeAttribute(ARIA_INVALID);
+                }
+                return this;
+            }
+            /**
+             * Applique l'état d'erreur au composant.
+             *
+             * @remarks
+             * Configure l'icône d'erreur, met à jour le texte de validité,
+             * ajoute les états internes `state` et `error`, et positionne
+             * l'attribut ARIA `aria-invalid` à `true`.
+             *
+             * Si le texte de validation natif n'est pas disponible, utilise
+             * le message par défaut {@link DEFAULT_VALIDITY_MESSAGE}.
+             *
+             * @private
+             */
+            #_setOnError() {
+                if (this.#_ui.icon.icon !== BnumCheckBoxIcon.ERROR)
+                    this.#_ui.icon.icon = BnumCheckBoxIcon.ERROR;
+                this.#_setText()
+                    .tapError(() => {
+                    this.#_ui.validityText.textContent = DEFAULT_VALIDITY_MESSAGE;
+                })
+                    .andThen(() => this.#_setInternalError());
+                this._p_addStates(STATE_STATE, STATE_ERROR);
+                this.#_ui.input.setAttribute(ARIA_INVALID, ARIA_TRUE);
+            }
+            /**
+             * Met à jour le texte de validité à partir du message natif de l'input.
+             *
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Ne met à jour le texte que si il diffère du message de validation courant.
+             *
+             * @private
+             */
+            get #_setText() { return _private__setText_descriptor.value; }
+            /**
+             * Propage l'état de validité de l'input natif vers les internals du composant.
+             *
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Utilise l'API `ElementInternals.setValidity` pour synchroniser
+             * la validité du composant avec celle de l'input natif sous-jacent.
+             *
+             * @private
+             */
+            get #_setInternalError() { return _private__setInternalError_descriptor.value; }
+            /**
+             * Réinitialise la validité du composant.
+             *
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Supprime l'état d'erreur des internals lorsque le checkbox redevient valide.
+             *
+             * @private
+             */
+            get #_setValidity() { return _private__setValidity_descriptor.value; }
+            /**
+             * Synchronise les attributs entre l'élément hôte et l'input interne.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Parcourt tous les {@link SYNCED_ATTRIBUTES} et applique leurs valeurs à l'input.
+             * Cas particulier : l'attribut `checked` est traité en tant que propriété booléenne.
+             * Après la synchronisation des attributs, met à jour les attributs ARIA.
+             *
+             * @private
+             */
+            #_sync() {
+                for (const attr of SYNCED_ATTRIBUTES$2) {
+                    if (attr === ATTRIBUTE_CHECKED$1) {
+                        this.#_ui.input.checked = this.checked;
+                    }
+                    else {
+                        if (this.hasAttribute(attr)) {
+                            this.#_ui.input.setAttribute(attr, this.getAttribute(attr));
+                        }
+                        else
+                            this.#_ui.input.removeAttribute(attr);
+                    }
+                }
+                this.#_syncAria();
+                return this;
+            }
+            /**
+             * Synchronise les attributs ARIA du composant avec l'input interne.
+             *
+             * @remarks
+             * Met à jour les attributs `aria-checked`, `aria-required`, `aria-disabled`
+             * et `aria-describedby` en fonction de l'état courant du composant.
+             *
+             * L'attribut `aria-describedby` est composé dynamiquement à partir
+             * des éléments d'aide et de validité présents.
+             *
+             * @private
+             */
+            #_syncAria() {
+                const input = this.#_ui.input;
+                input.setAttribute(ARIA_CHECKED, String(this.checked));
+                if (this.required)
+                    input.setAttribute(ARIA_REQUIRED, ARIA_TRUE);
+                else
+                    input.removeAttribute(ARIA_REQUIRED);
+                if (this.disabled)
+                    input.setAttribute(ARIA_DISABLED, ARIA_TRUE);
+                else
+                    input.removeAttribute(ARIA_DISABLED);
+                const descriptions = [];
+                if (this.#_ui.slotHint.assignedNodes().length > 0)
+                    descriptions.push(ID_HINT$1);
+                if (this.#_ui.validityText.textContent)
+                    descriptions.push(ID_VALIDITY_TEXT);
+                if (descriptions.length > 0)
+                    input.setAttribute(ARIA_DESCRIBEDBY, descriptions.join(' '));
+                else
+                    input.removeAttribute(ARIA_DESCRIBEDBY);
+            }
+            /**
+             * Vérifie la présence d'un label accessible et affiche un avertissement sinon.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Vérifie si une légende ou un indice est disponible pour le composant.
+             * Si aucun texte accessible n'est trouvé, émet un avertissement dans la console.
+             *
+             * @private
+             */
+            #_checkLabel() {
+                const hasLabel = this.#_verifyLabel();
+                if (!hasLabel) {
+                    Log.warn(LOG_TAG, WARN_NO_LABEL);
+                }
+                return this;
+            }
+            /**
+             * Vérifie si au moins une source de label est disponible.
+             *
+             * @returns `true` si une légende ou un indice existe, `false` sinon
+             *
+             * @private
+             */
+            #_verifyLabel() {
+                return this.#_verifyLegend() || this.#_verifyHint();
+            }
+            /**
+             * Vérifie la présence d'une légende.
+             *
+             * @returns `true` si une légende est définie ou si des éléments enfants existent
+             *
+             * @private
+             */
+            #_verifyLegend() {
+                return this.#_verifyData(this.#_legend);
+            }
+            /**
+             * Vérifie la présence d'un indice.
+             *
+             * @returns `true` si un indice est défini ou si des éléments slottés existent
+             *
+             * @private
+             */
+            #_verifyHint() {
+                return this.#_verifyData(this.#_hint, ID_HINT$1);
+            }
+            /**
+             * Vérifie la disponibilité d'une donnée ou d'éléments enfants associés.
+             *
+             * @param data - La donnée textuelle à vérifier
+             * @param slotName - Le nom du slot à inspecter (null pour le slot par défaut)
+             * @returns `true` si la donnée est définie ou si des éléments enfants existent
+             *
+             * @private
+             */
+            #_verifyData(data, slotName = null) {
+                const hasData = !!data;
+                const hasElements = this.#_verifyElements(slotName);
+                return hasData || hasElements;
+            }
+            /**
+             * Vérifie la présence d'éléments enfants dans un slot donné.
+             *
+             * @param slotName - Le nom du slot à inspecter (null pour les enfants sans slot)
+             * @returns `true` si au moins un élément est trouvé
+             *
+             * @private
+             */
+            #_verifyElements(slotName) {
+                const iterator = this.#_getVerifyElements(slotName);
+                return !iterator.next().done;
+            }
+            /**
+             * Générateur produisant les éléments enfants d'un slot donné.
+             *
+             * @param slotName - Le nom du slot à inspecter (null pour les enfants sans slot)
+             * @yields Les éléments enfants correspondant au critère de slot
+             *
+             * @remarks
+             * Si un nom de slot est fourni, retourne les éléments ayant l'attribut `slot` correspondant.
+             * Sinon, retourne les éléments enfants sans attribut `slot` et les nœuds texte non vides.
+             *
+             * @private
+             */
+            *#_getVerifyElements(slotName) {
+                if (slotName)
+                    yield* Array.from(this.querySelectorAll(`[slot="${slotName}"]`));
+                else {
+                    const nodes = [...Array.from(this.childNodes)];
+                    for (const node of nodes) {
+                        if (node instanceof HTMLElement) {
+                            if (!node.hasAttribute('slot'))
+                                yield node;
+                        }
+                        else if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
+                            yield node;
+                    }
+                }
+            }
+            //#endregion Private Methods
+            //#region Static Methods
+            /**
+             * Retourne la liste des attributs observés par le composant.
+             *
+             * @returns Un tableau contenant tous les noms d'attributs observés
+             *
+             * @remarks
+             * Combine les attributs observés du parent avec les {@link SYNCED_ATTRIBUTES}
+             * et l'attribut `helper` spécifiques à ce composant.
+             * Les changements de ces attributs déclencheront {@link _p_update}.
+             *
+             * @protected
+             * @static
+             * @override
+             * @deprecated Utilisez le décorateur {@link Observe} du commit 3e38db0162eef596874dbe32490d9e96b09fb1c0
+             * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
+             */
+            static _p_observedAttributes() {
+                return [
+                    ...super._p_observedAttributes(),
+                    ...SYNCED_ATTRIBUTES$2,
+                    ATTRIBUTE_HELPER,
+                ];
+            }
+            /**
+             * Indique que ce composant peut être associé à un formulaire.
+             *
+             * @remarks
+             * Permet au composant de participer au cycle de vie des formulaires HTML,
+             * notamment la soumission, la validation et la réinitialisation.
+             *
+             * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals#instance_properties | ElementInternals}
+             */
+            static get formAssociated() {
+                return true;
+            }
+        });
+        return _classThis;
+    })();
+
     /**
      * Bouton Bnum de type "Danger".
      *
@@ -4316,35 +6640,6 @@ var Bnum = (function (exports) {
         });
         return _classThis;
     })();
-
-    function NonStd(reason, fatal = false) {
-        // On accepte 'any' pour la value (car ça peut être une classe, une fonction, undefined pour un champ...)
-        // On utilise notre type GenericContext
-        return function (value, context) {
-            // On construit un message propre selon le type (classe, méthode, field...)
-            const typeLabel = {
-                class: 'La classe',
-                method: 'La méthode',
-                getter: 'Le getter',
-                setter: 'Le setter',
-                field: 'Le champ',
-                accessor: 'L\'accesseur',
-            }[context.kind] || 'L\'élément';
-            const name = String(context.name);
-            const message = `${typeLabel} '${name}' est non standard${reason ? ` : ${reason}` : ''}.`;
-            // addInitializer fonctionne partout !
-            // - Pour une classe : s'exécute à la définition de la classe.
-            // - Pour un membre (méthode/champ) : s'exécute à la création de l'instance.
-            context.addInitializer(function () {
-                if (fatal) {
-                    throw new Error(message);
-                }
-                else {
-                    Log.warn(name, message);
-                }
-            });
-        };
-    }
 
     var BnumDateLocale;
     (function (BnumDateLocale) {
@@ -5006,56 +7301,10 @@ var Bnum = (function (exports) {
         return HTMLBnumDate = _classThis;
     })();
 
-    /**
-     * Composant Web Component utilitaire "Fragment".
-     * * Ce composant agit comme un conteneur logique pour regrouper des éléments du DOM
-     * sans introduire de boîte de rendu visuelle supplémentaire (via `display: contents` généralement défini dans le style).
-     *
-     * @remarks
-     * Il permet de contourner la règle "un seul élément racine" ou de grouper des éléments
-     * pour des traitements logiques (boucles, conditions) sans briser le contexte de formatage
-     * CSS du parent (ex: `display: grid` ou `display: flex`).
-     *
-     * @example
-     * ```html
-     * <div class="grid-container">
-     * <bnum-fragment>
-     * <div class="cell-1">Item A</div>
-     * <div class="cell-2">Item B</div>
-     * </bnum-fragment>
-     * </div>
-     * ```
-     */
-    let HTMLBnumFragment = (() => {
-        let _classDecorators = [Define({ tag: TAG_FRAGMENT }), Light()];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = BnumElement;
-        (class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-            constructor() {
-                super();
-            }
-            connectedCallback() {
-                if (this.style.display !== 'contents')
-                    this.style.display = 'contents';
-            }
-        });
-        return _classThis;
-    })();
-
-    var css_248z$k = ":host{border-bottom:thin dotted;cursor:help}";
+    var css_248z$i = ":host{border-bottom:thin dotted;cursor:help}";
 
     // bnum-helper.ts
-    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$k);
+    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$i);
     /**
      * Constante représentant l'icône utilisée par défaut.
      */
@@ -5132,12 +7381,12 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
 
     //#region Global Constants
     const ID_ICON$1 = 'icon';
     //#endregion Global Constants
-    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$j);
+    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$h);
     const TEMPLATE$e = BnumElement.CreateTemplate(`
     <${HTMLBnumIcon.TAG} id="${ID_ICON$1}"><slot></slot></${HTMLBnumIcon.TAG}>
     `);
@@ -5336,1082 +7585,6 @@ var Bnum = (function (exports) {
             }
         });
         return _classThis;
-    })();
-
-    const EVENT_DEFAULT = 'default';
-
-    var css_248z$i = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
-
-    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host #state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) #state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) #state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) #hint-text__label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #hint-text__label,:host(:state(state):state(success)) #state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #hint-text__label,:host(:state(state):state(error)) #state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
-
-    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$i);
-    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$h);
-    //#region Global Constants
-    const ID_INPUT$1 = 'bnum-input';
-    const ID_HINT_TEXT = 'hint-text';
-    const ID_HINT_TEXT_LABEL = 'hint-text__label';
-    const ID_HINT_TEXT_HINT = 'hint-text__hint';
-    const ID_INPUT_ICON = 'input__icon';
-    const ID_INPUT_BUTTON = 'input__button';
-    const ID_STATE = 'state';
-    const ID_STATE_ICON = 'state__icon';
-    const ID_SUCCESS_TEXT = 'success-text';
-    const ID_ERROR_TEXT = 'error-text';
-    const CLASS_STATE_TEXT_SUCCESS = 'state__text success';
-    const CLASS_STATE_TEXT_ERROR = 'state__text error';
-    const DEFAULT_INPUT_TYPE = 'text';
-    const DEFAULT_BUTTON_VARIATION = exports.EButtonType.PRIMARY;
-    const SLOT_HINT = 'hint';
-    const SLOT_BUTTON = 'button';
-    const SLOT_SUCCESS = 'success';
-    const SLOT_ERROR = 'error';
-    const TEXT_VALID_INPUT = BnumConfig.Get('local_keys')?.valid_input || 'Le champs est valide !';
-    const TEXT_INVALID_INPUT = BnumConfig.Get('local_keys')?.invalid_input || 'Le champs est invalide !';
-    //#endregion Global Constants
-    //#region Template
-    // Utilisation des constantes dans le template
-    const BASE_TEMPLATE = `
-  <label id="${ID_HINT_TEXT}" class="label-container" for="${ID_INPUT$1}">
-    <span id="${ID_HINT_TEXT_LABEL}" class="label-container--label">
-      <slot></slot>
-    </span>
-    <span id="${ID_HINT_TEXT_HINT}" class="label-container--hint">
-      <slot name="${SLOT_HINT}"></slot>
-    </span>
-  </label>
-  <div class="container">
-    <div class="addons">
-      <div class="addons__inner">
-        <!-- {{addoninner}} -->
-        <${HTMLBnumIcon.TAG} id="${ID_INPUT_ICON}"></${HTMLBnumIcon.TAG}>
-          <input id="${ID_INPUT$1}" class="input-like" type="${DEFAULT_INPUT_TYPE}" />
-        </div>
-        <${HTMLBnumButton.TAG} id="${ID_INPUT_BUTTON}" rounded data-variation="${DEFAULT_BUTTON_VARIATION}"><slot name="${SLOT_BUTTON}"></slot></${HTMLBnumButton.TAG}>
-    </div>
-    <span id="${ID_STATE}">
-        <${HTMLBnumIcon.TAG} id="${ID_STATE_ICON}"></${HTMLBnumIcon.TAG}>
-        <span id="${ID_SUCCESS_TEXT}" class="${CLASS_STATE_TEXT_SUCCESS}"><slot name="${SLOT_SUCCESS}">${TEXT_VALID_INPUT}</slot></span>
-        <span id="${ID_ERROR_TEXT}" class="${CLASS_STATE_TEXT_ERROR}"><slot name="${SLOT_ERROR}">${TEXT_INVALID_INPUT}</slot></span>
-    </span>
-  </div>
-    `;
-    //#endregion Template
-    /**
-     * Composant Input du design system Bnum.
-     * Permet de gérer un champ de saisie enrichi avec gestion d'états, d'icônes, de bouton et d'accessibilité.
-     *
-     * @structure Sans rien
-     * <bnum-input></bnum-input>
-     *
-     * @structure Avec une légende
-     * <bnum-input>Label du champ</bnum-input>
-     *
-     * @structure Avec une légende et un indice
-     * <bnum-input>
-     * Label du champ
-     * <span slot="hint">Indice d'utilisation</span>
-     * </bnum-input>
-     *
-     * @structure Avec un bouton
-     * <bnum-input button="true" button-icon="add">Label du champ
-     *   <span slot="button">Ajouter</span>
-     * </bnum-input>
-     *
-     * @structure En erreur
-     * <bnum-input pattern="^[a-zA-Z0-9]+$" data-value="@@@@@">Label du champ
-     * </bnum-input>
-     *
-     * @structure Avec un état de succès
-     * <bnum-input state="success">Label du champ
-     *   <span slot="success">Le champ est valide !</span>
-     * </bnum-input>
-     *
-     * @structure Avec une icône
-     * <bnum-input icon="search">Label du champ</bnum-input>
-     *
-     * @structure Avec un bouton avec icône seulement
-     * <bnum-input placeholder="LA LA !" button-icon="add">Label du champ
-     * </bnum-input>
-     *
-     * @structure Nombre
-     * <bnum-input type="number" data-value="42">Label du champ</bnum-input>
-     *
-     * @structure Désactivé
-     * <bnum-input disabled>
-     *   Label du champ
-     * </bnum-input>
-     *
-     * @structure Complet
-     * <bnum-input
-     *   data-value="Valeur initiale"
-     *   placeholder="Texte indicatif"
-     *   type="text"
-     *   state="error"
-     *   icon="search"
-     *   button="primary"
-     *   button-icon="send"
-     * >
-     *   Label du champ
-     *   <span slot="hint">Indice d'utilisation</span>
-     *   <span slot="success">Le champ est valide !</span>
-     *   <span slot="error">Le champ est invalide !</span>
-     *   <span slot="button">Envoyer</span>
-     * </bnum-input>
-     *
-     * @slot (defaut) - Contenu du label principal du champ.
-     * @slot hint - Contenu de l'indice d'utilisation (hint) du champ.
-     * @slot success - Contenu du message de succès du champ.
-     * @slot error - Contenu du message d'erreur du champ.
-     * @slot button - Contenu du bouton interne (si présent).
-     *
-     * @state success - État de succès.
-     * @state error - État d'erreur.
-     * @state disabled - État désactivé.
-     * @state icon - Présence d'une icône.
-     * @state button - Présence d'un bouton.
-     * @state obi - Bouton avec icône seulement (sans texte).
-     * @state state - Présence d'un état (success / error).
-     *
-     * @cssvar {#666} --bnum-input-hint-text-color - Couleur du texte du hint.
-     * @cssvar {#eee} --bnum-input-background-color - Couleur de fond de l'input.
-     * @cssvar {#666} --bnum-input-color - Couleur du texte de l'input.
-     * @cssvar {#3a3a3a} --bnum-input-line-color - Couleur de la ligne/bordure de l'input.
-     * @cssvar {#36b37e} --bnum-input-state-success-color - Couleur de l'état de succès.
-     * @cssvar {#de350b} --bnum-input-state-error-color - Couleur de l'état d'erreur.
-     * @cssvar {inset 0 -2px 0 0 #3a3a3a} --bnum-input-box-shadow - Ombre portée de l'input.
-     *
-     */
-    let HTMLBnumInput = (() => {
-        let _classDecorators = [Define()];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = BnumElementInternal;
-        let _instanceExtraInitializers = [];
-        let ___decorators;
-        let ___initializers = [];
-        let ___extraInitializers = [];
-        let __p_inputValueChangedCallback_decorators;
-        let _private__setFormValue_decorators;
-        let _private__setFormValue_descriptor;
-        let _private__internalSetValidity_decorators;
-        let _private__internalSetValidity_descriptor;
-        let _private__safeCheckValidity_decorators;
-        let _private__safeCheckValidity_descriptor;
-        let _private__dispatchEvent_decorators;
-        let _private__dispatchEvent_descriptor;
-        var HTMLBnumInput = class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                ___decorators = [Self];
-                __p_inputValueChangedCallback_decorators = [Risky()];
-                _private__setFormValue_decorators = [Risky()];
-                _private__internalSetValidity_decorators = [Risky()];
-                _private__safeCheckValidity_decorators = [Risky()];
-                _private__dispatchEvent_decorators = [Risky()];
-                __esDecorate(this, null, __p_inputValueChangedCallback_decorators, { kind: "method", name: "_p_inputValueChangedCallback", static: false, private: false, access: { has: obj => "_p_inputValueChangedCallback" in obj, get: obj => obj._p_inputValueChangedCallback }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__setFormValue_descriptor = { value: __setFunctionName(function (value) {
-                        this._p_internal.setFormValue(value);
-                        return ATresult.Ok();
-                    }, "#_setFormValue") }, _private__setFormValue_decorators, { kind: "method", name: "#_setFormValue", static: false, private: true, access: { has: obj => #_setFormValue in obj, get: obj => obj.#_setFormValue }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__internalSetValidity_descriptor = { value: __setFunctionName(function (flags, message, anchor) {
-                        return this._p_internal.setValidity(flags, message, anchor);
-                    }, "#_internalSetValidity") }, _private__internalSetValidity_decorators, { kind: "method", name: "#_internalSetValidity", static: false, private: true, access: { has: obj => #_internalSetValidity in obj, get: obj => obj.#_internalSetValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__safeCheckValidity_descriptor = { value: __setFunctionName(function () {
-                        return this.#_input.checkValidity();
-                    }, "#_safeCheckValidity") }, _private__safeCheckValidity_decorators, { kind: "method", name: "#_safeCheckValidity", static: false, private: true, access: { has: obj => #_safeCheckValidity in obj, get: obj => obj.#_safeCheckValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__dispatchEvent_descriptor = { value: __setFunctionName(function (e) {
-                        this.dispatchEvent(e);
-                        return ATresult.Ok();
-                    }, "#_dispatchEvent") }, _private__dispatchEvent_decorators, { kind: "method", name: "#_dispatchEvent", static: false, private: true, access: { has: obj => #_dispatchEvent in obj, get: obj => obj.#_dispatchEvent }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                HTMLBnumInput = _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            }
-            //#region Constants
-            /**
-             * Template de l'élément input.
-             * Dans la classe cette fois si pour éviter les problèmes de scope.
-             */
-            static TEMPLATE = _classThis.CreateTemplate();
-            /**
-             * Événement déclenché au clic sur le bouton interne.
-             *
-             * Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.
-             * @event bnum-input:button.click
-             * @detail MouseEvent
-             */
-            static EVENT_BUTTON_CLICK = 'bnum-input:button.click';
-            /**
-             * Événement déclenché à la saisie dans le champ.
-             * @event input
-             * @detail InputEvent
-             */
-            static EVENT_INPUT = 'input';
-            /**
-             * Événement déclenché au changement de valeur du champ.
-             * @event change
-             * @detail Event
-             */
-            static EVENT_CHANGE = 'change';
-            /**
-             * Attribut data-value du composant.
-             * @attr {string} (optional) (default: undefined) data-value - Valeur initiale du champ.
-             */
-            static ATTRIBUTE_DATA_VALUE = 'data-value';
-            /**
-             * @attr {string} (optional) (default: undefined) placeholder - Texte indicatif du champ.
-             */
-            static ATTRIBUTE_PLACEHOLDER = 'placeholder';
-            /**
-             * @attr {string} (optional) (default: 'text') type - Type de l'input (text, password, email, etc.)
-             */
-            static ATTRIBUTE_TYPE = 'type';
-            /**
-             * @attr {string} (optional) (default: undefined) disabled - Désactive le champ.
-             */
-            static ATTRIBUTE_DISABLED = 'disabled';
-            /**
-             * @attr {string} (optional) (default: undefined) state - État du champ (success, error, etc.).
-             */
-            static ATTRIBUTE_STATE = 'state';
-            /**
-             * @attr {string} (optional) (default: undefined) button - Présence d'un bouton interne (primary, secondary, danger, ...).
-             */
-            static ATTRIBUTE_BUTTON = 'button';
-            /**
-             * @attr {string} (optional) (default: undefined) button-icon - Icône du bouton interne.
-             */
-            static ATTRIBUTE_BUTTON_ICON = 'button-icon';
-            /**
-             * @attr {string} (optional) (default: undefined) icon - Icône à afficher dans le champ.
-             */
-            static ATTRIBUTE_ICON = 'icon';
-            /**
-             * @attr {string} (optional) (default: undefined) required - Champ requis.
-             */
-            static ATTRIBUTE_REQUIRED = 'required';
-            /**
-             * @attr {string} (optional) (default: undefined) readonly - Champ en lecture seule.
-             */
-            static ATTRIBUTE_READONLY = 'readonly';
-            /**
-             * @attr {string} (optional) (default: undefined) pattern - Expression régulière de validation.
-             */
-            static ATTRIBUTE_PATTERN = 'pattern';
-            /**
-             * @attr {string} (optional) (default: undefined) minlength - Longueur minimale du champ.
-             */
-            static ATTRIBUTE_MINLENGTH = 'minlength';
-            /**
-             * @attr {string} (optional) (default: undefined) maxlength - Longueur maximale du champ.
-             */
-            static ATTRIBUTE_MAXLENGTH = 'maxlength';
-            /**
-             * @attr {string} (optional) (default: undefined) autocomplete - Attribut autocomplete HTML.
-             */
-            static ATTRIBUTE_AUTOCOMPLETE = 'autocomplete';
-            /**
-             * @attr {string} (optional) (default: undefined) inputmode - Mode de saisie (mobile).
-             */
-            static ATTRIBUTE_INPUTMODE = 'inputmode';
-            /**
-             * @attr {string} (optional) (default: undefined) spellcheck - Correction orthographique.
-             */
-            static ATTRIBUTE_SPELLCHECK = 'spellcheck';
-            /**
-             * @attr {string} (optional) (default: undefined) ignorevalue - Attribut interne pour ignorer la synchronisation de valeur. Ne pas utiliser.
-             */
-            static ATTRIBUTE_IGNOREVALUE = 'ignorevalue';
-            /**
-             * @attr {string} (optional) (default: undefined) name - Nom du champ (attribut HTML name).
-             */
-            static ATTRIBUTE_NAME = 'name';
-            /** ID du label principal */
-            static ID_HINT_TEXT = ID_HINT_TEXT;
-            /** ID du label du champ */
-            static ID_HINT_TEXT_LABEL = ID_HINT_TEXT_LABEL;
-            /** ID du hint */
-            static ID_HINT_TEXT_HINT = ID_HINT_TEXT_HINT;
-            /** ID de l'input */
-            static ID_INPUT = ID_INPUT$1;
-            /** ID du bouton */
-            static ID_INPUT_BUTTON = ID_INPUT_BUTTON;
-            /** ID de l'icône d'état */
-            static ID_STATE_ICON = ID_STATE_ICON;
-            /** ID de l'icône d'input */
-            static ID_INPUT_ICON = ID_INPUT_ICON;
-            /** ID du texte de succès */
-            static ID_SUCCESS_TEXT = ID_SUCCESS_TEXT;
-            /** ID du texte d'erreur */
-            static ID_ERROR_TEXT = ID_ERROR_TEXT;
-            /** ID du conteneur d'état */
-            static ID_STATE = ID_STATE;
-            /** Classe CSS pour le texte de succès */
-            static CLASS_STATE_TEXT_SUCCESS = CLASS_STATE_TEXT_SUCCESS;
-            /** Classe CSS pour le texte d'erreur */
-            static CLASS_STATE_TEXT_ERROR = CLASS_STATE_TEXT_ERROR;
-            /**
-             * État de succès.
-             */
-            static STATE_SUCCESS = 'success';
-            /**
-             * État d'erreur.
-             */
-            static STATE_ERROR = 'error';
-            /**
-             * État désactivé.
-             */
-            static STATE_DISABLED = 'disabled';
-            /**
-             * État avec icône.
-             */
-            static STATE_ICON = 'icon';
-            /**
-             * État avec bouton.
-             */
-            static STATE_BUTTON = 'button';
-            /**
-             * État bouton avec icône seulement (sans texte).
-             *
-             * (obi = Only Button Icon)
-             */
-            static STATE_OBI = 'obi';
-            /**
-             * État avec état (success / error).
-             */
-            static STATE_STATE = 'state';
-            /**
-             * Icône affichée en cas de succès de validation.
-             */
-            static ICON_SUCCESS = 'check_circle';
-            /**
-             * Icône affichée en cas d'erreur de validation.
-             */
-            static ICON_ERROR = 'cancel';
-            /**
-             * Nom du slot pour le bouton interne.
-             */
-            static SLOT_BUTTON = 'button';
-            /**
-             * Nom du slot pour l'indice d'utilisation (hint).
-             */
-            static SLOT_HINT = 'hint';
-            /**
-             * Nom du slot pour le message de succès.
-             */
-            static SLOT_SUCCESS = 'success';
-            /**
-             * Nom du slot pour le message d'erreur.
-             */
-            static SLOT_ERROR = 'error';
-            /**
-             * Type d'input par défaut.
-             */
-            static DEFAULT_INPUT_TYPE = 'text';
-            /**
-             * Variation du bouton par défaut.
-             */
-            static DEFAULT_BUTTON_VARIATION = DEFAULT_BUTTON_VARIATION;
-            /**
-             * Texte affiché en cas de succès de validation.
-             */
-            static TEXT_VALID_INPUT = TEXT_VALID_INPUT;
-            /**
-             * Texte affiché en cas d'erreur de validation.
-             */
-            static TEXT_INVALID_INPUT = TEXT_INVALID_INPUT;
-            /**
-             * Texte affiché en cas d'erreur de champ.
-             */
-            static TEXT_ERROR_FIELD = BnumConfig.Get('local_keys')?.error_field ||
-                'Ce champ contient une erreur.';
-            static formAssociated = true;
-            //#endregion Constants
-            //#region Private fields
-            /**
-             * Icône d'état (success / error)
-             */
-            #_stateIcon = (__runInitializers(this, _instanceExtraInitializers), null);
-            /**
-             * Input HTML interne
-             */
-            #_input = null;
-            /**
-             * Bouton HTML interne
-             */
-            #_button = null;
-            /**
-             * Icône interne
-             */
-            #_icon = null;
-            /**
-             * Événement déclenché au clic sur le bouton (si présent)
-             */
-            #_onButtonClicked = null;
-            /**
-             * Valeur initiale (pour la réinitialisation du formulaire)
-             */
-            #_initValue = EMPTY_STRING;
-            //#endregion Private fields
-            //#region Getters/Setters
-            /** Référence à la classe HTMLBnumInput */
-            _ = __runInitializers(this, ___initializers, void 0);
-            /**
-             * Permet d'écouter le clic sur le bouton interne.
-             * @returns {JsEvent} Instance d'événement personnalisée.
-             */
-            get onButtonClicked() {
-                if (this.#_onButtonClicked === null) {
-                    this.#_onButtonClicked = new JsEvent();
-                    this.#_onButtonClicked.add(EVENT_DEFAULT, (clickEvent) => {
-                        this.trigger(this._.EVENT_BUTTON_CLICK, {
-                            innerEvent: clickEvent,
-                        });
-                    });
-                    this.#_initialiseButton();
-                }
-                return this.#_onButtonClicked;
-            }
-            // -- Formulaire --
-            /**
-             * Valeur courante du champ de saisie.
-             */
-            get value() {
-                return (this.#_input?.value ||
-                    this.getAttribute(this._.ATTRIBUTE_DATA_VALUE) ||
-                    EMPTY_STRING);
-            }
-            set value(val) {
-                if (this.#_input === null)
-                    this.setAttribute(this._.ATTRIBUTE_DATA_VALUE, val);
-                else {
-                    this.#_input.value = val;
-                    this.#_setFormValue(val);
-                }
-            }
-            /**
-             * Nom du champ (attribut HTML name).
-             */
-            get name() {
-                return this.getAttribute(this._.ATTRIBUTE_NAME) || EMPTY_STRING;
-            }
-            set name(val) {
-                this.setAttribute(this._.ATTRIBUTE_NAME, val);
-            }
-            //#endregion Getters/Setters
-            //#region Lifecycle
-            /**
-             * Constructeur du composant.
-             * Initialise la valeur initiale à partir de l'attribut data-value.
-             */
-            constructor() {
-                super();
-                __runInitializers(this, ___extraInitializers);
-                this.#_initValue =
-                    this.getAttribute(this._.ATTRIBUTE_DATA_VALUE) ?? EMPTY_STRING;
-            }
-            /**
-             * Attache un Shadow DOM personnalisé.
-             */
-            _p_attachCustomShadow() {
-                return this.attachShadow({ mode: 'open', delegatesFocus: true });
-            }
-            /**
-             * Récupère des stylesheet déjà construites pour le composant.
-             * @returns Liste de stylesheet
-             */
-            _p_getStylesheets() {
-                return [...super._p_getStylesheets(), INPUT_BASE_STYLE, STYLE$1];
-            }
-            /**
-             * Retourne le template HTML utilisé pour le composant.
-             */
-            _p_fromTemplate() {
-                return this._.TEMPLATE;
-            }
-            /**
-             * Construit le DOM interne et attache les écouteurs d'événements.
-             */
-            _p_buildDOM(container) {
-                this.#_input = container.querySelector(`#${this._.ID_INPUT}`);
-                this.#_button = container.querySelector(`#${this._.ID_INPUT_BUTTON}`);
-                this.#_stateIcon = container.querySelector(`#${this._.ID_STATE_ICON}`);
-                this.#_icon = container.querySelector(`#${this._.ID_INPUT_ICON}`);
-                this.#_input.addEventListener(this._.EVENT_INPUT, (e) => {
-                    this.#_inputValueChangedCallback(e);
-                });
-                this.#_input.addEventListener(this._.EVENT_CHANGE, (e) => {
-                    this.#_inputValueChangedCallback(e);
-                });
-                this.#_initialiseButton().#_update();
-                this.attr(this._.ATTRIBUTE_IGNOREVALUE, 'true').removeAttribute(this._.ATTRIBUTE_DATA_VALUE);
-            }
-            /**
-             * Met à jour le composant lors d'un changement d'attribut.
-             */
-            _p_update(name, oldVal, newVal) {
-                if (this.alreadyLoaded === false)
-                    return 'break';
-                if (newVal == oldVal)
-                    return;
-                switch (name) {
-                    case this._.ATTRIBUTE_DATA_VALUE:
-                        if (this.attr(this._.ATTRIBUTE_IGNOREVALUE) !== null) {
-                            this.removeAttribute(this._.ATTRIBUTE_IGNOREVALUE);
-                            break;
-                        }
-                        if (newVal !== null) {
-                            this.#_setFormValue(newVal);
-                            if (this.#_input)
-                                this.#_input.value = newVal;
-                            this.setAttribute(this._.ATTRIBUTE_IGNOREVALUE, 'true');
-                            this.removeAttribute(this._.ATTRIBUTE_DATA_VALUE);
-                        }
-                        break;
-                }
-            }
-            /**
-             * Appelé après le flush du DOM pour synchroniser l'état.
-             */
-            _p_postFlush() {
-                this.#_update();
-            }
-            //#endregion Lifecycle
-            //#region Public methods
-            // --- Formulaire --
-            /**
-             * Réinitialise la valeur du champ lors d'une remise à zéro du formulaire parent.
-             */
-            formResetCallback() {
-                this.value = this.#_initValue;
-            }
-            /**
-             * Active ou désactive le champ selon l'état du fieldset parent.
-             */
-            formDisabledCallback(disabled) {
-                if (disabled)
-                    this.setAttribute(this._.ATTRIBUTE_DISABLED, 'disabled');
-                this.#_sync();
-            }
-            // -- Helper --
-            /**
-             * Active le bouton interne avec texte, icône et variation éventuels.
-             * @param options Objet contenant le texte, l'icône et la variation du bouton.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            enableButton({ text = undefined, icon = undefined, variation = DEFAULT_BUTTON_VARIATION, } = {}) {
-                this.setAttribute(this._.ATTRIBUTE_BUTTON, variation);
-                if (text !== undefined) {
-                    this.querySelector(`slot[name="${this._.SLOT_BUTTON}"]`)?.remove?.();
-                    const span = this._p_createSpan({
-                        child: text,
-                        attributes: { slot: 'button' },
-                    });
-                    this.appendChild(span);
-                }
-                if (icon !== undefined) {
-                    this.setAttribute(this._.ATTRIBUTE_BUTTON_ICON, icon);
-                }
-                return this;
-            }
-            /**
-             * Active uniquement l'icône du bouton interne (sans texte).
-             * @param icon Nom de l'icône à afficher sur le bouton.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            enableButtonIconOnly(icon) {
-                this.querySelector(`slot[name="${this._.SLOT_BUTTON}"]`)?.remove?.();
-                this.removeAttribute(this._.ATTRIBUTE_BUTTON);
-                this.setAttribute(this._.ATTRIBUTE_BUTTON_ICON, icon);
-                return this;
-            }
-            /**
-             * Masque le bouton interne.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            hideButton() {
-                this.removeAttribute(this._.ATTRIBUTE_BUTTON);
-                this.removeAttribute(this._.ATTRIBUTE_BUTTON_ICON);
-                return this;
-            }
-            /**
-             * Définit l'état de succès avec un message optionnel.
-             * @param message Message de succès à afficher.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            setSuccessState(message) {
-                return this.#_setState(this._.SLOT_SUCCESS, message);
-            }
-            /**
-             * Définit l'état d'erreur avec un message optionnel.
-             * @param message Message d'erreur à afficher.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            setErrorState(message) {
-                return this.#_setState(this._.SLOT_ERROR, message);
-            }
-            /**
-             * Définit une icône à afficher dans le champ.
-             * @param icon Nom de l'icône à afficher.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            setIcon(icon) {
-                this.setAttribute(this._.ATTRIBUTE_ICON, icon);
-                return this;
-            }
-            /**
-             * Supprime l'icône affichée dans le champ.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            removeIcon() {
-                this.removeAttribute(this._.ATTRIBUTE_ICON);
-                return this;
-            }
-            /**
-             * Définit un indice d'utilisation (hint) pour le champ.
-             * @param hint Texte de l'indice à afficher.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            setHint(hint) {
-                this.removeHint();
-                const span = this._p_createSpan({
-                    child: hint,
-                    attributes: { slot: this._.SLOT_HINT },
-                });
-                this.appendChild(span);
-                return this;
-            }
-            /**
-             * Supprime l'indice d'utilisation (hint) du champ.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            removeHint() {
-                this.querySelector(`slot[name="${this._.SLOT_HINT}"]`)?.remove?.();
-                return this;
-            }
-            /**
-             * Définit le label principal du champ.
-             * @param label Texte ou élément HTML à utiliser comme label.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            setLabel(label) {
-                // On supprime tout ce qui n'a pas l'attribut slot
-                const nodes = this.childNodes.values();
-                for (const node of nodes) {
-                    if (node instanceof HTMLElement) {
-                        const element = node;
-                        if (!element.hasAttribute('slot'))
-                            this.removeChild(element);
-                    }
-                }
-                if (typeof label === 'string')
-                    this.appendChild(this._p_createTextNode(label));
-                else
-                    this.appendChild(label);
-                return this;
-            }
-            //#endregion Public methods
-            //#region Private methods
-            /**
-             * Met à jour l'état visuel et fonctionnel du composant selon ses attributs.
-             * @private
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_update() {
-                this._p_clearStates();
-                if (this.#_input?.value || false)
-                    this._p_addState('value');
-                const btnValue = this.attr(this._.ATTRIBUTE_BUTTON);
-                if (btnValue !== null) {
-                    this._p_addState(this._.STATE_BUTTON);
-                    switch (btnValue) {
-                        case exports.EButtonType.PRIMARY:
-                            this.#_button.variation = exports.EButtonType.PRIMARY;
-                            break;
-                        case exports.EButtonType.SECONDARY:
-                            this.#_button.variation = exports.EButtonType.SECONDARY;
-                            break;
-                        case exports.EButtonType.DANGER:
-                            this.#_button.variation = exports.EButtonType.DANGER;
-                            break;
-                    }
-                }
-                const button_icon = this.attr(this._.ATTRIBUTE_BUTTON_ICON);
-                if (button_icon !== null) {
-                    this.#_button.icon = button_icon;
-                    if (!this._p_hasState(this._.STATE_BUTTON))
-                        this._p_addStates(this._.STATE_BUTTON, this._.STATE_OBI);
-                    else if (btnValue === EMPTY_STRING)
-                        this._p_addState(this._.STATE_OBI);
-                }
-                const icon = this.attr(this._.ATTRIBUTE_ICON);
-                if (icon !== null) {
-                    this._p_addState(this._.STATE_ICON);
-                    this.#_icon.icon = icon;
-                }
-                if (this.attr(this._.ATTRIBUTE_DISABLED) !== null)
-                    this._p_addState(this._.STATE_DISABLED);
-                return this.#_updateState(this.attr(this._.ATTRIBUTE_STATE)).#_sync();
-            }
-            /**
-             * Synchronise les propriétés et attributs de l'input interne.
-             * Met à jour les propriétés HTML de l'input selon les attributs du composant.
-             * @private
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_sync() {
-                if (!this.#_input)
-                    return this;
-                const input = this.#_input;
-                // 1. Propriétés de base
-                input.value = this.value;
-                input.type =
-                    this.getAttribute(this._.ATTRIBUTE_TYPE) ||
-                        HTMLBnumInput.DEFAULT_INPUT_TYPE;
-                input.placeholder =
-                    this.getAttribute(this._.ATTRIBUTE_PLACEHOLDER) || EMPTY_STRING;
-                // 2. États Booléens (On utilise .disabled / .readOnly pour la réactivité JS)
-                input.disabled =
-                    this.hasAttribute(this._.ATTRIBUTE_DISABLED) ||
-                        this._p_hasState(this._.STATE_DISABLED);
-                input.readOnly = this.hasAttribute(this._.ATTRIBUTE_READONLY);
-                input.required = this.hasAttribute(this._.ATTRIBUTE_REQUIRED);
-                // 3. Validation & UX (On utilise setAttribute pour les attributs HTML5)
-                this.#_setFieldAttr(this._.ATTRIBUTE_PATTERN);
-                this.#_setFieldAttr(this._.ATTRIBUTE_MINLENGTH);
-                this.#_setFieldAttr(this._.ATTRIBUTE_MAXLENGTH);
-                this.#_setFieldAttr(this._.ATTRIBUTE_AUTOCOMPLETE);
-                this.#_setFieldAttr(this._.ATTRIBUTE_INPUTMODE);
-                this.#_setFieldAttr(this._.ATTRIBUTE_SPELLCHECK);
-                this.#_setFieldAttr('min');
-                this.#_setFieldAttr('max');
-                this.#_setFieldAttr('step');
-                return this.#_updateA11y();
-            }
-            /**
-             * Met à jour l'accessibilité (a11y) de l'input selon l'état.
-             * Met à jour les attributs ARIA et la validité de l'input.
-             * @private
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_updateA11y() {
-                if (!this.#_input)
-                    return this;
-                return this.#_setValidity();
-            }
-            /**
-             * Met à jour l'état visuel selon l'état passé en paramètre.
-             * @private
-             * @param state L'état à appliquer (success, error, etc.)
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_updateState(state) {
-                if (state !== null) {
-                    switch (state) {
-                        case this._.STATE_SUCCESS:
-                            this._p_addStates(this._.STATE_STATE, this._.STATE_SUCCESS);
-                            this.#_stateIcon.icon = this._.ICON_SUCCESS;
-                            break;
-                        case this._.STATE_ERROR:
-                            this._p_addStates(this._.STATE_STATE, this._.STATE_ERROR);
-                            this.#_stateIcon.icon = this._.ICON_ERROR;
-                            break;
-                    }
-                }
-                return this;
-            }
-            /**
-             * Définit l'état (succès ou erreur) et le message associé.
-             * @private
-             * @param state Type d'état (success ou error).
-             * @param message Message à afficher.
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_setState(state, message) {
-                this.setAttribute(this._.ATTRIBUTE_STATE, state);
-                if (message) {
-                    this.querySelector(`slot[name="${state}"]`)?.remove?.();
-                    const span = this._p_createSpan({
-                        child: message,
-                        attributes: { slot: state },
-                    });
-                    this.appendChild(span);
-                }
-                return this;
-            }
-            /**
-             * Met à jour la validité de l'input et les messages d'erreur/succès.
-             * Gère également les attributs ARIA liés à la validation.
-             * @private
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_setValidity() {
-                if (!this.#_input)
-                    return this;
-                const stateAttr = this.attr(this._.ATTRIBUTE_STATE);
-                const isManualError = stateAttr === this._.STATE_ERROR;
-                if (isManualError) {
-                    this.#_internalSetValidity({ customError: true }, this._.TEXT_ERROR_FIELD, this.#_input);
-                }
-                else {
-                    this.#_safeCheckValidity().match({
-                        Ok: (isValid) => {
-                            const isSuccess = isValid && this.#_input.validationMessage === EMPTY_STRING;
-                            if (isSuccess) {
-                                this.#_internalSetValidity({});
-                            }
-                            else {
-                                this.#_internalSetValidity(this.#_input.validity, this.#_input.validationMessage, this.#_input);
-                            }
-                            return void 0;
-                        },
-                        Err: () => this.#_internalSetValidity({}), // Fallback de sécurité
-                    });
-                }
-                return this.#_syncValidationUI(isManualError);
-            }
-            /**
-             * Gère l'interface utilisateur de validation (messages, icônes, ARIA).
-             * @param isManualError Si l'erreur est définie manuellement via l'attribut state.
-             * @returns Cette instance pour chaînage.
-             */
-            #_syncValidationUI(isManualError) {
-                const input = this.#_input;
-                const hasNativeError = input.validationMessage !== EMPTY_STRING;
-                const isError = isManualError || (hasNativeError && !input.validity.valid);
-                const isSuccess = !isManualError && hasNativeError && input.validity.valid;
-                const hasState = isError || isSuccess;
-                if (hasState) {
-                    this._p_addStates(this._.STATE_STATE, isSuccess ? this._.STATE_SUCCESS : this._.STATE_ERROR);
-                    const successText = this.#_input.validationMessage || this._.TEXT_VALID_INPUT;
-                    const errorText = this.#_input.validationMessage || this._.TEXT_INVALID_INPUT;
-                    const validationText = isSuccess ? successText : errorText;
-                    const slotTextId = isSuccess
-                        ? this._.ID_SUCCESS_TEXT
-                        : this._.ID_ERROR_TEXT;
-                    this.shadowRoot.querySelector(`#${slotTextId} slot`).innerText = validationText;
-                    input.setAttribute('aria-invalid', isError ? 'true' : 'false');
-                    const descriptions = [];
-                    if (isError)
-                        descriptions.push(this._.ID_ERROR_TEXT);
-                    if (isSuccess)
-                        descriptions.push(this._.ID_SUCCESS_TEXT);
-                    input.setAttribute('aria-describedby', descriptions.join(' '));
-                }
-                else {
-                    input.removeAttribute('aria-invalid');
-                    input.removeAttribute('aria-describedby');
-                }
-                const finalState = isError
-                    ? this._.STATE_ERROR
-                    : isSuccess
-                        ? this._.STATE_SUCCESS
-                        : null;
-                return this.#_updateState(finalState);
-            }
-            /**
-             * Initialise le bouton interne et son écouteur de clic.
-             * Ajoute un écouteur d'événement sur le bouton si nécessaire.
-             * @private
-             * @returns {this} L'instance courante pour chaînage.
-             */
-            #_initialiseButton() {
-                if (this.#_onButtonClicked !== null && this.#_button !== null) {
-                    this.#_button.addEventListener('click', (e) => {
-                        this.onButtonClicked.call(e);
-                    });
-                }
-                return this;
-            }
-            /**
-             * Callback appelé lors d'un changement de valeur de l'input.
-             * @private
-             * @param e Evénement de changement de valeur.
-             */
-            #_inputValueChangedCallback(e) {
-                this._p_inputValueChangedCallback(e);
-            }
-            /**
-             * Callback protégé appelé lors d'un changement de valeur de l'input.
-             * @protected
-             * @param e Evénement de changement de valeur.
-             * @returns Résultat de l'opération.
-             */
-            _p_inputValueChangedCallback(e) {
-                this.#_setFormValue(this.#_input.value);
-                this.#_update();
-                return this.#_dispatchEvent(e).tapError(() => {
-                    this.#_dispatchInputEventFallback(e);
-                });
-            }
-            /**
-             * Transfère un attribut du composant vers l'input interne si présent.
-             * @private
-             * @param attrName Nom de l'attribut à synchroniser.
-             */
-            #_setFieldAttr(attrName) {
-                const val = this.getAttribute(attrName);
-                if (val !== null) {
-                    this.#_input.setAttribute(attrName, val);
-                }
-                else {
-                    this.#_input.removeAttribute(attrName);
-                }
-            }
-            /**
-             * Définit la valeur du formulaire interne.
-             * @param value Valeur à définir.
-             * @returns Résultat de l'opération.
-             */
-            get #_setFormValue() { return _private__setFormValue_descriptor.value; }
-            /**
-             * Met à jour la validité interne de l'input.
-             * @param flags Drapeaux de validité.
-             * @param message Message de validation.
-             * @param anchor Ancre HTML pour le message.
-             * @returns Résultat de l'opération.
-             */
-            get #_internalSetValidity() { return _private__internalSetValidity_descriptor.value; }
-            /**
-             * Fait une vérification sécurisée de la validité de l'input.
-             * @returns Résultat de l'opération avec la validité.
-             */
-            get #_safeCheckValidity() { return _private__safeCheckValidity_descriptor.value; }
-            /**
-             * Effectue la dispatch de l'événement passé en paramètre.
-             * @param e Evénement à dispatcher.
-             * @returns Résultat de l'opération.
-             */
-            get #_dispatchEvent() { return _private__dispatchEvent_descriptor.value; }
-            /**
-             * Fallback pour la dispatch des événements input/change.
-             * @param e Evènement qui pose problème
-             */
-            #_dispatchInputEventFallback(e) {
-                this.dispatchEvent(e.type === 'input'
-                    ? new InputEvent('input', {
-                        data: this.value,
-                        inputType: this.attr('type') || 'text',
-                    })
-                    : new Event('change'));
-            }
-            //#endregion Private methods
-            //#region Static methods
-            /**
-             * @inheritdoc
-             */
-            static _p_observedAttributes() {
-                return [
-                    this.ATTRIBUTE_DATA_VALUE,
-                    this.ATTRIBUTE_PLACEHOLDER,
-                    this.ATTRIBUTE_TYPE,
-                    this.ATTRIBUTE_DISABLED,
-                    this.ATTRIBUTE_STATE,
-                    this.ATTRIBUTE_BUTTON,
-                    this.ATTRIBUTE_BUTTON_ICON,
-                    this.ATTRIBUTE_ICON,
-                    this.ATTRIBUTE_REQUIRED,
-                    this.ATTRIBUTE_READONLY,
-                    this.ATTRIBUTE_PATTERN,
-                    this.ATTRIBUTE_MINLENGTH,
-                    this.ATTRIBUTE_MAXLENGTH,
-                    this.ATTRIBUTE_AUTOCOMPLETE,
-                    this.ATTRIBUTE_INPUTMODE,
-                    this.ATTRIBUTE_SPELLCHECK,
-                    'min',
-                    'max',
-                    'step',
-                ];
-            }
-            /**
-             * Crée une instance du composant avec les options fournies.
-             * @param label Texte du label principal.
-             * @param options Options d'initialisation (attributs et slots).
-             * @returns {HTMLBnumInput} Instance du composant.
-             */
-            static Create(label, { 'data-value': dataValue, placeholder, name, type, disabled, state, button, 'button-icon': buttonIcon, icon, required, readonly, pattern, minlength, maxlength, autocomplete, inputmode, spellcheck, hint, success, error, btnText, } = {}) {
-                const el = document.createElement(this.TAG);
-                // Appliquer chaque attribut si défini
-                if (dataValue !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_DATA_VALUE, dataValue);
-                if (placeholder !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_PLACEHOLDER, placeholder);
-                if (type !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_TYPE, type);
-                if (disabled !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_DISABLED, disabled);
-                if (state !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_STATE, state);
-                if (button !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_BUTTON, button);
-                if (buttonIcon !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_BUTTON_ICON, buttonIcon);
-                if (icon !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_ICON, icon);
-                if (required !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_REQUIRED, required);
-                if (readonly !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_READONLY, readonly);
-                if (pattern !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_PATTERN, pattern);
-                if (minlength !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_MINLENGTH, minlength);
-                if (maxlength !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_MAXLENGTH, maxlength);
-                if (autocomplete !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_AUTOCOMPLETE, autocomplete);
-                if (inputmode !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_INPUTMODE, inputmode);
-                if (spellcheck !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_SPELLCHECK, spellcheck);
-                if (name !== undefined)
-                    el.setAttribute(this.ATTRIBUTE_NAME, name);
-                // Slot par défaut (label)
-                el.textContent = label;
-                // Slots nommés
-                if (hint) {
-                    const hintSlot = document.createElement('span');
-                    hintSlot.slot = this.SLOT_HINT;
-                    hintSlot.textContent = hint;
-                    el.appendChild(hintSlot);
-                }
-                if (success) {
-                    const successSlot = document.createElement('span');
-                    successSlot.slot = this.SLOT_SUCCESS;
-                    successSlot.textContent = success;
-                    el.appendChild(successSlot);
-                }
-                if (error) {
-                    const errorSlot = document.createElement('span');
-                    errorSlot.slot = this.SLOT_ERROR;
-                    errorSlot.textContent = error;
-                    el.appendChild(errorSlot);
-                }
-                if (btnText) {
-                    const buttonSlot = document.createElement('span');
-                    buttonSlot.slot = this.SLOT_BUTTON;
-                    buttonSlot.textContent = btnText;
-                    el.appendChild(buttonSlot);
-                }
-                return el;
-            }
-            static CreateTemplate(html = EMPTY_STRING) {
-                return BnumElementInternal.CreateTemplate(BASE_TEMPLATE.replace('<!-- {{addoninner}} -->', html));
-            }
-            /**
-             * Tag HTML du composant.
-             */
-            static get TAG() {
-                return TAG_INPUT;
-            }
-            static {
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-        };
-        return HTMLBnumInput = _classThis;
     })();
 
     var css_248z$g = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
@@ -7640,123 +8813,6 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    // core/jsx/index.ts
-    const VOID_TAGS = new Set([
-        'area',
-        'base',
-        'br',
-        'col',
-        'embed',
-        'hr',
-        'img',
-        'input',
-        'link',
-        'meta',
-        'param',
-        'source',
-        'track',
-        'wbr',
-    ]);
-    function h(tag, props, ...argsChildren) {
-        if (typeof tag === 'function' && 'TAG' in tag) {
-            tag = tag.TAG;
-        }
-        if (typeof tag === 'function') {
-            const children = argsChildren.length ? argsChildren : props?.children || [];
-            return tag({ ...props, children });
-        }
-        let attrs = EMPTY_STRING;
-        if (props) {
-            for (const key in props) {
-                const value = props[key];
-                if (key === 'children' || value == null || value === false)
-                    continue;
-                const name = key === 'className' ? 'class' : key;
-                if (key === 'style' && typeof value === 'object') {
-                    let styleStr = EMPTY_STRING;
-                    for (const sKey in value) {
-                        styleStr += `${sKey}:${value[sKey]};`;
-                    }
-                    attrs += ` ${name}="${styleStr}"`;
-                }
-                else if (value === true) {
-                    attrs += ` ${name}`;
-                }
-                else {
-                    attrs += ` ${name}="${value}"`;
-                }
-            }
-        }
-        const open = `<${tag}${attrs}>`;
-        if (VOID_TAGS.has(tag))
-            return open;
-        const rawChildren = argsChildren.length > 0 ? argsChildren : props?.children;
-        const content = renderChildren(rawChildren);
-        return `${open}${content}</${tag}>`;
-    }
-    // Helper récursif ultra-rapide pour les enfants
-    function renderChildren(child) {
-        if (child == null || child === false || child === true)
-            return EMPTY_STRING;
-        if (Array.isArray(child)) {
-            let str = EMPTY_STRING;
-            for (let i = 0; i < child.length; i++) {
-                str += renderChildren(child[i]);
-            }
-            return str;
-        }
-        return String(child);
-    }
-
-    // core/decorators/ui.ts
-    function UI(selectorMap, options) {
-        const { shadowRoot = true } = options || {};
-        return function (target, context) {
-            const name = String(context.name);
-            // Symbole pour stocker l'objet UI une fois créé
-            const uiCacheKey = Symbol(name);
-            return {
-                get() {
-                    // 1. Si l'objet UI existe déjà, on le retourne
-                    if (this[uiCacheKey]) {
-                        return this[uiCacheKey];
-                    }
-                    const root = shadowRoot ? this.shadowRoot || this : this;
-                    // 2. On crée un objet vide
-                    const uiObject = {};
-                    // 3. On utilise un Map interne pour stocker les résultats des querySelector
-                    //    pour ne pas les refaire à chaque accès (Cache granulaire)
-                    const domCache = new Map();
-                    // 4. On définit dynamiquement des getters pour chaque clé
-                    for (const [key, selector] of Object.entries(selectorMap)) {
-                        Object.defineProperty(uiObject, key, {
-                            configurable: true,
-                            enumerable: true,
-                            get: () => {
-                                // A. Si on a déjà cherché cet élément précis, on le rend
-                                if (domCache.has(key)) {
-                                    return domCache.get(key);
-                                }
-                                // B. Sinon, on fait le querySelector (LAZY)
-                                const element = root.querySelector(selector);
-                                // C. On le met en cache
-                                domCache.set(key, element);
-                                return element;
-                            },
-                            // Permet d'écraser manuellement si besoin : this.#_ui.icon = ...
-                            set: (value) => {
-                                domCache.set(key, value);
-                            },
-                        });
-                    }
-                    // 5. On stocke l'objet configuré sur l'instance et on le retourne
-                    this[uiCacheKey] = uiObject;
-                    return uiObject;
-                },
-            };
-        };
-    }
-
     const PropertyMode = {
         default: 'rw',
         readonly: 'readonly',
@@ -7862,30 +8918,6 @@ var Bnum = (function (exports) {
     })();
 
     var css_248z$e = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal-color:var(--bnum-radio-color,var(--bnum-color-primary,#000091));--_internal-font-size:var(--bnum-radio-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-radio-outer-size:var(--_internal-font-size);--_internal-radio-inner-size:calc(var(--_internal-radio-outer-size)*0.6);--_internal-border-size:var(--bnum-radio-border-size,1px);--_internal-border-radius:var(--bnum-radio-border-radius,var(--bnum-radius-circle,50%));position:relative}.radio{height:0;opacity:0;position:absolute;width:0}.radio__label{display:flex;flex-direction:column;margin-left:calc(var(--_internal-radio-outer-size) + 10px)}.radio__label--legend{font-size:var(--_internal-font-size)}.radio__label:before{border:solid var(--_internal-border-size) var(--_internal-color);box-sizing:border-box;height:var(--_internal-radio-outer-size);left:0;top:0;width:var(--_internal-radio-outer-size)}.radio__label:after,.radio__label:before{border-radius:var(--_internal-border-radius);content:\"\";position:absolute}.radio__label:after{--_internal-pos:calc(var(--_internal-radio-outer-size)/2);background:var(--_internal-color);display:none;height:var(--_internal-radio-inner-size);left:var(--_internal-pos);top:var(--_internal-pos);transform:translate(-50%,-50%);width:var(--_internal-radio-inner-size)}.radio:checked~.radio__label:after{display:block}.radio:focus~.radio__label:before,:host(:focus-visible) .radio__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}:host(:focus-visible){outline:none}:host(:disabled),:host([disabled]){opacity:.6;pointer-events:none}";
-
-    const listenersCacheKey = Symbol('listenersCache');
-    function Listener(initilizator) {
-        return function (_target, context) {
-            const methodName = String(context.name);
-            const listenerCacheKey = Symbol(`listener_${methodName}`);
-            return {
-                get() {
-                    const self = this;
-                    if (!self[listenersCacheKey])
-                        self[listenersCacheKey] = new Map();
-                    if (self[listenersCacheKey].has(listenerCacheKey)) {
-                        return self[listenersCacheKey].get(listenerCacheKey);
-                    }
-                    const event = new JsEvent();
-                    if (initilizator) {
-                        initilizator(event, this);
-                    }
-                    self[listenersCacheKey].set(listenerCacheKey, event);
-                    return self[listenersCacheKey].get(listenerCacheKey);
-                },
-            };
-        };
-    }
 
     //#region Utilities
     /**
@@ -15824,6 +16856,7 @@ var Bnum = (function (exports) {
     exports.HTMLBnumCardItemMail = HTMLBnumCardItemMail;
     exports.HTMLBnumCardList = HTMLBnumCardList;
     exports.HTMLBnumCardTitle = HTMLBnumCardTitle;
+    exports.HTMLBnumCheckbox = HTMLBnumCheckbox;
     exports.HTMLBnumColumn = HTMLBnumColumn;
     exports.HTMLBnumDangerButton = HTMLBnumDangerButton;
     exports.HTMLBnumDate = HTMLBnumDate;
@@ -15848,6 +16881,7 @@ var Bnum = (function (exports) {
     exports.HTMLBnumSelect = HTMLBnumSelect;
     exports.HTMLBnumTree = HTMLBnumTree;
     exports.INPUT_BASE_STYLE = INPUT_BASE_STYLE;
+    exports.INPUT_STYLE_STATES = INPUT_STYLE_STATES;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
