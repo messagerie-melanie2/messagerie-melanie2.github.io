@@ -741,7 +741,7 @@ Les éléments HTML qui n'ont pas le rôle treeitem se voient attribuer ce rôle
       
     <table>
       <thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead>
-      <tbody><tr><td><code>--bnum-header-display</code></td><td><code>block</code> </td><td>Définit le type d'affichage du header</td></tr><tr><td><code>--bnum-header-height</code></td><td><code>60px</code> </td><td>Hauteur du header</td></tr><tr><td><code>--bnum-header-background-color</code></td><td><code>#f5f6fa</code> <span class="color-swatch" style="background-color: #f5f6fa;"></span></td><td>Couleur de fond du header</td></tr><tr><td><code>--bnum-header-border-bottom</code></td><td><code>1px solid #e5e7eb</code> </td><td>Bordure basse du header</td></tr><tr><td><code>--bnum-header-left-gap</code></td><td><code>8px</code> </td><td>Espace à gauche entre les éléments du header</td></tr><tr><td><code>--bnum-header-right-gap</code></td><td><code>24px</code> </td><td>Espace à droite entre les éléments du header</td></tr><tr><td><code>--bnum-header-logo-height</code></td><td><code>45px</code> </td><td>Hauteur du logo dans le header</td></tr><tr><td><code>--bnum-header-background-image</code></td><td><code>none</code> </td><td>Image de fond du header (par défaut aucune)</td></tr><tr><td><code>--bnum-header-with-background-color</code></td><td><code>#ffffff</code> <span class="color-swatch" style="background-color: #ffffff;"></span></td><td>Couleur du texte sur fond personnalisé</td></tr><tr><td><code>--bnum-header-main-action-border-color</code></td><td><code>#ffffff</code> <span class="color-swatch" style="background-color: #ffffff;"></span></td><td>Couleur de la bordure du bouton principal sur fond personnalisé</td></tr><tr><td><code>--bnum-header-main-action-color</code></td><td><code>#ffffff</code> <span class="color-swatch" style="background-color: #ffffff;"></span></td><td>Couleur du texte du bouton principal sur fond personnalisé</td></tr><tr><td><code>--bnum-header-background-button-padding</code></td><td><code>5px 3px</code> </td><td>Padding de l'action principale</td></tr></tbody>
+      <tbody><tr><td><code>--bnum-header-display</code></td><td><code>block</code> </td><td>Définit le type d'affichage du header</td></tr><tr><td><code>--bnum-header-height</code></td><td><code>60px</code> </td><td>Hauteur du header</td></tr><tr><td><code>--bnum-header-background-color</code></td><td><code>#f5f6fa</code> <span class="color-swatch" style="background-color: #f5f6fa;"></span></td><td>Couleur de fond du header</td></tr><tr><td><code>--bnum-header-border-bottom</code></td><td><code>1px solid #e5e7eb</code> </td><td>Bordure basse du header</td></tr><tr><td><code>--bnum-header-left-gap</code></td><td><code>8px</code> </td><td>Espace à gauche entre les éléments du header</td></tr><tr><td><code>--bnum-header-right-gap</code></td><td><code>24px</code> </td><td>Espace à droite entre les éléments du header</td></tr><tr><td><code>--bnum-header-logo-height</code></td><td><code>45px</code> </td><td>Hauteur du logo dans le header</td></tr><tr><td><code>--bnum-header-background-image</code></td><td><code>none</code> </td><td>Image de fond du header (par défaut aucune)</td></tr><tr><td><code>--bnum-header-with-background-color</code></td><td><code>#ffffff</code> <span class="color-swatch" style="background-color: #ffffff;"></span></td><td>Couleur du texte sur fond personnalisé</td></tr><tr><td><code>--bnum-header-main-action-border-color</code></td><td><code>#ffffff</code> <span class="color-swatch" style="background-color: #ffffff;"></span></td><td>Couleur de la bordure du bouton principal sur fond personnalisé</td></tr><tr><td><code>--bnum-header-main-action-color</code></td><td><code>#ffffff</code> <span class="color-swatch" style="background-color: #ffffff;"></span></td><td>Couleur du texte du bouton principal sur fond personnalisé</td></tr><tr><td><code>--bnum-header-background-button-padding</code></td><td><code>5px 3px</code> </td><td>Padding de l'action principale</td></tr><tr><td><code>--bnum-header-title-margin</code></td><td><code>0</code> </td><td>Marge du titre</td></tr><tr><td><code>--bnum-header-title-font-size</code></td><td><code>1.25rem</code> </td><td>Taille de la police du titre</td></tr></tbody>
     </table>
   
 
@@ -786,13 +786,13 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>({
-    background = null,
-  }: { background?: string; }) : <code>HTMLBnumHeader</code></code></h4>
+		background = null,
+	}: { background?: string; }) : <code>HTMLBnumHeader</code></code></h4>
         <p>Génère un nouvel élément HTMLBnumHeader</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
-    background = null,
-  }</code>: N/A</li>
+		background = null,
+	}</code>: N/A</li>
     </ul>
         <p><strong>Retourne :</strong> Element créé</p>
       </div>
@@ -2165,10 +2165,10 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
     <h4>Cas standard</h4>
     <div><bnum-card>
 <span slot="title">Titre de la carte</span>
-<p>Contenu principal.</p>
+<span>Contenu principal.</span>
 </bnum-card></div><pre><code>&lt;bnum-card&gt;
 &lt;span slot=&quot;title&quot;&gt;Titre de la carte&lt;/span&gt;
-&lt;p&gt;Contenu principal.&lt;/p&gt;
+&lt;span&gt;Contenu principal.&lt;/span&gt;
 &lt;/bnum-card&gt;</code></pre>
   </div>
   
@@ -2176,10 +2176,10 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
     <h4>Carte cliquable</h4>
     <div><bnum-card clickable>
 <span slot="title">Carte cliquable</span>
-<p>Cliquez n'importe où.</p>
+<span>Cliquez n'importe où.</span>
 </bnum-card></div><pre><code>&lt;bnum-card clickable&gt;
 &lt;span slot=&quot;title&quot;&gt;Carte cliquable&lt;/span&gt;
-&lt;p&gt;Cliquez n&#039;importe où.&lt;/p&gt;
+&lt;span&gt;Cliquez n&#039;importe où.&lt;/span&gt;
 &lt;/bnum-card&gt;</code></pre>
   </div>
   
@@ -2189,12 +2189,12 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
 data-title-text="Titre généré"
 data-title-icon="info"
 >
-<p>Le slot "title" est vide.</p>
+<span>Le slot "title" est vide.</span>
 </bnum-card></div><pre><code>&lt;bnum-card
 data-title-text=&quot;Titre généré&quot;
 data-title-icon=&quot;info&quot;
 &gt;
-&lt;p&gt;Le slot &quot;title&quot; est vide.&lt;/p&gt;
+&lt;span&gt;Le slot &quot;title&quot; est vide.&lt;/span&gt;
 &lt;/bnum-card&gt;</code></pre>
   </div>
   
@@ -2202,10 +2202,10 @@ data-title-icon=&quot;info&quot;
     <h4>Carte avec un chargement</h4>
     <div><bnum-card loading>
 <bnum-card-title slot="title" data-icon="info">Titre en cours de chargement...</bnum-card-title>
-<p>Chargement</p>
+<span>Chargement</span>
 </bnum-card></div><pre><code>&lt;bnum-card loading&gt;
 &lt;bnum-card-title slot=&quot;title&quot; data-icon=&quot;info&quot;&gt;Titre en cours de chargement...&lt;/bnum-card-title&gt;
-&lt;p&gt;Chargement&lt;/p&gt;
+&lt;span&gt;Chargement&lt;/span&gt;
 &lt;/bnum-card&gt;</code></pre>
   </div>
   </div>
@@ -2703,19 +2703,19 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>({
-    title = null,
-    body = null,
-    clickable = false,
-    loading = false,
-  }: { title?: HTMLBnumCardTitle; body?: Element; clickable?: boolean; loading?: boolean; }) : <code>HTMLBnumCardElement</code></code></h4>
+		title = null,
+		body = null,
+		clickable = false,
+		loading = false,
+	}: { title?: HTMLBnumCardTitle; body?: Element; clickable?: boolean; loading?: boolean; }) : <code>HTMLBnumCardElement</code></code></h4>
         <p>Crée une nouvelle instance de HTMLBnumCardElement avec les options spécifiées.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
-    title = null,
-    body = null,
-    clickable = false,
-    loading = false,
-  }</code>: Options de création de la carte</li>
+		title = null,
+		body = null,
+		clickable = false,
+		loading = false,
+	}</code>: Options de création de la carte</li>
     </ul>
         <p><strong>Retourne :</strong> Element HTMLBnumCardElement créé</p>
       </div>

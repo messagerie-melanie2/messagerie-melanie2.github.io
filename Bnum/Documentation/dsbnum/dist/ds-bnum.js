@@ -11338,7 +11338,7 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_local-indent:calc(var(--bnum-folder-indentation-base, 0.5em)*var(--internal-bnum-folder-level, 0));display:var(--bnum-folder-display,block);padding-left:var(--bnum-folder-indentation,var(--_local-indent));width:var(--bnum-folder-width,100%)}:host .bal-container{display:flex;justify-content:space-between;padding:var(--bnum-folder-title-padding,10px 15px);transition:background-color .2s ease}:host .bal-container__left,:host .bal-container__title{align-content:center;align-items:center;display:flex;gap:var(--bnum-folder-gap,var(--bnum-space-s,10px))}:host .bal-container__title__name{text-wrap:nowrap;max-width:var(--bnum-folder-text-ellipisis-max-width,125px);overflow:hidden;pointer-events:none;text-overflow:ellipsis}:host .bal-container__title__icon{color:var(--bnum-folder-icon-color,inherit);flex-shrink:0}:host bnum-badge{height:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);transition:all .2s ease;width:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host bnum-badge.is-cumulative{background-color:var(--bnum-color-primary-active)}:host bnum-badge:state(no-value){display:none}:host([level=\"0\"]){border-bottom:var(--bnum-border-in-column)}:host([level=\"0\"]) .bal-container{padding:var(--bnum-folder-bal-title-padding,15px 15px)}:host(:state(no-subfolders)) .bal-container__toggle{display:none}:host(:state(double-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem)}:host(:state(triple-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem);height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host([is-collapsed=true]) .bal-sub-folders{display:none}:host([is-virtual=false]){cursor:pointer}:host([is-virtual=false]) .bal-container__title__name{pointer-events:all}:host([is-virtual=false]:hover) .bal-container{background-color:var(--bnum-color-list-hover)}:host([is-selected=true]) .bal-container{background-color:var(--bnum-color-list);cursor:default}:host([is-selected=true]:hover) .bal-container{background-color:var(--bnum-color-list)}:host(.dragover) .bal-container{background-color:var(--bnum-color-list-drag)}";
+    var css_248z$7 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_local-indent:calc(var(--bnum-folder-indentation-base, 0.5em)*var(--internal-bnum-folder-level, 0));display:var(--bnum-folder-display,block);padding-left:var(--bnum-folder-indentation,var(--_local-indent));width:var(--bnum-folder-width,100%)}:host .bal-container{display:flex;justify-content:space-between;padding:var(--bnum-folder-title-padding,10px 15px);transition:background-color .2s ease}:host .bal-container__left,:host .bal-container__title{align-content:center;align-items:center;display:flex;gap:var(--bnum-folder-gap,var(--bnum-space-s,10px))}:host .bal-container__title__name{text-wrap:nowrap;max-width:var(--bnum-folder-text-ellipisis-max-width,125px);overflow:hidden;pointer-events:none;text-overflow:ellipsis}:host .bal-container__title__icon{color:var(--bnum-folder-icon-color,inherit);flex-shrink:0}:host bnum-badge{font-size:15px;height:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);transition:all .2s ease;width:calc(16px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host bnum-badge.is-cumulative{background-color:var(--bnum-color-primary-active)}:host bnum-badge:state(no-value){display:none}:host([level=\"0\"]){border-bottom:var(--bnum-border-in-column)}:host([level=\"0\"]) .bal-container{padding:var(--bnum-folder-bal-title-padding,15px 15px)}:host(:state(no-subfolders)) .bal-container__toggle{display:none}:host(:state(double-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem)}:host(:state(triple-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.5625rem);height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host([is-collapsed=true]) .bal-sub-folders{display:none}:host([is-virtual=false]){cursor:pointer}:host([is-virtual=false]) .bal-container__title__name{pointer-events:all}:host([is-virtual=false]:hover) .bal-container{background-color:var(--bnum-color-list-hover)}:host([is-selected=true]) .bal-container{background-color:var(--bnum-color-list);cursor:default}:host([is-selected=true]:hover) .bal-container{background-color:var(--bnum-color-list)}:host(.dragover) .bal-container{background-color:var(--bnum-color-list-drag)}";
 
     const STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$7);
     //#region Template
@@ -13757,13 +13757,13 @@ var Bnum = (function (exports) {
      * @structure Cas standard
      * <bnum-card>
      * <span slot="title">Titre de la carte</span>
-     * <p>Contenu principal.</p>
+     * <span>Contenu principal.</span>
      * </bnum-card>
      *
      * @structure Carte cliquable
      * <bnum-card clickable>
      * <span slot="title">Carte cliquable</span>
-     * <p>Cliquez n'importe où.</p>
+     * <span>Cliquez n'importe où.</span>
      * </bnum-card>
      *
      * @structure Carte avec titre par défaut (via data-attrs)
@@ -13771,13 +13771,13 @@ var Bnum = (function (exports) {
      * data-title-text="Titre généré"
      * data-title-icon="info"
      * >
-     * <p>Le slot "title" est vide.</p>
+     * <span>Le slot "title" est vide.</span>
      * </bnum-card>
      *
      * @structure Carte avec un chargement
      * <bnum-card loading>
      * <bnum-card-title slot="title" data-icon="info">Titre en cours de chargement...</bnum-card-title>
-     * <p>Chargement</p>
+     * <span>Chargement</span>
      * </bnum-card>
      *
      * @state clickable - Est actif lorsque la carte est cliquable.
@@ -14087,7 +14087,7 @@ var Bnum = (function (exports) {
                 }
             }
             #_requestUpdateTitle(element) {
-                this.#_scheduleTitle ??= new Scheduler((el) => this.#_updateOrResetTitle(el));
+                this.#_scheduleTitle ??= new Scheduler(el => this.#_updateOrResetTitle(el));
                 this.#_scheduleTitle.schedule(element);
             }
             #_updateOrResetTitle(element) {
@@ -14099,16 +14099,16 @@ var Bnum = (function (exports) {
             #_updateTitle(element) {
                 element.setAttribute('slot', this._.SLOT_TITLE);
                 const oldTitles = this.querySelectorAll(`[slot="${this._.SLOT_TITLE}"]`);
-                oldTitles.forEach((node) => node.remove());
+                oldTitles.forEach(node => node.remove());
                 this.appendChild(element);
             }
             #_resetTitle() {
                 // On trouve tous les éléments du Light DOM assignés au slot "title"
                 const nodes = this.querySelectorAll(`[slot="${this._.SLOT_TITLE}"]`);
-                nodes.forEach((node) => node.remove());
+                nodes.forEach(node => node.remove());
             }
             #_requestUpdateBody(element) {
-                this.#_scheduleBody ??= new Scheduler((el) => this.#_updateOrResetBody(el));
+                this.#_scheduleBody ??= new Scheduler(el => this.#_updateOrResetBody(el));
                 this.#_scheduleBody.schedule(element);
             }
             #_updateOrResetBody(element) {
@@ -14119,23 +14119,23 @@ var Bnum = (function (exports) {
             }
             #_updateBody(element) {
                 element.removeAttribute('slot');
-                const oldBodyNodes = Array.from(this.childNodes).filter((node) => (node.nodeType === Node.ELEMENT_NODE &&
+                const oldBodyNodes = Array.from(this.childNodes).filter(node => (node.nodeType === Node.ELEMENT_NODE &&
                     node.getAttribute('slot') !== this._.SLOT_TITLE) ||
                     (node.nodeType === Node.TEXT_NODE &&
                         node.textContent?.trim() !== EMPTY_STRING));
-                oldBodyNodes.forEach((node) => node.remove());
+                oldBodyNodes.forEach(node => node.remove());
                 this.appendChild(element);
             }
             #_resetBody() {
                 // On trouve tous les éléments qui n'ont PAS de slot="title"
-                const nodes = Array.from(this.childNodes).filter((node) => (node.nodeType === Node.ELEMENT_NODE &&
+                const nodes = Array.from(this.childNodes).filter(node => (node.nodeType === Node.ELEMENT_NODE &&
                     node.getAttribute('slot') !== this._.SLOT_TITLE) ||
                     (node.nodeType === Node.TEXT_NODE &&
                         node.textContent?.trim() !== EMPTY_STRING));
-                nodes.forEach((node) => node.remove());
+                nodes.forEach(node => node.remove());
             }
             #_requestAppendElement(appended) {
-                this.#_scheduleAppend ??= new Scheduler((el) => this.#_appendElement(el));
+                this.#_scheduleAppend ??= new Scheduler(el => this.#_appendElement(el));
                 this.#_scheduleAppend.schedule(appended);
             }
             #_appendElement(appended) {
@@ -14863,7 +14863,7 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{align-items:center;display:flex;line-height:1.2;margin:0 0 -10px}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}::slotted(bnum-secondary-button){--bnum-button-padding:var(--bnum-header-background-button-padding,5px 3px)}::slotted(.main-action-button){-padding:var(--bnum-header-background-button-padding,5px 3px)}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:var(--bnum-header-main-action-border-color,#fff);color:var(--bnum-header-main-action-color,#fff)}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
+    var css_248z = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-header-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-header-border-bottom,var(--bnum-border-in-surface,solid 1px #ddd));box-sizing:border-box;display:var(--bnum-header-display,block);height:var(--bnum-header-height,60px)}:host .bnum-header-container{box-sizing:border-box;display:flex;height:100%;padding:0 1rem;width:100%}:host .header-left,:host .header-right{align-items:center;display:flex;flex:1}:host .header-left{gap:var(--bnum-header-left-gap,var(--bnum-space-s,10px));justify-content:flex-start}:host .header-left ::slotted(div),:host .header-left ::slotted(h1),:host .header-left ::slotted(h2),:host .header-left ::slotted(p),:host .header-left ::slotted(span),:host .header-left h1{--_internal-font-size:var(--bnum-font-size-xl,1.25rem);--bnum-font-size-h1:var(--bnum-header-title-font-size,var(--_internal-font-size));align-items:center;display:flex;line-height:1.2;margin:var(--bnum-header-title-margin,0)!important}:host .header-right{gap:var(--bnum-header-right-gap,var(--bnum-space-l,20px));justify-content:flex-end}:host ::slotted(bnum-img),:host ::slotted(img),:host bnum-img,:host img{display:block;height:var(--bnum-header-logo-height,45px);-o-object-fit:contain;object-fit:contain;width:auto}::slotted(bnum-secondary-button){--bnum-button-padding:var(--bnum-header-background-button-padding,5px 3px)}::slotted(.main-action-button){-padding:var(--bnum-header-background-button-padding,5px 3px)}:host(:state(with-background)){background-color:unset!important;background-image:var(--bnum-header-background-image);background-position:50%!important;background-size:cover!important;color:var(--bnum-header-with-background-color,#fff)}:host(:state(with-background)) .header-modifier{background:linear-gradient(90deg,#161616,transparent) 0 /50% 100% no-repeat,linear-gradient(270deg,#161616,transparent) 100% /50% 100% no-repeat}:host(:state(with-background)) ::slotted(.main-action-button),:host(:state(with-background)) ::slotted(bnum-secondary-button){background-color:#1616164d;border-color:var(--bnum-header-main-action-border-color,#fff);color:var(--bnum-header-main-action-color,#fff)}:host(:state(with-background)) ::slotted(.main-action-button):hover,:host(:state(with-background)) ::slotted(bnum-secondary-button):hover{background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button):active,:host(:state(with-background)) ::slotted(bnum-secondary-button):active{background-color:#474747ee}:host(:state(with-background)) ::slotted(.main-action-button:hover),:host(:state(with-background)) ::slotted(bnum-secondary-button:hover){background-color:#343434d2}:host(:state(with-background)) ::slotted(.main-action-button:active),:host(:state(with-background)) ::slotted(bnum-secondary-button:active){background-color:#474747ee}";
 
     const SHEET = BnumElementInternal.ConstructCSSStyleSheet(css_248z);
     //#region Global constants
@@ -14959,6 +14959,8 @@ var Bnum = (function (exports) {
      * @cssvar {#ffffff} --bnum-header-main-action-border-color - Couleur de la bordure du bouton principal sur fond personnalisé
      * @cssvar {#ffffff} --bnum-header-main-action-color - Couleur du texte du bouton principal sur fond personnalisé
      * @cssvar {5px 3px} --bnum-header-background-button-padding - Padding de l'action principale
+     * @cssvar {0} --bnum-header-title-margin - Marge du titre
+     * @cssvar {1.25rem} --bnum-header-title-font-size - Taille de la police du titre
      */
     let HTMLBnumHeader = (() => {
         let _classDecorators = [Define()];
@@ -15096,7 +15098,7 @@ var Bnum = (function (exports) {
              */
             get #_backgroundScheduler() {
                 return (this.#_scheduleUpdateBackground ??
-                    (this.#_scheduleUpdateBackground = new Scheduler((val) => this.#_updateBackground(val))));
+                    (this.#_scheduleUpdateBackground = new Scheduler(val => this.#_updateBackground(val))));
             }
             /**
              * Evènement du changement d'image de fond
@@ -15104,7 +15106,7 @@ var Bnum = (function (exports) {
             get onBackgroundChanged() {
                 if (this.#_onBackgroundChanged === null) {
                     this.#_onBackgroundChanged = new JsEvent();
-                    this.#_onBackgroundChanged.add(EVENT_DEFAULT, (newBackground) => {
+                    this.#_onBackgroundChanged.add(EVENT_DEFAULT, newBackground => {
                         this.trigger(this._.EVENT_BACKGROUND_CHANGED, {
                             newBackground,
                         });
@@ -15164,7 +15166,7 @@ var Bnum = (function (exports) {
              */
             setPageTitle(content) {
                 // Initialisation Lazy du scheduler
-                (this.#_scheduleUpdateTitle ??= new Scheduler((val) => this.#_applyTitleUpdate(val))).schedule(content);
+                (this.#_scheduleUpdateTitle ??= new Scheduler(val => this.#_applyTitleUpdate(val))).schedule(content);
                 return this;
             }
             /**
