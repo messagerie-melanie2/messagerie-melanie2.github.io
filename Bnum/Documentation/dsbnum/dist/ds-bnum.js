@@ -487,8 +487,8 @@ var Bnum = (function (exports) {
             invalid_input: 'Le champs est invalide !',
             error_field: 'Ce champ contient une erreur.',
             search_field: 'Rechercher',
-            active_checkbox: 'Activé',
-            inactive_checkbox: 'Désactivé',
+            active_switch: 'Activé',
+            inactive_switch: 'Désactivé',
         },
         console_logging: true,
         console_logging_level: LogEnum.TRACE,
@@ -661,11 +661,11 @@ var Bnum = (function (exports) {
                 const dateA = this.#_getTime(primarySelector(a));
                 const dateB = this.#_getTime(primarySelector(b));
                 if (dateB !== dateA) {
-                    return dateB - dateA;
+                    return dateA - dateB;
                 }
                 const subA = this.#_getTime(secondarySelector(a));
                 const subB = this.#_getTime(secondarySelector(b));
-                return subB - subA;
+                return subA - subB;
             });
         }
         /**
@@ -4271,73 +4271,742 @@ var Bnum = (function (exports) {
         return HTMLBnumButton = _classThis;
     })();
 
-    // core/jsx/index.ts
-    const VOID_TAGS = new Set([
-        'area',
-        'base',
-        'br',
-        'col',
-        'embed',
-        'hr',
-        'img',
-        'input',
-        'link',
-        'meta',
-        'param',
-        'source',
-        'track',
-        'wbr',
-    ]);
-    function h(tag, props, ...argsChildren) {
-        if (typeof tag === 'function' && 'TAG' in tag) {
-            tag = tag.TAG;
-        }
-        if (typeof tag === 'function') {
-            const children = argsChildren.length ? argsChildren : props?.children || [];
-            return tag({ ...props, children });
-        }
-        let attrs = EMPTY_STRING;
-        if (props) {
-            for (const key in props) {
-                const value = props[key];
-                if (key === 'children' || value == null || value === false)
-                    continue;
-                const name = key === 'className' ? 'class' : key;
-                if (key === 'style' && typeof value === 'object') {
-                    let styleStr = EMPTY_STRING;
-                    for (const sKey in value) {
-                        styleStr += `${sKey}:${value[sKey]};`;
-                    }
-                    attrs += ` ${name}="${styleStr}"`;
-                }
-                else if (value === true) {
-                    attrs += ` ${name}`;
+    /**
+     * Bouton Bnum de type "Danger".
+     *
+     * @structure Cas standard
+     * <bnum-danger-button>Texte du bouton</bnum-danger-button>
+     *
+     * @structure Bouton avec icône
+     * <bnum-danger-button data-icon="home">Texte du bouton</bnum-danger-button>
+     *
+     * @structure Bouton avec une icône à gauche
+     * <bnum-danger-button data-icon="home" data-icon-pos="left">Texte du bouton</bnum-danger-button>
+     *
+     * @structure Bouton en état de chargement
+     * <bnum-danger-button loading>Texte du bouton</bnum-danger-button>
+     *
+     * @structure Bouton arrondi
+     * <bnum-danger-button rounded>Texte du bouton</bnum-danger-button>
+     *
+     * @structure Bouton cachant le texte sur les petits layouts
+     * <bnum-danger-button data-hide="small" data-icon="menu">Menu</bnum-danger-button>
+     */
+    let HTMLBnumDangerButton = (() => {
+        let _classDecorators = [Define()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = HTMLBnumButton;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            constructor() {
+                super();
+                const fromAttribute = false;
+                this.data(HTMLBnumButton.ATTR_VARIATION, exports.EButtonType.DANGER, fromAttribute);
+            }
+            static get TAG() {
+                return TAG_DANGER;
+            }
+        });
+        return _classThis;
+    })();
+
+    function NonStd(reason, fatal = false) {
+        // On accepte 'any' pour la value (car ça peut être une classe, une fonction, undefined pour un champ...)
+        // On utilise notre type GenericContext
+        return function (value, context) {
+            // On construit un message propre selon le type (classe, méthode, field...)
+            const typeLabel = {
+                class: 'La classe',
+                method: 'La méthode',
+                getter: 'Le getter',
+                setter: 'Le setter',
+                field: 'Le champ',
+                accessor: 'L\'accesseur',
+            }[context.kind] || 'L\'élément';
+            const name = String(context.name);
+            const message = `${typeLabel} '${name}' est non standard${reason ? ` : ${reason}` : ''}.`;
+            // addInitializer fonctionne partout !
+            // - Pour une classe : s'exécute à la définition de la classe.
+            // - Pour un membre (méthode/champ) : s'exécute à la création de l'instance.
+            context.addInitializer(function () {
+                if (fatal) {
+                    throw new Error(message);
                 }
                 else {
-                    attrs += ` ${name}="${value}"`;
+                    Log.warn(name, message);
+                }
+            });
+        };
+    }
+
+    var BnumDateLocale;
+    (function (BnumDateLocale) {
+        BnumDateLocale["FR"] = "fr-FR";
+        BnumDateLocale["EN"] = "en-US";
+    })(BnumDateLocale || (BnumDateLocale = {}));
+    /**
+     * Native replacements for date-fns functions to reduce bundle size.
+     * Uses Intl API for localization and native Date for manipulations.
+     */
+    let BnumDateUtils = (() => {
+        let _staticExtraInitializers = [];
+        let _static_private__parse_decorators;
+        let _static_private__parse_descriptor;
+        return class BnumDateUtils {
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+                _static_private__parse_decorators = [Risky()];
+                __esDecorate(this, _static_private__parse_descriptor = { value: __setFunctionName(function (dateString, format) {
+                        if (!dateString)
+                            return null;
+                        // 1. Si aucun format n'est fourni, on tente le parsing natif (ISO 8601)
+                        if (!format) {
+                            const d = new Date(dateString);
+                            return (this.isValid(d) ? d : null);
+                        }
+                        else {
+                            if (['PPPP', 'PPP', 'PP', 'P'].includes(format)) {
+                                format = 'dd/MM/yyyy';
+                            }
+                        }
+                        // On extrait les nombres de la chaîne (ignore les séparateurs comme / - :)
+                        const values = dateString.match(/\d+/g);
+                        const tokens = format.match(/[a-zA-Z]+/g);
+                        if (!values || !tokens || values.length !== tokens.length)
+                            return null;
+                        let year = new Date().getFullYear();
+                        let month = 0;
+                        let day = 1;
+                        let hour = 0;
+                        let minute = 0;
+                        tokens.forEach((token, index) => {
+                            const val = parseInt(values[index], 10);
+                            if (token.includes('y'))
+                                year = val;
+                            if (token.includes('M'))
+                                month = val - 1; // Mois 0-11 en JS
+                            if (token.includes('d'))
+                                day = val;
+                            if (token.includes('H'))
+                                hour = val;
+                            if (token.includes('m'))
+                                minute = val;
+                        });
+                        const result = new Date(year, month, day, hour, minute);
+                        return (this.isValid(result) ? result : null);
+                    }, "#_parse") }, _static_private__parse_decorators, { kind: "method", name: "#_parse", static: true, private: true, access: { has: obj => #_parse in obj, get: obj => obj.#_parse }, metadata: _metadata }, null, _staticExtraInitializers);
+                if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(this, _staticExtraInitializers);
+            }
+            /**
+             * Equivalent to date-fns/format.
+             * @param date Date to format.
+             * @param options Intl options or a simple locale string.
+             * @param locale Locale string (e.g., 'fr-FR', 'en-US').
+             */
+            static format(date, options = {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            }, locale = 'fr-FR') {
+                return new Intl.DateTimeFormat(locale, options).format(date);
+            }
+            /**
+             * Parse une chaîne de caractères en objet Date.
+             * @param dateString La chaîne à parser (ex: "12/08/1997")
+             * @param format Optionnel : le format de la chaîne (ex: "dd/MM/yyyy")
+             */
+            static parse(dateString, format) {
+                return this.#_parse(dateString, format).unwrapOr(null);
+            }
+            /**
+             * Parse une chaîne de caractères en objet Date.
+             * @param dateString La chaîne à parser (ex: "12/08/1997")
+             * @param format Optionnel : le format de la chaîne (ex: "dd/MM/yyyy")
+             */
+            static get #_parse() { return _static_private__parse_descriptor.value; }
+            /**
+             * Equivalent to date-fns/isValid.
+             */
+            static isValid(date) {
+                return date instanceof Date && !isNaN(date.getTime());
+            }
+            /**
+             * Equivalent to date-fns/addDays (Immutable).
+             */
+            static addDays(date, days) {
+                const result = new Date(date);
+                result.setDate(result.getDate() + days);
+                return result;
+            }
+            /**
+             * Equivalent to date-fns/addMonths (Immutable).
+             */
+            static addMonths(date, months) {
+                const result = new Date(date);
+                result.setMonth(result.getMonth() + months);
+                return result;
+            }
+            /**
+             * Equivalent to date-fns/addYears (Immutable).
+             */
+            static addYears(date, years) {
+                const result = new Date(date);
+                result.setFullYear(result.getFullYear() + years);
+                return result;
+            }
+            /**
+             * Convertit dynamiquement une chaîne de tokens (ex: "dd/MM") en options Intl.
+             * @param pattern La chaîne de formatage.
+             */
+            static getOptionsFromToken(pattern) {
+                if (pattern.includes('PPPP'))
+                    return { dateStyle: 'full' };
+                if (pattern.includes('PPP'))
+                    return { dateStyle: 'long' };
+                if (pattern.includes('PP'))
+                    return { dateStyle: 'medium' };
+                if (pattern.includes('P'))
+                    return { dateStyle: 'short' };
+                const options = {};
+                if (pattern.includes('yyyy'))
+                    options.year = 'numeric';
+                else if (pattern.includes('yy'))
+                    options.year = '2-digit';
+                if (pattern.includes('MMMM'))
+                    options.month = 'long';
+                else if (pattern.includes('MMM'))
+                    options.month = 'short';
+                else if (pattern.includes('MM'))
+                    options.month = '2-digit';
+                else if (pattern.includes('M'))
+                    options.month = 'numeric';
+                if (pattern.includes('dd'))
+                    options.day = '2-digit';
+                else if (pattern.includes('d'))
+                    options.day = 'numeric';
+                if (pattern.includes('EEEE'))
+                    options.weekday = 'long';
+                else if (pattern.includes('E'))
+                    options.weekday = 'short';
+                if (pattern.includes('HH'))
+                    options.hour = '2-digit';
+                else if (pattern.includes('H'))
+                    options.hour = 'numeric';
+                if (pattern.includes('mm'))
+                    options.minute = '2-digit';
+                // Force 24h si on demande des heures
+                if (options.hour)
+                    options.hour12 = false;
+                return options;
+            }
+            /**
+             * Vérifie si deux dates correspondent au même jour (ignore l'heure).
+             * @param date Première date à comparer.
+             * @param now Deuxième date à comparer (par défaut : Date actuelle).
+             * @returns True si c'est le même jour.
+             */
+            static isSameDay(date, now = new Date()) {
+                return (date.getFullYear() === now.getFullYear() &&
+                    date.getMonth() === now.getMonth() &&
+                    date.getDate() === now.getDate());
+            }
+            /**
+             * Vérifie si la date fournie est aujourd'hui.
+             */
+            static isToday(date) {
+                return this.isSameDay(date, new Date());
+            }
+            /**
+             * Retourne une nouvelle date fixée au début du jour (00:00:00.000).
+             */
+            static startOfDay(date) {
+                const result = new Date(date);
+                result.setHours(0, 0, 0, 0);
+                return result;
+            }
+            /**
+             * Retourne une nouvelle date fixée à la fin du jour (23:59:59.999).
+             */
+            static endOfDay(date) {
+                const result = new Date(date);
+                result.setHours(23, 59, 59, 999);
+                return result;
+            }
+            /**
+             * Soustrait un nombre de jours à une date (Immuable).
+             */
+            static subDays(date, amount) {
+                return this.addDays(date, -amount);
+            }
+            /**
+             * Vérifie si une date se trouve dans un intervalle donné (inclusif).
+             * @param date Date à vérifier.
+             * @param interval Objet contenant start et end.
+             */
+            static isWithinInterval(date, interval) {
+                const time = date.getTime();
+                return time >= interval.start.getTime() && time <= interval.end.getTime();
+            }
+        };
+    })();
+
+    /**
+     * Affiche une date formatée qui peut être mise à jour dynamiquement.
+     *
+     * /!\ Seuls les formats de date supportés ceux par intl.DateTimeFormat.
+     *
+     * Vous DEVEZ utiliser les tokens suivants pour la configuration du format en html:
+     *
+     * - P : format court (ex: 12/08/1997)
+     * - PP : format moyen (ex: 12 août 1997)
+     * - PPP : format long (ex: mardi 12 août 1997)
+     * - PPPP : format complet (ex: mardi 12 août 1997)
+     * - yyyy : année sur 4 chiffres
+     * - yy : année sur 2 chiffres
+     * - M : mois numérique sans zéro initial
+     * - MM : mois numérique avec zéro initial
+     * - MMM : mois abrégé (ex: août)
+     * - MMMM : mois complet (ex: août)
+     * - d : jour du mois sans zéro initial
+     * - dd : jour du mois avec zéro initial
+     * - EEEE : jour de la semaine complet (ex: mardi)
+     * - E : jour de la semaine abrégé (ex: mar)
+     * - H : heure sans zéro initial (0-23)
+     * - HH : heure avec zéro initial (00-23)
+     * - mm : minutes avec zéro initial (00-59)
+     *
+     * Pour la locale, utilisez ceux par intl.
+     *
+     * A la place de `fr_FR`, vous pouvez utilisez `fr`.
+     *
+     * @structure Date simple
+     * <bnum-date format="P">1997-08-12</bnum-date>
+     *
+     * @structure Date avec parsing personnalisé
+     * <bnum-date format="PPPP" data-start-format="dd/MM/yyyy">12/08/1997</bnum-date>
+     *
+     * @structure Date avec attribut data-date
+     * <bnum-date format="ddMMyyyy HHmm" data-date="1997-08-12T15:30:00Z"></bnum-date>
+     *
+     * @structure Date en anglais
+     * <bnum-date format="PPPP" locale="en">1997-08-12</bnum-date>
+     *
+     * @state invalid - Actif quand la date est invalide ou non définie
+     * @state not-ready - Actif quand le composant n'est pas encore prêt
+     */
+    let HTMLBnumDate = (() => {
+        var _HTMLBnumDate_LOCALES;
+        let _classDecorators = [Define(), NonStd('Ne respecte pas la classe template')];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElementInternal;
+        let _instanceExtraInitializers = [];
+        let _static_private_LOCALES_decorators;
+        let _static_private_LOCALES_initializers = [];
+        let _static_private_LOCALES_extraInitializers = [];
+        let ___decorators;
+        let ___initializers = [];
+        let ___extraInitializers = [];
+        let _private_originalDate_decorators;
+        let _private_originalDate_initializers = [];
+        let _private_originalDate_extraInitializers = [];
+        let _private_outputFormat_decorators;
+        let _private_outputFormat_initializers = [];
+        let _private_outputFormat_extraInitializers = [];
+        let _private_locale_decorators;
+        let _private_locale_initializers = [];
+        let _private_locale_extraInitializers = [];
+        let _private_startFormat_decorators;
+        let _private_startFormat_initializers = [];
+        let _private_startFormat_extraInitializers = [];
+        let _private_outputElement_decorators;
+        let _private_outputElement_initializers = [];
+        let _private_outputElement_extraInitializers = [];
+        let _private_renderDate_decorators;
+        let _private_renderDate_descriptor;
+        let _private__format_decorators;
+        let _private__format_descriptor;
+        var HTMLBnumDate = class extends _classSuper {
+            static { _classThis = this; }
+            static { __setFunctionName(this, "HTMLBnumDate"); }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _static_private_LOCALES_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                ___decorators = [Self];
+                _private_originalDate_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                _private_outputFormat_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                _private_locale_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                _private_startFormat_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                _private_outputElement_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                _private_renderDate_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
+                _private__format_decorators = [Risky()];
+                __esDecorate(this, _private_renderDate_descriptor = { value: __setFunctionName(function () {
+                        this._p_clearStates();
+                        if (!this.#outputElement) {
+                            this._p_addState(this._.STATE_NOT_READY);
+                            return; // Pas encore prêt
+                        }
+                        if (!this.#originalDate) {
+                            this.#outputElement.textContent = EMPTY_STRING; // Affiche une chaîne vide si date invalide/null
+                            this._p_addState(this._.STATE_INVALID);
+                            return;
+                        }
+                        // Trouve la locale, avec fallback sur 'fr'
+                        const locale = this.localeElement;
+                        const textContent = this.#_format(locale).match({
+                            Ok: (formated) => this.formatEvent.call({ date: formated })?.date || formated,
+                            Err: (e) => {
+                                Log.error('HTMLBnumDate/renderDate', `Erreur de formatage Intl. Format: "${this.#outputFormat}`, '\\', BnumDateUtils.getOptionsFromToken(this.#outputFormat), '"', e);
+                                this._p_addState(HTMLBnumDate.STATE_INVALID);
+                                return 'Date invalide';
+                            },
+                        });
+                        this.#outputElement.textContent = textContent;
+                        this.setAttribute('aria-label', this.#outputElement.textContent);
+                    }, "#renderDate") }, _private_renderDate_decorators, { kind: "method", name: "#renderDate", static: false, private: true, access: { has: obj => #renderDate in obj, get: obj => obj.#renderDate }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__format_descriptor = { value: __setFunctionName(function (locale) {
+                        if (this.#originalDate === null)
+                            throw new Error('Date is null');
+                        return BnumDateUtils.format(this.#originalDate, BnumDateUtils.getOptionsFromToken(this.#outputFormat), locale);
+                    }, "#_format") }, _private__format_decorators, { kind: "method", name: "#_format", static: false, private: true, access: { has: obj => #_format in obj, get: obj => obj.#_format }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, null, _static_private_LOCALES_decorators, { kind: "field", name: "#LOCALES", static: true, private: true, access: { has: obj => __classPrivateFieldIn(_classThis, obj), get: obj => __classPrivateFieldGet(obj, _classThis, "f", _HTMLBnumDate_LOCALES), set: (obj, value) => { __classPrivateFieldSet(obj, _classThis, value, "f", _HTMLBnumDate_LOCALES); } }, metadata: _metadata }, _static_private_LOCALES_initializers, _static_private_LOCALES_extraInitializers);
+                __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
+                __esDecorate(null, null, _private_originalDate_decorators, { kind: "field", name: "#originalDate", static: false, private: true, access: { has: obj => #originalDate in obj, get: obj => obj.#originalDate, set: (obj, value) => { obj.#originalDate = value; } }, metadata: _metadata }, _private_originalDate_initializers, _private_originalDate_extraInitializers);
+                __esDecorate(null, null, _private_outputFormat_decorators, { kind: "field", name: "#outputFormat", static: false, private: true, access: { has: obj => #outputFormat in obj, get: obj => obj.#outputFormat, set: (obj, value) => { obj.#outputFormat = value; } }, metadata: _metadata }, _private_outputFormat_initializers, _private_outputFormat_extraInitializers);
+                __esDecorate(null, null, _private_locale_decorators, { kind: "field", name: "#locale", static: false, private: true, access: { has: obj => #locale in obj, get: obj => obj.#locale, set: (obj, value) => { obj.#locale = value; } }, metadata: _metadata }, _private_locale_initializers, _private_locale_extraInitializers);
+                __esDecorate(null, null, _private_startFormat_decorators, { kind: "field", name: "#startFormat", static: false, private: true, access: { has: obj => #startFormat in obj, get: obj => obj.#startFormat, set: (obj, value) => { obj.#startFormat = value; } }, metadata: _metadata }, _private_startFormat_initializers, _private_startFormat_extraInitializers);
+                __esDecorate(null, null, _private_outputElement_decorators, { kind: "field", name: "#outputElement", static: false, private: true, access: { has: obj => #outputElement in obj, get: obj => obj.#outputElement, set: (obj, value) => { obj.#outputElement = value; } }, metadata: _metadata }, _private_outputElement_initializers, _private_outputElement_extraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                HTMLBnumDate = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            /**
+             * Attribut format
+             * @attr {string} (optional) (default: 'P') format - Le format de sortie.
+             */
+            static ATTRIBUTE_FORMAT = 'format';
+            /**
+             * Attribut locale
+             * @attr {string} (optional) (default: undefined) locale - La locale pour le formatage
+             */
+            static ATTRIBUTE_LOCALE = 'locale';
+            /**
+             * Attribut date
+             * @attr {string | undefined} (optional) data-date - La date source (prioritaire sur le textContent)
+             */
+            static ATTRIBUTE_DATE = 'data-date';
+            /**
+             * Attribut start-format
+             * @attr {string | undefined} (optional) data-start-format - Le format de parsing si la date source est une chaîne
+             */
+            static ATTRIBUTE_START_FORMAT = 'data-start-format';
+            /**
+             * Événement déclenché lors de la mise à jour d'un attribut
+             * @event bnum-date:attribute-updated
+             * @detail { property: string; newValue: string | null; oldValue: string | null }
+             */
+            static EVENT_ATTRIBUTE_UPDATED = 'bnum-date:attribute-updated';
+            /**
+             * Événement déclenché lors de la mise à jour du format de la date
+             * @event bnum-date:attribute-updated:format
+             * @detail { property: string; newValue: string | null; oldValue: string | null }
+             */
+            static EVENT_ATTRIBUTE_UPDATED_FORMAT = 'bnum-date:attribute-updated:format';
+            /**
+             * Événement déclenché lors de la mise à jour de la locale
+             * @event bnum-date:attribute-updated:locale
+             * @detail { property: string; newValue: string | null; oldValue: string | null }
+             */
+            static EVENT_ATTRIBUTE_UPDATED_LOCALE = 'bnum-date:attribute-updated:locale';
+            /**
+             * Événement déclenché lors de la mise à jour de la date
+             * @event bnum-date:date
+             * @detail { property: string; newValue: Date | null; oldValue: Date | null }
+             */
+            static EVENT_DATE = 'bnum-date:date';
+            /** Valeur par défaut du format */
+            static DEFAULT_FORMAT = 'dd/MM/yyyy HH:mm';
+            /** Valeur par défaut de la locale */
+            static DEFAULT_LOCALE = 'fr';
+            /**
+             * État invalide
+             */
+            static STATE_INVALID = 'invalid';
+            /** État non prêt */
+            static STATE_NOT_READY = 'not-ready';
+            /** Nom de la balise */
+            static get TAG() {
+                return TAG_DATE;
+            }
+            static {
+                /**
+                 * Registre statique des raccourcis des locales.
+                 */
+                _HTMLBnumDate_LOCALES = { value: __runInitializers(_classThis, _static_private_LOCALES_initializers, {
+                        fr: BnumDateLocale.FR,
+                        en: BnumDateLocale.EN,
+                    }) };
+            }
+            /** Attributs observés pour la mise à jour. */
+            static _p_observedAttributes() {
+                return [this.ATTRIBUTE_FORMAT, this.ATTRIBUTE_LOCALE];
+            }
+            // --- Champs privés (état interne) ---
+            /** Référence à la classe HTMLBnumDate */
+            _ = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, ___initializers, void 0));
+            /** L'objet Date (notre source de vérité) */
+            #originalDate = (__runInitializers(this, ___extraInitializers), __runInitializers(this, _private_originalDate_initializers, null));
+            /** Le format d'affichage (ex: 'PPPP') */
+            #outputFormat = (__runInitializers(this, _private_originalDate_extraInitializers), __runInitializers(this, _private_outputFormat_initializers, this._.DEFAULT_FORMAT)); // 'P' -> 12/08/1997
+            /** La locale (code) */
+            #locale = (__runInitializers(this, _private_outputFormat_extraInitializers), __runInitializers(this, _private_locale_initializers, this._.DEFAULT_LOCALE));
+            /** Le format de parsing (ex: 'dd/MM/yyyy') */
+            #startFormat = (__runInitializers(this, _private_locale_extraInitializers), __runInitializers(this, _private_startFormat_initializers, null));
+            /** L'élément SPAN interne qui contient le texte formaté */
+            #outputElement = (__runInitializers(this, _private_startFormat_extraInitializers), __runInitializers(this, _private_outputElement_initializers, null));
+            #_renderSheduled = (__runInitializers(this, _private_outputElement_extraInitializers), false);
+            /**
+             * Événement circulaire déclenché lors du formatage de la date.
+             * Permet de personnaliser le formatage via un listener externe.
+             */
+            formatEvent = new eventExports.JsCircularEvent();
+            /**
+             * Indique que ce composant utilise le Shadow DOM.
+             * @returns {boolean}
+             */
+            _p_isShadowElement() {
+                return true;
+            }
+            /**
+             * Construit le DOM interne (appelé une seule fois).
+             * @param container Le ShadowRoot
+             */
+            _p_buildDOM(container) {
+                this.#outputElement = document.createElement('span');
+                this.#outputElement.setAttribute('part', 'date-text'); // Permet de styler depuis l'extérieur
+                container.append(this.#outputElement);
+            }
+            /**
+             * Phase de pré-chargement (avant _p_buildDOM).
+             * On lit les attributs initiaux et le textContent.
+             */
+            _p_preload() {
+                // On ajoute un listener sur `bnum-date:attribute-updated` pour trigger les propriété de manière + précises.
+                this.addEventListener(this._.EVENT_ATTRIBUTE_UPDATED, (e) => {
+                    this.trigger(`${this._.EVENT_ATTRIBUTE_UPDATED}:${e.detail.property}`, e.detail);
+                });
+                // Lire les attributs de configuration
+                this.#outputFormat =
+                    this.getAttribute(this._.ATTRIBUTE_FORMAT) || this.#outputFormat;
+                this.#locale = this.getAttribute(this._.ATTRIBUTE_LOCALE) || this.#locale;
+                this.#startFormat =
+                    this.getAttribute(this._.ATTRIBUTE_START_FORMAT) || null;
+                // Déterminer la date initiale (priorité à data-date)
+                const initialDateStr = this.getAttribute(this._.ATTRIBUTE_DATE) ||
+                    this.textContent?.trim() ||
+                    null;
+                // Définir la date sans déclencher de rendu (render=false)
+                if (initialDateStr)
+                    this.setDate(initialDateStr, this.#startFormat, false);
+            }
+            /**
+             * Phase d'attachement (après _p_buildDOM).
+             * C'est ici qu'on fait le premier rendu.
+             */
+            _p_attach() {
+                this.#renderDate();
+            }
+            /**
+             * Gère les changements d'attributs (appelé après _p_preload).
+             */
+            _p_update(name, oldVal, newVal) {
+                if (oldVal === newVal)
+                    return;
+                let needsRender = false;
+                switch (name) {
+                    case this._.ATTRIBUTE_FORMAT:
+                        this.#outputFormat = newVal || this._.DEFAULT_FORMAT;
+                        needsRender = true;
+                        break;
+                    case this._.ATTRIBUTE_LOCALE:
+                        this.#locale = newVal || this._.DEFAULT_LOCALE;
+                        needsRender = true;
+                        break;
+                    case this._.ATTRIBUTE_START_FORMAT:
+                        this.#startFormat = newVal;
+                        // Pas de re-rendu, affecte seulement le prochain setDate()
+                        break;
+                    case this._.ATTRIBUTE_DATE:
+                        // Re-parse la date
+                        this.setDate(newVal, this.#startFormat, false);
+                        needsRender = true;
+                        break;
+                }
+                if (needsRender) {
+                    this.#renderDate();
+                    // On déclenche l'événement pour la réactivité
+                    this.trigger(this._.EVENT_ATTRIBUTE_UPDATED, {
+                        property: name,
+                        newValue: newVal,
+                        oldValue: oldVal,
+                    });
                 }
             }
-        }
-        const open = `<${tag}${attrs}>`;
-        if (VOID_TAGS.has(tag))
-            return open;
-        const rawChildren = argsChildren.length > 0 ? argsChildren : props?.children;
-        const content = renderChildren(rawChildren);
-        return `${open}${content}</${tag}>`;
-    }
-    // Helper récursif ultra-rapide pour les enfants
-    function renderChildren(child) {
-        if (child == null || child === false || child === true)
-            return EMPTY_STRING;
-        if (Array.isArray(child)) {
-            let str = EMPTY_STRING;
-            for (let i = 0; i < child.length; i++) {
-                str += renderChildren(child[i]);
+            // --- API Publique (Propriétés) ---
+            /**
+             * Définit ou obtient l'objet Date.
+             * C'est le point d'entrée principal pour JS.
+             */
+            get date() {
+                return this.#originalDate;
             }
-            return str;
-        }
-        return String(child);
-    }
+            set date(value) {
+                this.setDate(value, this.#startFormat, true);
+            }
+            /** Définit ou obtient le format d'affichage. */
+            get format() {
+                return this.#outputFormat;
+            }
+            set format(value) {
+                this.setAttribute(this._.ATTRIBUTE_FORMAT, value);
+            }
+            /** Définit ou obtient la locale. */
+            get locale() {
+                return this.#locale;
+            }
+            set locale(value) {
+                this.setAttribute(this._.ATTRIBUTE_LOCALE, value);
+            }
+            get localeElement() {
+                return (__classPrivateFieldGet(this._, _classThis, "f", _HTMLBnumDate_LOCALES)[this.#locale] ||
+                    this.#locale ||
+                    __classPrivateFieldGet(this._, _classThis, "f", _HTMLBnumDate_LOCALES)[this._.DEFAULT_LOCALE]);
+            }
+            // --- API Publique (Méthodes) ---
+            /**
+             * Définit la date à partir d'une chaîne, d'un objet Date ou null.
+             * @param dateInput La date source.
+             * @param startFormat Le format pour parser la date si c'est une chaîne.
+             * @param triggerRender Indique s'il faut rafraîchir l'affichage (par défaut: true).
+             */
+            setDate(dateInput, startFormat, triggerRender = true) {
+                const oldDate = this.#originalDate;
+                let newDate = null;
+                if (dateInput === null) {
+                    newDate = null;
+                }
+                else if (dateInput instanceof Date) {
+                    newDate = dateInput;
+                }
+                else if (typeof dateInput === 'string') {
+                    if (dateInput.trim() === 'now') {
+                        newDate = new Date();
+                    }
+                    else {
+                        const formatToUse = startFormat || this.#startFormat;
+                        if (formatToUse) {
+                            // Parsing avec format spécifique
+                            newDate = BnumDateUtils.parse(dateInput, formatToUse); //parse(dateInput, formatToUse, new Date());
+                        }
+                        else {
+                            // Parsing natif (ISO 8601, timestamps...)
+                            newDate = new Date(dateInput);
+                        }
+                    }
+                }
+                // Vérification de la validité
+                if (newDate && BnumDateUtils.isValid(newDate)) {
+                    this.#originalDate = newDate;
+                }
+                else {
+                    this.#originalDate = null;
+                }
+                // Déclenche le rendu et/ou l'événement si la date a changé
+                if (oldDate?.getTime() !== this.#originalDate?.getTime()) {
+                    if (triggerRender) {
+                        this.#renderDate();
+                    }
+                    this.trigger(this._.EVENT_DATE, {
+                        property: 'date',
+                        newValue: this.#originalDate,
+                        oldValue: oldDate,
+                    });
+                }
+            }
+            /** Récupère l'objet Date actuel. */
+            getDate() {
+                return this.#originalDate;
+            }
+            /** Ajoute un nombre de jours à la date actuelle. */
+            addDays(days) {
+                if (!this.#originalDate)
+                    return;
+                this.date = BnumDateUtils.addDays(this.#originalDate, days);
+            }
+            /** Ajoute un nombre de mois à la date actuelle. */
+            addMonths(months) {
+                if (!this.#originalDate)
+                    return;
+                this.date = BnumDateUtils.addMonths(this.#originalDate, months);
+            }
+            /** Ajoute un nombre d'années à la date actuelle. */
+            addYears(years) {
+                if (!this.#originalDate)
+                    return;
+                this.date = BnumDateUtils.addYears(this.#originalDate, years);
+            }
+            askRender() {
+                if (this.#_renderSheduled)
+                    return;
+                this.#_renderSheduled = true;
+                requestAnimationFrame(() => {
+                    this.#_renderSheduled = false;
+                    this.#renderDate();
+                });
+            }
+            // --- Méthodes Privées ---
+            /**
+             * Met à jour le textContent du span interne.
+             * C'est la seule fonction qui écrit dans le DOM.
+             */
+            get #renderDate() { return _private_renderDate_descriptor.value; }
+            get #_format() { return _private__format_descriptor.value; }
+            /**
+             * Méthode statique pour la création (non implémentée ici,
+             * mais suit le pattern de BnumElement).
+             */
+            static Create(dateInput, options) {
+                const el = document.createElement(this.TAG);
+                if (options?.format)
+                    el.format = options.format;
+                if (options?.locale)
+                    el.locale = options.locale;
+                if (options?.startFormat)
+                    el.setAttribute(this.ATTRIBUTE_START_FORMAT, options.startFormat);
+                if (typeof dateInput === 'string')
+                    el.appendChild(document.createTextNode(dateInput));
+                else if (dateInput)
+                    el.date = dateInput;
+                return el;
+            }
+            static {
+                __runInitializers(_classThis, _static_private_LOCALES_extraInitializers);
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        };
+        return HTMLBnumDate = _classThis;
+    })();
 
     /**
      * Composant Web Component utilitaire "Fragment".
@@ -4385,66 +5054,303 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    // core/decorators/ui.ts
-    function UI(selectorMap, options) {
-        const { shadowRoot = true } = options || {};
-        return function (target, context) {
-            const name = String(context.name);
-            // Symbole pour stocker l'objet UI une fois créé
-            const uiCacheKey = Symbol(name);
-            return {
-                get() {
-                    // 1. Si l'objet UI existe déjà, on le retourne
-                    if (this[uiCacheKey]) {
-                        return this[uiCacheKey];
+    var css_248z$m = ":host{border-bottom:thin dotted;cursor:help}";
+
+    // bnum-helper.ts
+    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$m);
+    /**
+     * Constante représentant l'icône utilisée par défaut.
+     */
+    const ICON = 'help';
+    (() => {
+        let _classDecorators = [Define()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElement;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            /**
+             * Constructeur de l'élément HTMLBnumHelper.
+             * Initialise l'élément.
+             */
+            constructor() {
+                super();
+            }
+            /**
+             * Précharge les données de l'élément.
+             * Si l'élément possède des enfants, le texte est déplacé dans l'attribut title et le contenu est vidé.
+             */
+            _p_preload() {
+                super._p_preload();
+                setTimeout(() => {
+                    if (this.hasChildNodes()) {
+                        this.setAttribute('title', this.textContent ?? EMPTY_STRING);
+                        this.textContent = EMPTY_STRING;
                     }
-                    const root = shadowRoot ? this.shadowRoot || this : this;
-                    // 2. On crée un objet vide
-                    const uiObject = {};
-                    // 3. On utilise un Map interne pour stocker les résultats des querySelector
-                    //    pour ne pas les refaire à chaque accès (Cache granulaire)
-                    const domCache = new Map();
-                    // 4. On définit dynamiquement des getters pour chaque clé
-                    for (const [key, selector] of Object.entries(selectorMap)) {
-                        Object.defineProperty(uiObject, key, {
-                            configurable: true,
-                            enumerable: true,
-                            get: () => {
-                                // A. Si on a déjà cherché cet élément précis, on le rend
-                                if (domCache.has(key)) {
-                                    return domCache.get(key);
-                                }
-                                // B. Sinon, on fait le querySelector (LAZY)
-                                const element = root.querySelector(selector);
-                                // C. On le met en cache
-                                domCache.set(key, element);
-                                return element;
-                            },
-                            // Permet d'écraser manuellement si besoin : this.#_ui.icon = ...
-                            set: (value) => {
-                                domCache.set(key, value);
-                            },
-                        });
+                }, 0);
+            }
+            /**
+             * Construit le DOM interne de l'élément.
+             * Ajoute l'icône d'aide dans le conteneur.
+             * @param container Racine du shadow DOM ou élément HTML.
+             */
+            _p_buildDOM(container) {
+                super._p_buildDOM(container);
+                container.appendChild(HTMLBnumIcon.Create(ICON));
+            }
+            /**
+             * @inheritdoc
+             */
+            _p_getStylesheets() {
+                return [...super._p_getStylesheets(), SHEET$c];
+            }
+            /**
+             * Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.
+             * @param title Texte d'aide à afficher dans l'attribut title.
+             * @returns {HTMLBnumHelper} Instance du composant.
+             */
+            static Create(title) {
+                const element = document.createElement(this.TAG);
+                element.setAttribute('title', title);
+                return element;
+            }
+            /**
+             * Tag HTML du composant.
+             * @readonly
+             * @returns {string} Tag HTML utilisé pour ce composant.
+             */
+            static get TAG() {
+                return TAG_HELPER;
+            }
+        });
+        return _classThis;
+    })();
+
+    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+
+    //#region Global Constants
+    const ID_ICON$1 = 'icon';
+    //#endregion Global Constants
+    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$l);
+    const TEMPLATE$f = BnumElement.CreateTemplate(`
+    <${HTMLBnumIcon.TAG} id="${ID_ICON$1}"><slot></slot></${HTMLBnumIcon.TAG}>
+    `);
+    /**
+     * Button contenant une icône.
+     *
+     * @structure Button Icon
+     * <bnum-icon-button>home</bnum-icon-button>
+     *
+     * @structure Button Disabled
+     * <bnum-icon-button disabled>home</bnum-icon-button>
+     *
+     * @cssvar {0.6} --bnum-button-disabled-opacity - Opacité du bouton désactivé
+     * @cssvar {none} --bnum-button-disabled-pointer-events - Gestion des événements souris pour le bouton désactivé
+     *
+     * @slot (default) - Contenu de l'icône (nom de l'icône à afficher)
+     */
+    let HTMLBnumButtonIcon = (() => {
+        let _classDecorators = [Define()];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElement;
+        let ___decorators;
+        let ___initializers = [];
+        let ___extraInitializers = [];
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                ___decorators = [Self];
+                __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            //#region Constantes
+            /**
+             * Id de l'icône à l'intérieur du bouton
+             */
+            static ID_ICON = ID_ICON$1;
+            /**
+             * Attribut pour définir le gestionnaire de clic
+             * @event click
+             */
+            static ATTRIBUTE_ON_CLICK = 'onclick';
+            //#endregion Constantes
+            //#region Private fields
+            /**
+             * Référence vers l'élément icône à l'intérieur du bouton
+             */
+            #_icon = null;
+            #_onClick = null;
+            #_lastClick = null;
+            //#endregion Private fields
+            //#region Getters/Setters
+            /** Référence à la classe HTMLBnumButtonIcon */
+            _ = __runInitializers(this, ___initializers, void 0);
+            get #_linkedClickEvent() {
+                if (this.#_onClick === null) {
+                    this.#_onClick = new JsEvent();
+                    this.addEventListener('click', () => {
+                        this.#_onClick?.call?.();
+                    });
+                }
+                return this.#_onClick;
+            }
+            /**
+             * Référence vers l'élément icône à l'intérieur du bouton.
+             *
+             * Si l'icône n'a pas été mise en mémoire, elle sera cherché puis mise en mémoire.
+             */
+            get #_iconElement() {
+                if (!this.#_icon) {
+                    const icon = this.querySelector(HTMLBnumIcon.TAG) ??
+                        this.shadowRoot?.getElementById(this._.ID_ICON);
+                    if (!icon)
+                        this.#_throw('Icon element not found inside icon button');
+                    this.#_icon = icon;
+                }
+                return this.#_icon;
+            }
+            /**
+             * Icône affichée dans le bouton
+             */
+            get icon() {
+                return ((this.#_iconElement.icon || this.#_throw('Icon is not defined')) ??
+                    EMPTY_STRING);
+            }
+            set icon(value) {
+                this.#_iconElement.icon = value;
+            }
+            //#endregion Getters/Setters
+            //#region Lifecycle
+            constructor() {
+                super();
+                __runInitializers(this, ___extraInitializers);
+            }
+            /**
+             * @inheritdoc
+             */
+            _p_getStylesheets() {
+                return [...super._p_getStylesheets(), SHEET$b];
+            }
+            /**
+             * @inheritdoc
+             */
+            _p_fromTemplate() {
+                return TEMPLATE$f;
+            }
+            /**
+             * @inheritdoc
+             */
+            _p_buildDOM(_) {
+                HTMLBnumButton.ToButton(this);
+                if (this.title === EMPTY_STRING)
+                    Log.warn(this._.TAG, 'Icon button should have a title for accessibility purposes');
+                if (this.hasAttribute('click')) {
+                    const click = this.getAttribute('click');
+                    this.#_updateAttributeClick(click ?? EMPTY_STRING);
+                }
+            }
+            _p_update(name, oldVal, newVal) {
+                if (oldVal === newVal)
+                    return;
+                if (name === 'click') {
+                    this.#_updateAttributeClick(newVal ?? EMPTY_STRING);
+                }
+            }
+            //#endregion Lifecycle
+            //#region Private methods
+            #_updateAttributeClick(val) {
+                if (val !== this.#_lastClick) {
+                    this.#_lastClick = val;
+                    if (this.#_linkedClickEvent.has('click'))
+                        this.#_linkedClickEvent.remove('click');
+                    if (val && REG_XSS_SAFE.test(val)) {
+                        this.#_linkedClickEvent.add('click', (click) => {
+                            // Si c'est un id unique
+                            var elementToClick = document.getElementById(click);
+                            if (elementToClick)
+                                elementToClick.click();
+                            else {
+                                // Sinon on part du principe que c'est un sélecteur CSS
+                                const elements = document.querySelector(click);
+                                if (elements)
+                                    elements.click();
+                                else
+                                    throw new Error(`[${this._.TAG}] L'attribut 'click' ne référence aucun élément.`);
+                            }
+                        }, val);
                     }
-                    // 5. On stocke l'objet configuré sur l'instance et on le retourne
-                    this[uiCacheKey] = uiObject;
-                    return uiObject;
-                },
-            };
-        };
-    }
+                }
+            }
+            /**
+             * Permet de lancer une erreur avec un message spécifique dans une expression inline.
+             * @param msg Message à envoyer dans l'erreur.
+             */
+            #_throw(msg) {
+                throw new Error(msg);
+            }
+            //#endregion Private methods
+            //#region Static methods
+            /**
+             * Retourne la liste des attributs observés par le composant.
+             */
+            static _p_observedAttributes() {
+                return ['click'];
+            }
+            /**
+             * Génère un bouton icône avec l'icône spécifiée.
+             * @param icon Icône à afficher dans le bouton.
+             * @returns Node créée.
+             */
+            static Create(icon) {
+                const node = document.createElement(this.TAG);
+                node.icon = icon;
+                return node;
+            }
+            /**
+             * Génère le code HTML d'un bouton icône avec l'icône spécifiée.
+             * @param icon Icône à afficher dans le bouton.
+             * @returns Code HTML créée.
+             */
+            static Write(icon, attrs = {}) {
+                return `<${this.TAG} ${this._p_WriteAttributes(attrs)}>${icon}</${this.TAG}>`;
+            }
+            /**
+             * Tag de l'élément.
+             */
+            static get TAG() {
+                return TAG_ICON_BUTTON;
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        });
+        return _classThis;
+    })();
 
     const EVENT_DEFAULT = 'default';
 
-    var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
+    var css_248z$k = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:0.5rem;display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--internal-gap,.5rem)}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
 
-    var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host .state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}";
+    var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host .state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:#000091}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}";
 
-    var css_248z$k = ":host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) .state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) .state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) .hint-label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .hint-label,:host(:state(state):state(success)) .state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .hint-label,:host(:state(state):state(error)) .state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+    var css_248z$i = ":host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) .state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) .state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) .hint-label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .hint-label,:host(:state(state):state(success)) .state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .hint-label,:host(:state(state):state(error)) .state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
 
-    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$m);
-    const INPUT_STYLE_STATES = BnumElementInternal.ConstructCSSStyleSheet(css_248z$k);
-    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$l);
+    const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(css_248z$k);
+    const INPUT_STYLE_STATES = BnumElementInternal.ConstructCSSStyleSheet(css_248z$i);
+    const STYLE$1 = BnumElementInternal.ConstructCSSStyleSheet(css_248z$j);
     //#region Global Constants
     const ID_INPUT$1 = 'bnum-input';
     const ID_HINT_TEXT = 'hint-text';
@@ -5518,2078 +6424,9 @@ var Bnum = (function (exports) {
         return HTMLBnumInput = _classThis;
     })();
 
-    var css_248z$j = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_color:var(--bnum-checkbox-color,var(--bnum-primary-color,#000091));--_background-color:var(--bnum-checkbox-background-color,var(--bnum-color-background,#fff));--_internal-border-color:var(--_color);--_internal-error:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host .checkbox__label{align-content:center;align-items:center;display:inline-flex;flex-direction:row;position:relative;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host .checkbox__label:before{background:var(--_background-color);border:thin solid var(--_internal-border-color);border-radius:500px;box-sizing:border-box;content:\"\";cursor:pointer;display:inline-block;height:1.5rem;width:2.5rem}:host .checkbox__label:after{background-color:var(--_background-color);border:thin solid var(--_internal-border-color);border-radius:100%;box-sizing:border-box;content:\"\";cursor:pointer;display:block;height:1.5rem;left:0;position:absolute;top:0;width:1.5rem}:host .checkbox__label__desc{color:var(--_color)!important;display:none;left:0;position:absolute;top:24px}:host .checkbox__state{display:none}:host .checkbox__label--hint{display:block;margin-top:1rem;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}#native-input{height:0;opacity:0;position:absolute;width:0}#native-input:focus-visible~.checkbox__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}#native-input:checked~.checkbox__label:before{background:var(--_color)}#native-input:checked~.checkbox__label:after{color:var(--_color);content:\"\\e5ca\";font-family:var(--bnum-icon-font-family);font-size:21px;line-height:22px;transform:translateX(1rem)}:host(:state(state)) .checkbox__state{display:block}:host(:state(state):state(error)){--_internal-border-color:var(--_internal-error)}:host(:state(state):state(error)) #active-text,:host(:state(state):state(error)) #inactive-text{color:var(--_internal-error)!important}:host(:state(helper)) #inactive-text{display:block}:host(:state(helper)) #active-text{display:none}:host(:state(helper)) #native-input:checked #inactive-text,:host([checked]:state(helper)) #inactive-text{display:none}:host(:state(helper)) #native-input:checked #active-text,:host([checked]:state(helper)) #active-text{display:block}:host([disabled]){opacity:.5;pointer-events:none}";
+    var css_248z$h = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
 
-    const listenersCacheKey = Symbol('listenersCache');
-    function Listener(initilizator) {
-        return function (_target, context) {
-            const methodName = String(context.name);
-            const listenerCacheKey = Symbol(`listener_${methodName}`);
-            return {
-                get() {
-                    const self = this;
-                    if (!self[listenersCacheKey])
-                        self[listenersCacheKey] = new Map();
-                    if (self[listenersCacheKey].has(listenerCacheKey)) {
-                        return self[listenersCacheKey].get(listenerCacheKey);
-                    }
-                    const event = new JsEvent();
-                    if (initilizator) {
-                        initilizator(event, this);
-                    }
-                    self[listenersCacheKey].set(listenerCacheKey, event);
-                    return self[listenersCacheKey].get(listenerCacheKey);
-                },
-            };
-        };
-    }
-
-    function NonStd(reason, fatal = false) {
-        // On accepte 'any' pour la value (car ça peut être une classe, une fonction, undefined pour un champ...)
-        // On utilise notre type GenericContext
-        return function (value, context) {
-            // On construit un message propre selon le type (classe, méthode, field...)
-            const typeLabel = {
-                class: 'La classe',
-                method: 'La méthode',
-                getter: 'Le getter',
-                setter: 'Le setter',
-                field: 'Le champ',
-                accessor: 'L\'accesseur',
-            }[context.kind] || 'L\'élément';
-            const name = String(context.name);
-            const message = `${typeLabel} '${name}' est non standard${reason ? ` : ${reason}` : ''}.`;
-            // addInitializer fonctionne partout !
-            // - Pour une classe : s'exécute à la définition de la classe.
-            // - Pour un membre (méthode/champ) : s'exécute à la création de l'instance.
-            context.addInitializer(function () {
-                if (fatal) {
-                    throw new Error(message);
-                }
-                else {
-                    Log.warn(name, message);
-                }
-            });
-        };
-    }
-
-    //#region Utilities
-    /**
-     * Initialise l'écouteur d'événement `change` sur l'instance du checkbox.
-     *
-     * @remarks
-     * Ajoute un listener natif `change` sur l'élément hôte et appelle le callback
-     * de l'événement personnalisé {@link OnCheckedChangeEvent} lorsqu'il y a des abonnés.
-     *
-     * @param event - L'événement personnalisé à déclencher
-     * @param instance - L'instance du composant {@link HTMLBnumCheckbox}
-     *
-     * @internal
-     */
-    function OnCheckedChangeInitializer(event, instance) {
-        instance.addEventListener(EVENT_CHANGE$3, (e) => {
-            if (event.haveEvents())
-                event.call(e);
-        });
-    }
-    //#endregion Internal Types
-    //#region Global Constants
-    /**
-     * Icônes utilisées pour les états du checkbox.
-     *
-     * @remarks
-     * Associe chaque état de validation à une icône Material Icons correspondante.
-     *
-     * @internal
-     */
-    const BnumCheckBoxIcon = {
-        SUCCESS: 'check_circle',
-        ERROR: 'cancel',
-    };
-    /**
-     * Nom de l'attribut 'checked'.
-     * @internal
-     */
-    const ATTRIBUTE_CHECKED$1 = 'checked';
-    /**
-     * Nom de l'attribut 'helper'.
-     * @internal
-     */
-    const ATTRIBUTE_HELPER = 'helper';
-    /**
-     * Nom de l'événement 'change'.
-     * @internal
-     */
-    const EVENT_CHANGE$3 = 'change';
-    /**
-     * Tag utilisé pour les messages de log du composant.
-     * @internal
-     */
-    const LOG_TAG = 'BnumCheckbox';
-    /**
-     * Message d'avertissement affiché lorsqu'aucun label n'est trouvé.
-     * @internal
-     */
-    const WARN_NO_LABEL = "Aucun texte de description ou d'aide n'a été trouvé";
-    /**
-     * Message de validité par défaut lorsqu'aucun message natif n'est disponible.
-     * @internal
-     */
-    const DEFAULT_VALIDITY_MESSAGE = 'Certaines conditions ne sont pas satisfaites';
-    /**
-     * Nom de l'état interne 'state'.
-     * @internal
-     */
-    const STATE_STATE = 'state';
-    /**
-     * Nom de l'état interne 'error'.
-     * @internal
-     */
-    const STATE_ERROR = 'error';
-    /**
-     * Nom de l'attribut ARIA 'aria-checked'.
-     * @internal
-     */
-    const ARIA_CHECKED = 'aria-checked';
-    /**
-     * Nom de l'attribut ARIA 'aria-required'.
-     * @internal
-     */
-    const ARIA_REQUIRED = 'aria-required';
-    /**
-     * Nom de l'attribut ARIA 'aria-disabled'.
-     * @internal
-     */
-    const ARIA_DISABLED = 'aria-disabled';
-    /**
-     * Nom de l'attribut ARIA 'aria-invalid'.
-     * @internal
-     */
-    const ARIA_INVALID = 'aria-invalid';
-    /**
-     * Nom de l'attribut ARIA 'aria-describedby'.
-     * @internal
-     */
-    const ARIA_DESCRIBEDBY = 'aria-describedby';
-    /**
-     * Identifiant du slot d'indice.
-     * @internal
-     */
-    const ID_HINT$1 = 'hint';
-    /**
-     * Identifiant de l'élément affichant le texte de validité.
-     * @internal
-     */
-    const ID_VALIDITY_TEXT = 'validity-text';
-    /**
-     * Valeur booléenne 'true' sous forme de chaîne.
-     * @internal
-     */
-    const ARIA_TRUE = 'true';
-    /**
-     * Texte par défaut pour l'état actif.
-     * @internal
-     */
-    const TEXT_ACTIVE_DEFAULT = BnumConfig.Get('local_keys')?.active_checkbox ?? 'Activé';
-    /**
-     * Texte par défaut pour l'état inactif.
-     * @internal
-     */
-    const TEXT_INACTIVE_DEFAULT = BnumConfig.Get('local_keys')?.inactive_checkbox ?? 'Désactivé';
-    /**
-     * Liste des attributs synchronisés entre l'élément hôte et l'input interne.
-     *
-     * @remarks
-     * Ces attributs sont automatiquement propagés de l'élément personnalisé vers l'input natif.
-     * @internal
-     */
-    const SYNCED_ATTRIBUTES$2 = ['name', 'checked', 'value', 'disabled', 'required'];
-    //#endregion Global Constants
-    //#region Template
-    /**
-     * Template HTML du composant checkbox.
-     *
-     * @remarks
-     * Structure DOM utilisée pour créer le shadow DOM du composant.
-     * Comprend un input checkbox natif configuré en rôle `switch`, un label
-     * avec des slots pour le contenu actif/inactif, et une zone d'état de validation.
-     *
-     * @internal
-     */
-    const TEMPLATE$f = (h(HTMLBnumFragment, { children: [h("input", { id: "native-input", type: "checkbox", role: "switch" }), h("label", { class: "checkbox__label label-container hint-label", for: "native-input", children: [h("span", { class: "checkbox__label--legend label-container--label ", children: h("slot", { id: "legend" }) }), h("span", { id: "active-text", class: "checkbox__label__desc checkbox__label__desc--ok label-container--hint", children: h("slot", { name: "activeText", children: TEXT_ACTIVE_DEFAULT }) }), h("span", { id: "inactive-text", class: "checkbox__label__desc checkbox__label__desc--no label-container--hint", children: h("slot", { name: "inactiveText", children: TEXT_INACTIVE_DEFAULT }) })] }), h("span", { class: "checkbox__label--hint hint-label label-container--hint", children: h("slot", { id: ID_HINT$1, name: ID_HINT$1 }) }), h("div", { class: "checkbox__state state", children: [h(HTMLBnumIcon, { id: "icon" }), h("span", { id: ID_VALIDITY_TEXT })] })] }));
-    //#endregion Template
-    /**
-     * Composant personnalisé représentant un checkbox avec support de formulaire.
-     *
-     * @remarks
-     * Ce composant Web étend {@link BnumElementInternal} et fournit un checkbox personnalisé
-     * avec support complet des formulaires HTML, gestion d'état, validation et accessibilité.
-     *
-     * Le composant utilise le Shadow DOM pour encapsuler son style et sa structure,
-     * et synchronise automatiquement ses attributs avec un input checkbox natif sous-jacent.
-     * Il fonctionne en mode `switch` (interrupteur on/off) avec des textes configurables
-     * pour les états actif et inactif.
-     *
-     * @example
-     * Structure simple :
-     * ```html
-     * <bnum-checkbox>Click me !</bnum-checkbox>
-     * ```
-     *
-     * @example
-     * Structure avec indice :
-     * ```html
-     * <bnum-checkbox>Click me !<span slot="hint">Indice</span></bnum-checkbox>
-     * ```
-     *
-     * @example
-     * Structure required avec helper :
-     * ```html
-     * <bnum-checkbox helper required>Click me !<span slot="hint">Indice</span></bnum-checkbox>
-     * ```
-     *
-     * @fires CustomEvent<BnumCheckBoxDetail> - Déclenché lorsque l'état coché du checkbox change
-     *
-     * @public
-     *
-     * @structure Classique
-     * <bnum-checkbox>Click me !</bnum-checkbox>
-     *
-     * @structure Avec indice
-     * <bnum-checkbox checked>Click me !<span slot="hint">Indice</span></bnum-checkbox>
-     *
-     * @structure Requis
-     * <bnum-checkbox required>Click me !<span slot="hint">Indice</span></bnum-checkbox>
-     *
-     * @structure Avec un texte d'aide
-     * <bnum-checkbox helper>Click me !<span slot="hint">Indice</span></bnum-checkbox>
-     *
-     * @slot (default) - Légende de l'élément
-     * @slot activeText - Texte affiché lorsque le checkbox est activé
-     * @slot inactiveText - Texte affiché lorsque le checkbox est désactivé
-     * @slot hint - Aide supplémentaire dans la légende
-     *
-     * @event {CustomEvent<BnumCheckBoxDetail>} change - Lorsque l'élément change d'état
-     *
-     * @attr {boolean} (optional) (default: false) checked - Si l'élément est coché ou non
-     * @attr {string} (optional) name - Nom de l'élément pour les formulaires
-     * @attr {string} (optional) (default: 'on') value - Valeur de l'élément
-     * @attr {boolean} (optional) (default: false) disabled - Désactive l'élément
-     * @attr {boolean} (optional) (default: false) required - Rend le champ obligatoire
-     * @attr {boolean} (optional) (default: false) helper - Active le mode d'aide visuelle
-     *
-     * @state error - Lorsque la validation échoue
-     * @state helper - Lorsque l'attribut helper est actif
-     *
-     * @cssvar {#000091} --bnum-checkbox-color - Couleur du checkbox
-     * @cssvar {white} --bnum-checkbox-background-color - Couleur de fond du checkbox
-     * @cssvar {#de350b} --bnum-input-state-error-color - Couleur de l'erreur
-     */
-    let HTMLBnumCheckbox = (() => {
-        let _classDecorators = [Define({
-                tag: 'bnum-checkbox',
-                template: TEMPLATE$f,
-                styles: [INPUT_BASE_STYLE, INPUT_STYLE_STATES, css_248z$j],
-            })];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = BnumElementInternal;
-        let _staticExtraInitializers = [];
-        let _instanceExtraInitializers = [];
-        let _static__p_observedAttributes_decorators;
-        let _private__ui_decorators;
-        let _private__ui_initializers = [];
-        let _private__ui_extraInitializers = [];
-        let _private__ui_descriptor;
-        let _checked_decorators;
-        let _checked_initializers = [];
-        let _checked_extraInitializers = [];
-        let _name_decorators;
-        let _name_initializers = [];
-        let _name_extraInitializers = [];
-        let _value_decorators;
-        let _value_initializers = [];
-        let _value_extraInitializers = [];
-        let _disabled_decorators;
-        let _disabled_initializers = [];
-        let _disabled_extraInitializers = [];
-        let _required_decorators;
-        let _required_initializers = [];
-        let _required_extraInitializers = [];
-        let _helper_decorators;
-        let _helper_initializers = [];
-        let _helper_extraInitializers = [];
-        let _private__legend_decorators;
-        let _private__legend_initializers = [];
-        let _private__legend_extraInitializers = [];
-        let _private__legend_descriptor;
-        let _private__hint_decorators;
-        let _private__hint_initializers = [];
-        let _private__hint_extraInitializers = [];
-        let _private__hint_descriptor;
-        let _oncheckedchange_decorators;
-        let _oncheckedchange_initializers = [];
-        let _oncheckedchange_extraInitializers = [];
-        let _private__checkValidity_decorators;
-        let _private__checkValidity_descriptor;
-        let _private__reportValidity_decorators;
-        let _private__reportValidity_descriptor;
-        let _private__change_decorators;
-        let _private__change_descriptor;
-        let _private__setText_decorators;
-        let _private__setText_descriptor;
-        let _private__setInternalError_decorators;
-        let _private__setInternalError_descriptor;
-        let _private__setValidity_decorators;
-        let _private__setValidity_descriptor;
-        (class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                _private__ui_decorators = [UI({
-                        input: '#native-input',
-                        textActive: '#active-text',
-                        textInactive: '#inactive-text',
-                        slotLegend: '#legend',
-                        slotHint: `#${ID_HINT$1}`,
-                        validityText: `#${ID_VALIDITY_TEXT}`,
-                        icon: '#icon',
-                    })];
-                _checked_decorators = [Attr()];
-                _name_decorators = [Attr()];
-                _value_decorators = [Attr()];
-                _disabled_decorators = [Attr()];
-                _required_decorators = [Attr()];
-                _helper_decorators = [Attr()];
-                _private__legend_decorators = [Data()];
-                _private__hint_decorators = [Data()];
-                _oncheckedchange_decorators = [Listener(OnCheckedChangeInitializer)];
-                _private__checkValidity_decorators = [Risky()];
-                _private__reportValidity_decorators = [Risky()];
-                _private__change_decorators = [Fire(EVENT_CHANGE$3)];
-                _private__setText_decorators = [Risky()];
-                _private__setInternalError_decorators = [Risky()];
-                _private__setValidity_decorators = [Risky()];
-                _static__p_observedAttributes_decorators = [NonStd('Deprecated')];
-                __esDecorate(this, null, _static__p_observedAttributes_decorators, { kind: "method", name: "_p_observedAttributes", static: true, private: false, access: { has: obj => "_p_observedAttributes" in obj, get: obj => obj._p_observedAttributes }, metadata: _metadata }, null, _staticExtraInitializers);
-                __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
-                __esDecorate(this, null, _checked_decorators, { kind: "accessor", name: "checked", static: false, private: false, access: { has: obj => "checked" in obj, get: obj => obj.checked, set: (obj, value) => { obj.checked = value; } }, metadata: _metadata }, _checked_initializers, _checked_extraInitializers);
-                __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
-                __esDecorate(this, null, _value_decorators, { kind: "accessor", name: "value", static: false, private: false, access: { has: obj => "value" in obj, get: obj => obj.value, set: (obj, value) => { obj.value = value; } }, metadata: _metadata }, _value_initializers, _value_extraInitializers);
-                __esDecorate(this, null, _disabled_decorators, { kind: "accessor", name: "disabled", static: false, private: false, access: { has: obj => "disabled" in obj, get: obj => obj.disabled, set: (obj, value) => { obj.disabled = value; } }, metadata: _metadata }, _disabled_initializers, _disabled_extraInitializers);
-                __esDecorate(this, null, _required_decorators, { kind: "accessor", name: "required", static: false, private: false, access: { has: obj => "required" in obj, get: obj => obj.required, set: (obj, value) => { obj.required = value; } }, metadata: _metadata }, _required_initializers, _required_extraInitializers);
-                __esDecorate(this, null, _helper_decorators, { kind: "accessor", name: "helper", static: false, private: false, access: { has: obj => "helper" in obj, get: obj => obj.helper, set: (obj, value) => { obj.helper = value; } }, metadata: _metadata }, _helper_initializers, _helper_extraInitializers);
-                __esDecorate(this, _private__legend_descriptor = { get: __setFunctionName(function () { return this.#_legend_accessor_storage; }, "#_legend", "get"), set: __setFunctionName(function (value) { this.#_legend_accessor_storage = value; }, "#_legend", "set") }, _private__legend_decorators, { kind: "accessor", name: "#_legend", static: false, private: true, access: { has: obj => #_legend in obj, get: obj => obj.#_legend, set: (obj, value) => { obj.#_legend = value; } }, metadata: _metadata }, _private__legend_initializers, _private__legend_extraInitializers);
-                __esDecorate(this, _private__hint_descriptor = { get: __setFunctionName(function () { return this.#_hint_accessor_storage; }, "#_hint", "get"), set: __setFunctionName(function (value) { this.#_hint_accessor_storage = value; }, "#_hint", "set") }, _private__hint_decorators, { kind: "accessor", name: "#_hint", static: false, private: true, access: { has: obj => #_hint in obj, get: obj => obj.#_hint, set: (obj, value) => { obj.#_hint = value; } }, metadata: _metadata }, _private__hint_initializers, _private__hint_extraInitializers);
-                __esDecorate(this, null, _oncheckedchange_decorators, { kind: "accessor", name: "oncheckedchange", static: false, private: false, access: { has: obj => "oncheckedchange" in obj, get: obj => obj.oncheckedchange, set: (obj, value) => { obj.oncheckedchange = value; } }, metadata: _metadata }, _oncheckedchange_initializers, _oncheckedchange_extraInitializers);
-                __esDecorate(this, _private__checkValidity_descriptor = { value: __setFunctionName(function () {
-                        return this.#_ui.input.checkValidity();
-                    }, "#_checkValidity") }, _private__checkValidity_decorators, { kind: "method", name: "#_checkValidity", static: false, private: true, access: { has: obj => #_checkValidity in obj, get: obj => obj.#_checkValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__reportValidity_descriptor = { value: __setFunctionName(function () {
-                        return this.#_ui.input.reportValidity();
-                    }, "#_reportValidity") }, _private__reportValidity_decorators, { kind: "method", name: "#_reportValidity", static: false, private: true, access: { has: obj => #_reportValidity in obj, get: obj => obj.#_reportValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__change_descriptor = { value: __setFunctionName(function (event) {
-                        this.checked = this.#_ui.input.checked;
-                        return { inner: event, caller: this };
-                    }, "#_change") }, _private__change_decorators, { kind: "method", name: "#_change", static: false, private: true, access: { has: obj => #_change in obj, get: obj => obj.#_change }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__setText_descriptor = { value: __setFunctionName(function () {
-                        if (this.#_ui.validityText.textContent !== this.#_ui.input.validationMessage)
-                            this.#_ui.validityText.textContent = this.#_ui.input.validationMessage;
-                        return null;
-                    }, "#_setText") }, _private__setText_decorators, { kind: "method", name: "#_setText", static: false, private: true, access: { has: obj => #_setText in obj, get: obj => obj.#_setText }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__setInternalError_descriptor = { value: __setFunctionName(function () {
-                        if (!this.checkValidity()) {
-                            this._p_internal.setValidity(this.#_ui.input.validity, this.#_ui.input.validationMessage, this.#_ui.input);
-                        }
-                        return null;
-                    }, "#_setInternalError") }, _private__setInternalError_decorators, { kind: "method", name: "#_setInternalError", static: false, private: true, access: { has: obj => #_setInternalError in obj, get: obj => obj.#_setInternalError }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__setValidity_descriptor = { value: __setFunctionName(function () {
-                        if (this.checkValidity()) {
-                            this._p_internal.setValidity({});
-                        }
-                        return null;
-                    }, "#_setValidity") }, _private__setValidity_decorators, { kind: "method", name: "#_setValidity", static: false, private: true, access: { has: obj => #_setValidity in obj, get: obj => obj.#_setValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _staticExtraInitializers);
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-            //#region Private Fields
-            /**
-             * État initial du checkbox lors du chargement.
-             *
-             * @remarks
-             * Stocké lors du préchargement pour pouvoir restaurer l'état initial
-             * lors d'un reset du formulaire via {@link formResetCallback}.
-             *
-             * @internal
-             */
-            #_initState = __runInitializers(this, _instanceExtraInitializers);
-            #_ui_accessor_storage = __runInitializers(this, _private__ui_initializers, void 0);
-            /**
-             * Références aux éléments du DOM interne.
-             *
-             * @remarks
-             * Injecté automatiquement par le décorateur {@link UI}.
-             * Fournit un accès typé à l'input checkbox natif, aux slots de contenu
-             * et aux éléments d'état de validation.
-             *
-             * @internal
-             */
-            get #_ui() { return _private__ui_descriptor.get.call(this); }
-            set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
-            #checked_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _checked_initializers, false));
-            //#endregion Private Fields
-            //#region Public Fields
-            /**
-             * Indique si le checkbox est coché.
-             *
-             * @remarks
-             * Contrôle l'état de sélection du checkbox.
-             *
-             * @defaultValue `false`
-             */
-            get checked() { return this.#checked_accessor_storage; }
-            set checked(value) { this.#checked_accessor_storage = value; }
-            #name_accessor_storage = (__runInitializers(this, _checked_extraInitializers), __runInitializers(this, _name_initializers, undefined));
-            /**
-             * Le nom du checkbox pour les formulaires.
-             *
-             * @remarks
-             * Permet d'identifier le champ lors de la soumission du formulaire.
-             *
-             * @defaultValue `undefined`
-             */
-            get name() { return this.#name_accessor_storage; }
-            set name(value) { this.#name_accessor_storage = value; }
-            #value_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _value_initializers, 'on'));
-            /**
-             * La valeur associée au checkbox.
-             *
-             * @remarks
-             * Cette valeur est envoyée lors de la soumission du formulaire si le checkbox est coché.
-             *
-             * @defaultValue `'on'`
-             */
-            get value() { return this.#value_accessor_storage; }
-            set value(value) { this.#value_accessor_storage = value; }
-            #disabled_accessor_storage = (__runInitializers(this, _value_extraInitializers), __runInitializers(this, _disabled_initializers, false));
-            /**
-             * Indique si le checkbox est désactivé.
-             *
-             * @remarks
-             * Un checkbox désactivé ne peut pas être sélectionné ni recevoir le focus.
-             *
-             * @defaultValue `false`
-             */
-            get disabled() { return this.#disabled_accessor_storage; }
-            set disabled(value) { this.#disabled_accessor_storage = value; }
-            #required_accessor_storage = (__runInitializers(this, _disabled_extraInitializers), __runInitializers(this, _required_initializers, false));
-            /**
-             * Indique si le checkbox est obligatoire.
-             *
-             * @remarks
-             * Un checkbox obligatoire doit être coché pour que le formulaire soit valide.
-             *
-             * @defaultValue `false`
-             */
-            get required() { return this.#required_accessor_storage; }
-            set required(value) { this.#required_accessor_storage = value; }
-            #helper_accessor_storage = (__runInitializers(this, _required_extraInitializers), __runInitializers(this, _helper_initializers, false));
-            /**
-             * Active le mode d'aide visuelle.
-             *
-             * @remarks
-             * Lorsque activé, ajoute l'état `helper` au composant pour un rendu visuel spécifique.
-             *
-             * @defaultValue `false`
-             */
-            get helper() { return this.#helper_accessor_storage; }
-            set helper(value) { this.#helper_accessor_storage = value; }
-            #_legend_accessor_storage = (__runInitializers(this, _helper_extraInitializers), __runInitializers(this, _private__legend_initializers, undefined));
-            /**
-             * Texte de la légende principale du checkbox.
-             *
-             * @remarks
-             * Stocke le contenu textuel provenant de l'attribut `data-legend`.
-             * Utilisé pour initialiser le slot de légende si défini.
-             *
-             * @defaultValue `undefined`
-             * @internal
-             */
-            get #_legend() { return _private__legend_descriptor.get.call(this); }
-            set #_legend(value) { return _private__legend_descriptor.set.call(this, value); }
-            #_hint_accessor_storage = (__runInitializers(this, _private__legend_extraInitializers), __runInitializers(this, _private__hint_initializers, undefined));
-            /**
-             * Texte de l'indice/aide du checkbox.
-             *
-             * @remarks
-             * Stocke le contenu textuel provenant de l'attribut `data-hint`.
-             * Utilisé pour initialiser le slot d'indice si défini.
-             *
-             * @defaultValue `undefined`
-             * @internal
-             */
-            get #_hint() { return _private__hint_descriptor.get.call(this); }
-            set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
-            #oncheckedchange_accessor_storage = (__runInitializers(this, _private__hint_extraInitializers), __runInitializers(this, _oncheckedchange_initializers, void 0));
-            /**
-             * Événement personnalisé déclenché lors du changement d'état coché.
-             *
-             * @remarks
-             * Initialisé par {@link OnCheckedChangeInitializer} via le décorateur {@link Listener}.
-             * Permet de s'abonner aux changements d'état du checkbox.
-             */
-            get oncheckedchange() { return this.#oncheckedchange_accessor_storage; }
-            set oncheckedchange(value) { this.#oncheckedchange_accessor_storage = value; }
-            //#endregion Public Fields
-            //#region Lifecycle
-            /**
-             * Constructeur du composant HTMLBnumCheckbox.
-             *
-             * @remarks
-             * Initialise l'instance du composant en appelant le constructeur parent.
-             */
-            constructor() {
-                super();
-                __runInitializers(this, _oncheckedchange_extraInitializers);
-            }
-            /**
-             * Précharge l'état initial du checkbox.
-             *
-             * @remarks
-             * Sauvegarde l'état coché initial pour permettre la restauration
-             * lors d'un reset de formulaire.
-             *
-             * @protected
-             * @override
-             */
-            _p_preload() {
-                this.#_initState = !!(this.checked || false);
-            }
-            /**
-             * Attache le composant au DOM et initialise son comportement.
-             *
-             * @remarks
-             * Initialise les données des slots, synchronise les attributs avec l'input natif,
-             * vérifie la présence d'un label et gère l'état d'erreur initial.
-             * Ajoute l'état `helper` si l'attribut correspondant est défini.
-             *
-             * @protected
-             * @override
-             */
-            _p_attach() {
-                this.#_init().#_sync().#_checkLabel().#_ifOnErrorSet();
-                if (this.helper)
-                    this._p_addState(ATTRIBUTE_HELPER);
-            }
-            /**
-             * Gère la mise à jour d'un attribut observé.
-             *
-             * @param name - Le nom de l'attribut modifié
-             * @param oldVal - L'ancienne valeur de l'attribut
-             * @param newVal - La nouvelle valeur de l'attribut
-             * @returns `void` ou `'break'` pour interrompre le traitement
-             *
-             * @remarks
-             * Cette méthode est appelée automatiquement lorsqu'un attribut observé change.
-             * Elle traite spécifiquement les attributs `checked` et `helper`,
-             * et délègue les autres attributs à l'input natif.
-             *
-             * @protected
-             * @override
-             */
-            _p_update(name, oldVal, newVal) {
-                if (newVal === EMPTY_STRING)
-                    newVal = ARIA_TRUE;
-                if (oldVal === newVal)
-                    return;
-                switch (name) {
-                    case ATTRIBUTE_CHECKED$1:
-                        if (this.#_ui.input.checked !== this.checked) {
-                            this.#_ui.input.checked = this.checked;
-                            this.#_ui.input.setAttribute(ARIA_CHECKED, String(this.checked));
-                        }
-                        break;
-                    case ATTRIBUTE_HELPER:
-                        if (newVal)
-                            this._p_addState(ATTRIBUTE_HELPER);
-                        else
-                            this._p_removeState(ATTRIBUTE_HELPER);
-                        break;
-                    default:
-                        if (newVal)
-                            this.#_ui.input.setAttribute(name, newVal);
-                        else
-                            this.#_ui.input.removeAttribute(name);
-                        break;
-                }
-            }
-            /**
-             * Effectue les opérations post-flush du composant.
-             *
-             * @remarks
-             * Vérifie l'état d'erreur et resynchronise les attributs après un flush.
-             *
-             * @protected
-             * @override
-             */
-            _p_postFlush() {
-                this.#_ifOnErrorSet().#_sync();
-            }
-            /**
-             * Callback de réinitialisation du formulaire.
-             *
-             * @remarks
-             * Restaure l'état coché initial du checkbox lorsque le formulaire est réinitialisé.
-             */
-            formResetCallback() {
-                this.checked = this.#_initState;
-            }
-            /**
-             * Active ou désactive le champ selon l'état du fieldset parent.
-             *
-             * @param disabled - `true` pour désactiver, `false` pour activer
-             */
-            formDisabledCallback(disabled) {
-                this.disabled = disabled;
-            }
-            /**
-             * Met à jour l'état coché du checkbox et déclenche l'événement de changement.
-             *
-             * @param checked - L'état coché à définir
-             *
-             * @remarks
-             * Cette méthode est utilisée en interne pour mettre à jour l'état coché
-             * et déclencher l'événement de changement correspondant.
-             */
-            updateCheckedAndFire(checked) {
-                this.checked = checked;
-                this.#_change(new Event('change'));
-            }
-            //#endregion Lifecycle
-            //#region Public Methods
-            /**
-             * Vérifie la validité du checkbox sans afficher de message.
-             *
-             * @returns `true` si le checkbox est valide, `false` sinon
-             *
-             * @remarks
-             * Délègue la vérification à l'input natif sous-jacent.
-             * En cas d'erreur, retourne `true` par défaut.
-             */
-            checkValidity() {
-                return this.#_checkValidity().unwrapOr(true);
-            }
-            /**
-             * Vérifie la validité du checkbox et affiche le message de validation.
-             *
-             * @returns `true` si le checkbox est valide, `false` sinon
-             *
-             * @remarks
-             * Délègue la vérification à l'input natif sous-jacent et déclenche
-             * l'affichage du message de validation natif si invalide.
-             * En cas d'erreur, retourne `true` par défaut.
-             */
-            reportValidity() {
-                return this.#_reportValidity().unwrapOr(true);
-            }
-            //#endregion Public Methods
-            //#region Private Methods
-            /**
-             * Vérifie la validité de l'input natif sans rapport.
-             *
-             * @returns Un {@link Result} contenant le résultat de la vérification
-             *
-             * @private
-             */
-            get #_checkValidity() { return _private__checkValidity_descriptor.value; }
-            /**
-             * Vérifie la validité de l'input natif avec rapport.
-             *
-             * @returns Un {@link Result} contenant le résultat de la vérification
-             *
-             * @private
-             */
-            get #_reportValidity() { return _private__reportValidity_descriptor.value; }
-            /**
-             * Initialise les données internes du composant.
-             *
-             * @returns L'instance courante pour chaînage de méthodes
-             *
-             * @remarks
-             * Initialise les données des slots de légende et d'indice,
-             * puis configure les écouteurs d'événements.
-             *
-             * @private
-             */
-            #_init() {
-                return this.#_initDataLegend().#_initDataHint().#_setListeners();
-            }
-            /**
-             * Initialise le slot de légende avec la donnée correspondante.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @private
-             */
-            #_initDataLegend() {
-                return this.#_initData(this.#_legend, this.#_ui.slotLegend);
-            }
-            /**
-             * Initialise le slot d'indice avec la donnée correspondante.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @private
-             */
-            #_initDataHint() {
-                return this.#_initData(this.#_hint, this.#_ui.slotHint);
-            }
-            /**
-             * Initialise un slot avec une donnée textuelle.
-             *
-             * @param data - La donnée textuelle à insérer dans le slot
-             * @param slot - Le slot cible dans lequel insérer la donnée
-             * @returns L'instance courante pour chaînage
-             *
-             * @remarks
-             * N'affecte le slot que si la donnée est définie et non vide.
-             *
-             * @private
-             */
-            #_initData(data, slot) {
-                if (data)
-                    slot.textContent = data;
-                return this;
-            }
-            /**
-             * Configure tous les écouteurs d'événements du composant.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @remarks
-             * Actuellement configure uniquement l'écouteur de changement de l'input interne.
-             *
-             * @private
-             */
-            #_setListeners() {
-                return this.#_listenChange();
-            }
-            /**
-             * Configure l'écouteur d'événement pour les changements de l'input interne.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @remarks
-             * Écoute l'événement `change` de l'input natif et déclenche
-             * la méthode {@link #_change} pour propager le changement.
-             *
-             * @private
-             */
-            #_listenChange() {
-                this.#_ui.input.addEventListener(EVENT_CHANGE$3, e => {
-                    this.#_change(e);
-                });
-                return this;
-            }
-            /**
-             * Traite le changement d'état du checkbox et déclenche l'événement personnalisé.
-             *
-             * @param event - L'événement natif de changement
-             * @returns Les détails de l'événement contenant la référence à l'instance
-             *
-             * @remarks
-             * Met à jour la propriété `checked` à partir de l'input natif,
-             * puis retourne les détails nécessaires au décorateur {@link Fire}
-             * pour dispatcher l'événement `change`.
-             *
-             * @fires CustomEvent<BnumCheckBoxDetail>
-             * @private
-             */
-            get #_change() { return _private__change_descriptor.value; }
-            /**
-             * Vérifie et applique l'état d'erreur si nécessaire.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @remarks
-             * Si la validation échoue, applique l'état d'erreur via {@link #_setOnError}.
-             * Si la validation réussit et que l'état d'erreur est actif,
-             * le supprime et réinitialise la validité.
-             *
-             * @private
-             */
-            #_ifOnErrorSet() {
-                if (!this.checkValidity()) {
-                    this.#_setOnError();
-                }
-                else if (this._p_hasState(STATE_ERROR)) {
-                    this._p_removeStates([STATE_STATE, STATE_ERROR]).#_setValidity();
-                    this.#_ui.input.removeAttribute(ARIA_INVALID);
-                }
-                return this;
-            }
-            /**
-             * Applique l'état d'erreur au composant.
-             *
-             * @remarks
-             * Configure l'icône d'erreur, met à jour le texte de validité,
-             * ajoute les états internes `state` et `error`, et positionne
-             * l'attribut ARIA `aria-invalid` à `true`.
-             *
-             * Si le texte de validation natif n'est pas disponible, utilise
-             * le message par défaut {@link DEFAULT_VALIDITY_MESSAGE}.
-             *
-             * @private
-             */
-            #_setOnError() {
-                if (this.#_ui.icon.icon !== BnumCheckBoxIcon.ERROR)
-                    this.#_ui.icon.icon = BnumCheckBoxIcon.ERROR;
-                this.#_setText()
-                    .tapError(() => {
-                    this.#_ui.validityText.textContent = DEFAULT_VALIDITY_MESSAGE;
-                })
-                    .andThen(() => this.#_setInternalError());
-                this._p_addStates(STATE_STATE, STATE_ERROR);
-                this.#_ui.input.setAttribute(ARIA_INVALID, ARIA_TRUE);
-            }
-            /**
-             * Met à jour le texte de validité à partir du message natif de l'input.
-             *
-             * @returns Un {@link Result} indiquant le succès de l'opération
-             *
-             * @remarks
-             * Ne met à jour le texte que si il diffère du message de validation courant.
-             *
-             * @private
-             */
-            get #_setText() { return _private__setText_descriptor.value; }
-            /**
-             * Propage l'état de validité de l'input natif vers les internals du composant.
-             *
-             * @returns Un {@link Result} indiquant le succès de l'opération
-             *
-             * @remarks
-             * Utilise l'API `ElementInternals.setValidity` pour synchroniser
-             * la validité du composant avec celle de l'input natif sous-jacent.
-             *
-             * @private
-             */
-            get #_setInternalError() { return _private__setInternalError_descriptor.value; }
-            /**
-             * Réinitialise la validité du composant.
-             *
-             * @returns Un {@link Result} indiquant le succès de l'opération
-             *
-             * @remarks
-             * Supprime l'état d'erreur des internals lorsque le checkbox redevient valide.
-             *
-             * @private
-             */
-            get #_setValidity() { return _private__setValidity_descriptor.value; }
-            /**
-             * Synchronise les attributs entre l'élément hôte et l'input interne.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @remarks
-             * Parcourt tous les {@link SYNCED_ATTRIBUTES} et applique leurs valeurs à l'input.
-             * Cas particulier : l'attribut `checked` est traité en tant que propriété booléenne.
-             * Après la synchronisation des attributs, met à jour les attributs ARIA.
-             *
-             * @private
-             */
-            #_sync() {
-                for (const attr of SYNCED_ATTRIBUTES$2) {
-                    if (attr === ATTRIBUTE_CHECKED$1) {
-                        this.#_ui.input.checked = this.checked;
-                    }
-                    else {
-                        if (this.hasAttribute(attr)) {
-                            this.#_ui.input.setAttribute(attr, this.getAttribute(attr));
-                        }
-                        else
-                            this.#_ui.input.removeAttribute(attr);
-                    }
-                }
-                this.#_syncAria();
-                return this;
-            }
-            /**
-             * Synchronise les attributs ARIA du composant avec l'input interne.
-             *
-             * @remarks
-             * Met à jour les attributs `aria-checked`, `aria-required`, `aria-disabled`
-             * et `aria-describedby` en fonction de l'état courant du composant.
-             *
-             * L'attribut `aria-describedby` est composé dynamiquement à partir
-             * des éléments d'aide et de validité présents.
-             *
-             * @private
-             */
-            #_syncAria() {
-                const input = this.#_ui.input;
-                input.setAttribute(ARIA_CHECKED, String(this.checked));
-                if (this.required)
-                    input.setAttribute(ARIA_REQUIRED, ARIA_TRUE);
-                else
-                    input.removeAttribute(ARIA_REQUIRED);
-                if (this.disabled)
-                    input.setAttribute(ARIA_DISABLED, ARIA_TRUE);
-                else
-                    input.removeAttribute(ARIA_DISABLED);
-                const descriptions = [];
-                if (this.#_ui.slotHint.assignedNodes().length > 0)
-                    descriptions.push(ID_HINT$1);
-                if (this.#_ui.validityText.textContent)
-                    descriptions.push(ID_VALIDITY_TEXT);
-                if (descriptions.length > 0)
-                    input.setAttribute(ARIA_DESCRIBEDBY, descriptions.join(' '));
-                else
-                    input.removeAttribute(ARIA_DESCRIBEDBY);
-            }
-            /**
-             * Vérifie la présence d'un label accessible et affiche un avertissement sinon.
-             *
-             * @returns L'instance courante pour chaînage
-             *
-             * @remarks
-             * Vérifie si une légende ou un indice est disponible pour le composant.
-             * Si aucun texte accessible n'est trouvé, émet un avertissement dans la console.
-             *
-             * @private
-             */
-            #_checkLabel() {
-                const hasLabel = this.#_verifyLabel();
-                if (!hasLabel) {
-                    Log.warn(LOG_TAG, WARN_NO_LABEL);
-                }
-                return this;
-            }
-            /**
-             * Vérifie si au moins une source de label est disponible.
-             *
-             * @returns `true` si une légende ou un indice existe, `false` sinon
-             *
-             * @private
-             */
-            #_verifyLabel() {
-                return this.#_verifyLegend() || this.#_verifyHint();
-            }
-            /**
-             * Vérifie la présence d'une légende.
-             *
-             * @returns `true` si une légende est définie ou si des éléments enfants existent
-             *
-             * @private
-             */
-            #_verifyLegend() {
-                return this.#_verifyData(this.#_legend);
-            }
-            /**
-             * Vérifie la présence d'un indice.
-             *
-             * @returns `true` si un indice est défini ou si des éléments slottés existent
-             *
-             * @private
-             */
-            #_verifyHint() {
-                return this.#_verifyData(this.#_hint, ID_HINT$1);
-            }
-            /**
-             * Vérifie la disponibilité d'une donnée ou d'éléments enfants associés.
-             *
-             * @param data - La donnée textuelle à vérifier
-             * @param slotName - Le nom du slot à inspecter (null pour le slot par défaut)
-             * @returns `true` si la donnée est définie ou si des éléments enfants existent
-             *
-             * @private
-             */
-            #_verifyData(data, slotName = null) {
-                const hasData = !!data;
-                const hasElements = this.#_verifyElements(slotName);
-                return hasData || hasElements;
-            }
-            /**
-             * Vérifie la présence d'éléments enfants dans un slot donné.
-             *
-             * @param slotName - Le nom du slot à inspecter (null pour les enfants sans slot)
-             * @returns `true` si au moins un élément est trouvé
-             *
-             * @private
-             */
-            #_verifyElements(slotName) {
-                const iterator = this.#_getVerifyElements(slotName);
-                return !iterator.next().done;
-            }
-            /**
-             * Générateur produisant les éléments enfants d'un slot donné.
-             *
-             * @param slotName - Le nom du slot à inspecter (null pour les enfants sans slot)
-             * @yields Les éléments enfants correspondant au critère de slot
-             *
-             * @remarks
-             * Si un nom de slot est fourni, retourne les éléments ayant l'attribut `slot` correspondant.
-             * Sinon, retourne les éléments enfants sans attribut `slot` et les nœuds texte non vides.
-             *
-             * @private
-             */
-            *#_getVerifyElements(slotName) {
-                if (slotName)
-                    yield* Array.from(this.querySelectorAll(`[slot="${slotName}"]`));
-                else {
-                    const nodes = [...Array.from(this.childNodes)];
-                    for (const node of nodes) {
-                        if (node instanceof HTMLElement) {
-                            if (!node.hasAttribute('slot'))
-                                yield node;
-                        }
-                        else if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
-                            yield node;
-                    }
-                }
-            }
-            //#endregion Private Methods
-            //#region Static Methods
-            /**
-             * Retourne la liste des attributs observés par le composant.
-             *
-             * @returns Un tableau contenant tous les noms d'attributs observés
-             *
-             * @remarks
-             * Combine les attributs observés du parent avec les {@link SYNCED_ATTRIBUTES}
-             * et l'attribut `helper` spécifiques à ce composant.
-             * Les changements de ces attributs déclencheront {@link _p_update}.
-             *
-             * @protected
-             * @static
-             * @override
-             * @deprecated Utilisez le décorateur {@link Observe} du commit 3e38db0162eef596874dbe32490d9e96b09fb1c0
-             * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
-             */
-            static _p_observedAttributes() {
-                return [
-                    ...super._p_observedAttributes(),
-                    ...SYNCED_ATTRIBUTES$2,
-                    ATTRIBUTE_HELPER,
-                ];
-            }
-            /**
-             * Indique que ce composant peut être associé à un formulaire.
-             *
-             * @remarks
-             * Permet au composant de participer au cycle de vie des formulaires HTML,
-             * notamment la soumission, la validation et la réinitialisation.
-             *
-             * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals#instance_properties | ElementInternals}
-             */
-            static get formAssociated() {
-                return true;
-            }
-        });
-        return _classThis;
-    })();
-
-    /**
-     * Bouton Bnum de type "Danger".
-     *
-     * @structure Cas standard
-     * <bnum-danger-button>Texte du bouton</bnum-danger-button>
-     *
-     * @structure Bouton avec icône
-     * <bnum-danger-button data-icon="home">Texte du bouton</bnum-danger-button>
-     *
-     * @structure Bouton avec une icône à gauche
-     * <bnum-danger-button data-icon="home" data-icon-pos="left">Texte du bouton</bnum-danger-button>
-     *
-     * @structure Bouton en état de chargement
-     * <bnum-danger-button loading>Texte du bouton</bnum-danger-button>
-     *
-     * @structure Bouton arrondi
-     * <bnum-danger-button rounded>Texte du bouton</bnum-danger-button>
-     *
-     * @structure Bouton cachant le texte sur les petits layouts
-     * <bnum-danger-button data-hide="small" data-icon="menu">Menu</bnum-danger-button>
-     */
-    let HTMLBnumDangerButton = (() => {
-        let _classDecorators = [Define()];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = HTMLBnumButton;
-        (class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-            constructor() {
-                super();
-                const fromAttribute = false;
-                this.data(HTMLBnumButton.ATTR_VARIATION, exports.EButtonType.DANGER, fromAttribute);
-            }
-            static get TAG() {
-                return TAG_DANGER;
-            }
-        });
-        return _classThis;
-    })();
-
-    var BnumDateLocale;
-    (function (BnumDateLocale) {
-        BnumDateLocale["FR"] = "fr-FR";
-        BnumDateLocale["EN"] = "en-US";
-    })(BnumDateLocale || (BnumDateLocale = {}));
-    /**
-     * Native replacements for date-fns functions to reduce bundle size.
-     * Uses Intl API for localization and native Date for manipulations.
-     */
-    let BnumDateUtils = (() => {
-        let _staticExtraInitializers = [];
-        let _static_private__parse_decorators;
-        let _static_private__parse_descriptor;
-        return class BnumDateUtils {
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                _static_private__parse_decorators = [Risky()];
-                __esDecorate(this, _static_private__parse_descriptor = { value: __setFunctionName(function (dateString, format) {
-                        if (!dateString)
-                            return null;
-                        // 1. Si aucun format n'est fourni, on tente le parsing natif (ISO 8601)
-                        if (!format) {
-                            const d = new Date(dateString);
-                            return (this.isValid(d) ? d : null);
-                        }
-                        else {
-                            if (['PPPP', 'PPP', 'PP', 'P'].includes(format)) {
-                                format = 'dd/MM/yyyy';
-                            }
-                        }
-                        // On extrait les nombres de la chaîne (ignore les séparateurs comme / - :)
-                        const values = dateString.match(/\d+/g);
-                        const tokens = format.match(/[a-zA-Z]+/g);
-                        if (!values || !tokens || values.length !== tokens.length)
-                            return null;
-                        let year = new Date().getFullYear();
-                        let month = 0;
-                        let day = 1;
-                        let hour = 0;
-                        let minute = 0;
-                        tokens.forEach((token, index) => {
-                            const val = parseInt(values[index], 10);
-                            if (token.includes('y'))
-                                year = val;
-                            if (token.includes('M'))
-                                month = val - 1; // Mois 0-11 en JS
-                            if (token.includes('d'))
-                                day = val;
-                            if (token.includes('H'))
-                                hour = val;
-                            if (token.includes('m'))
-                                minute = val;
-                        });
-                        const result = new Date(year, month, day, hour, minute);
-                        return (this.isValid(result) ? result : null);
-                    }, "#_parse") }, _static_private__parse_decorators, { kind: "method", name: "#_parse", static: true, private: true, access: { has: obj => #_parse in obj, get: obj => obj.#_parse }, metadata: _metadata }, null, _staticExtraInitializers);
-                if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(this, _staticExtraInitializers);
-            }
-            /**
-             * Equivalent to date-fns/format.
-             * @param date Date to format.
-             * @param options Intl options or a simple locale string.
-             * @param locale Locale string (e.g., 'fr-FR', 'en-US').
-             */
-            static format(date, options = {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-            }, locale = 'fr-FR') {
-                return new Intl.DateTimeFormat(locale, options).format(date);
-            }
-            /**
-             * Parse une chaîne de caractères en objet Date.
-             * @param dateString La chaîne à parser (ex: "12/08/1997")
-             * @param format Optionnel : le format de la chaîne (ex: "dd/MM/yyyy")
-             */
-            static parse(dateString, format) {
-                return this.#_parse(dateString, format).unwrapOr(null);
-            }
-            /**
-             * Parse une chaîne de caractères en objet Date.
-             * @param dateString La chaîne à parser (ex: "12/08/1997")
-             * @param format Optionnel : le format de la chaîne (ex: "dd/MM/yyyy")
-             */
-            static get #_parse() { return _static_private__parse_descriptor.value; }
-            /**
-             * Equivalent to date-fns/isValid.
-             */
-            static isValid(date) {
-                return date instanceof Date && !isNaN(date.getTime());
-            }
-            /**
-             * Equivalent to date-fns/addDays (Immutable).
-             */
-            static addDays(date, days) {
-                const result = new Date(date);
-                result.setDate(result.getDate() + days);
-                return result;
-            }
-            /**
-             * Equivalent to date-fns/addMonths (Immutable).
-             */
-            static addMonths(date, months) {
-                const result = new Date(date);
-                result.setMonth(result.getMonth() + months);
-                return result;
-            }
-            /**
-             * Equivalent to date-fns/addYears (Immutable).
-             */
-            static addYears(date, years) {
-                const result = new Date(date);
-                result.setFullYear(result.getFullYear() + years);
-                return result;
-            }
-            /**
-             * Convertit dynamiquement une chaîne de tokens (ex: "dd/MM") en options Intl.
-             * @param pattern La chaîne de formatage.
-             */
-            static getOptionsFromToken(pattern) {
-                if (pattern.includes('PPPP'))
-                    return { dateStyle: 'full' };
-                if (pattern.includes('PPP'))
-                    return { dateStyle: 'long' };
-                if (pattern.includes('PP'))
-                    return { dateStyle: 'medium' };
-                if (pattern.includes('P'))
-                    return { dateStyle: 'short' };
-                const options = {};
-                if (pattern.includes('yyyy'))
-                    options.year = 'numeric';
-                else if (pattern.includes('yy'))
-                    options.year = '2-digit';
-                if (pattern.includes('MMMM'))
-                    options.month = 'long';
-                else if (pattern.includes('MMM'))
-                    options.month = 'short';
-                else if (pattern.includes('MM'))
-                    options.month = '2-digit';
-                else if (pattern.includes('M'))
-                    options.month = 'numeric';
-                if (pattern.includes('dd'))
-                    options.day = '2-digit';
-                else if (pattern.includes('d'))
-                    options.day = 'numeric';
-                if (pattern.includes('EEEE'))
-                    options.weekday = 'long';
-                else if (pattern.includes('E'))
-                    options.weekday = 'short';
-                if (pattern.includes('HH'))
-                    options.hour = '2-digit';
-                else if (pattern.includes('H'))
-                    options.hour = 'numeric';
-                if (pattern.includes('mm'))
-                    options.minute = '2-digit';
-                // Force 24h si on demande des heures
-                if (options.hour)
-                    options.hour12 = false;
-                return options;
-            }
-            /**
-             * Vérifie si deux dates correspondent au même jour (ignore l'heure).
-             * @param date Première date à comparer.
-             * @param now Deuxième date à comparer (par défaut : Date actuelle).
-             * @returns True si c'est le même jour.
-             */
-            static isSameDay(date, now = new Date()) {
-                return (date.getFullYear() === now.getFullYear() &&
-                    date.getMonth() === now.getMonth() &&
-                    date.getDate() === now.getDate());
-            }
-            /**
-             * Vérifie si la date fournie est aujourd'hui.
-             */
-            static isToday(date) {
-                return this.isSameDay(date, new Date());
-            }
-            /**
-             * Retourne une nouvelle date fixée au début du jour (00:00:00.000).
-             */
-            static startOfDay(date) {
-                const result = new Date(date);
-                result.setHours(0, 0, 0, 0);
-                return result;
-            }
-            /**
-             * Retourne une nouvelle date fixée à la fin du jour (23:59:59.999).
-             */
-            static endOfDay(date) {
-                const result = new Date(date);
-                result.setHours(23, 59, 59, 999);
-                return result;
-            }
-            /**
-             * Soustrait un nombre de jours à une date (Immuable).
-             */
-            static subDays(date, amount) {
-                return this.addDays(date, -amount);
-            }
-            /**
-             * Vérifie si une date se trouve dans un intervalle donné (inclusif).
-             * @param date Date à vérifier.
-             * @param interval Objet contenant start et end.
-             */
-            static isWithinInterval(date, interval) {
-                const time = date.getTime();
-                return time >= interval.start.getTime() && time <= interval.end.getTime();
-            }
-        };
-    })();
-
-    /**
-     * Affiche une date formatée qui peut être mise à jour dynamiquement.
-     *
-     * /!\ Seuls les formats de date supportés ceux par intl.DateTimeFormat.
-     *
-     * Vous DEVEZ utiliser les tokens suivants pour la configuration du format en html:
-     *
-     * - P : format court (ex: 12/08/1997)
-     * - PP : format moyen (ex: 12 août 1997)
-     * - PPP : format long (ex: mardi 12 août 1997)
-     * - PPPP : format complet (ex: mardi 12 août 1997)
-     * - yyyy : année sur 4 chiffres
-     * - yy : année sur 2 chiffres
-     * - M : mois numérique sans zéro initial
-     * - MM : mois numérique avec zéro initial
-     * - MMM : mois abrégé (ex: août)
-     * - MMMM : mois complet (ex: août)
-     * - d : jour du mois sans zéro initial
-     * - dd : jour du mois avec zéro initial
-     * - EEEE : jour de la semaine complet (ex: mardi)
-     * - E : jour de la semaine abrégé (ex: mar)
-     * - H : heure sans zéro initial (0-23)
-     * - HH : heure avec zéro initial (00-23)
-     * - mm : minutes avec zéro initial (00-59)
-     *
-     * Pour la locale, utilisez ceux par intl.
-     *
-     * A la place de `fr_FR`, vous pouvez utilisez `fr`.
-     *
-     * @structure Date simple
-     * <bnum-date format="P">1997-08-12</bnum-date>
-     *
-     * @structure Date avec parsing personnalisé
-     * <bnum-date format="PPPP" data-start-format="dd/MM/yyyy">12/08/1997</bnum-date>
-     *
-     * @structure Date avec attribut data-date
-     * <bnum-date format="ddMMyyyy HHmm" data-date="1997-08-12T15:30:00Z"></bnum-date>
-     *
-     * @structure Date en anglais
-     * <bnum-date format="PPPP" locale="en">1997-08-12</bnum-date>
-     *
-     * @state invalid - Actif quand la date est invalide ou non définie
-     * @state not-ready - Actif quand le composant n'est pas encore prêt
-     */
-    let HTMLBnumDate = (() => {
-        var _HTMLBnumDate_LOCALES;
-        let _classDecorators = [Define(), NonStd('Ne respecte pas la classe template')];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = BnumElementInternal;
-        let _instanceExtraInitializers = [];
-        let _static_private_LOCALES_decorators;
-        let _static_private_LOCALES_initializers = [];
-        let _static_private_LOCALES_extraInitializers = [];
-        let ___decorators;
-        let ___initializers = [];
-        let ___extraInitializers = [];
-        let _private_originalDate_decorators;
-        let _private_originalDate_initializers = [];
-        let _private_originalDate_extraInitializers = [];
-        let _private_outputFormat_decorators;
-        let _private_outputFormat_initializers = [];
-        let _private_outputFormat_extraInitializers = [];
-        let _private_locale_decorators;
-        let _private_locale_initializers = [];
-        let _private_locale_extraInitializers = [];
-        let _private_startFormat_decorators;
-        let _private_startFormat_initializers = [];
-        let _private_startFormat_extraInitializers = [];
-        let _private_outputElement_decorators;
-        let _private_outputElement_initializers = [];
-        let _private_outputElement_extraInitializers = [];
-        let _private_renderDate_decorators;
-        let _private_renderDate_descriptor;
-        let _private__format_decorators;
-        let _private__format_descriptor;
-        var HTMLBnumDate = class extends _classSuper {
-            static { _classThis = this; }
-            static { __setFunctionName(this, "HTMLBnumDate"); }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                _static_private_LOCALES_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                ___decorators = [Self];
-                _private_originalDate_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                _private_outputFormat_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                _private_locale_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                _private_startFormat_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                _private_outputElement_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                _private_renderDate_decorators = [NonStd('Ne suis pas le bon pattern de nommage pour un membre privée')];
-                _private__format_decorators = [Risky()];
-                __esDecorate(this, _private_renderDate_descriptor = { value: __setFunctionName(function () {
-                        this._p_clearStates();
-                        if (!this.#outputElement) {
-                            this._p_addState(this._.STATE_NOT_READY);
-                            return; // Pas encore prêt
-                        }
-                        if (!this.#originalDate) {
-                            this.#outputElement.textContent = EMPTY_STRING; // Affiche une chaîne vide si date invalide/null
-                            this._p_addState(this._.STATE_INVALID);
-                            return;
-                        }
-                        // Trouve la locale, avec fallback sur 'fr'
-                        const locale = this.localeElement;
-                        const textContent = this.#_format(locale).match({
-                            Ok: (formated) => this.formatEvent.call({ date: formated })?.date || formated,
-                            Err: (e) => {
-                                Log.error('HTMLBnumDate/renderDate', `Erreur de formatage Intl. Format: "${this.#outputFormat}`, '\\', BnumDateUtils.getOptionsFromToken(this.#outputFormat), '"', e);
-                                this._p_addState(HTMLBnumDate.STATE_INVALID);
-                                return 'Date invalide';
-                            },
-                        });
-                        this.#outputElement.textContent = textContent;
-                        this.setAttribute('aria-label', this.#outputElement.textContent);
-                    }, "#renderDate") }, _private_renderDate_decorators, { kind: "method", name: "#renderDate", static: false, private: true, access: { has: obj => #renderDate in obj, get: obj => obj.#renderDate }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(this, _private__format_descriptor = { value: __setFunctionName(function (locale) {
-                        if (this.#originalDate === null)
-                            throw new Error('Date is null');
-                        return BnumDateUtils.format(this.#originalDate, BnumDateUtils.getOptionsFromToken(this.#outputFormat), locale);
-                    }, "#_format") }, _private__format_decorators, { kind: "method", name: "#_format", static: false, private: true, access: { has: obj => #_format in obj, get: obj => obj.#_format }, metadata: _metadata }, null, _instanceExtraInitializers);
-                __esDecorate(null, null, _static_private_LOCALES_decorators, { kind: "field", name: "#LOCALES", static: true, private: true, access: { has: obj => __classPrivateFieldIn(_classThis, obj), get: obj => __classPrivateFieldGet(obj, _classThis, "f", _HTMLBnumDate_LOCALES), set: (obj, value) => { __classPrivateFieldSet(obj, _classThis, value, "f", _HTMLBnumDate_LOCALES); } }, metadata: _metadata }, _static_private_LOCALES_initializers, _static_private_LOCALES_extraInitializers);
-                __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
-                __esDecorate(null, null, _private_originalDate_decorators, { kind: "field", name: "#originalDate", static: false, private: true, access: { has: obj => #originalDate in obj, get: obj => obj.#originalDate, set: (obj, value) => { obj.#originalDate = value; } }, metadata: _metadata }, _private_originalDate_initializers, _private_originalDate_extraInitializers);
-                __esDecorate(null, null, _private_outputFormat_decorators, { kind: "field", name: "#outputFormat", static: false, private: true, access: { has: obj => #outputFormat in obj, get: obj => obj.#outputFormat, set: (obj, value) => { obj.#outputFormat = value; } }, metadata: _metadata }, _private_outputFormat_initializers, _private_outputFormat_extraInitializers);
-                __esDecorate(null, null, _private_locale_decorators, { kind: "field", name: "#locale", static: false, private: true, access: { has: obj => #locale in obj, get: obj => obj.#locale, set: (obj, value) => { obj.#locale = value; } }, metadata: _metadata }, _private_locale_initializers, _private_locale_extraInitializers);
-                __esDecorate(null, null, _private_startFormat_decorators, { kind: "field", name: "#startFormat", static: false, private: true, access: { has: obj => #startFormat in obj, get: obj => obj.#startFormat, set: (obj, value) => { obj.#startFormat = value; } }, metadata: _metadata }, _private_startFormat_initializers, _private_startFormat_extraInitializers);
-                __esDecorate(null, null, _private_outputElement_decorators, { kind: "field", name: "#outputElement", static: false, private: true, access: { has: obj => #outputElement in obj, get: obj => obj.#outputElement, set: (obj, value) => { obj.#outputElement = value; } }, metadata: _metadata }, _private_outputElement_initializers, _private_outputElement_extraInitializers);
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                HTMLBnumDate = _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            }
-            /**
-             * Attribut format
-             * @attr {string} (optional) (default: 'P') format - Le format de sortie.
-             */
-            static ATTRIBUTE_FORMAT = 'format';
-            /**
-             * Attribut locale
-             * @attr {string} (optional) (default: undefined) locale - La locale pour le formatage
-             */
-            static ATTRIBUTE_LOCALE = 'locale';
-            /**
-             * Attribut date
-             * @attr {string | undefined} (optional) data-date - La date source (prioritaire sur le textContent)
-             */
-            static ATTRIBUTE_DATE = 'data-date';
-            /**
-             * Attribut start-format
-             * @attr {string | undefined} (optional) data-start-format - Le format de parsing si la date source est une chaîne
-             */
-            static ATTRIBUTE_START_FORMAT = 'data-start-format';
-            /**
-             * Événement déclenché lors de la mise à jour d'un attribut
-             * @event bnum-date:attribute-updated
-             * @detail { property: string; newValue: string | null; oldValue: string | null }
-             */
-            static EVENT_ATTRIBUTE_UPDATED = 'bnum-date:attribute-updated';
-            /**
-             * Événement déclenché lors de la mise à jour du format de la date
-             * @event bnum-date:attribute-updated:format
-             * @detail { property: string; newValue: string | null; oldValue: string | null }
-             */
-            static EVENT_ATTRIBUTE_UPDATED_FORMAT = 'bnum-date:attribute-updated:format';
-            /**
-             * Événement déclenché lors de la mise à jour de la locale
-             * @event bnum-date:attribute-updated:locale
-             * @detail { property: string; newValue: string | null; oldValue: string | null }
-             */
-            static EVENT_ATTRIBUTE_UPDATED_LOCALE = 'bnum-date:attribute-updated:locale';
-            /**
-             * Événement déclenché lors de la mise à jour de la date
-             * @event bnum-date:date
-             * @detail { property: string; newValue: Date | null; oldValue: Date | null }
-             */
-            static EVENT_DATE = 'bnum-date:date';
-            /** Valeur par défaut du format */
-            static DEFAULT_FORMAT = 'dd/MM/yyyy HH:mm';
-            /** Valeur par défaut de la locale */
-            static DEFAULT_LOCALE = 'fr';
-            /**
-             * État invalide
-             */
-            static STATE_INVALID = 'invalid';
-            /** État non prêt */
-            static STATE_NOT_READY = 'not-ready';
-            /** Nom de la balise */
-            static get TAG() {
-                return TAG_DATE;
-            }
-            static {
-                /**
-                 * Registre statique des raccourcis des locales.
-                 */
-                _HTMLBnumDate_LOCALES = { value: __runInitializers(_classThis, _static_private_LOCALES_initializers, {
-                        fr: BnumDateLocale.FR,
-                        en: BnumDateLocale.EN,
-                    }) };
-            }
-            /** Attributs observés pour la mise à jour. */
-            static _p_observedAttributes() {
-                return [this.ATTRIBUTE_FORMAT, this.ATTRIBUTE_LOCALE];
-            }
-            // --- Champs privés (état interne) ---
-            /** Référence à la classe HTMLBnumDate */
-            _ = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, ___initializers, void 0));
-            /** L'objet Date (notre source de vérité) */
-            #originalDate = (__runInitializers(this, ___extraInitializers), __runInitializers(this, _private_originalDate_initializers, null));
-            /** Le format d'affichage (ex: 'PPPP') */
-            #outputFormat = (__runInitializers(this, _private_originalDate_extraInitializers), __runInitializers(this, _private_outputFormat_initializers, this._.DEFAULT_FORMAT)); // 'P' -> 12/08/1997
-            /** La locale (code) */
-            #locale = (__runInitializers(this, _private_outputFormat_extraInitializers), __runInitializers(this, _private_locale_initializers, this._.DEFAULT_LOCALE));
-            /** Le format de parsing (ex: 'dd/MM/yyyy') */
-            #startFormat = (__runInitializers(this, _private_locale_extraInitializers), __runInitializers(this, _private_startFormat_initializers, null));
-            /** L'élément SPAN interne qui contient le texte formaté */
-            #outputElement = (__runInitializers(this, _private_startFormat_extraInitializers), __runInitializers(this, _private_outputElement_initializers, null));
-            #_renderSheduled = (__runInitializers(this, _private_outputElement_extraInitializers), false);
-            /**
-             * Événement circulaire déclenché lors du formatage de la date.
-             * Permet de personnaliser le formatage via un listener externe.
-             */
-            formatEvent = new eventExports.JsCircularEvent();
-            /**
-             * Indique que ce composant utilise le Shadow DOM.
-             * @returns {boolean}
-             */
-            _p_isShadowElement() {
-                return true;
-            }
-            /**
-             * Construit le DOM interne (appelé une seule fois).
-             * @param container Le ShadowRoot
-             */
-            _p_buildDOM(container) {
-                this.#outputElement = document.createElement('span');
-                this.#outputElement.setAttribute('part', 'date-text'); // Permet de styler depuis l'extérieur
-                container.append(this.#outputElement);
-            }
-            /**
-             * Phase de pré-chargement (avant _p_buildDOM).
-             * On lit les attributs initiaux et le textContent.
-             */
-            _p_preload() {
-                // On ajoute un listener sur `bnum-date:attribute-updated` pour trigger les propriété de manière + précises.
-                this.addEventListener(this._.EVENT_ATTRIBUTE_UPDATED, (e) => {
-                    this.trigger(`${this._.EVENT_ATTRIBUTE_UPDATED}:${e.detail.property}`, e.detail);
-                });
-                // Lire les attributs de configuration
-                this.#outputFormat =
-                    this.getAttribute(this._.ATTRIBUTE_FORMAT) || this.#outputFormat;
-                this.#locale = this.getAttribute(this._.ATTRIBUTE_LOCALE) || this.#locale;
-                this.#startFormat =
-                    this.getAttribute(this._.ATTRIBUTE_START_FORMAT) || null;
-                // Déterminer la date initiale (priorité à data-date)
-                const initialDateStr = this.getAttribute(this._.ATTRIBUTE_DATE) ||
-                    this.textContent?.trim() ||
-                    null;
-                // Définir la date sans déclencher de rendu (render=false)
-                if (initialDateStr)
-                    this.setDate(initialDateStr, this.#startFormat, false);
-            }
-            /**
-             * Phase d'attachement (après _p_buildDOM).
-             * C'est ici qu'on fait le premier rendu.
-             */
-            _p_attach() {
-                this.#renderDate();
-            }
-            /**
-             * Gère les changements d'attributs (appelé après _p_preload).
-             */
-            _p_update(name, oldVal, newVal) {
-                if (oldVal === newVal)
-                    return;
-                let needsRender = false;
-                switch (name) {
-                    case this._.ATTRIBUTE_FORMAT:
-                        this.#outputFormat = newVal || this._.DEFAULT_FORMAT;
-                        needsRender = true;
-                        break;
-                    case this._.ATTRIBUTE_LOCALE:
-                        this.#locale = newVal || this._.DEFAULT_LOCALE;
-                        needsRender = true;
-                        break;
-                    case this._.ATTRIBUTE_START_FORMAT:
-                        this.#startFormat = newVal;
-                        // Pas de re-rendu, affecte seulement le prochain setDate()
-                        break;
-                    case this._.ATTRIBUTE_DATE:
-                        // Re-parse la date
-                        this.setDate(newVal, this.#startFormat, false);
-                        needsRender = true;
-                        break;
-                }
-                if (needsRender) {
-                    this.#renderDate();
-                    // On déclenche l'événement pour la réactivité
-                    this.trigger(this._.EVENT_ATTRIBUTE_UPDATED, {
-                        property: name,
-                        newValue: newVal,
-                        oldValue: oldVal,
-                    });
-                }
-            }
-            // --- API Publique (Propriétés) ---
-            /**
-             * Définit ou obtient l'objet Date.
-             * C'est le point d'entrée principal pour JS.
-             */
-            get date() {
-                return this.#originalDate;
-            }
-            set date(value) {
-                this.setDate(value, this.#startFormat, true);
-            }
-            /** Définit ou obtient le format d'affichage. */
-            get format() {
-                return this.#outputFormat;
-            }
-            set format(value) {
-                this.setAttribute(this._.ATTRIBUTE_FORMAT, value);
-            }
-            /** Définit ou obtient la locale. */
-            get locale() {
-                return this.#locale;
-            }
-            set locale(value) {
-                this.setAttribute(this._.ATTRIBUTE_LOCALE, value);
-            }
-            get localeElement() {
-                return (__classPrivateFieldGet(this._, _classThis, "f", _HTMLBnumDate_LOCALES)[this.#locale] ||
-                    this.#locale ||
-                    __classPrivateFieldGet(this._, _classThis, "f", _HTMLBnumDate_LOCALES)[this._.DEFAULT_LOCALE]);
-            }
-            // --- API Publique (Méthodes) ---
-            /**
-             * Définit la date à partir d'une chaîne, d'un objet Date ou null.
-             * @param dateInput La date source.
-             * @param startFormat Le format pour parser la date si c'est une chaîne.
-             * @param triggerRender Indique s'il faut rafraîchir l'affichage (par défaut: true).
-             */
-            setDate(dateInput, startFormat, triggerRender = true) {
-                const oldDate = this.#originalDate;
-                let newDate = null;
-                if (dateInput === null) {
-                    newDate = null;
-                }
-                else if (dateInput instanceof Date) {
-                    newDate = dateInput;
-                }
-                else if (typeof dateInput === 'string') {
-                    if (dateInput.trim() === 'now') {
-                        newDate = new Date();
-                    }
-                    else {
-                        const formatToUse = startFormat || this.#startFormat;
-                        if (formatToUse) {
-                            // Parsing avec format spécifique
-                            newDate = BnumDateUtils.parse(dateInput, formatToUse); //parse(dateInput, formatToUse, new Date());
-                        }
-                        else {
-                            // Parsing natif (ISO 8601, timestamps...)
-                            newDate = new Date(dateInput);
-                        }
-                    }
-                }
-                // Vérification de la validité
-                if (newDate && BnumDateUtils.isValid(newDate)) {
-                    this.#originalDate = newDate;
-                }
-                else {
-                    this.#originalDate = null;
-                }
-                // Déclenche le rendu et/ou l'événement si la date a changé
-                if (oldDate?.getTime() !== this.#originalDate?.getTime()) {
-                    if (triggerRender) {
-                        this.#renderDate();
-                    }
-                    this.trigger(this._.EVENT_DATE, {
-                        property: 'date',
-                        newValue: this.#originalDate,
-                        oldValue: oldDate,
-                    });
-                }
-            }
-            /** Récupère l'objet Date actuel. */
-            getDate() {
-                return this.#originalDate;
-            }
-            /** Ajoute un nombre de jours à la date actuelle. */
-            addDays(days) {
-                if (!this.#originalDate)
-                    return;
-                this.date = BnumDateUtils.addDays(this.#originalDate, days);
-            }
-            /** Ajoute un nombre de mois à la date actuelle. */
-            addMonths(months) {
-                if (!this.#originalDate)
-                    return;
-                this.date = BnumDateUtils.addMonths(this.#originalDate, months);
-            }
-            /** Ajoute un nombre d'années à la date actuelle. */
-            addYears(years) {
-                if (!this.#originalDate)
-                    return;
-                this.date = BnumDateUtils.addYears(this.#originalDate, years);
-            }
-            askRender() {
-                if (this.#_renderSheduled)
-                    return;
-                this.#_renderSheduled = true;
-                requestAnimationFrame(() => {
-                    this.#_renderSheduled = false;
-                    this.#renderDate();
-                });
-            }
-            // --- Méthodes Privées ---
-            /**
-             * Met à jour le textContent du span interne.
-             * C'est la seule fonction qui écrit dans le DOM.
-             */
-            get #renderDate() { return _private_renderDate_descriptor.value; }
-            get #_format() { return _private__format_descriptor.value; }
-            /**
-             * Méthode statique pour la création (non implémentée ici,
-             * mais suit le pattern de BnumElement).
-             */
-            static Create(dateInput, options) {
-                const el = document.createElement(this.TAG);
-                if (options?.format)
-                    el.format = options.format;
-                if (options?.locale)
-                    el.locale = options.locale;
-                if (options?.startFormat)
-                    el.setAttribute(this.ATTRIBUTE_START_FORMAT, options.startFormat);
-                if (typeof dateInput === 'string')
-                    el.appendChild(document.createTextNode(dateInput));
-                else if (dateInput)
-                    el.date = dateInput;
-                return el;
-            }
-            static {
-                __runInitializers(_classThis, _static_private_LOCALES_extraInitializers);
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-        };
-        return HTMLBnumDate = _classThis;
-    })();
-
-    var css_248z$i = ":host{border-bottom:thin dotted;cursor:help}";
-
-    // bnum-helper.ts
-    const SHEET$c = BnumElement.ConstructCSSStyleSheet(css_248z$i);
-    /**
-     * Constante représentant l'icône utilisée par défaut.
-     */
-    const ICON = 'help';
-    (() => {
-        let _classDecorators = [Define()];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = BnumElement;
-        (class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-            /**
-             * Constructeur de l'élément HTMLBnumHelper.
-             * Initialise l'élément.
-             */
-            constructor() {
-                super();
-            }
-            /**
-             * Précharge les données de l'élément.
-             * Si l'élément possède des enfants, le texte est déplacé dans l'attribut title et le contenu est vidé.
-             */
-            _p_preload() {
-                super._p_preload();
-                setTimeout(() => {
-                    if (this.hasChildNodes()) {
-                        this.setAttribute('title', this.textContent ?? EMPTY_STRING);
-                        this.textContent = EMPTY_STRING;
-                    }
-                }, 0);
-            }
-            /**
-             * Construit le DOM interne de l'élément.
-             * Ajoute l'icône d'aide dans le conteneur.
-             * @param container Racine du shadow DOM ou élément HTML.
-             */
-            _p_buildDOM(container) {
-                super._p_buildDOM(container);
-                container.appendChild(HTMLBnumIcon.Create(ICON));
-            }
-            /**
-             * @inheritdoc
-             */
-            _p_getStylesheets() {
-                return [...super._p_getStylesheets(), SHEET$c];
-            }
-            /**
-             * Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.
-             * @param title Texte d'aide à afficher dans l'attribut title.
-             * @returns {HTMLBnumHelper} Instance du composant.
-             */
-            static Create(title) {
-                const element = document.createElement(this.TAG);
-                element.setAttribute('title', title);
-                return element;
-            }
-            /**
-             * Tag HTML du composant.
-             * @readonly
-             * @returns {string} Tag HTML utilisé pour ce composant.
-             */
-            static get TAG() {
-                return TAG_HELPER;
-            }
-        });
-        return _classThis;
-    })();
-
-    var css_248z$h = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
-
-    //#region Global Constants
-    const ID_ICON$1 = 'icon';
-    //#endregion Global Constants
-    const SHEET$b = BnumElement.ConstructCSSStyleSheet(css_248z$h);
-    const TEMPLATE$e = BnumElement.CreateTemplate(`
-    <${HTMLBnumIcon.TAG} id="${ID_ICON$1}"><slot></slot></${HTMLBnumIcon.TAG}>
-    `);
-    /**
-     * Button contenant une icône.
-     *
-     * @structure Button Icon
-     * <bnum-icon-button>home</bnum-icon-button>
-     *
-     * @structure Button Disabled
-     * <bnum-icon-button disabled>home</bnum-icon-button>
-     *
-     * @cssvar {0.6} --bnum-button-disabled-opacity - Opacité du bouton désactivé
-     * @cssvar {none} --bnum-button-disabled-pointer-events - Gestion des événements souris pour le bouton désactivé
-     *
-     * @slot (default) - Contenu de l'icône (nom de l'icône à afficher)
-     */
-    let HTMLBnumButtonIcon = (() => {
-        let _classDecorators = [Define()];
-        let _classDescriptor;
-        let _classExtraInitializers = [];
-        let _classThis;
-        let _classSuper = BnumElement;
-        let ___decorators;
-        let ___initializers = [];
-        let ___extraInitializers = [];
-        (class extends _classSuper {
-            static { _classThis = this; }
-            static {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                ___decorators = [Self];
-                __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            }
-            //#region Constantes
-            /**
-             * Id de l'icône à l'intérieur du bouton
-             */
-            static ID_ICON = ID_ICON$1;
-            /**
-             * Attribut pour définir le gestionnaire de clic
-             * @event click
-             */
-            static ATTRIBUTE_ON_CLICK = 'onclick';
-            //#endregion Constantes
-            //#region Private fields
-            /**
-             * Référence vers l'élément icône à l'intérieur du bouton
-             */
-            #_icon = null;
-            #_onClick = null;
-            #_lastClick = null;
-            //#endregion Private fields
-            //#region Getters/Setters
-            /** Référence à la classe HTMLBnumButtonIcon */
-            _ = __runInitializers(this, ___initializers, void 0);
-            get #_linkedClickEvent() {
-                if (this.#_onClick === null) {
-                    this.#_onClick = new JsEvent();
-                    this.addEventListener('click', () => {
-                        this.#_onClick?.call?.();
-                    });
-                }
-                return this.#_onClick;
-            }
-            /**
-             * Référence vers l'élément icône à l'intérieur du bouton.
-             *
-             * Si l'icône n'a pas été mise en mémoire, elle sera cherché puis mise en mémoire.
-             */
-            get #_iconElement() {
-                if (!this.#_icon) {
-                    const icon = this.querySelector(HTMLBnumIcon.TAG) ??
-                        this.shadowRoot?.getElementById(this._.ID_ICON);
-                    if (!icon)
-                        this.#_throw('Icon element not found inside icon button');
-                    this.#_icon = icon;
-                }
-                return this.#_icon;
-            }
-            /**
-             * Icône affichée dans le bouton
-             */
-            get icon() {
-                return ((this.#_iconElement.icon || this.#_throw('Icon is not defined')) ??
-                    EMPTY_STRING);
-            }
-            set icon(value) {
-                this.#_iconElement.icon = value;
-            }
-            //#endregion Getters/Setters
-            //#region Lifecycle
-            constructor() {
-                super();
-                __runInitializers(this, ___extraInitializers);
-            }
-            /**
-             * @inheritdoc
-             */
-            _p_getStylesheets() {
-                return [...super._p_getStylesheets(), SHEET$b];
-            }
-            /**
-             * @inheritdoc
-             */
-            _p_fromTemplate() {
-                return TEMPLATE$e;
-            }
-            /**
-             * @inheritdoc
-             */
-            _p_buildDOM(_) {
-                HTMLBnumButton.ToButton(this);
-                if (this.title === EMPTY_STRING)
-                    Log.warn(this._.TAG, 'Icon button should have a title for accessibility purposes');
-                if (this.hasAttribute('click')) {
-                    const click = this.getAttribute('click');
-                    this.#_updateAttributeClick(click ?? EMPTY_STRING);
-                }
-            }
-            _p_update(name, oldVal, newVal) {
-                if (oldVal === newVal)
-                    return;
-                if (name === 'click') {
-                    this.#_updateAttributeClick(newVal ?? EMPTY_STRING);
-                }
-            }
-            //#endregion Lifecycle
-            //#region Private methods
-            #_updateAttributeClick(val) {
-                if (val !== this.#_lastClick) {
-                    this.#_lastClick = val;
-                    if (this.#_linkedClickEvent.has('click'))
-                        this.#_linkedClickEvent.remove('click');
-                    if (val && REG_XSS_SAFE.test(val)) {
-                        this.#_linkedClickEvent.add('click', (click) => {
-                            // Si c'est un id unique
-                            var elementToClick = document.getElementById(click);
-                            if (elementToClick)
-                                elementToClick.click();
-                            else {
-                                // Sinon on part du principe que c'est un sélecteur CSS
-                                const elements = document.querySelector(click);
-                                if (elements)
-                                    elements.click();
-                                else
-                                    throw new Error(`[${this._.TAG}] L'attribut 'click' ne référence aucun élément.`);
-                            }
-                        }, val);
-                    }
-                }
-            }
-            /**
-             * Permet de lancer une erreur avec un message spécifique dans une expression inline.
-             * @param msg Message à envoyer dans l'erreur.
-             */
-            #_throw(msg) {
-                throw new Error(msg);
-            }
-            //#endregion Private methods
-            //#region Static methods
-            /**
-             * Retourne la liste des attributs observés par le composant.
-             */
-            static _p_observedAttributes() {
-                return ['click'];
-            }
-            /**
-             * Génère un bouton icône avec l'icône spécifiée.
-             * @param icon Icône à afficher dans le bouton.
-             * @returns Node créée.
-             */
-            static Create(icon) {
-                const node = document.createElement(this.TAG);
-                node.icon = icon;
-                return node;
-            }
-            /**
-             * Génère le code HTML d'un bouton icône avec l'icône spécifiée.
-             * @param icon Icône à afficher dans le bouton.
-             * @returns Code HTML créée.
-             */
-            static Write(icon, attrs = {}) {
-                return `<${this.TAG} ${this._p_WriteAttributes(attrs)}>${icon}</${this.TAG}>`;
-            }
-            /**
-             * Tag de l'élément.
-             */
-            static get TAG() {
-                return TAG_ICON_BUTTON;
-            }
-            static {
-                __runInitializers(_classThis, _classExtraInitializers);
-            }
-        });
-        return _classThis;
-    })();
-
-    var css_248z$g = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
-
-    const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$g);
+    const SHEET$a = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$h);
     /**
      * Input nombre.
      *
@@ -8000,9 +6837,9 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
-    var css_248z$f = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
+    var css_248z$g = ":host #input-search-actions-container{display:flex;position:absolute;right:10px;top:8px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
 
-    const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$f);
+    const SHEET$9 = HTMLBnumInput.ConstructCSSStyleSheet(css_248z$g);
     //#region Global Constants
     const ID_ACTIONS_CONTAINER = 'input-search-actions-container';
     const ID_CLEAR_BUTTON = 'input-clear-button';
@@ -8010,7 +6847,7 @@ var Bnum = (function (exports) {
     const EVENT_SEARCH = 'bnum-input-search:search';
     //#endregion Global Constants
     //#region Template
-    const TEMPLATE$d = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
+    const TEMPLATE$e = HTMLBnumInput.CreateTemplate(`<div id="${ID_ACTIONS_CONTAINER}">
       ${HTMLBnumButtonIcon.Write('close', { id: ID_CLEAR_BUTTON })}
       <slot name="${SLOT_ACTIONS}"></slot>
     </div>`);
@@ -8147,7 +6984,7 @@ var Bnum = (function (exports) {
                 __runInitializers(this, ____extraInitializers);
             }
             _p_fromTemplate() {
-                return TEMPLATE$d;
+                return TEMPLATE$e;
             }
             _p_getStylesheets() {
                 return [...super._p_getStylesheets(), SHEET$9];
@@ -8813,6 +7650,123 @@ var Bnum = (function (exports) {
         return _classThis;
     })();
 
+    // core/jsx/index.ts
+    const VOID_TAGS = new Set([
+        'area',
+        'base',
+        'br',
+        'col',
+        'embed',
+        'hr',
+        'img',
+        'input',
+        'link',
+        'meta',
+        'param',
+        'source',
+        'track',
+        'wbr',
+    ]);
+    function h(tag, props, ...argsChildren) {
+        if (typeof tag === 'function' && 'TAG' in tag) {
+            tag = tag.TAG;
+        }
+        if (typeof tag === 'function') {
+            const children = argsChildren.length ? argsChildren : props?.children || [];
+            return tag({ ...props, children });
+        }
+        let attrs = EMPTY_STRING;
+        if (props) {
+            for (const key in props) {
+                const value = props[key];
+                if (key === 'children' || value == null || value === false)
+                    continue;
+                const name = key === 'className' ? 'class' : key;
+                if (key === 'style' && typeof value === 'object') {
+                    let styleStr = EMPTY_STRING;
+                    for (const sKey in value) {
+                        styleStr += `${sKey}:${value[sKey]};`;
+                    }
+                    attrs += ` ${name}="${styleStr}"`;
+                }
+                else if (value === true) {
+                    attrs += ` ${name}`;
+                }
+                else {
+                    attrs += ` ${name}="${value}"`;
+                }
+            }
+        }
+        const open = `<${tag}${attrs}>`;
+        if (VOID_TAGS.has(tag))
+            return open;
+        const rawChildren = argsChildren.length > 0 ? argsChildren : props?.children;
+        const content = renderChildren(rawChildren);
+        return `${open}${content}</${tag}>`;
+    }
+    // Helper récursif ultra-rapide pour les enfants
+    function renderChildren(child) {
+        if (child == null || child === false || child === true)
+            return EMPTY_STRING;
+        if (Array.isArray(child)) {
+            let str = EMPTY_STRING;
+            for (let i = 0; i < child.length; i++) {
+                str += renderChildren(child[i]);
+            }
+            return str;
+        }
+        return String(child);
+    }
+
+    // core/decorators/ui.ts
+    function UI(selectorMap, options) {
+        const { shadowRoot = true } = options || {};
+        return function (target, context) {
+            const name = String(context.name);
+            // Symbole pour stocker l'objet UI une fois créé
+            const uiCacheKey = Symbol(name);
+            return {
+                get() {
+                    // 1. Si l'objet UI existe déjà, on le retourne
+                    if (this[uiCacheKey]) {
+                        return this[uiCacheKey];
+                    }
+                    const root = shadowRoot ? this.shadowRoot || this : this;
+                    // 2. On crée un objet vide
+                    const uiObject = {};
+                    // 3. On utilise un Map interne pour stocker les résultats des querySelector
+                    //    pour ne pas les refaire à chaque accès (Cache granulaire)
+                    const domCache = new Map();
+                    // 4. On définit dynamiquement des getters pour chaque clé
+                    for (const [key, selector] of Object.entries(selectorMap)) {
+                        Object.defineProperty(uiObject, key, {
+                            configurable: true,
+                            enumerable: true,
+                            get: () => {
+                                // A. Si on a déjà cherché cet élément précis, on le rend
+                                if (domCache.has(key)) {
+                                    return domCache.get(key);
+                                }
+                                // B. Sinon, on fait le querySelector (LAZY)
+                                const element = root.querySelector(selector);
+                                // C. On le met en cache
+                                domCache.set(key, element);
+                                return element;
+                            },
+                            // Permet d'écraser manuellement si besoin : this.#_ui.icon = ...
+                            set: (value) => {
+                                domCache.set(key, value);
+                            },
+                        });
+                    }
+                    // 5. On stocke l'objet configuré sur l'instance et on le retourne
+                    this[uiCacheKey] = uiObject;
+                    return uiObject;
+                },
+            };
+        };
+    }
+
     const PropertyMode = {
         default: 'rw',
         readonly: 'readonly',
@@ -8917,7 +7871,31 @@ var Bnum = (function (exports) {
         };
     })();
 
-    var css_248z$e = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal-color:var(--bnum-radio-color,var(--bnum-color-primary,#000091));--_internal-font-size:var(--bnum-radio-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-radio-outer-size:var(--_internal-font-size);--_internal-radio-inner-size:calc(var(--_internal-radio-outer-size)*0.6);--_internal-border-size:var(--bnum-radio-border-size,1px);--_internal-border-radius:var(--bnum-radio-border-radius,var(--bnum-radius-circle,50%));position:relative}.radio{height:0;opacity:0;position:absolute;width:0}.radio__label{display:flex;flex-direction:column;margin-left:calc(var(--_internal-radio-outer-size) + 10px)}.radio__label--legend{font-size:var(--_internal-font-size)}.radio__label:before{border:solid var(--_internal-border-size) var(--_internal-color);box-sizing:border-box;height:var(--_internal-radio-outer-size);left:0;top:0;width:var(--_internal-radio-outer-size)}.radio__label:after,.radio__label:before{border-radius:var(--_internal-border-radius);content:\"\";position:absolute}.radio__label:after{--_internal-pos:calc(var(--_internal-radio-outer-size)/2);background:var(--_internal-color);display:none;height:var(--_internal-radio-inner-size);left:var(--_internal-pos);top:var(--_internal-pos);transform:translate(-50%,-50%);width:var(--_internal-radio-inner-size)}.radio:checked~.radio__label:after{display:block}.radio:focus~.radio__label:before,:host(:focus-visible) .radio__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}:host(:focus-visible){outline:none}:host(:disabled),:host([disabled]){opacity:.6;pointer-events:none}";
+    var css_248z$f = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_internal-color:var(--bnum-radio-color,var(--bnum-color-primary,#000091));--_internal-font-size:var(--bnum-radio-font-size,var(--bnum-body-font-size,var(--bnum-font-size-m,1rem)));--_internal-radio-outer-size:var(--_internal-font-size);--_internal-radio-inner-size:calc(var(--_internal-radio-outer-size)*0.6);--_internal-border-size:var(--bnum-radio-border-size,1px);--_internal-border-radius:var(--bnum-radio-border-radius,var(--bnum-radius-circle,50%));position:relative}.radio{height:0;opacity:0;position:absolute;width:0}.radio__label{display:flex;flex-direction:column;margin-left:calc(var(--_internal-radio-outer-size) + 10px)}.radio__label--legend{font-size:var(--_internal-font-size)}.radio__label:before{border:solid var(--_internal-border-size) var(--_internal-color);box-sizing:border-box;height:var(--_internal-radio-outer-size);left:0;top:0;width:var(--_internal-radio-outer-size)}.radio__label:after,.radio__label:before{border-radius:var(--_internal-border-radius);content:\"\";position:absolute}.radio__label:after{--_internal-pos:calc(var(--_internal-radio-outer-size)/2);background:var(--_internal-color);display:none;height:var(--_internal-radio-inner-size);left:var(--_internal-pos);top:var(--_internal-pos);transform:translate(-50%,-50%);width:var(--_internal-radio-inner-size)}.radio:checked~.radio__label:after{display:block}.radio:focus~.radio__label:before,:host(:focus-visible) .radio__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}:host(:focus-visible){outline:none}:host(:disabled),:host([disabled]){opacity:.6;pointer-events:none}";
+
+    const listenersCacheKey = Symbol('listenersCache');
+    function Listener(initilizator) {
+        return function (_target, context) {
+            const methodName = String(context.name);
+            const listenerCacheKey = Symbol(`listener_${methodName}`);
+            return {
+                get() {
+                    const self = this;
+                    if (!self[listenersCacheKey])
+                        self[listenersCacheKey] = new Map();
+                    if (self[listenersCacheKey].has(listenerCacheKey)) {
+                        return self[listenersCacheKey].get(listenerCacheKey);
+                    }
+                    const event = new JsEvent();
+                    if (initilizator) {
+                        initilizator(event, this);
+                    }
+                    self[listenersCacheKey].set(listenerCacheKey, event);
+                    return self[listenersCacheKey].get(listenerCacheKey);
+                },
+            };
+        };
+    }
 
     //#region Utilities
     /**
@@ -8977,7 +7955,7 @@ var Bnum = (function (exports) {
      * Nom de l'attribut 'checked'.
      * @internal
      */
-    const ATTRIBUTE_CHECKED = 'checked';
+    const ATTRIBUTE_CHECKED$1 = 'checked';
     /**
      * Nom de l'attribut 'value'.
      * @internal
@@ -8987,7 +7965,7 @@ var Bnum = (function (exports) {
      * Nom de l'événement 'change'.
      * @internal
      */
-    const EVENT_CHANGE$2 = 'bnum-radio:change';
+    const EVENT_CHANGE$3 = 'bnum-radio:change';
     /**
      * Liste des attributs synchronisés entre l'élément hôte et l'input interne.
      *
@@ -8995,7 +7973,7 @@ var Bnum = (function (exports) {
      * Ces attributs sont automatiquement propagés de l'élément personnalisé vers l'input natif.
      * @internal
      */
-    const SYNCED_ATTRIBUTES$1 = ['name', 'checked', 'value', 'disabled'];
+    const SYNCED_ATTRIBUTES$2 = ['name', 'checked', 'value', 'disabled'];
     /**
      * Template HTML du composant radio.
      *
@@ -9004,7 +7982,7 @@ var Bnum = (function (exports) {
      * Comprend un input radio natif et un label avec des slots pour le contenu et l'indice.
      * @internal
      */
-    const TEMPLATE$c = (h(HTMLBnumFragment, { children: [h("input", { type: "radio", id: ID_INPUT, class: "radio" }), h("label", { part: "label", for: "radio", class: "radio__label", children: [h("span", { class: "radio__label--legend", children: h("slot", { id: "legend" }) }), h("span", { class: "radio--hint label-container--hint", children: h("slot", { id: "hint", name: "hint" }) })] })] }));
+    const TEMPLATE$d = (h(HTMLBnumFragment, { children: [h("input", { type: "radio", id: ID_INPUT, class: "radio" }), h("label", { part: "label", for: "radio", class: "radio__label", children: [h("span", { class: "radio__label--legend", children: h("slot", { id: "legend" }) }), h("span", { class: "radio--hint label-container--hint", children: h("slot", { id: "hint", name: "hint" }) })] })] }));
     //#endregion Global Constants
     /**
      * Composant personnalisé représentant un bouton radio avec support de formulaire.
@@ -9070,9 +8048,9 @@ var Bnum = (function (exports) {
      */
     let HTMLBnumRadio = (() => {
         let _classDecorators = [Define({
-                template: TEMPLATE$c,
+                template: TEMPLATE$d,
                 tag: TAG_RADIO,
-                styles: [INPUT_BASE_STYLE, css_248z$e],
+                styles: [INPUT_BASE_STYLE, css_248z$f],
             })];
         let _classDescriptor;
         let _classExtraInitializers = [];
@@ -9365,7 +8343,7 @@ var Bnum = (function (exports) {
              */
             _p_update(name, oldVal, newVal) {
                 let needUpdate = oldVal !== newVal;
-                if (name === ATTRIBUTE_CHECKED) {
+                if (name === ATTRIBUTE_CHECKED$1) {
                     const isChecked = this.#_ui.input.checked;
                     const willBeChecked = newVal !== null && newVal !== 'false';
                     needUpdate = isChecked !== willBeChecked;
@@ -9532,13 +8510,13 @@ var Bnum = (function (exports) {
              * @private
              */
             #_sync() {
-                for (const attr of SYNCED_ATTRIBUTES$1) {
+                for (const attr of SYNCED_ATTRIBUTES$2) {
                     if (this.hasAttribute(attr)) {
                         this._p_update(attr, null, this.getAttribute(attr));
                     }
                     else {
-                        if (attr === ATTRIBUTE_CHECKED && this.checked) {
-                            this._p_update(ATTRIBUTE_CHECKED, null, 'true');
+                        if (attr === ATTRIBUTE_CHECKED$1 && this.checked) {
+                            this._p_update(ATTRIBUTE_CHECKED$1, null, 'true');
                         }
                     }
                 }
@@ -9576,7 +8554,7 @@ var Bnum = (function (exports) {
              * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
              */
             static _p_observedAttributes() {
-                return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES$1];
+                return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES$2];
             }
             /**
              * Retourne le nom de l'événement 'change'.
@@ -9584,7 +8562,7 @@ var Bnum = (function (exports) {
              * @returns Le nom de l'événement 'change'
              */
             static get EVENT_CHANGE() {
-                return EVENT_CHANGE$2;
+                return EVENT_CHANGE$3;
             }
             static {
                 __runInitializers(_classThis, _classExtraInitializers);
@@ -9715,11 +8693,11 @@ var Bnum = (function (exports) {
         };
     }
 
-    var css_248z$d = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer}.icon-arrow-down{position:absolute;right:5px;top:50%;transform:translateY(-50%);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.select-container{position:relative}";
+    var css_248z$e = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host([no-legend]) .bnum-select__container__label{clip:rect(1px,1px,1px,1px)!important;border:0!important;clip-path:inset(50%)!important;height:1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer}.icon-arrow-down{position:absolute;right:5px;top:50%;transform:translateY(-50%);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.select-container{position:relative}";
 
     //#endregon Types
     //#region Global Constants
-    const SYNCED_ATTRIBUTES = [
+    const SYNCED_ATTRIBUTES$1 = [
         'autocomplete',
         'autofocus',
         'disabled',
@@ -9730,7 +8708,7 @@ var Bnum = (function (exports) {
         'name',
         'value',
     ];
-    const TEMPLATE$b = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("div", { class: "select-container", children: [h("select", { id: "select", class: "bnum-select__container__select input-like" }), h(HTMLBnumIcon, { "data-icon": "keyboard_arrow_down", class: "icon-arrow-down" })] })] }));
+    const TEMPLATE$c = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("div", { class: "select-container", children: [h("select", { id: "select", class: "bnum-select__container__select input-like" }), h(HTMLBnumIcon, { "data-icon": "keyboard_arrow_down", class: "icon-arrow-down" })] })] }));
     //#endregion Global Constants
     /**
      * @structure Defaut
@@ -9783,8 +8761,8 @@ var Bnum = (function (exports) {
     let HTMLBnumSelect = (() => {
         let _classDecorators = [Define({
                 tag: TAG_SELECT,
-                template: TEMPLATE$b,
-                styles: [INPUT_BASE_STYLE, css_248z$d],
+                template: TEMPLATE$c,
+                styles: [INPUT_BASE_STYLE, css_248z$e],
             }), UpdateAll()];
         let _classDescriptor;
         let _classExtraInitializers = [];
@@ -10144,7 +9122,7 @@ var Bnum = (function (exports) {
             }
             #_sync() {
                 const select = this.#_ui.select;
-                for (const attr of SYNCED_ATTRIBUTES) {
+                for (const attr of SYNCED_ATTRIBUTES$1) {
                     if (this.hasAttribute(attr))
                         select.setAttribute(attr, this.getAttribute(attr));
                     else if (select.hasAttribute(attr))
@@ -10167,10 +9145,1032 @@ var Bnum = (function (exports) {
              * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
              */
             static _p_observedAttributes() {
-                return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES];
+                return [...super._p_observedAttributes(), ...SYNCED_ATTRIBUTES$1];
             }
             static {
                 __runInitializers(_classThis, _classExtraInitializers);
+            }
+        });
+        return _classThis;
+    })();
+
+    var css_248z$d = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_color:var(--bnum-checkbox-color,var(--bnum-primary-color,#000091));--_background-color:var(--bnum-checkbox-background-color,var(--bnum-color-background,#fff));--_internal-border-color:var(--_color);--_internal-error:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host .checkbox__label{align-content:center;align-items:center;display:inline-flex;flex-direction:row;position:relative;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host .checkbox__label:before{background:var(--_background-color);border:thin solid var(--_internal-border-color);border-radius:500px;box-sizing:border-box;content:\"\";cursor:pointer;display:inline-block;height:1.5rem;width:2.5rem}:host .checkbox__label:after{background-color:var(--_background-color);border:thin solid var(--_internal-border-color);border-radius:100%;box-sizing:border-box;content:\"\";cursor:pointer;display:block;height:1.5rem;left:0;position:absolute;top:0;width:1.5rem}:host .checkbox__label__desc{color:var(--_color)!important;display:none;left:0;position:absolute;top:24px}:host .checkbox__state{display:none}:host .checkbox__label--hint{display:block;margin-top:1rem;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}#native-input{height:0;opacity:0;position:absolute;width:0}#native-input:focus-visible~.checkbox__label:before{outline-color:#0a76f6;outline-offset:2px;outline-style:solid;outline-width:2px}#native-input:checked~.checkbox__label:before{background:var(--_color)}#native-input:checked~.checkbox__label:after{color:var(--_color);content:\"\\e5ca\";font-family:var(--bnum-icon-font-family);font-size:21px;line-height:22px;transform:translateX(1rem)}:host(:state(state)) .checkbox__state{display:block}:host(:state(state):state(error)){--_internal-border-color:var(--_internal-error)}:host(:state(state):state(error)) #active-text,:host(:state(state):state(error)) #inactive-text{color:var(--_internal-error)!important}:host(:state(helper)) #inactive-text{display:block}:host(:state(helper)) #active-text{display:none}:host(:state(helper)) #native-input:checked #inactive-text,:host([checked]:state(helper)) #inactive-text{display:none}:host(:state(helper)) #native-input:checked #active-text,:host([checked]:state(helper)) #active-text{display:block}:host([disabled]){opacity:.5;pointer-events:none}";
+
+    //#region Utilities
+    /**
+     * Initialise l'écouteur d'événement `change` sur l'instance du checkbox.
+     *
+     * @remarks
+     * Ajoute un listener natif `change` sur l'élément hôte et appelle le callback
+     * de l'événement personnalisé {@link OnCheckedChangeEvent} lorsqu'il y a des abonnés.
+     *
+     * @param event - L'événement personnalisé à déclencher
+     * @param instance - L'instance du composant {@link HTMLBnumSwitch}
+     *
+     * @internal
+     */
+    function OnCheckedChangeInitializer(event, instance) {
+        instance.addEventListener(EVENT_CHANGE$2, (e) => {
+            if (event.haveEvents())
+                event.call(e);
+        });
+    }
+    //#endregion Internal Types
+    //#region Global Constants
+    /**
+     * Icônes utilisées pour les états du checkbox.
+     *
+     * @remarks
+     * Associe chaque état de validation à une icône Material Icons correspondante.
+     *
+     * @internal
+     */
+    const BnumSwitchIcon = {
+        SUCCESS: 'check_circle',
+        ERROR: 'cancel',
+    };
+    /**
+     * Nom de l'attribut 'checked'.
+     * @internal
+     */
+    const ATTRIBUTE_CHECKED = 'checked';
+    /**
+     * Nom de l'attribut 'helper'.
+     * @internal
+     */
+    const ATTRIBUTE_HELPER = 'helper';
+    /**
+     * Nom de l'événement 'change'.
+     * @internal
+     */
+    const EVENT_CHANGE$2 = 'change';
+    /**
+     * Tag utilisé pour les messages de log du composant.
+     * @internal
+     */
+    const LOG_TAG = 'BnumCheckbox';
+    /**
+     * Message d'avertissement affiché lorsqu'aucun label n'est trouvé.
+     * @internal
+     */
+    const WARN_NO_LABEL = "Aucun texte de description ou d'aide n'a été trouvé";
+    /**
+     * Message de validité par défaut lorsqu'aucun message natif n'est disponible.
+     * @internal
+     */
+    const DEFAULT_VALIDITY_MESSAGE = 'Certaines conditions ne sont pas satisfaites';
+    /**
+     * Nom de l'état interne 'state'.
+     * @internal
+     */
+    const STATE_STATE = 'state';
+    /**
+     * Nom de l'état interne 'error'.
+     * @internal
+     */
+    const STATE_ERROR = 'error';
+    /**
+     * Nom de l'attribut ARIA 'aria-checked'.
+     * @internal
+     */
+    const ARIA_CHECKED = 'aria-checked';
+    /**
+     * Nom de l'attribut ARIA 'aria-required'.
+     * @internal
+     */
+    const ARIA_REQUIRED = 'aria-required';
+    /**
+     * Nom de l'attribut ARIA 'aria-disabled'.
+     * @internal
+     */
+    const ARIA_DISABLED = 'aria-disabled';
+    /**
+     * Nom de l'attribut ARIA 'aria-invalid'.
+     * @internal
+     */
+    const ARIA_INVALID = 'aria-invalid';
+    /**
+     * Nom de l'attribut ARIA 'aria-describedby'.
+     * @internal
+     */
+    const ARIA_DESCRIBEDBY = 'aria-describedby';
+    /**
+     * Identifiant du slot d'indice.
+     * @internal
+     */
+    const ID_HINT$1 = 'hint';
+    /**
+     * Identifiant de l'élément affichant le texte de validité.
+     * @internal
+     */
+    const ID_VALIDITY_TEXT = 'validity-text';
+    /**
+     * Valeur booléenne 'true' sous forme de chaîne.
+     * @internal
+     */
+    const ARIA_TRUE = 'true';
+    /**
+     * Texte par défaut pour l'état actif.
+     * @internal
+     */
+    const TEXT_ACTIVE_DEFAULT = BnumConfig.Get('local_keys')?.active_switch ?? 'Activé';
+    /**
+     * Texte par défaut pour l'état inactif.
+     * @internal
+     */
+    const TEXT_INACTIVE_DEFAULT = BnumConfig.Get('local_keys')?.inactive_switch ?? 'Désactivé';
+    /**
+     * Liste des attributs synchronisés entre l'élément hôte et l'input interne.
+     *
+     * @remarks
+     * Ces attributs sont automatiquement propagés de l'élément personnalisé vers l'input natif.
+     * @internal
+     */
+    const SYNCED_ATTRIBUTES = ['name', 'checked', 'value', 'disabled', 'required'];
+    //#endregion Global Constants
+    //#region Template
+    /**
+     * Template HTML du composant checkbox.
+     *
+     * @remarks
+     * Structure DOM utilisée pour créer le shadow DOM du composant.
+     * Comprend un input checkbox natif configuré en rôle `switch`, un label
+     * avec des slots pour le contenu actif/inactif, et une zone d'état de validation.
+     *
+     * @internal
+     */
+    const TEMPLATE$b = (h(HTMLBnumFragment, { children: [h("input", { id: "native-input", type: "checkbox", role: "switch" }), h("label", { class: "checkbox__label label-container hint-label", for: "native-input", children: [h("span", { class: "checkbox__label--legend label-container--label ", children: h("slot", { id: "legend" }) }), h("span", { id: "active-text", class: "checkbox__label__desc checkbox__label__desc--ok label-container--hint", children: h("slot", { name: "activeText", children: TEXT_ACTIVE_DEFAULT }) }), h("span", { id: "inactive-text", class: "checkbox__label__desc checkbox__label__desc--no label-container--hint", children: h("slot", { name: "inactiveText", children: TEXT_INACTIVE_DEFAULT }) })] }), h("span", { class: "checkbox__label--hint hint-label label-container--hint", children: h("slot", { id: ID_HINT$1, name: ID_HINT$1 }) }), h("div", { class: "checkbox__state state", children: [h(HTMLBnumIcon, { id: "icon" }), h("span", { id: ID_VALIDITY_TEXT })] })] }));
+    //#endregion Template
+    /**
+     * Composant personnalisé représentant un checkbox avec support de formulaire.
+     *
+     * @remarks
+     * Ce composant Web étend {@link BnumElementInternal} et fournit un checkbox personnalisé
+     * avec support complet des formulaires HTML, gestion d'état, validation et accessibilité.
+     *
+     * Le composant utilise le Shadow DOM pour encapsuler son style et sa structure,
+     * et synchronise automatiquement ses attributs avec un input checkbox natif sous-jacent.
+     * Il fonctionne en mode `switch` (interrupteur on/off) avec des textes configurables
+     * pour les états actif et inactif.
+     *
+     * @example
+     * Structure simple :
+     * ```html
+     * <bnum-switch>Click me !</bnum-switch>
+     * ```
+     *
+     * @example
+     * Structure avec indice :
+     * ```html
+     * <bnum-switch>Click me !<span slot="hint">Indice</span></bnum-switch>
+     * ```
+     *
+     * @example
+     * Structure required avec helper :
+     * ```html
+     * <bnum-switch helper required>Click me !<span slot="hint">Indice</span></bnum-switch>
+     * ```
+     *
+     * @fires CustomEvent<BnumCheckBoxDetail> - Déclenché lorsque l'état coché du checkbox change
+     *
+     * @public
+     *
+     * @structure Classique
+     * <bnum-switch>Click me !</bnum-switch>
+     *
+     * @structure Avec indice
+     * <bnum-switch checked>Click me !<span slot="hint">Indice</span></bnum-switch>
+     *
+     * @structure Requis
+     * <bnum-switch required>Click me !<span slot="hint">Indice</span></bnum-switch>
+     *
+     * @structure Avec un texte d'aide
+     * <bnum-switch helper>Click me !<span slot="hint">Indice</span></bnum-switch>
+     *
+     * @slot (default) - Légende de l'élément
+     * @slot activeText - Texte affiché lorsque le checkbox est activé
+     * @slot inactiveText - Texte affiché lorsque le checkbox est désactivé
+     * @slot hint - Aide supplémentaire dans la légende
+     *
+     * @event {CustomEvent<BnumCheckBoxDetail>} change - Lorsque l'élément change d'état
+     *
+     * @attr {boolean} (optional) (default: false) checked - Si l'élément est coché ou non
+     * @attr {string} (optional) name - Nom de l'élément pour les formulaires
+     * @attr {string} (optional) (default: 'on') value - Valeur de l'élément
+     * @attr {boolean} (optional) (default: false) disabled - Désactive l'élément
+     * @attr {boolean} (optional) (default: false) required - Rend le champ obligatoire
+     * @attr {boolean} (optional) (default: false) helper - Active le mode d'aide visuelle
+     *
+     * @state error - Lorsque la validation échoue
+     * @state helper - Lorsque l'attribut helper est actif
+     *
+     * @cssvar {#000091} --bnum-switch-color - Couleur du checkbox
+     * @cssvar {white} --bnum-switch-background-color - Couleur de fond du checkbox
+     * @cssvar {#de350b} --bnum-input-state-error-color - Couleur de l'erreur
+     */
+    let HTMLBnumSwitch = (() => {
+        let _classDecorators = [Define({
+                tag: 'bnum-switch',
+                template: TEMPLATE$b,
+                styles: [INPUT_BASE_STYLE, INPUT_STYLE_STATES, css_248z$d],
+            })];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = BnumElementInternal;
+        let _staticExtraInitializers = [];
+        let _instanceExtraInitializers = [];
+        let _static__p_observedAttributes_decorators;
+        let _private__ui_decorators;
+        let _private__ui_initializers = [];
+        let _private__ui_extraInitializers = [];
+        let _private__ui_descriptor;
+        let _checked_decorators;
+        let _checked_initializers = [];
+        let _checked_extraInitializers = [];
+        let _name_decorators;
+        let _name_initializers = [];
+        let _name_extraInitializers = [];
+        let _value_decorators;
+        let _value_initializers = [];
+        let _value_extraInitializers = [];
+        let _disabled_decorators;
+        let _disabled_initializers = [];
+        let _disabled_extraInitializers = [];
+        let _required_decorators;
+        let _required_initializers = [];
+        let _required_extraInitializers = [];
+        let _helper_decorators;
+        let _helper_initializers = [];
+        let _helper_extraInitializers = [];
+        let _private__legend_decorators;
+        let _private__legend_initializers = [];
+        let _private__legend_extraInitializers = [];
+        let _private__legend_descriptor;
+        let _private__hint_decorators;
+        let _private__hint_initializers = [];
+        let _private__hint_extraInitializers = [];
+        let _private__hint_descriptor;
+        let _oncheckedchange_decorators;
+        let _oncheckedchange_initializers = [];
+        let _oncheckedchange_extraInitializers = [];
+        let _private__checkValidity_decorators;
+        let _private__checkValidity_descriptor;
+        let _private__reportValidity_decorators;
+        let _private__reportValidity_descriptor;
+        let _private__change_decorators;
+        let _private__change_descriptor;
+        let _private__setText_decorators;
+        let _private__setText_descriptor;
+        let _private__setInternalError_decorators;
+        let _private__setInternalError_descriptor;
+        let _private__setValidity_decorators;
+        let _private__setValidity_descriptor;
+        (class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _private__ui_decorators = [UI({
+                        input: '#native-input',
+                        textActive: '#active-text',
+                        textInactive: '#inactive-text',
+                        slotLegend: '#legend',
+                        slotHint: `#${ID_HINT$1}`,
+                        validityText: `#${ID_VALIDITY_TEXT}`,
+                        icon: '#icon',
+                    })];
+                _checked_decorators = [Attr()];
+                _name_decorators = [Attr()];
+                _value_decorators = [Attr()];
+                _disabled_decorators = [Attr()];
+                _required_decorators = [Attr()];
+                _helper_decorators = [Attr()];
+                _private__legend_decorators = [Data()];
+                _private__hint_decorators = [Data()];
+                _oncheckedchange_decorators = [Listener(OnCheckedChangeInitializer)];
+                _private__checkValidity_decorators = [Risky()];
+                _private__reportValidity_decorators = [Risky()];
+                _private__change_decorators = [Fire(EVENT_CHANGE$2)];
+                _private__setText_decorators = [Risky()];
+                _private__setInternalError_decorators = [Risky()];
+                _private__setValidity_decorators = [Risky()];
+                _static__p_observedAttributes_decorators = [NonStd('Deprecated')];
+                __esDecorate(this, null, _static__p_observedAttributes_decorators, { kind: "method", name: "_p_observedAttributes", static: true, private: false, access: { has: obj => "_p_observedAttributes" in obj, get: obj => obj._p_observedAttributes }, metadata: _metadata }, null, _staticExtraInitializers);
+                __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+                __esDecorate(this, null, _checked_decorators, { kind: "accessor", name: "checked", static: false, private: false, access: { has: obj => "checked" in obj, get: obj => obj.checked, set: (obj, value) => { obj.checked = value; } }, metadata: _metadata }, _checked_initializers, _checked_extraInitializers);
+                __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+                __esDecorate(this, null, _value_decorators, { kind: "accessor", name: "value", static: false, private: false, access: { has: obj => "value" in obj, get: obj => obj.value, set: (obj, value) => { obj.value = value; } }, metadata: _metadata }, _value_initializers, _value_extraInitializers);
+                __esDecorate(this, null, _disabled_decorators, { kind: "accessor", name: "disabled", static: false, private: false, access: { has: obj => "disabled" in obj, get: obj => obj.disabled, set: (obj, value) => { obj.disabled = value; } }, metadata: _metadata }, _disabled_initializers, _disabled_extraInitializers);
+                __esDecorate(this, null, _required_decorators, { kind: "accessor", name: "required", static: false, private: false, access: { has: obj => "required" in obj, get: obj => obj.required, set: (obj, value) => { obj.required = value; } }, metadata: _metadata }, _required_initializers, _required_extraInitializers);
+                __esDecorate(this, null, _helper_decorators, { kind: "accessor", name: "helper", static: false, private: false, access: { has: obj => "helper" in obj, get: obj => obj.helper, set: (obj, value) => { obj.helper = value; } }, metadata: _metadata }, _helper_initializers, _helper_extraInitializers);
+                __esDecorate(this, _private__legend_descriptor = { get: __setFunctionName(function () { return this.#_legend_accessor_storage; }, "#_legend", "get"), set: __setFunctionName(function (value) { this.#_legend_accessor_storage = value; }, "#_legend", "set") }, _private__legend_decorators, { kind: "accessor", name: "#_legend", static: false, private: true, access: { has: obj => #_legend in obj, get: obj => obj.#_legend, set: (obj, value) => { obj.#_legend = value; } }, metadata: _metadata }, _private__legend_initializers, _private__legend_extraInitializers);
+                __esDecorate(this, _private__hint_descriptor = { get: __setFunctionName(function () { return this.#_hint_accessor_storage; }, "#_hint", "get"), set: __setFunctionName(function (value) { this.#_hint_accessor_storage = value; }, "#_hint", "set") }, _private__hint_decorators, { kind: "accessor", name: "#_hint", static: false, private: true, access: { has: obj => #_hint in obj, get: obj => obj.#_hint, set: (obj, value) => { obj.#_hint = value; } }, metadata: _metadata }, _private__hint_initializers, _private__hint_extraInitializers);
+                __esDecorate(this, null, _oncheckedchange_decorators, { kind: "accessor", name: "oncheckedchange", static: false, private: false, access: { has: obj => "oncheckedchange" in obj, get: obj => obj.oncheckedchange, set: (obj, value) => { obj.oncheckedchange = value; } }, metadata: _metadata }, _oncheckedchange_initializers, _oncheckedchange_extraInitializers);
+                __esDecorate(this, _private__checkValidity_descriptor = { value: __setFunctionName(function () {
+                        return this.#_ui.input.checkValidity();
+                    }, "#_checkValidity") }, _private__checkValidity_decorators, { kind: "method", name: "#_checkValidity", static: false, private: true, access: { has: obj => #_checkValidity in obj, get: obj => obj.#_checkValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__reportValidity_descriptor = { value: __setFunctionName(function () {
+                        return this.#_ui.input.reportValidity();
+                    }, "#_reportValidity") }, _private__reportValidity_decorators, { kind: "method", name: "#_reportValidity", static: false, private: true, access: { has: obj => #_reportValidity in obj, get: obj => obj.#_reportValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__change_descriptor = { value: __setFunctionName(function (event) {
+                        this.checked = this.#_ui.input.checked;
+                        return { inner: event, caller: this };
+                    }, "#_change") }, _private__change_decorators, { kind: "method", name: "#_change", static: false, private: true, access: { has: obj => #_change in obj, get: obj => obj.#_change }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setText_descriptor = { value: __setFunctionName(function () {
+                        if (this.#_ui.validityText.textContent !== this.#_ui.input.validationMessage)
+                            this.#_ui.validityText.textContent = this.#_ui.input.validationMessage;
+                        return null;
+                    }, "#_setText") }, _private__setText_decorators, { kind: "method", name: "#_setText", static: false, private: true, access: { has: obj => #_setText in obj, get: obj => obj.#_setText }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setInternalError_descriptor = { value: __setFunctionName(function () {
+                        if (!this.checkValidity()) {
+                            this._p_internal.setValidity(this.#_ui.input.validity, this.#_ui.input.validationMessage, this.#_ui.input);
+                        }
+                        return null;
+                    }, "#_setInternalError") }, _private__setInternalError_decorators, { kind: "method", name: "#_setInternalError", static: false, private: true, access: { has: obj => #_setInternalError in obj, get: obj => obj.#_setInternalError }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(this, _private__setValidity_descriptor = { value: __setFunctionName(function () {
+                        if (this.checkValidity()) {
+                            this._p_internal.setValidity({});
+                        }
+                        return null;
+                    }, "#_setValidity") }, _private__setValidity_decorators, { kind: "method", name: "#_setValidity", static: false, private: true, access: { has: obj => #_setValidity in obj, get: obj => obj.#_setValidity }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _staticExtraInitializers);
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            //#region Private Fields
+            /**
+             * État initial du checkbox lors du chargement.
+             *
+             * @remarks
+             * Stocké lors du préchargement pour pouvoir restaurer l'état initial
+             * lors d'un reset du formulaire via {@link formResetCallback}.
+             *
+             * @internal
+             */
+            #_initState = __runInitializers(this, _instanceExtraInitializers);
+            #_ui_accessor_storage = __runInitializers(this, _private__ui_initializers, void 0);
+            /**
+             * Références aux éléments du DOM interne.
+             *
+             * @remarks
+             * Injecté automatiquement par le décorateur {@link UI}.
+             * Fournit un accès typé à l'input checkbox natif, aux slots de contenu
+             * et aux éléments d'état de validation.
+             *
+             * @internal
+             */
+            get #_ui() { return _private__ui_descriptor.get.call(this); }
+            set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
+            #checked_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _checked_initializers, false));
+            //#endregion Private Fields
+            //#region Public Fields
+            /**
+             * Indique si le checkbox est coché.
+             *
+             * @remarks
+             * Contrôle l'état de sélection du checkbox.
+             *
+             * @defaultValue `false`
+             */
+            get checked() { return this.#checked_accessor_storage; }
+            set checked(value) { this.#checked_accessor_storage = value; }
+            #name_accessor_storage = (__runInitializers(this, _checked_extraInitializers), __runInitializers(this, _name_initializers, undefined));
+            /**
+             * Le nom du checkbox pour les formulaires.
+             *
+             * @remarks
+             * Permet d'identifier le champ lors de la soumission du formulaire.
+             *
+             * @defaultValue `undefined`
+             */
+            get name() { return this.#name_accessor_storage; }
+            set name(value) { this.#name_accessor_storage = value; }
+            #value_accessor_storage = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _value_initializers, 'on'));
+            /**
+             * La valeur associée au checkbox.
+             *
+             * @remarks
+             * Cette valeur est envoyée lors de la soumission du formulaire si le checkbox est coché.
+             *
+             * @defaultValue `'on'`
+             */
+            get value() { return this.#value_accessor_storage; }
+            set value(value) { this.#value_accessor_storage = value; }
+            #disabled_accessor_storage = (__runInitializers(this, _value_extraInitializers), __runInitializers(this, _disabled_initializers, false));
+            /**
+             * Indique si le checkbox est désactivé.
+             *
+             * @remarks
+             * Un checkbox désactivé ne peut pas être sélectionné ni recevoir le focus.
+             *
+             * @defaultValue `false`
+             */
+            get disabled() { return this.#disabled_accessor_storage; }
+            set disabled(value) { this.#disabled_accessor_storage = value; }
+            #required_accessor_storage = (__runInitializers(this, _disabled_extraInitializers), __runInitializers(this, _required_initializers, false));
+            /**
+             * Indique si le checkbox est obligatoire.
+             *
+             * @remarks
+             * Un checkbox obligatoire doit être coché pour que le formulaire soit valide.
+             *
+             * @defaultValue `false`
+             */
+            get required() { return this.#required_accessor_storage; }
+            set required(value) { this.#required_accessor_storage = value; }
+            #helper_accessor_storage = (__runInitializers(this, _required_extraInitializers), __runInitializers(this, _helper_initializers, false));
+            /**
+             * Active le mode d'aide visuelle.
+             *
+             * @remarks
+             * Lorsque activé, ajoute l'état `helper` au composant pour un rendu visuel spécifique.
+             *
+             * @defaultValue `false`
+             */
+            get helper() { return this.#helper_accessor_storage; }
+            set helper(value) { this.#helper_accessor_storage = value; }
+            #_legend_accessor_storage = (__runInitializers(this, _helper_extraInitializers), __runInitializers(this, _private__legend_initializers, undefined));
+            /**
+             * Texte de la légende principale du checkbox.
+             *
+             * @remarks
+             * Stocke le contenu textuel provenant de l'attribut `data-legend`.
+             * Utilisé pour initialiser le slot de légende si défini.
+             *
+             * @defaultValue `undefined`
+             * @internal
+             */
+            get #_legend() { return _private__legend_descriptor.get.call(this); }
+            set #_legend(value) { return _private__legend_descriptor.set.call(this, value); }
+            #_hint_accessor_storage = (__runInitializers(this, _private__legend_extraInitializers), __runInitializers(this, _private__hint_initializers, undefined));
+            /**
+             * Texte de l'indice/aide du checkbox.
+             *
+             * @remarks
+             * Stocke le contenu textuel provenant de l'attribut `data-hint`.
+             * Utilisé pour initialiser le slot d'indice si défini.
+             *
+             * @defaultValue `undefined`
+             * @internal
+             */
+            get #_hint() { return _private__hint_descriptor.get.call(this); }
+            set #_hint(value) { return _private__hint_descriptor.set.call(this, value); }
+            #oncheckedchange_accessor_storage = (__runInitializers(this, _private__hint_extraInitializers), __runInitializers(this, _oncheckedchange_initializers, void 0));
+            /**
+             * Événement personnalisé déclenché lors du changement d'état coché.
+             *
+             * @remarks
+             * Initialisé par {@link OnCheckedChangeInitializer} via le décorateur {@link Listener}.
+             * Permet de s'abonner aux changements d'état du checkbox.
+             */
+            get oncheckedchange() { return this.#oncheckedchange_accessor_storage; }
+            set oncheckedchange(value) { this.#oncheckedchange_accessor_storage = value; }
+            //#endregion Public Fields
+            //#region Lifecycle
+            /**
+             * Constructeur du composant HTMLBnumCheckbox.
+             *
+             * @remarks
+             * Initialise l'instance du composant en appelant le constructeur parent.
+             */
+            constructor() {
+                super();
+                __runInitializers(this, _oncheckedchange_extraInitializers);
+            }
+            /**
+             * Précharge l'état initial du checkbox.
+             *
+             * @remarks
+             * Sauvegarde l'état coché initial pour permettre la restauration
+             * lors d'un reset de formulaire.
+             *
+             * @protected
+             * @override
+             */
+            _p_preload() {
+                this.#_initState = !!(this.checked || false);
+            }
+            /**
+             * Attache le composant au DOM et initialise son comportement.
+             *
+             * @remarks
+             * Initialise les données des slots, synchronise les attributs avec l'input natif,
+             * vérifie la présence d'un label et gère l'état d'erreur initial.
+             * Ajoute l'état `helper` si l'attribut correspondant est défini.
+             *
+             * @protected
+             * @override
+             */
+            _p_attach() {
+                this.#_init().#_sync().#_checkLabel().#_ifOnErrorSet();
+                if (this.helper)
+                    this._p_addState(ATTRIBUTE_HELPER);
+            }
+            /**
+             * Gère la mise à jour d'un attribut observé.
+             *
+             * @param name - Le nom de l'attribut modifié
+             * @param oldVal - L'ancienne valeur de l'attribut
+             * @param newVal - La nouvelle valeur de l'attribut
+             * @returns `void` ou `'break'` pour interrompre le traitement
+             *
+             * @remarks
+             * Cette méthode est appelée automatiquement lorsqu'un attribut observé change.
+             * Elle traite spécifiquement les attributs `checked` et `helper`,
+             * et délègue les autres attributs à l'input natif.
+             *
+             * @protected
+             * @override
+             */
+            _p_update(name, oldVal, newVal) {
+                if (newVal === EMPTY_STRING)
+                    newVal = ARIA_TRUE;
+                if (oldVal === newVal)
+                    return;
+                switch (name) {
+                    case ATTRIBUTE_CHECKED:
+                        if (this.#_ui.input.checked !== this.checked) {
+                            this.#_ui.input.checked = this.checked;
+                            this.#_ui.input.setAttribute(ARIA_CHECKED, String(this.checked));
+                        }
+                        break;
+                    case ATTRIBUTE_HELPER:
+                        if (newVal)
+                            this._p_addState(ATTRIBUTE_HELPER);
+                        else
+                            this._p_removeState(ATTRIBUTE_HELPER);
+                        break;
+                    default:
+                        if (newVal)
+                            this.#_ui.input.setAttribute(name, newVal);
+                        else
+                            this.#_ui.input.removeAttribute(name);
+                        break;
+                }
+            }
+            /**
+             * Effectue les opérations post-flush du composant.
+             *
+             * @remarks
+             * Vérifie l'état d'erreur et resynchronise les attributs après un flush.
+             *
+             * @protected
+             * @override
+             */
+            _p_postFlush() {
+                this.#_ifOnErrorSet().#_sync();
+            }
+            /**
+             * Callback de réinitialisation du formulaire.
+             *
+             * @remarks
+             * Restaure l'état coché initial du checkbox lorsque le formulaire est réinitialisé.
+             */
+            formResetCallback() {
+                this.checked = this.#_initState;
+            }
+            /**
+             * Active ou désactive le champ selon l'état du fieldset parent.
+             *
+             * @param disabled - `true` pour désactiver, `false` pour activer
+             */
+            formDisabledCallback(disabled) {
+                this.disabled = disabled;
+            }
+            /**
+             * Met à jour l'état coché du checkbox et déclenche l'événement de changement.
+             *
+             * @param checked - L'état coché à définir
+             *
+             * @remarks
+             * Cette méthode est utilisée en interne pour mettre à jour l'état coché
+             * et déclencher l'événement de changement correspondant.
+             */
+            updateCheckedAndFire(checked) {
+                this.checked = checked;
+                this.#_change(new Event('change'));
+            }
+            //#endregion Lifecycle
+            //#region Public Methods
+            /**
+             * Vérifie la validité du checkbox sans afficher de message.
+             *
+             * @returns `true` si le checkbox est valide, `false` sinon
+             *
+             * @remarks
+             * Délègue la vérification à l'input natif sous-jacent.
+             * En cas d'erreur, retourne `true` par défaut.
+             */
+            checkValidity() {
+                return this.#_checkValidity().unwrapOr(true);
+            }
+            /**
+             * Vérifie la validité du checkbox et affiche le message de validation.
+             *
+             * @returns `true` si le checkbox est valide, `false` sinon
+             *
+             * @remarks
+             * Délègue la vérification à l'input natif sous-jacent et déclenche
+             * l'affichage du message de validation natif si invalide.
+             * En cas d'erreur, retourne `true` par défaut.
+             */
+            reportValidity() {
+                return this.#_reportValidity().unwrapOr(true);
+            }
+            //#endregion Public Methods
+            //#region Private Methods
+            /**
+             * Vérifie la validité de l'input natif sans rapport.
+             *
+             * @returns Un {@link Result} contenant le résultat de la vérification
+             *
+             * @private
+             */
+            get #_checkValidity() { return _private__checkValidity_descriptor.value; }
+            /**
+             * Vérifie la validité de l'input natif avec rapport.
+             *
+             * @returns Un {@link Result} contenant le résultat de la vérification
+             *
+             * @private
+             */
+            get #_reportValidity() { return _private__reportValidity_descriptor.value; }
+            /**
+             * Initialise les données internes du composant.
+             *
+             * @returns L'instance courante pour chaînage de méthodes
+             *
+             * @remarks
+             * Initialise les données des slots de légende et d'indice,
+             * puis configure les écouteurs d'événements.
+             *
+             * @private
+             */
+            #_init() {
+                return this.#_initDataLegend().#_initDataHint().#_setListeners();
+            }
+            /**
+             * Initialise le slot de légende avec la donnée correspondante.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @private
+             */
+            #_initDataLegend() {
+                return this.#_initData(this.#_legend, this.#_ui.slotLegend);
+            }
+            /**
+             * Initialise le slot d'indice avec la donnée correspondante.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @private
+             */
+            #_initDataHint() {
+                return this.#_initData(this.#_hint, this.#_ui.slotHint);
+            }
+            /**
+             * Initialise un slot avec une donnée textuelle.
+             *
+             * @param data - La donnée textuelle à insérer dans le slot
+             * @param slot - Le slot cible dans lequel insérer la donnée
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * N'affecte le slot que si la donnée est définie et non vide.
+             *
+             * @private
+             */
+            #_initData(data, slot) {
+                if (data)
+                    slot.textContent = data;
+                return this;
+            }
+            /**
+             * Configure tous les écouteurs d'événements du composant.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Actuellement configure uniquement l'écouteur de changement de l'input interne.
+             *
+             * @private
+             */
+            #_setListeners() {
+                return this.#_listenChange();
+            }
+            /**
+             * Configure l'écouteur d'événement pour les changements de l'input interne.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Écoute l'événement `change` de l'input natif et déclenche
+             * la méthode {@link #_change} pour propager le changement.
+             *
+             * @private
+             */
+            #_listenChange() {
+                this.#_ui.input.addEventListener(EVENT_CHANGE$2, e => {
+                    this.#_change(e);
+                });
+                return this;
+            }
+            /**
+             * Traite le changement d'état du checkbox et déclenche l'événement personnalisé.
+             *
+             * @param event - L'événement natif de changement
+             * @returns Les détails de l'événement contenant la référence à l'instance
+             *
+             * @remarks
+             * Met à jour la propriété `checked` à partir de l'input natif,
+             * puis retourne les détails nécessaires au décorateur {@link Fire}
+             * pour dispatcher l'événement `change`.
+             *
+             * @fires CustomEvent<BnumCheckBoxDetail>
+             * @private
+             */
+            get #_change() { return _private__change_descriptor.value; }
+            /**
+             * Vérifie et applique l'état d'erreur si nécessaire.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Si la validation échoue, applique l'état d'erreur via {@link #_setOnError}.
+             * Si la validation réussit et que l'état d'erreur est actif,
+             * le supprime et réinitialise la validité.
+             *
+             * @private
+             */
+            #_ifOnErrorSet() {
+                if (!this.checkValidity()) {
+                    this.#_setOnError();
+                }
+                else if (this._p_hasState(STATE_ERROR)) {
+                    this._p_removeStates([STATE_STATE, STATE_ERROR]).#_setValidity();
+                    this.#_ui.input.removeAttribute(ARIA_INVALID);
+                }
+                return this;
+            }
+            /**
+             * Applique l'état d'erreur au composant.
+             *
+             * @remarks
+             * Configure l'icône d'erreur, met à jour le texte de validité,
+             * ajoute les états internes `state` et `error`, et positionne
+             * l'attribut ARIA `aria-invalid` à `true`.
+             *
+             * Si le texte de validation natif n'est pas disponible, utilise
+             * le message par défaut {@link DEFAULT_VALIDITY_MESSAGE}.
+             *
+             * @private
+             */
+            #_setOnError() {
+                if (this.#_ui.icon.icon !== BnumSwitchIcon.ERROR)
+                    this.#_ui.icon.icon = BnumSwitchIcon.ERROR;
+                this.#_setText()
+                    .tapError(() => {
+                    this.#_ui.validityText.textContent = DEFAULT_VALIDITY_MESSAGE;
+                })
+                    .andThen(() => this.#_setInternalError());
+                this._p_addStates(STATE_STATE, STATE_ERROR);
+                this.#_ui.input.setAttribute(ARIA_INVALID, ARIA_TRUE);
+            }
+            /**
+             * Met à jour le texte de validité à partir du message natif de l'input.
+             *
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Ne met à jour le texte que si il diffère du message de validation courant.
+             *
+             * @private
+             */
+            get #_setText() { return _private__setText_descriptor.value; }
+            /**
+             * Propage l'état de validité de l'input natif vers les internals du composant.
+             *
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Utilise l'API `ElementInternals.setValidity` pour synchroniser
+             * la validité du composant avec celle de l'input natif sous-jacent.
+             *
+             * @private
+             */
+            get #_setInternalError() { return _private__setInternalError_descriptor.value; }
+            /**
+             * Réinitialise la validité du composant.
+             *
+             * @returns Un {@link Result} indiquant le succès de l'opération
+             *
+             * @remarks
+             * Supprime l'état d'erreur des internals lorsque le checkbox redevient valide.
+             *
+             * @private
+             */
+            get #_setValidity() { return _private__setValidity_descriptor.value; }
+            /**
+             * Synchronise les attributs entre l'élément hôte et l'input interne.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Parcourt tous les {@link SYNCED_ATTRIBUTES} et applique leurs valeurs à l'input.
+             * Cas particulier : l'attribut `checked` est traité en tant que propriété booléenne.
+             * Après la synchronisation des attributs, met à jour les attributs ARIA.
+             *
+             * @private
+             */
+            #_sync() {
+                for (const attr of SYNCED_ATTRIBUTES) {
+                    if (attr === ATTRIBUTE_CHECKED) {
+                        this.#_ui.input.checked = this.checked;
+                    }
+                    else {
+                        if (this.hasAttribute(attr)) {
+                            this.#_ui.input.setAttribute(attr, this.getAttribute(attr));
+                        }
+                        else
+                            this.#_ui.input.removeAttribute(attr);
+                    }
+                }
+                this.#_syncAria();
+                return this;
+            }
+            /**
+             * Synchronise les attributs ARIA du composant avec l'input interne.
+             *
+             * @remarks
+             * Met à jour les attributs `aria-checked`, `aria-required`, `aria-disabled`
+             * et `aria-describedby` en fonction de l'état courant du composant.
+             *
+             * L'attribut `aria-describedby` est composé dynamiquement à partir
+             * des éléments d'aide et de validité présents.
+             *
+             * @private
+             */
+            #_syncAria() {
+                const input = this.#_ui.input;
+                input.setAttribute(ARIA_CHECKED, String(this.checked));
+                if (this.required)
+                    input.setAttribute(ARIA_REQUIRED, ARIA_TRUE);
+                else
+                    input.removeAttribute(ARIA_REQUIRED);
+                if (this.disabled)
+                    input.setAttribute(ARIA_DISABLED, ARIA_TRUE);
+                else
+                    input.removeAttribute(ARIA_DISABLED);
+                const descriptions = [];
+                if (this.#_ui.slotHint.assignedNodes().length > 0)
+                    descriptions.push(ID_HINT$1);
+                if (this.#_ui.validityText.textContent)
+                    descriptions.push(ID_VALIDITY_TEXT);
+                if (descriptions.length > 0)
+                    input.setAttribute(ARIA_DESCRIBEDBY, descriptions.join(' '));
+                else
+                    input.removeAttribute(ARIA_DESCRIBEDBY);
+            }
+            /**
+             * Vérifie la présence d'un label accessible et affiche un avertissement sinon.
+             *
+             * @returns L'instance courante pour chaînage
+             *
+             * @remarks
+             * Vérifie si une légende ou un indice est disponible pour le composant.
+             * Si aucun texte accessible n'est trouvé, émet un avertissement dans la console.
+             *
+             * @private
+             */
+            #_checkLabel() {
+                const hasLabel = this.#_verifyLabel();
+                if (!hasLabel) {
+                    Log.warn(LOG_TAG, WARN_NO_LABEL);
+                }
+                return this;
+            }
+            /**
+             * Vérifie si au moins une source de label est disponible.
+             *
+             * @returns `true` si une légende ou un indice existe, `false` sinon
+             *
+             * @private
+             */
+            #_verifyLabel() {
+                return this.#_verifyLegend() || this.#_verifyHint();
+            }
+            /**
+             * Vérifie la présence d'une légende.
+             *
+             * @returns `true` si une légende est définie ou si des éléments enfants existent
+             *
+             * @private
+             */
+            #_verifyLegend() {
+                return this.#_verifyData(this.#_legend);
+            }
+            /**
+             * Vérifie la présence d'un indice.
+             *
+             * @returns `true` si un indice est défini ou si des éléments slottés existent
+             *
+             * @private
+             */
+            #_verifyHint() {
+                return this.#_verifyData(this.#_hint, ID_HINT$1);
+            }
+            /**
+             * Vérifie la disponibilité d'une donnée ou d'éléments enfants associés.
+             *
+             * @param data - La donnée textuelle à vérifier
+             * @param slotName - Le nom du slot à inspecter (null pour le slot par défaut)
+             * @returns `true` si la donnée est définie ou si des éléments enfants existent
+             *
+             * @private
+             */
+            #_verifyData(data, slotName = null) {
+                const hasData = !!data;
+                const hasElements = this.#_verifyElements(slotName);
+                return hasData || hasElements;
+            }
+            /**
+             * Vérifie la présence d'éléments enfants dans un slot donné.
+             *
+             * @param slotName - Le nom du slot à inspecter (null pour les enfants sans slot)
+             * @returns `true` si au moins un élément est trouvé
+             *
+             * @private
+             */
+            #_verifyElements(slotName) {
+                const iterator = this.#_getVerifyElements(slotName);
+                return !iterator.next().done;
+            }
+            /**
+             * Générateur produisant les éléments enfants d'un slot donné.
+             *
+             * @param slotName - Le nom du slot à inspecter (null pour les enfants sans slot)
+             * @yields Les éléments enfants correspondant au critère de slot
+             *
+             * @remarks
+             * Si un nom de slot est fourni, retourne les éléments ayant l'attribut `slot` correspondant.
+             * Sinon, retourne les éléments enfants sans attribut `slot` et les nœuds texte non vides.
+             *
+             * @private
+             */
+            *#_getVerifyElements(slotName) {
+                if (slotName)
+                    yield* Array.from(this.querySelectorAll(`[slot="${slotName}"]`));
+                else {
+                    const nodes = [...Array.from(this.childNodes)];
+                    for (const node of nodes) {
+                        if (node instanceof HTMLElement) {
+                            if (!node.hasAttribute('slot'))
+                                yield node;
+                        }
+                        else if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim())
+                            yield node;
+                    }
+                }
+            }
+            //#endregion Private Methods
+            //#region Static Methods
+            /**
+             * Retourne la liste des attributs observés par le composant.
+             *
+             * @returns Un tableau contenant tous les noms d'attributs observés
+             *
+             * @remarks
+             * Combine les attributs observés du parent avec les {@link SYNCED_ATTRIBUTES}
+             * et l'attribut `helper` spécifiques à ce composant.
+             * Les changements de ces attributs déclencheront {@link _p_update}.
+             *
+             * @protected
+             * @static
+             * @override
+             * @deprecated Utilisez le décorateur {@link Observe} du commit 3e38db0162eef596874dbe32490d9e96b09fb1c0
+             * @see [feat(composants): ✨ Ajout d'un décorateur pour réduire le boilerplate des attibuts à observer](https://github.com/messagerie-melanie2/design-system-bnum/commit/3e38db0162eef596874dbe32490d9e96b09fb1c0)
+             */
+            static _p_observedAttributes() {
+                return [
+                    ...super._p_observedAttributes(),
+                    ...SYNCED_ATTRIBUTES,
+                    ATTRIBUTE_HELPER,
+                ];
+            }
+            /**
+             * Indique que ce composant peut être associé à un formulaire.
+             *
+             * @remarks
+             * Permet au composant de participer au cycle de vie des formulaires HTML,
+             * notamment la soumission, la validation et la réinitialisation.
+             *
+             * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals#instance_properties | ElementInternals}
+             */
+            static get formAssociated() {
+                return true;
             }
         });
         return _classThis;
@@ -16856,7 +16856,6 @@ var Bnum = (function (exports) {
     exports.HTMLBnumCardItemMail = HTMLBnumCardItemMail;
     exports.HTMLBnumCardList = HTMLBnumCardList;
     exports.HTMLBnumCardTitle = HTMLBnumCardTitle;
-    exports.HTMLBnumCheckbox = HTMLBnumCheckbox;
     exports.HTMLBnumColumn = HTMLBnumColumn;
     exports.HTMLBnumDangerButton = HTMLBnumDangerButton;
     exports.HTMLBnumDate = HTMLBnumDate;
@@ -16879,6 +16878,7 @@ var Bnum = (function (exports) {
     exports.HTMLBnumSegmentedControl = HTMLBnumSegmentedControl;
     exports.HTMLBnumSegmentedItem = HTMLBnumSegmentedItem;
     exports.HTMLBnumSelect = HTMLBnumSelect;
+    exports.HTMLBnumSwitch = HTMLBnumSwitch;
     exports.HTMLBnumTree = HTMLBnumTree;
     exports.INPUT_BASE_STYLE = INPUT_BASE_STYLE;
     exports.INPUT_STYLE_STATES = INPUT_STYLE_STATES;
