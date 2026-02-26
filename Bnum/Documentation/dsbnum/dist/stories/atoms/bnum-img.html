@@ -1,0 +1,703 @@
+
+                <html>
+    <head>
+        <link href="../../global.css" rel="stylesheet">
+        <link href="../../material-symbols.css" rel="stylesheet">
+        <script src="../../ds-bnum.js" defer></script>
+
+        <style>
+            .demo-code,
+            .log-output {
+                max-height: 300px;
+                overflow: auto;
+            }
+
+            .structures {
+                display: flex;
+                flex-direction: row; /* C'est la valeur par défaut, mais explicite ici */
+                flex-wrap: wrap;    /* Permet aux colonnes de passer à la ligne sur petits écrans (optionnel) */
+            }
+
+            .structure-block {
+                /* Chaque colonne prend 50% de la largeur */
+                flex-basis: 50%;
+                
+                /* Alternative : flex: 1 1 50%; (grow, shrink, basis) */
+                /* Ou plus simple si elles doivent grandir/rétrécir pareil : flex: 1; */
+
+                /* Ajout de padding et box-sizing pour une meilleure gestion des espacements */
+                box-sizing: border-box;
+                padding: 10px;
+                max-width:50%;
+            }
+
+            .color-swatch {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border: solid thin black;
+                border-radius: 100%;
+            }
+
+            .story-sidebar {
+                background-color: #2c3054;
+            }
+
+            .story-sidebar a {
+                color: white;
+            }
+            .story-sidebar a:hover {
+                background-color: #484d7a;
+            }
+            .story-sidebar a.active {
+                background-color: #6067a8;
+            }
+
+            .structures bnum-img {
+                max-width: 100px;
+                aspect-ratio: 1;
+            }
+
+html.dark body {
+    background-color: black;
+    color: #ddd;
+}
+
+ html.dark body h1,
+      html.dark body h2,
+      html.dark body h3 {
+        border-bottom-color: #444;
+      }
+
+      .bnum-img-playground-container bnum-img {
+        display: inline-block;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed #ccc;
+        vertical-align: middle;
+        margin-right: 1rem;
+        background-color: #f4f4f4; /* Fond pour voir l'image */
+      }
+
+      html.dark body bnum-img {
+        background-color: #333;
+        border-color: #555;
+      }
+
+      /* Style pour le cas d'erreur */
+      bnum-img[src*='fake-image'] {
+        border-color: red;
+      }
+
+      .bnum-img-playground-container button {
+        padding: 8px 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        border: 1px solid #aaa;
+      }
+
+      html.dark body .bnum-img-playground-container button {
+        background-color: #555;
+        border-color: #888;
+        color: #fff;
+      }
+
+      .bnum-img-playground-container code,
+      .bnum-img-playground-container pre {
+        background-color: #eee;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+
+      html.dark body  code,
+      html.dark body  pre {
+        background-color: #444;
+        color: #ffc;
+      }
+      
+
+      html.dark body  th {
+        background-color: #333;
+        border-color: #555;
+      }
+      html.dark body  td {
+        border-color: #555;
+      }
+
+      .playground[playground] {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .playground[playground]  .playground-tester {
+        flex-basis: 100%;
+        min-height: 80px;
+        padding: 1rem;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .playground[playground]  .playground-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.playground[playground]  .control-group {
+	flex: 1 0 50%;
+	margin-bottom: 10px;
+}
+        </style>
+        
+    <style>/* Styles pour la barre latérale et la recherche */
+.story-sidebar {
+	width: 280px;
+	flex-shrink: 0;
+	border-right: 1px solid #eaeaea;
+	height: 100vh;
+	overflow-y: auto;
+	padding: 1.5rem 1rem;
+	box-sizing: border-box;
+	background-color: #2c3054;
+	color: white;
+}
+
+.sidebar-header {
+	margin-bottom: 1.5rem;
+	position: sticky;
+	top: -1.5rem;
+	background: #2c3054;
+	z-index: 10;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #484d7a;
+}
+
+.search-box {
+	width: 100%;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #484d7a;
+	background: #1e213a;
+	color: white;
+	font-size: 0.9rem;
+	margin-top: 12px;
+	outline: none;
+}
+
+.search-box:focus {
+	border-color: #6067a8;
+	box-shadow: 0 0 0 2px rgba(96, 103, 168, 0.3);
+}
+
+.sidebar-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.sidebar-group {
+	margin-bottom: 1.5rem;
+}
+
+.group-title {
+	display: block;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	color: #a5a9d1;
+	margin-bottom: 0.6rem;
+	padding-left: 8px;
+	font-weight: 800;
+	letter-spacing: 1.2px;
+}
+
+.sidebar-group ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.story-sidebar li a {
+	display: block;
+	padding: 7px 12px;
+	text-decoration: none;
+	color: #cbd5e0;
+	border-radius: 6px;
+	font-weight: 500;
+	font-size: 0.85rem;
+	transition: all 0.2s;
+}
+
+.story-sidebar li a:hover {
+	background: #484d7a;
+	color: white;
+	transform: translateX(4px);
+}
+
+.story-sidebar li a.active {
+	background: #6067a8;
+	color: white;
+	font-weight: 600;
+}
+/* Styles pour le contenu principal des stories */
+.story-main {
+	flex-grow: 1;
+	padding: 2rem;
+	height: 100vh;
+	overflow-y: auto;
+	box-sizing: border-box;
+	background: #f8fafc;
+}
+
+.story-wrapper {
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 2.5rem;
+	max-width: 1100px;
+	background: white;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 2.25rem;
+	margin-top: 0;
+	color: #1e293b;
+	border-bottom: 2px solid #e2e8f0;
+	padding-bottom: 1rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 2.5rem;
+	color: #334155;
+	border-bottom: 1px solid #f1f5f9;
+	padding-bottom: 0.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 2rem;
+	color: #475569;
+}
+
+table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin-bottom: 2rem;
+	font-size: 0.9rem;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+th,
+td {
+	padding: 12px 16px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+	background-color: #f8fafc;
+	font-weight: 600;
+	color: #64748b;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	letter-spacing: 0.05em;
+}
+
+tr:last-child td {
+	border-bottom: none;
+}
+
+code {
+	background-color: #f1f5f9;
+	color: #ef4444;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	font-size: 0.85em;
+}
+
+pre {
+	background-color: #1e293b;
+	border-radius: 8px;
+	padding: 1.25rem;
+	overflow-x: auto;
+	margin: 1.5rem 0;
+}
+
+pre > code {
+	display: block;
+	background: transparent;
+	color: #e2e8f0;
+	padding: 0;
+	font-size: 0.9em;
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+.playground-demo-box {
+	border: 2px dashed #cbd5e0;
+	padding: 2.5rem;
+	border-radius: 12px;
+	margin: 1.5rem 0;
+	background: #fff;
+}
+
+.api-method {
+	padding: 1rem 0;
+}
+
+.api-method h4 {
+	margin: 0 0 0.5rem 0;
+	font-family: monospace;
+	font-size: 1.1em;
+	color: #0f172a;
+}
+
+.api-method h4 em {
+	font-style: normal;
+	font-weight: 400;
+	color: #94a3b8;
+}
+
+.api-separator {
+	border: none;
+	border-top: 1px solid #f1f5f9;
+	margin: 2rem 0;
+}
+
+.color-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+.structures {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+	margin: 1.5rem 0;
+}
+
+.structure-block {
+	border: 1px solid #f1f5f9;
+	padding: 1.5rem;
+	border-radius: 8px;
+	background: #fcfcfc;
+}
+
+.structure-block h4 {
+	margin-top: 0;
+	color: #64748b;
+	font-size: 0.9rem;
+}
+</style></head>
+    <body>
+                <div class="story-container">
+                    <nav class="story-sidebar"><div class="sidebar-header"><h3 style="color:white;margin:0">Composants</h3><input type="text" id="component-search" placeholder="Rechercher... (/)" class="search-box" /></div><ul class="sidebar-list"><li class="sidebar-group"><span class="group-title">atoms</span><ul><li><a href="../atoms/bnum-badge.html" class="" data-name="bnum-badge">bnum-badge</a></li><li><a href="../atoms/bnum-button.html" class="" data-name="bnum-button">bnum-button</a></li><li><a href="../atoms/bnum-danger-button.html" class="" data-name="bnum-danger-button">bnum-danger-button</a></li><li><a href="../atoms/bnum-date.html" class="" data-name="bnum-date">bnum-date</a></li><li><a href="../atoms/bnum-fragment.html" class="" data-name="bnum-fragment">bnum-fragment</a></li><li><a href="../atoms/bnum-helper.html" class="" data-name="bnum-helper">bnum-helper</a></li><li><a href="../atoms/bnum-icon.html" class="" data-name="bnum-icon">bnum-icon</a></li><li><a href="../atoms/bnum-icon-button.html" class="" data-name="bnum-icon-button">bnum-icon-button</a></li><li><a href="../atoms/bnum-img.html" class="active" data-name="bnum-img">bnum-img</a></li><li><a href="../atoms/bnum-input.html" class="" data-name="bnum-input">bnum-input</a></li><li><a href="../atoms/bnum-input-date.html" class="" data-name="bnum-input-date">bnum-input-date</a></li><li><a href="../atoms/bnum-input-number.html" class="" data-name="bnum-input-number">bnum-input-number</a></li><li><a href="../atoms/bnum-input-search.html" class="" data-name="bnum-input-search">bnum-input-search</a></li><li><a href="../atoms/bnum-input-text.html" class="" data-name="bnum-input-text">bnum-input-text</a></li><li><a href="../atoms/bnum-input-time.html" class="" data-name="bnum-input-time">bnum-input-time</a></li><li><a href="../atoms/bnum-primary-button.html" class="" data-name="bnum-primary-button">bnum-primary-button</a></li><li><a href="../atoms/bnum-radio.html" class="" data-name="bnum-radio">bnum-radio</a></li><li><a href="../atoms/bnum-secondary-button.html" class="" data-name="bnum-secondary-button">bnum-secondary-button</a></li><li><a href="../atoms/bnum-select.html" class="" data-name="bnum-select">bnum-select</a></li><li><a href="../atoms/bnum-switch.html" class="" data-name="bnum-switch">bnum-switch</a></li></ul></li><li class="sidebar-group"><span class="group-title">molecules</span><ul><li><a href="../molecules/bnum-card-item.html" class="" data-name="bnum-card-item">bnum-card-item</a></li><li><a href="../molecules/bnum-card-item-agenda.html" class="" data-name="bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="../molecules/bnum-card-item-mail.html" class="" data-name="bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="../molecules/bnum-card-list.html" class="" data-name="bnum-card-list">bnum-card-list</a></li><li><a href="../molecules/bnum-card-title.html" class="" data-name="bnum-card-title">bnum-card-title</a></li><li><a href="../molecules/bnum-folder.html" class="" data-name="bnum-folder">bnum-folder</a></li><li><a href="../molecules/bnum-hide.html" class="" data-name="bnum-hide">bnum-hide</a></li><li><a href="../molecules/bnum-radio-group.html" class="" data-name="bnum-radio-group">bnum-radio-group</a></li><li><a href="../molecules/bnum-segmented-control.html" class="" data-name="bnum-segmented-control">bnum-segmented-control</a></li><li><a href="../molecules/bnum-segmented-item.html" class="" data-name="bnum-segmented-item">bnum-segmented-item</a></li></ul></li><li class="sidebar-group"><span class="group-title">organisms</span><ul><li><a href="../organisms/bnum-card.html" class="" data-name="bnum-card">bnum-card</a></li><li><a href="../organisms/bnum-card-agenda.html" class="" data-name="bnum-card-agenda">bnum-card-agenda</a></li><li><a href="../organisms/bnum-card-email.html" class="" data-name="bnum-card-email">bnum-card-email</a></li><li><a href="../organisms/bnum-folder-list.html" class="" data-name="bnum-folder-list">bnum-folder-list</a></li><li><a href="../organisms/bnum-header.html" class="" data-name="bnum-header">bnum-header</a></li><li><a href="../organisms/bnum-tree.html" class="" data-name="bnum-tree">bnum-tree</a></li></ul></li><li class="sidebar-group"><span class="group-title">template</span><ul><li><a href="../template/bnum-column.html" class="" data-name="bnum-column">bnum-column</a></li></ul></li></ul></nav>
+                    <main class="story-main">
+                        <div class="story-wrapper"><h1><code><bnum-img></code></h1><section><h2>Description</h2><div><p>Élément web personnalisé permettant d&#39;afficher une image qui s&#39;adapte automatiquement au mode sombre ou clair de l&#39;interface.</p>
+<p>Le composant utilise des variables CSS pour gérer les différentes versions de l&#39;image en fonction du thème.</p>
+<h2>Attributs</h2>
+<ul>
+<li><code>src</code> : L&#39;URL de l&#39;image à afficher.</li>
+<li><code>alt</code> : Texte alternatif pour l&#39;image.</li>
+</ul>
+<h2>Evènements</h2>
+<ul>
+<li><code>load</code> : Déclenché lorsque l&#39;image est chargée avec succès.</li>
+<li><code>error</code> : Déclenché si une erreur survient lors du chargement de l&#39;image.</li>
+</ul>
+</div></section><section><h2>Structure</h2><div class="structures"><div class="structure-block"><h4>Image avec -light dans le nom de fichier</h4><div><bnum-img src="assets/icon-light.png" alt="Description"></bnum-img></div><pre><code>&lt;bnum-img src=&quot;assets/icon-light.png&quot; alt=&quot;Description&quot;&gt;&lt;/bnum-img&gt;</code></pre></div><div class="structure-block"><h4>Image sans -light dans le nom de fichier</h4><div><bnum-img src="assets/logo.png" alt="Description"></bnum-img></div><pre><code>&lt;bnum-img src=&quot;assets/logo.png&quot; alt=&quot;Description&quot;&gt;&lt;/bnum-img&gt;</code></pre></div></div></section><section><h2>Utilisation (Playground)</h2><div class="playground-demo-box">  <div class="bnum-img-playground-container">
+  <h2 id="test-component">Contrôles</h2>
+    <button id="toggle-dark">
+      Basculer le Thème
+    </button>
+
+    <h2>Utilisation & Scénarios</h2>
+
+    <h3>
+      1. Nommage "light/dark" (<code>icon-light.png</code> &rarr;
+      <code>icon-dark.png</code>)
+    </h3>
+    <p>
+      L'attribut <code>src</code> est
+      <code>./assets/icon-light.png</code>.
+    </p>
+    <bnum-img
+      src="./assets/icon-light.png"
+      alt="Icône light/dark"
+      id="img1"
+    ></bnum-img>
+
+    <h3>
+      2. Nommage standard (<code>logo.png</code> &rarr; <code>logo-dark.png</code>)
+    </h3>
+    <p>
+      L'attribut <code>src</code> est <code>./assets/logo.png</code>.
+    </p>
+    <bnum-img src="./assets/logo.png" alt="Logo standard" id="img2"></bnum-img>
+
+    <h3>3. Cas d'erreur</h3>
+    <p>
+      L'attribut <code>src</code> pointe vers une image inexistante.
+    </p>
+    <bnum-img
+      src="./assets/fake-image.png"
+      alt="Image en erreur"
+      id="imgError"
+    ></bnum-img>
+
+    <h2>Logs des événements</h2>
+    <p>Affiche les événements <code>load</code> et <code>error</code> émis par les composants.</p>
+    <pre id="log-output-3"></pre>
+    </div></div><h3>Code HTML</h3><pre><code class="demo-code">  &lt;div class=&quot;bnum-img-playground-container&quot;&gt;
+  &lt;h2 id=&quot;test-component&quot;&gt;Contrôles&lt;/h2&gt;
+    &lt;button id=&quot;toggle-dark&quot;&gt;
+      Basculer le Thème
+    &lt;/button&gt;
+
+    &lt;h2&gt;Utilisation &amp; Scénarios&lt;/h2&gt;
+
+    &lt;h3&gt;
+      1. Nommage &quot;light/dark&quot; (&lt;code&gt;icon-light.png&lt;/code&gt; &amp;rarr;
+      &lt;code&gt;icon-dark.png&lt;/code&gt;)
+    &lt;/h3&gt;
+    &lt;p&gt;
+      L&#039;attribut &lt;code&gt;src&lt;/code&gt; est
+      &lt;code&gt;./assets/icon-light.png&lt;/code&gt;.
+    &lt;/p&gt;
+    &lt;bnum-img
+      src=&quot;./assets/icon-light.png&quot;
+      alt=&quot;Icône light/dark&quot;
+      id=&quot;img1&quot;
+    &gt;&lt;/bnum-img&gt;
+
+    &lt;h3&gt;
+      2. Nommage standard (&lt;code&gt;logo.png&lt;/code&gt; &amp;rarr; &lt;code&gt;logo-dark.png&lt;/code&gt;)
+    &lt;/h3&gt;
+    &lt;p&gt;
+      L&#039;attribut &lt;code&gt;src&lt;/code&gt; est &lt;code&gt;./assets/logo.png&lt;/code&gt;.
+    &lt;/p&gt;
+    &lt;bnum-img src=&quot;./assets/logo.png&quot; alt=&quot;Logo standard&quot; id=&quot;img2&quot;&gt;&lt;/bnum-img&gt;
+
+    &lt;h3&gt;3. Cas d&#039;erreur&lt;/h3&gt;
+    &lt;p&gt;
+      L&#039;attribut &lt;code&gt;src&lt;/code&gt; pointe vers une image inexistante.
+    &lt;/p&gt;
+    &lt;bnum-img
+      src=&quot;./assets/fake-image.png&quot;
+      alt=&quot;Image en erreur&quot;
+      id=&quot;imgError&quot;
+    &gt;&lt;/bnum-img&gt;
+
+    &lt;h2&gt;Logs des événements&lt;/h2&gt;
+    &lt;p&gt;Affiche les événements &lt;code&gt;load&lt;/code&gt; et &lt;code&gt;error&lt;/code&gt; émis par les composants.&lt;/p&gt;
+    &lt;pre id=&quot;log-output-3&quot;&gt;&lt;/pre&gt;
+    &lt;/div&gt;</code></pre><h3>Code JS</h3><pre><code class="demo-code">document.addEventListener(&#039;DOMContentLoaded&#039;, () =&gt; {
+  const logOutput = document.getElementById(&#039;log-output-3&#039;);
+  const toggleBtn = document.getElementById(&#039;toggle-dark&#039;);
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    // Vérification de sécurité au cas où l&#039;élément n&#039;existe pas dans le DOM
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+    }
+  }
+
+  log(&#039;Page chargée. Attachement des écouteurs...&#039;);
+
+  // 1. Contrôle du thème de la page
+  if (toggleBtn) {
+    toggleBtn.addEventListener(&#039;click&#039;, () =&gt; {
+      document.documentElement.classList.toggle(&#039;dark&#039;);
+      log(
+        `Action: Thème de la page basculé. Classe &quot;.dark&quot; ${
+          document.documentElement.classList.contains(&#039;dark&#039;)
+            ? &#039;ajoutée&#039;
+            : &#039;retirée&#039;
+        }.`,
+      );
+    });
+  }
+
+  // 2. Écouteurs d&#039;événements sur les composants bnum-img
+  const img1 = document.getElementById(&#039;img1&#039;);
+  const img2 = document.getElementById(&#039;img2&#039;);
+  const imgError = document.getElementById(&#039;imgError&#039;);
+
+  if (img1) {
+    // Remplacement de .on() par .addEventListener()
+    img1.addEventListener(&#039;load&#039;, (e) =&gt;
+      log(&#039;✅ SUCCESS (img1): Événement &quot;load&quot; reçu.&#039;),
+    );
+    img1.addEventListener(&#039;error&#039;, (e) =&gt;
+      log(
+        &#039;❌ ERROR (img1): Événement &quot;error&quot; reçu. Vérifiez le chemin &quot;./assets/icon-light.png&quot; (et dark).&#039;,
+      ),
+    );
+  }
+
+  if (img2) {
+    img2.addEventListener(&#039;load&#039;, (e) =&gt;
+      log(&#039;✅ SUCCESS (img2): Événement &quot;load&quot; reçu.&#039;),
+    );
+    img2.addEventListener(&#039;error&#039;, (e) =&gt;
+      log(
+        &#039;❌ ERROR (img2): Événement &quot;error&quot; reçu. Vérifiez le chemin &quot;./assets/logo.svg&quot; (et dark).&#039;,
+      ),
+    );
+  }
+
+  if (imgError) {
+    imgError.addEventListener(&#039;load&#039;, (e) =&gt;
+      log(
+        &#039;⚠️ WARN (imgError): Événement &quot;load&quot; reçu. (Ne devrait pas arriver si le fichier n\&#039;existe pas)&#039;,
+      ),
+    );
+    imgError.addEventListener(&#039;error&#039;, (e) =&gt;
+      log(
+        &#039;✅ SUCCESS (imgError): Événement &quot;error&quot; reçu. (Comportement attendu)&#039;,
+      ),
+    );
+  }
+});
+</code></pre><script>document.addEventListener('DOMContentLoaded', () => {
+  const logOutput = document.getElementById('log-output-3');
+  const toggleBtn = document.getElementById('toggle-dark');
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    // Vérification de sécurité au cas où l'élément n'existe pas dans le DOM
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+    }
+  }
+
+  log('Page chargée. Attachement des écouteurs...');
+
+  // 1. Contrôle du thème de la page
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      log(
+        `Action: Thème de la page basculé. Classe ".dark" ${
+          document.documentElement.classList.contains('dark')
+            ? 'ajoutée'
+            : 'retirée'
+        }.`,
+      );
+    });
+  }
+
+  // 2. Écouteurs d'événements sur les composants bnum-img
+  const img1 = document.getElementById('img1');
+  const img2 = document.getElementById('img2');
+  const imgError = document.getElementById('imgError');
+
+  if (img1) {
+    // Remplacement de .on() par .addEventListener()
+    img1.addEventListener('load', (e) =>
+      log('✅ SUCCESS (img1): Événement "load" reçu.'),
+    );
+    img1.addEventListener('error', (e) =>
+      log(
+        '❌ ERROR (img1): Événement "error" reçu. Vérifiez le chemin "./assets/icon-light.png" (et dark).',
+      ),
+    );
+  }
+
+  if (img2) {
+    img2.addEventListener('load', (e) =>
+      log('✅ SUCCESS (img2): Événement "load" reçu.'),
+    );
+    img2.addEventListener('error', (e) =>
+      log(
+        '❌ ERROR (img2): Événement "error" reçu. Vérifiez le chemin "./assets/logo.svg" (et dark).',
+      ),
+    );
+  }
+
+  if (imgError) {
+    imgError.addEventListener('load', (e) =>
+      log(
+        '⚠️ WARN (imgError): Événement "load" reçu. (Ne devrait pas arriver si le fichier n\'existe pas)',
+      ),
+    );
+    imgError.addEventListener('error', (e) =>
+      log(
+        '✅ SUCCESS (imgError): Événement "error" reçu. (Comportement attendu)',
+      ),
+    );
+  }
+});
+</script></section><section><h2>Événements</h2><p>N/A</p></section><section><h2>Slots</h2><p>N/A</p></section><section><h2>Attributs de Données</h2><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>src</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Source de l'image</td></tr></tbody></table></section><section><h2>Variables CSS</h2><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description</th></tr></thead><tbody><tr><td><code>--_image-url</code></td><td><code>var(--_image-light)</code>false</td><td>Url de l'image de la balise `img`. Ne pas modifier, sauf lors de la surcharge dans votre système de mode sombre.</td></tr><tr><td><code>--_image-dark</code></td><td><code>N/A</code>false</td><td>Variable à assigner à `--_image-url` en mode sombre. Ne pas modifier.</td></tr><tr><td><code>--_image-light</code></td><td><code>N/A</code>false</td><td>Ne pas modifier.</td></tr></tbody></table></section><section><h2>États internes</h2><p>N/A</p></section><section><h2>API Publique</h2><h3>Méthodes</h3><div class="api-method"><h4><code><em>(static) </em><strong>Create</strong>(src: string) : HTMLBnumPicture</code></h4><p>Crée un nouvel élément BnumHTMLPicture avec la source spécifiée.
+Permet d'instancier facilement le composant avec une image donnée.</p><ul><li><code>src</code>: - L'URL de l'image à afficher.</li></ul><hr class="api-separator" /></div><h3>Variables d'instance</h3><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>src</code></td><td><code>Nullable<string></code></td><td>Oui</td><td><span><p>Retourne l&#39;URL de l&#39;image.
+Permet d&#39;obtenir la valeur de l&#39;attribut &#39;src&#39;.</p>
+</span></td></tr><tr><td><code>darkUrl</code></td><td><code>Nullable<string></code></td><td>Oui</td><td><span><p>Retourne l&#39;URL de l&#39;image en mode sombre.
+Génère dynamiquement l&#39;URL pour le mode sombre à partir de l&#39;attribut &#39;src&#39;.</p>
+</span></td></tr><tr><td><code>picture</code></td><td><code>Nullable<HTMLImageElement></code></td><td>Oui</td><td><span><p>Retourne l&#39;élément image HTML associé.
+Permet d&#39;accéder directement à l&#39;élément <img> du composant.</p>
+</span></td></tr><tr><td><code>onimageload</code></td><td><code>JsEvent<ImgLoadedCallback></code></td><td>Non</td><td><span><p>Evènement lorsque l&#39;image est chargée.</p>
+</span></td></tr><tr><td><code>onimageerror</code></td><td><code>JsEvent<ImgErrorCallback></code></td><td>Non</td><td><span><p>Evènement lorsque l&#39;image n&#39;arrive pas à chargée.</p>
+</span></td></tr></tbody></table><h3>Variables statiques</h3><p>N/A</p></section><section><h2>Code source</h2><p><a href="https://github.com/votre-projet/tree/main/components/bnum-img" target="_blank">Voir le code source sur GitHub (components/bnum-img)</a></p></section></div>
+                    </main>
+                </div>
+                <script>/**
+ * Logique client pour la barre de recherche et l'interactivité
+ */
+document.addEventListener('DOMContentLoaded', () => {
+	const searchInput = document.getElementById('component-search');
+	const groups = document.querySelectorAll('.sidebar-group');
+
+	if (searchInput) {
+		searchInput.addEventListener('input', e => {
+			const term = e.target.value.toLowerCase();
+			groups.forEach(group => {
+				let hasVisible = false;
+				const links = group.querySelectorAll('a');
+				links.forEach(link => {
+					const name = (link.getAttribute('data-name') || '').toLowerCase();
+					if (name.includes(term)) {
+						link.parentElement.style.display = '';
+						hasVisible = true;
+					} else {
+						link.parentElement.style.display = 'none';
+					}
+				});
+				group.style.display = hasVisible ? '' : 'none';
+			});
+		});
+
+		// Focus search on '/' key
+		document.addEventListener('keydown', e => {
+			if (e.key === '/' && document.activeElement !== searchInput) {
+				e.preventDefault();
+				searchInput.focus();
+			}
+		});
+	}
+});
+</script>
+                    </body>
+</html>
+
+            

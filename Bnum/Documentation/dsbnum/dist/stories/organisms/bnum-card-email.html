@@ -1,0 +1,912 @@
+
+                <html>
+    <head>
+        <link href="../../global.css" rel="stylesheet">
+        <link href="../../material-symbols.css" rel="stylesheet">
+        <script src="../../ds-bnum.js" defer></script>
+
+        <style>
+            .demo-code,
+            .log-output {
+                max-height: 300px;
+                overflow: auto;
+            }
+
+            .structures {
+                display: flex;
+                flex-direction: row; /* C'est la valeur par défaut, mais explicite ici */
+                flex-wrap: wrap;    /* Permet aux colonnes de passer à la ligne sur petits écrans (optionnel) */
+            }
+
+            .structure-block {
+                /* Chaque colonne prend 50% de la largeur */
+                flex-basis: 50%;
+                
+                /* Alternative : flex: 1 1 50%; (grow, shrink, basis) */
+                /* Ou plus simple si elles doivent grandir/rétrécir pareil : flex: 1; */
+
+                /* Ajout de padding et box-sizing pour une meilleure gestion des espacements */
+                box-sizing: border-box;
+                padding: 10px;
+                max-width:50%;
+            }
+
+            .color-swatch {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border: solid thin black;
+                border-radius: 100%;
+            }
+
+            .story-sidebar {
+                background-color: #2c3054;
+            }
+
+            .story-sidebar a {
+                color: white;
+            }
+            .story-sidebar a:hover {
+                background-color: #484d7a;
+            }
+            .story-sidebar a.active {
+                background-color: #6067a8;
+            }
+
+            .structures bnum-img {
+                max-width: 100px;
+                aspect-ratio: 1;
+            }
+
+html.dark body {
+    background-color: black;
+    color: #ddd;
+}
+
+ html.dark body h1,
+      html.dark body h2,
+      html.dark body h3 {
+        border-bottom-color: #444;
+      }
+
+      .bnum-img-playground-container bnum-img {
+        display: inline-block;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed #ccc;
+        vertical-align: middle;
+        margin-right: 1rem;
+        background-color: #f4f4f4; /* Fond pour voir l'image */
+      }
+
+      html.dark body bnum-img {
+        background-color: #333;
+        border-color: #555;
+      }
+
+      /* Style pour le cas d'erreur */
+      bnum-img[src*='fake-image'] {
+        border-color: red;
+      }
+
+      .bnum-img-playground-container button {
+        padding: 8px 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        border: 1px solid #aaa;
+      }
+
+      html.dark body .bnum-img-playground-container button {
+        background-color: #555;
+        border-color: #888;
+        color: #fff;
+      }
+
+      .bnum-img-playground-container code,
+      .bnum-img-playground-container pre {
+        background-color: #eee;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+
+      html.dark body  code,
+      html.dark body  pre {
+        background-color: #444;
+        color: #ffc;
+      }
+      
+
+      html.dark body  th {
+        background-color: #333;
+        border-color: #555;
+      }
+      html.dark body  td {
+        border-color: #555;
+      }
+
+      .playground[playground] {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .playground[playground]  .playground-tester {
+        flex-basis: 100%;
+        min-height: 80px;
+        padding: 1rem;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .playground[playground]  .playground-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.playground[playground]  .control-group {
+	flex: 1 0 50%;
+	margin-bottom: 10px;
+}
+        </style>
+        
+    <style>/* Styles pour la barre latérale et la recherche */
+.story-sidebar {
+	width: 280px;
+	flex-shrink: 0;
+	border-right: 1px solid #eaeaea;
+	height: 100vh;
+	overflow-y: auto;
+	padding: 1.5rem 1rem;
+	box-sizing: border-box;
+	background-color: #2c3054;
+	color: white;
+}
+
+.sidebar-header {
+	margin-bottom: 1.5rem;
+	position: sticky;
+	top: -1.5rem;
+	background: #2c3054;
+	z-index: 10;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #484d7a;
+}
+
+.search-box {
+	width: 100%;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #484d7a;
+	background: #1e213a;
+	color: white;
+	font-size: 0.9rem;
+	margin-top: 12px;
+	outline: none;
+}
+
+.search-box:focus {
+	border-color: #6067a8;
+	box-shadow: 0 0 0 2px rgba(96, 103, 168, 0.3);
+}
+
+.sidebar-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.sidebar-group {
+	margin-bottom: 1.5rem;
+}
+
+.group-title {
+	display: block;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	color: #a5a9d1;
+	margin-bottom: 0.6rem;
+	padding-left: 8px;
+	font-weight: 800;
+	letter-spacing: 1.2px;
+}
+
+.sidebar-group ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.story-sidebar li a {
+	display: block;
+	padding: 7px 12px;
+	text-decoration: none;
+	color: #cbd5e0;
+	border-radius: 6px;
+	font-weight: 500;
+	font-size: 0.85rem;
+	transition: all 0.2s;
+}
+
+.story-sidebar li a:hover {
+	background: #484d7a;
+	color: white;
+	transform: translateX(4px);
+}
+
+.story-sidebar li a.active {
+	background: #6067a8;
+	color: white;
+	font-weight: 600;
+}
+/* Styles pour le contenu principal des stories */
+.story-main {
+	flex-grow: 1;
+	padding: 2rem;
+	height: 100vh;
+	overflow-y: auto;
+	box-sizing: border-box;
+	background: #f8fafc;
+}
+
+.story-wrapper {
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 2.5rem;
+	max-width: 1100px;
+	background: white;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 2.25rem;
+	margin-top: 0;
+	color: #1e293b;
+	border-bottom: 2px solid #e2e8f0;
+	padding-bottom: 1rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 2.5rem;
+	color: #334155;
+	border-bottom: 1px solid #f1f5f9;
+	padding-bottom: 0.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 2rem;
+	color: #475569;
+}
+
+table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin-bottom: 2rem;
+	font-size: 0.9rem;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+th,
+td {
+	padding: 12px 16px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+	background-color: #f8fafc;
+	font-weight: 600;
+	color: #64748b;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	letter-spacing: 0.05em;
+}
+
+tr:last-child td {
+	border-bottom: none;
+}
+
+code {
+	background-color: #f1f5f9;
+	color: #ef4444;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	font-size: 0.85em;
+}
+
+pre {
+	background-color: #1e293b;
+	border-radius: 8px;
+	padding: 1.25rem;
+	overflow-x: auto;
+	margin: 1.5rem 0;
+}
+
+pre > code {
+	display: block;
+	background: transparent;
+	color: #e2e8f0;
+	padding: 0;
+	font-size: 0.9em;
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+.playground-demo-box {
+	border: 2px dashed #cbd5e0;
+	padding: 2.5rem;
+	border-radius: 12px;
+	margin: 1.5rem 0;
+	background: #fff;
+}
+
+.api-method {
+	padding: 1rem 0;
+}
+
+.api-method h4 {
+	margin: 0 0 0.5rem 0;
+	font-family: monospace;
+	font-size: 1.1em;
+	color: #0f172a;
+}
+
+.api-method h4 em {
+	font-style: normal;
+	font-weight: 400;
+	color: #94a3b8;
+}
+
+.api-separator {
+	border: none;
+	border-top: 1px solid #f1f5f9;
+	margin: 2rem 0;
+}
+
+.color-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+.structures {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+	margin: 1.5rem 0;
+}
+
+.structure-block {
+	border: 1px solid #f1f5f9;
+	padding: 1.5rem;
+	border-radius: 8px;
+	background: #fcfcfc;
+}
+
+.structure-block h4 {
+	margin-top: 0;
+	color: #64748b;
+	font-size: 0.9rem;
+}
+</style></head>
+    <body>
+                <div class="story-container">
+                    <nav class="story-sidebar"><div class="sidebar-header"><h3 style="color:white;margin:0">Composants</h3><input type="text" id="component-search" placeholder="Rechercher... (/)" class="search-box" /></div><ul class="sidebar-list"><li class="sidebar-group"><span class="group-title">atoms</span><ul><li><a href="../atoms/bnum-badge.html" class="" data-name="bnum-badge">bnum-badge</a></li><li><a href="../atoms/bnum-button.html" class="" data-name="bnum-button">bnum-button</a></li><li><a href="../atoms/bnum-danger-button.html" class="" data-name="bnum-danger-button">bnum-danger-button</a></li><li><a href="../atoms/bnum-date.html" class="" data-name="bnum-date">bnum-date</a></li><li><a href="../atoms/bnum-fragment.html" class="" data-name="bnum-fragment">bnum-fragment</a></li><li><a href="../atoms/bnum-helper.html" class="" data-name="bnum-helper">bnum-helper</a></li><li><a href="../atoms/bnum-icon.html" class="" data-name="bnum-icon">bnum-icon</a></li><li><a href="../atoms/bnum-icon-button.html" class="" data-name="bnum-icon-button">bnum-icon-button</a></li><li><a href="../atoms/bnum-img.html" class="" data-name="bnum-img">bnum-img</a></li><li><a href="../atoms/bnum-input.html" class="" data-name="bnum-input">bnum-input</a></li><li><a href="../atoms/bnum-input-date.html" class="" data-name="bnum-input-date">bnum-input-date</a></li><li><a href="../atoms/bnum-input-number.html" class="" data-name="bnum-input-number">bnum-input-number</a></li><li><a href="../atoms/bnum-input-search.html" class="" data-name="bnum-input-search">bnum-input-search</a></li><li><a href="../atoms/bnum-input-text.html" class="" data-name="bnum-input-text">bnum-input-text</a></li><li><a href="../atoms/bnum-input-time.html" class="" data-name="bnum-input-time">bnum-input-time</a></li><li><a href="../atoms/bnum-primary-button.html" class="" data-name="bnum-primary-button">bnum-primary-button</a></li><li><a href="../atoms/bnum-radio.html" class="" data-name="bnum-radio">bnum-radio</a></li><li><a href="../atoms/bnum-secondary-button.html" class="" data-name="bnum-secondary-button">bnum-secondary-button</a></li><li><a href="../atoms/bnum-select.html" class="" data-name="bnum-select">bnum-select</a></li><li><a href="../atoms/bnum-switch.html" class="" data-name="bnum-switch">bnum-switch</a></li></ul></li><li class="sidebar-group"><span class="group-title">molecules</span><ul><li><a href="../molecules/bnum-card-item.html" class="" data-name="bnum-card-item">bnum-card-item</a></li><li><a href="../molecules/bnum-card-item-agenda.html" class="" data-name="bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="../molecules/bnum-card-item-mail.html" class="" data-name="bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="../molecules/bnum-card-list.html" class="" data-name="bnum-card-list">bnum-card-list</a></li><li><a href="../molecules/bnum-card-title.html" class="" data-name="bnum-card-title">bnum-card-title</a></li><li><a href="../molecules/bnum-folder.html" class="" data-name="bnum-folder">bnum-folder</a></li><li><a href="../molecules/bnum-hide.html" class="" data-name="bnum-hide">bnum-hide</a></li><li><a href="../molecules/bnum-radio-group.html" class="" data-name="bnum-radio-group">bnum-radio-group</a></li><li><a href="../molecules/bnum-segmented-control.html" class="" data-name="bnum-segmented-control">bnum-segmented-control</a></li><li><a href="../molecules/bnum-segmented-item.html" class="" data-name="bnum-segmented-item">bnum-segmented-item</a></li></ul></li><li class="sidebar-group"><span class="group-title">organisms</span><ul><li><a href="../organisms/bnum-card.html" class="" data-name="bnum-card">bnum-card</a></li><li><a href="../organisms/bnum-card-agenda.html" class="" data-name="bnum-card-agenda">bnum-card-agenda</a></li><li><a href="../organisms/bnum-card-email.html" class="active" data-name="bnum-card-email">bnum-card-email</a></li><li><a href="../organisms/bnum-folder-list.html" class="" data-name="bnum-folder-list">bnum-folder-list</a></li><li><a href="../organisms/bnum-header.html" class="" data-name="bnum-header">bnum-header</a></li><li><a href="../organisms/bnum-tree.html" class="" data-name="bnum-tree">bnum-tree</a></li></ul></li><li class="sidebar-group"><span class="group-title">template</span><ul><li><a href="../template/bnum-column.html" class="" data-name="bnum-column">bnum-column</a></li></ul></li></ul></nav>
+                    <main class="story-main">
+                        <div class="story-wrapper"><h1><code><bnum-card-email></code></h1><section><h2>Description</h2><div><p>Organisme qui permet d&#39;afficher simplement une liste de mails dans une carte.</p>
+</div></section><section><h2>Structure</h2><div class="structures"><div class="structure-block"><h4>Avec des éléments</h4><div><bnum-card-email>
+<bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+</bnum-card-item-mail>
+<bnum-card-item-mail read data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+</bnum-card-item-mail>
+<bnum-card-item-mail data-date="now">
+<span slot="subject">Sujet par défaut</span>
+<span slot="sender">Expéditeur par défaut</span>
+</bnum-card-item-mail>
+</bnum-card-email></div><pre><code>&lt;bnum-card-email&gt;
+&lt;bnum-card-item-mail data-date=&quot;2025-10-31 11:11&quot; data-subject=&quot;Sujet ici&quot; data-sender=&quot;Expéditeur ici&quot;&gt;
+&lt;/bnum-card-item-mail&gt;
+&lt;bnum-card-item-mail read data-date=&quot;2025-10-31 11:11&quot; data-subject=&quot;Sujet ici&quot; data-sender=&quot;Expéditeur ici&quot;&gt;
+&lt;/bnum-card-item-mail&gt;
+&lt;bnum-card-item-mail data-date=&quot;now&quot;&gt;
+&lt;span slot=&quot;subject&quot;&gt;Sujet par défaut&lt;/span&gt;
+&lt;span slot=&quot;sender&quot;&gt;Expéditeur par défaut&lt;/span&gt;
+&lt;/bnum-card-item-mail&gt;
+&lt;/bnum-card-email&gt;</code></pre></div><div class="structure-block"><h4>Sans éléments</h4><div><bnum-card-email>
+</bnum-card-email></div><pre><code>&lt;bnum-card-email&gt;
+&lt;/bnum-card-email&gt;</code></pre></div><div class="structure-block"><h4>Avec une url</h4><div><bnum-card-email data-url="#">
+</bnum-card-email></div><pre><code>&lt;bnum-card-email data-url=&quot;#&quot;&gt;
+&lt;/bnum-card-email&gt;</code></pre></div></div></section><section><h2>Utilisation (Playground)</h2><div class="playground-demo-box"><div id="bnum-card-email-story">
+
+  <div class="demo-container">
+
+  <div id="bnum-card-email-story-playground-section">
+    <div id="bnum-card-email-story-playground-controls">
+      <div class="control-group">
+        <label>Contrôles d'état (Attributs) :</label>
+        <label>
+          <input type="checkbox" id="bnum-card-email-story-ctrl-loading" />
+          <code>[loading]</code>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>Méthodes JS (Corps) :</label>
+        <bnum-primary-button data-icon="add" id="bnum-card-email-story-btn-append-body">Ajouter un mail</bnum-primary-button>
+        <bnum-primary-button data-icon="clear_all" id="bnum-card-email-story-btn-clear-body">Vider</bnum-primary-button>
+      </div>
+    </div>
+
+    <bnum-card-email id="bnum-card-email-story-card-playground" style="display: block;">
+    </bnum-card-email>
+
+    <h4>Logs des événements (sur le Playground)</h4>
+    <pre id="bnum-card-email-story-log-output-card" class="log-output"></pre>
+  </div>
+</div>
+</div></div><h3>Code HTML</h3><pre><code class="demo-code">&lt;div id=&quot;bnum-card-email-story&quot;&gt;
+
+  &lt;div class=&quot;demo-container&quot;&gt;
+
+  &lt;div id=&quot;bnum-card-email-story-playground-section&quot;&gt;
+    &lt;div id=&quot;bnum-card-email-story-playground-controls&quot;&gt;
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Contrôles d&#039;état (Attributs) :&lt;/label&gt;
+        &lt;label&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;bnum-card-email-story-ctrl-loading&quot; /&gt;
+          &lt;code&gt;[loading]&lt;/code&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;control-group&quot;&gt;
+        &lt;label&gt;Méthodes JS (Corps) :&lt;/label&gt;
+        &lt;bnum-primary-button data-icon=&quot;add&quot; id=&quot;bnum-card-email-story-btn-append-body&quot;&gt;Ajouter un mail&lt;/bnum-primary-button&gt;
+        &lt;bnum-primary-button data-icon=&quot;clear_all&quot; id=&quot;bnum-card-email-story-btn-clear-body&quot;&gt;Vider&lt;/bnum-primary-button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;bnum-card-email id=&quot;bnum-card-email-story-card-playground&quot; style=&quot;display: block;&quot;&gt;
+    &lt;/bnum-card-email&gt;
+
+    &lt;h4&gt;Logs des événements (sur le Playground)&lt;/h4&gt;
+    &lt;pre id=&quot;bnum-card-email-story-log-output-card&quot; class=&quot;log-output&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre><h3>Code JS</h3><pre><code class="demo-code">/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise &#039;DOMContentLoaded&#039; pour s&#039;assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener(&#039;DOMContentLoaded&#039;, () =&gt; {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d&#039;événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    &#039;bnum-card-email-story-card-playground&#039;,
+  );
+  const logOutput = document.getElementById(
+    &#039;bnum-card-email-story-log-output-card&#039;,
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d&#039;attacher les listeners,
+        au cas où la story ne serait pas la première à s&#039;afficher.
+      */
+  const cardClickable = document.getElementById(
+    &#039;bnum-card-email-story-card-clickable&#039;,
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener(&#039;bnum-card-email:click&#039;, (e) =&gt; {
+      log(&#039;✅ Événement &quot;bnum-card-email:click&quot; reçu (sur la carte cliquable)&#039;);
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      &#039;Page chargée. Attachement des écouteurs pour #bnum-card-email-story-card-playground...&#039;,
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      &#039;bnum-card-email-story-ctrl-clickable&#039;,
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener(&#039;change&#039;, (e) =&gt; {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      &#039;bnum-card-email-story-ctrl-loading&#039;,
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener(&#039;change&#039;, (e) =&gt; {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d&#039;événements sur le Playground
+    playgroundCard.addEventListener(&#039;bnum-card-email:loading&#039;, (e) =&gt; {
+      log(
+        `✅ Événement &quot;bnum-card-email:loading&quot; reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener(&#039;bnum-card-email:click&#039;, (e) =&gt; {
+      log(&#039;✅ Événement &quot;bnum-card-email:click&quot; reçu (sur le playground)&#039;);
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const mail_subjects = [
+      &#039;Réunion de projet&#039;,
+      &#039;Présentation du nouveau produit&#039;,
+      &#039;Atelier de formation&#039;,
+      &#039;Déjeuner d\&#039;équipe&#039;,
+      &#039;Session de brainstorming&#039;,
+      &#039;Mise à jour du statut&#039;,
+      &#039;Planification stratégique&#039;,
+      &#039;Révision du budget&#039;,
+      &#039;Conférence client&#039;,
+      &#039;Webinaire sur les tendances du marché&#039;,
+    ];
+
+    const mail_senders = [
+      &#039;Marie Dupont&#039;,
+      &#039;Antoine Martin&#039;,
+      &#039;Sophie Bernard&#039;,
+      &#039;Lucas Durand&#039;,
+      &#039;Emma Moreau&#039;,
+      &#039;Hugo Lefebvre&#039;,
+      &#039;Chloé Simon&#039;,
+      &#039;Louis Michel&#039;,
+      &#039;Camille Garcia&#039;,
+      &#039;Julien Robert&#039;,
+      &#039;Laura Richard&#039;,
+      &#039;Maxime Petit&#039;,
+      &#039;Sarah Durand&#039;,
+      &#039;Nicolas Fournier&#039;,
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const subject = randomArrayElement(mail_subjects);
+      const sender = randomArrayElement(mail_senders);
+
+      return Bnum.HTMLBnumCardItemMail.Create(subject, sender, start);
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById(&#039;bnum-card-email-story-btn-clear-body&#039;)
+      ?.addEventListener(&#039;click&#039;, () =&gt; {
+        log(&#039;Reset des évènements&#039;);
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById(&#039;bnum-card-email-story-btn-append-body&#039;)
+      ?.addEventListener(&#039;click&#039;, () =&gt; {
+        log(&#039;Action: Appel de .appendToBody()&#039;);
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n&#039;est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      &#039;Script bnum-card-email: #bnum-card-email-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).&#039;,
+    );
+  }
+});
+</code></pre><script>/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise 'DOMContentLoaded' pour s'assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener('DOMContentLoaded', () => {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d'événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    'bnum-card-email-story-card-playground',
+  );
+  const logOutput = document.getElementById(
+    'bnum-card-email-story-log-output-card',
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d'attacher les listeners,
+        au cas où la story ne serait pas la première à s'afficher.
+      */
+  const cardClickable = document.getElementById(
+    'bnum-card-email-story-card-clickable',
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener('bnum-card-email:click', (e) => {
+      log('✅ Événement "bnum-card-email:click" reçu (sur la carte cliquable)');
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      'Page chargée. Attachement des écouteurs pour #bnum-card-email-story-card-playground...',
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      'bnum-card-email-story-ctrl-clickable',
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener('change', (e) => {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      'bnum-card-email-story-ctrl-loading',
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener('change', (e) => {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d'événements sur le Playground
+    playgroundCard.addEventListener('bnum-card-email:loading', (e) => {
+      log(
+        `✅ Événement "bnum-card-email:loading" reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener('bnum-card-email:click', (e) => {
+      log('✅ Événement "bnum-card-email:click" reçu (sur le playground)');
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const mail_subjects = [
+      'Réunion de projet',
+      'Présentation du nouveau produit',
+      'Atelier de formation',
+      'Déjeuner d\'équipe',
+      'Session de brainstorming',
+      'Mise à jour du statut',
+      'Planification stratégique',
+      'Révision du budget',
+      'Conférence client',
+      'Webinaire sur les tendances du marché',
+    ];
+
+    const mail_senders = [
+      'Marie Dupont',
+      'Antoine Martin',
+      'Sophie Bernard',
+      'Lucas Durand',
+      'Emma Moreau',
+      'Hugo Lefebvre',
+      'Chloé Simon',
+      'Louis Michel',
+      'Camille Garcia',
+      'Julien Robert',
+      'Laura Richard',
+      'Maxime Petit',
+      'Sarah Durand',
+      'Nicolas Fournier',
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const subject = randomArrayElement(mail_subjects);
+      const sender = randomArrayElement(mail_senders);
+
+      return Bnum.HTMLBnumCardItemMail.Create(subject, sender, start);
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById('bnum-card-email-story-btn-clear-body')
+      ?.addEventListener('click', () => {
+        log('Reset des évènements');
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById('bnum-card-email-story-btn-append-body')
+      ?.addEventListener('click', () => {
+        log('Action: Appel de .appendToBody()');
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n'est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      'Script bnum-card-email: #bnum-card-email-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).',
+    );
+  }
+});
+</script></section><section><h2>Événements</h2><p>N/A</p></section><section><h2>Slots</h2><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>Contenu des éléments de type HTMLBnumCardItemMail.</td></tr></tbody></table></section><section><h2>Attributs de Données</h2><p>N/A</p></section><section><h2>Variables CSS</h2><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description</th></tr></thead><tbody><tr><td><code>--bnum-card-email-display</code></td><td><code>block</code>false</td><td>Définit le display du composant. Par défaut à "block".</td></tr></tbody></table></section><section><h2>États internes</h2><p>N/A</p></section><section><h2>API Publique</h2><h3>Méthodes</h3><div class="api-method"><h4><code><strong>add</strong>(content: HTMLBnumCardItemMail[]) : this</code></h4><p>Ajoute des éléments.
+
+Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.</p><ul><li><code>content</code>: Elements à ajouter</li></ul><hr class="api-separator" /></div><div class="api-method"><h4><code><strong>clear</strong>() : this</code></h4><p>Vide le composant.</p><hr class="api-separator" /></div><div class="api-method"><h4><code><em>(static) </em><strong>Create</strong>({
+    contents = [],
+    url = EMPTY_STRING,
+  }: { contents?: HTMLBnumCardItemMail[]; url?: string; }) : HTMLBnumCardEmail</code></h4><p>Méthode statique pour créer une instance du composant.</p><ul><li><code>{
+    contents = [],
+    url = EMPTY_STRING,
+  }</code>: Options de création</li></ul><p><strong>Retourne :</strong> Nouvelle node HTMLBnumCardEmail</p><hr class="api-separator" /></div><h3>Variables d'instance</h3><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemMail[]) => void></code></td><td>Oui</td><td><span><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
+</span></td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><span><p>Mode loading.</p>
+</span></td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Récupère l&#39;URL du titre.</p>
+</span></td></tr></tbody></table><h3>Variables statiques</h3><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Tag du composant.</p>
+</span></td></tr><tr><td><code>DATA_URL</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Data pour l&#39;URL du titre.</p>
+</span></td></tr><tr><td><code>ID_CARD_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><span><p>ID du titre.</p>
+</span></td></tr><tr><td><code>ID_CARD_ITEM_NO_ELEMENTS</code></td><td><code>string</code></td><td>Oui</td><td><span><p>ID de l&#39;élément &quot;Aucun élément&quot;.</p>
+</span></td></tr></tbody></table></section><section><h2>Code source</h2><p><a href="https://github.com/votre-projet/tree/main/components/bnum-card-email" target="_blank">Voir le code source sur GitHub (components/bnum-card-email)</a></p></section></div>
+                    </main>
+                </div>
+                <script>/**
+ * Logique client pour la barre de recherche et l'interactivité
+ */
+document.addEventListener('DOMContentLoaded', () => {
+	const searchInput = document.getElementById('component-search');
+	const groups = document.querySelectorAll('.sidebar-group');
+
+	if (searchInput) {
+		searchInput.addEventListener('input', e => {
+			const term = e.target.value.toLowerCase();
+			groups.forEach(group => {
+				let hasVisible = false;
+				const links = group.querySelectorAll('a');
+				links.forEach(link => {
+					const name = (link.getAttribute('data-name') || '').toLowerCase();
+					if (name.includes(term)) {
+						link.parentElement.style.display = '';
+						hasVisible = true;
+					} else {
+						link.parentElement.style.display = 'none';
+					}
+				});
+				group.style.display = hasVisible ? '' : 'none';
+			});
+		});
+
+		// Focus search on '/' key
+		document.addEventListener('keydown', e => {
+			if (e.key === '/' && document.activeElement !== searchInput) {
+				e.preventDefault();
+				searchInput.focus();
+			}
+		});
+	}
+});
+</script>
+                    </body>
+</html>
+
+            

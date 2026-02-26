@@ -328,7 +328,7 @@ html.dark body {
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>type</code></td><td><code>string</code></td><td><code>'default'</code></td><td>✅</td><td>Le type de colonne (ex: "sidebar", "main", "tools")</td></tr><tr><td><code>data-keep-body</code></td><td><code>boolean</code></td><td><code>true</code></td><td>✅</td><td>Indique si le corps doit être conservé</td></tr></tbody>
+      <tbody><tr><td><code>type</code></td><td><code>string</code></td><td><code>'default'</code></td><td>✅</td><td>Le type de colonne (ex: "sidebar", "main", "tools")</td></tr></tbody>
     </table>
   
 
@@ -356,29 +356,7 @@ Utile pour le CSS qui va définir la largeur</p>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>"bnum-column"</code></td><td>Oui</td><td><p>Tag HTML personnalisé utilisé pour ce composant.</p>
-</td></tr><tr><td><code>DEFAULT_COLUMN_TYPE</code></td><td><code>"default"</code></td><td>Oui</td><td><p>Valeur par défaut pour le type de colonne.</p>
-</td></tr><tr><td><code>CLASS_PREFIX</code></td><td><code>"bnum-column"</code></td><td>Oui</td><td><p>Préfixe commun pour les classes CSS de la colonne.</p>
-</td></tr><tr><td><code>CLASS_HEADER</code></td><td><code>"bnum-column__header"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;en-tête de la colonne.</p>
-</td></tr><tr><td><code>CLASS_RC_HEADER</code></td><td><code>"header"</code></td><td>Oui</td><td><p>Classe CSS &quot;legacy&quot; pour l&#39;en-tête (compatibilité).</p>
-</td></tr><tr><td><code>CLASS_RC_HEADER_OLD</code></td><td><code>"old-header"</code></td><td>Oui</td><td><p>Ancienne classe CSS pour l&#39;en-tête (pour rétrocompatibilité).</p>
-</td></tr><tr><td><code>CLASS_BODY</code></td><td><code>"bnum-column__body"</code></td><td>Oui</td><td><p>Classe CSS pour le corps de la colonne.</p>
-</td></tr><tr><td><code>CLASS_FOOTER</code></td><td><code>"bnum-column__footer"</code></td><td>Oui</td><td><p>Classe CSS pour le pied de page de la colonne.</p>
-</td></tr><tr><td><code>CLASS_RC_FOOTER</code></td><td><code>"footer"</code></td><td>Oui</td><td><p>Classe CSS &quot;legacy&quot; pour le pied de page (compatibilité).</p>
-</td></tr><tr><td><code>CLASS_FROM_SLOT</code></td><td><code>"from-slot"</code></td><td>Oui</td><td><p>Classe CSS indiquant qu&#39;un élément provient d&#39;un slot.</p>
-</td></tr><tr><td><code>CLASS_CONTENT_PREFIX</code></td><td><code>"bnum-column"</code></td><td>Oui</td><td><p>Préfixe pour les classes CSS de contenu.</p>
-</td></tr><tr><td><code>CLASS_CONTENT_POSTFIX</code></td><td><code>"content"</code></td><td>Oui</td><td><p>Suffixe pour les classes CSS de contenu.</p>
-</td></tr><tr><td><code>CLASS_CONTENT_HEADER</code></td><td><code>"bnum-column__header__content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu de l&#39;en-tête.</p>
-</td></tr><tr><td><code>CLASS_CONTENT_BODY</code></td><td><code>"bnum-column__body__content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu du corps.</p>
-</td></tr><tr><td><code>CLASS_CONTENT_FOOTER</code></td><td><code>"bnum-column__footer__content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu du pied de page.</p>
-</td></tr><tr><td><code>SLOT_HEADER</code></td><td><code>"header"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;en-tête.</p>
-</td></tr><tr><td><code>SLOT_FOOTER</code></td><td><code>"footer"</code></td><td>Oui</td><td><p>Nom du slot pour le pied de page.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -395,7 +373,7 @@ Utile pour le CSS qui va définir la largeur</p>
       <h1><code>&lt;bnum-tree&gt;</code></h1>
       
       <h2>Description</h2>
-      <p><p>Classe interne étendant BnumElement pour gérer les états personnalisés via ElementInternals.</p>
+      <p><p>Webcomposant représentant un arbre.</p>
 </p>
       
       <h2>Structure</h2>
@@ -717,7 +695,7 @@ Les éléments HTML qui n'ont pas le rôle treeitem se voient attribuer ce rôle
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-header:background.changed</code></td><td><code>{newBackground:Nullable&lt;string&gt;}</code></td><td>Evènement du changement de d'image</td></tr></tbody>
+      <tbody><tr><td><code>bnum-header:background.changed</code></td><td><code>CustomEvent&lt;{newBackground:Nullable&lt;string&gt;}&gt;</code></td><td>Événement déclenché lorsque l'image de fond change</td></tr></tbody>
     </table>
   
       
@@ -787,7 +765,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>({
 		background = null,
-	}: { background?: string; }) : <code>HTMLBnumHeader</code></code></h4>
+	}: HTMLBnumHeaderCreateOption) : <code>HTMLBnumHeader</code></code></h4>
         <p>Génère un nouvel élément HTMLBnumHeader</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -803,37 +781,13 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
       <tbody><tr><td><code>#_backgroundScheduler</code></td><td><code>Scheduler<string></code></td><td>Oui</td><td><p>Scheduler pour la mise à jour de l&#39;image de fond</p>
-</td></tr><tr><td><code>onBackgroundChanged</code></td><td><code>JsEvent<(newBackground: string) => void></code></td><td>Oui</td><td><p>Evènement du changement d&#39;image de fond</p>
-</td></tr><tr><td><code>ImgBackground</code></td><td><code>string</code></td><td>Non</td><td><p>URL de l&#39;image de fond du header</p>
+</td></tr><tr><td><code>onBackgroundChanged</code></td><td><code>JsEvent<import("/opt/bnum/rcube/github/design-system-bnum/components/organisms/header/bnum-header.internal/types").BackgroundChangedCallback></code></td><td>Non</td><td><p>Evènement du changement d&#39;image de fond</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML de l&#39;élément</p>
-</td></tr><tr><td><code>CLASS_HEADER_CONTAINER</code></td><td><code>"bnum-header-container"</code></td><td>Oui</td><td><p>Classe CSS du container principal</p>
-</td></tr><tr><td><code>CLASS_HEADER_LEFT</code></td><td><code>"header-left"</code></td><td>Oui</td><td><p>Classe CSS de la partie gauche du header</p>
-</td></tr><tr><td><code>CLASS_HEADER_RIGHT</code></td><td><code>"header-right"</code></td><td>Oui</td><td><p>Classe CSS de la partie droite du header</p>
-</td></tr><tr><td><code>CLASS_HEADER_TITLE</code></td><td><code>"header-title"</code></td><td>Oui</td><td><p>Classe CSS du titre textuel</p>
-</td></tr><tr><td><code>CLASS_HEADER_CUSTOM</code></td><td><code>"header-custom"</code></td><td>Oui</td><td><p>Classe CSS du conteneur du titre custom</p>
-</td></tr><tr><td><code>CLASS_HEADER_MODIFIER</code></td><td><code>"header-modifier"</code></td><td>Oui</td><td><p>Classe CSS de la zone qui peut obtenir des &quot;effets&quot;</p>
-</td></tr><tr><td><code>PART_HEADER_CONTAINER</code></td><td><code>"header-container"</code></td><td>Oui</td><td><p>Partie du container principal</p>
-</td></tr><tr><td><code>PART_HEADER_LEFT</code></td><td><code>"header-left"</code></td><td>Oui</td><td><p>Partie du header gauche</p>
-</td></tr><tr><td><code>PART_HEADER_RIGHT</code></td><td><code>"header-right"</code></td><td>Oui</td><td><p>Partie du header droit</p>
-</td></tr><tr><td><code>PART_HEADER_TITLE</code></td><td><code>"header-title"</code></td><td>Oui</td><td><p>Partie du titre</p>
-</td></tr><tr><td><code>PART_HEADER_CUSTOM</code></td><td><code>"header-custom"</code></td><td>Oui</td><td><p>Partie de l&#39;élément custom</p>
-</td></tr><tr><td><code>ID_TITLE_TEXT</code></td><td><code>"title-text"</code></td><td>Oui</td><td><p>ID du H1 pour le titre textuel</p>
-</td></tr><tr><td><code>ID_TITLE_CUSTOM</code></td><td><code>"title-custom"</code></td><td>Oui</td><td><p>ID du conteneur pour le titre custom</p>
-</td></tr><tr><td><code>SLOT_NAME_LOGO</code></td><td><code>"logo"</code></td><td>Oui</td><td><p>Nom du slot pour le logo</p>
-</td></tr><tr><td><code>SLOT_NAME_TITLE</code></td><td><code>"title"</code></td><td>Oui</td><td><p>Nom du slot pour le titre</p>
-</td></tr><tr><td><code>SLOT_NAME_ACTIONS</code></td><td><code>"actions"</code></td><td>Oui</td><td><p>Nom du slot pour les actions</p>
-</td></tr><tr><td><code>SLOT_NAME_AVATAR</code></td><td><code>"avatar"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;avatar</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -850,7 +804,9 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <h1><code>&lt;bnum-folder-list&gt;</code></h1>
       
       <h2>Description</h2>
-      <p></p>
+      <p><p>Représente un élément personnalisé de type liste de dossiers (Folder List) pour l&#39;interface Bnum.
+Cet élément utilise le tag HTML défini par <code>TAG_FOLDER_LIST</code> et est rendu dans le Light DOM (pas de Shadow DOM).</p>
+</p>
       
       <h2>Structure</h2>
       <div class="structures"><p>N/A</p></div>
@@ -887,7 +843,18 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 
       <h2>API Publique</h2>
       <h3>Méthodes</h3>
-      <p>N/A</p>
+      
+      <div class="api-method">
+        <h4><code><strong><em>(static)</em> Write</strong>(content: string, attrs: Record<string, string>) : <code>string</code></code></h4>
+        <p>Génère et retourne la structure JSX/TSX (ou chaîne de caractères) du composant `HTMLBnumFolderList`.</p>
+        <strong>Paramètres :</strong><ul>
+      <li><code>content</code>: Le contenu (texte ou éléments enfants) à insérer à l'intérieur de la balise.</li>
+    
+      <li><code>attrs</code>: Un dictionnaire (clé-valeur) représentant les attributs HTML à appliquer au composant.</li>
+    </ul>
+        <p><strong>Retourne :</strong> L'élément rendu</p>
+      </div>
+    
 
       <h3>Variables d'instance</h3>
       <p>N/A</p>
@@ -1389,7 +1356,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-card-email:change</code></td><td><code>HTMLBnumCardItemMail[]</code></td><td>Nom du event déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody>
+      <tbody><tr><td><code>bnum-card-email:change</code></td><td><code>CustomEvent&lt;HTMLBnumCardItemMail[]&gt;</code></td><td>Déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody>
     </table>
   
       
@@ -1405,7 +1372,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody>
+      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody>
     </table>
   
 
@@ -1444,15 +1411,15 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>({
-    contents = [],
-    url = EMPTY_STRING,
-  }: { contents?: HTMLBnumCardItemMail[]; url?: string; }) : <code>HTMLBnumCardEmail</code></code></h4>
+		contents = [],
+		url = EMPTY_STRING,
+	}: { contents?: HTMLBnumCardItemMail[]; url?: string; }) : <code>HTMLBnumCardEmail</code></code></h4>
         <p>Méthode statique pour créer une instance du composant.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
-    contents = [],
-    url = EMPTY_STRING,
-  }</code>: Options de création</li>
+		contents = [],
+		url = EMPTY_STRING,
+	}</code>: Options de création</li>
     </ul>
         <p><strong>Retourne :</strong> Nouvelle node HTMLBnumCardEmail</p>
       </div>
@@ -1462,24 +1429,13 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemMail[]) => void></code></td><td>Oui</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
-</td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><p>Mode loading.</p>
-</td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><p>Récupère l&#39;URL du titre.</p>
+      <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<import("/opt/bnum/rcube/github/design-system-bnum/components/organisms/card-email/bnum-card-email.internal/types").OnElementChangedCallback></code></td><td>Non</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag du composant.</p>
-</td></tr><tr><td><code>DATA_URL</code></td><td><code>string</code></td><td>Oui</td><td><p>Data pour l&#39;URL du titre.</p>
-</td></tr><tr><td><code>ID_CARD_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><p>ID du titre.</p>
-</td></tr><tr><td><code>ID_CARD_ITEM_NO_ELEMENTS</code></td><td><code>string</code></td><td>Oui</td><td><p>ID de l&#39;élément &quot;Aucun élément&quot;.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -1985,7 +1941,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-card-agenda:change</code></td><td><code>HTMLBnumCardItemAgenda[]</code></td><td>Nom du event déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody>
+      <tbody><tr><td><code>bnum-card-agenda:change</code></td><td><code>CustomEvent&lt;HTMLBnumCardItemAgenda[]&gt;</code></td><td>Déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody>
     </table>
   
       
@@ -2001,7 +1957,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody>
+      <tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody>
     </table>
   
 
@@ -2040,15 +1996,15 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>({
-    contents = [],
-    url = EMPTY_STRING,
-  }: { contents?: HTMLBnumCardItemAgenda[]; url?: string; }) : <code>HTMLBnumCardAgenda</code></code></h4>
+		contents = [],
+		url = EMPTY_STRING,
+	}: { contents?: HTMLBnumCardItemAgenda[]; url?: string; }) : <code>HTMLBnumCardAgenda</code></code></h4>
         <p>Méthode statique pour créer une instance du composant.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
-    contents = [],
-    url = EMPTY_STRING,
-  }</code>: Options de création</li>
+		contents = [],
+		url = EMPTY_STRING,
+	}</code>: Options de création</li>
     </ul>
         <p><strong>Retourne :</strong> Nouvelle node HTMLBnumCardAgenda</p>
       </div>
@@ -2058,24 +2014,13 @@ Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et dé
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<(data: HTMLBnumCardItemAgenda[]) => void></code></td><td>Oui</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
-</td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><p>Mode loading.</p>
-</td></tr><tr><td><code>#_url</code></td><td><code>string</code></td><td>Oui</td><td><p>Récupère l&#39;URL du titre.</p>
+      <tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<import("/opt/bnum/rcube/github/design-system-bnum/components/organisms/card-agenda/bnum-card-agenda.internal/types").OnElementChangedCallback></code></td><td>Non</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag du composant.</p>
-</td></tr><tr><td><code>DATA_URL</code></td><td><code>string</code></td><td>Oui</td><td><p>Data pour l&#39;URL du titre.</p>
-</td></tr><tr><td><code>ID_CARD_TITLE</code></td><td><code>"bnum-card-title"</code></td><td>Oui</td><td><p>ID du titre.</p>
-</td></tr><tr><td><code>ID_CARD_ITEM_NO_ELEMENTS</code></td><td><code>"no-elements"</code></td><td>Oui</td><td><p>ID de l&#39;élément &quot;Aucun élément&quot;.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -2600,20 +2545,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
       
       <!--<h2>Propriétés (API Principale)</h2>
-      
-    <table>
-      <thead><tr><th>Nom (Attribut / .propriété)</th><th>Type</th><th>Description</th><th>Défaut</th></tr></thead>
-      <tbody><tr><td><code>clickable</code></td><td><code>boolean | undefined</code></td><td>Si vrai, rend la carte interactive et accessible (rôle bouton).</td><td><code>N/A</code></td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td>Si vrai, affiche un spinner et masque le corps.</td><td><code>N/A</code></td></tr></tbody>
-    </table>
-  -->
+      <p>N/A</p>-->
       
       <h2>Événements</h2>
-      
-    <table>
-      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-card:loading</code></td><td><code>{ oldValue: string|null, newValue: string|null, caller: HTMLBnumCardElement }</code></td><td>Nom de l'évènement déclenché lors du loading.</td></tr><tr><td><code>bnum-card:click</code></td><td><code>{ originalEvent: MouseEvent }</code></td><td>Nom de l'évènement déclenché lors d'un clic sur la carte.</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
       
       <h2>Slots</h2>
       
@@ -2624,12 +2559,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
       <h2>Attributs de Données</h2>
-      
-    <table>
-      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>clickable</code></td><td><code>boolean | string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Indique si la carte est cliquable.</td></tr><tr><td><code>loading</code></td><td><code>boolean | string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Indique si la carte est en cours de chargement.</td></tr><tr><td><code>data-title-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Nom de l'icône (Material Symbols) pour le titre par défaut.</td></tr><tr><td><code>data-title-text</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Texte à afficher dans le titre par défaut.</td></tr><tr><td><code>data-title-link</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>URL à utiliser si le titre par défaut doit être un lien.</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Variables CSS</h2>
       
@@ -2653,52 +2583,52 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
       <div class="api-method">
         <h4><code><strong>updateTitle</strong>(element: Element) : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Remplace tout le contenu du slot "title" par un nouvel élément.</p>
+        <p>Remplace intégralement le contenu du slot "title" par l'élément fourni.</p>
         <strong>Paramètres :</strong><ul>
-      <li><code>element</code>: Élément à insérer dans le slot "title".</li>
+      <li><code>element</code>: - Le nouvel élément à insérer comme titre.</li>
     </ul>
-        <p><strong>Retourne :</strong> L'instance courante de HTMLCardElement.</p>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage d'appels.</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong>updateBody</strong>(element: Element) : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Remplace tout le contenu du slot par défaut (body) par un nouvel élément.</p>
+        <p>Remplace intégralement le contenu du corps principal (slot par défaut) par l'élément fourni.</p>
         <strong>Paramètres :</strong><ul>
-      <li><code>element</code>: Élément à insérer dans le corps de la carte.</li>
+      <li><code>element</code>: - Le nouvel élément à insérer dans le corps.</li>
     </ul>
-        <p><strong>Retourne :</strong> L'instance courante de HTMLCardElement.</p>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage d'appels.</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong>clearTitle</strong>() : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Supprime tous les éléments du slot "title".</p>
+        <p>Supprime tous les éléments actuellement insérés dans le slot "title".</p>
         
-        <p><strong>Retourne :</strong> L'instance courante de HTMLCardElement.</p>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage d'appels.</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong>clearBody</strong>() : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Supprime tous les éléments du corps de la carte (hors slot "title").</p>
+        <p>Supprime tous les éléments actuellement insérés dans le corps principal (hors slot "title").</p>
         
-        <p><strong>Retourne :</strong> L'instance courante de HTMLCardElement.</p>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage d'appels.</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong>appendToTitle</strong>(element: Element) : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Ajoute un élément au slot "title" sans supprimer les éléments existants.</p>
+        <p>Ajoute un nouvel élément au sein du slot "title", préservant les éléments déjà présents.</p>
         <strong>Paramètres :</strong><ul>
-      <li><code>element</code>: Élément à ajouter au slot "title".</li>
+      <li><code>element</code>: - L'élément à ajouter au titre.</li>
     </ul>
-        <p><strong>Retourne :</strong> L'instance courante de HTMLCardElement.</p>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage d'appels.</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong>appendToBody</strong>(element: Element) : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Ajoute un élément au corps de la carte (slot par défaut) sans supprimer les éléments existants.</p>
+        <p>Ajoute un nouvel élément au sein du corps de la carte, préservant les éléments déjà présents.</p>
         <strong>Paramètres :</strong><ul>
-      <li><code>element</code>: Élément à ajouter au corps de la carte.</li>
+      <li><code>element</code>: - L'élément à ajouter au corps.</li>
     </ul>
-        <p><strong>Retourne :</strong> L'instance courante de HTMLCardElement.</p>
+        <p><strong>Retourne :</strong> L'instance courante pour le chaînage d'appels.</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
@@ -2708,16 +2638,16 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		clickable = false,
 		loading = false,
 	}: { title?: HTMLBnumCardTitle; body?: Element; clickable?: boolean; loading?: boolean; }) : <code>HTMLBnumCardElement</code></code></h4>
-        <p>Crée une nouvelle instance de HTMLBnumCardElement avec les options spécifiées.</p>
+        <p>Instancie une nouvelle `HTMLBnumCardElement` initialisée avec les options spécifiées.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
 		title = null,
 		body = null,
 		clickable = false,
 		loading = false,
-	}</code>: Options de création de la carte</li>
+	}</code>: - Objet de configuration de la carte.</li>
     </ul>
-        <p><strong>Retourne :</strong> Element HTMLBnumCardElement créé</p>
+        <p><strong>Retourne :</strong> Une nouvelle instance configurée de l'élément HTML.</p>
       </div>
     
 
@@ -2725,26 +2655,15 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><p>Si vrai, affiche la carte en état de chargement. Elle montre un spinner et masque le corps, de plus, tout les <code>pointer-events</code> sont désactivés.</p>
-</td></tr><tr><td><code>clickable</code></td><td><code>boolean</code></td><td>Non</td><td><p>Si vrai, la carte est cliquable et interactive.</p>
+      <tbody><tr><td><code>loading</code></td><td><code>boolean</code></td><td>Non</td><td><p>Indique si la carte est actuellement en état de chargement.
+Si vrai, la carte affiche un spinner, masque le corps et désactive ses évènements pointer.</p>
+</td></tr><tr><td><code>clickable</code></td><td><code>boolean</code></td><td>Non</td><td><p>Indique si la carte est configurée pour être cliquable et interactive.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le nom de la balise personnalisée pour cet élément.</p>
-</td></tr><tr><td><code>CSS_CLASS_TITLE</code></td><td><code>"card-title"</code></td><td>Oui</td><td><p>Classe CSS pour le titre de la carte.</p>
-</td></tr><tr><td><code>CSS_CLASS_BODY</code></td><td><code>"card-body"</code></td><td>Oui</td><td><p>Classe CSS pour le corps de la carte.</p>
-</td></tr><tr><td><code>CSS_CLASS_LOADING</code></td><td><code>"card-loading"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;affichage du loading.</p>
-</td></tr><tr><td><code>SLOT_TITLE</code></td><td><code>"title"</code></td><td>Oui</td><td><p>Nom du slot pour le titre.</p>
-</td></tr><tr><td><code>ICON_SPINNER</code></td><td><code>"progress_activity"</code></td><td>Oui</td><td><p>Nom de l&#39;icône utilisée pour le spinner de chargement.</p>
-</td></tr><tr><td><code>SYMBOL_RESET</code></td><td><code>typeof HTMLBnumCardElement.SYMBOL_RESET</code></td><td>Oui</td><td><p>Symbole utilisé pour réinitialiser le contenu du slot.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -2808,7 +2727,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
   
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>✅</td><td>Indique si l'item est désactivé.</td></tr><tr><td><code>selected</code></td><td><code>boolean</code></td><td><code>false</code></td><td>✅</td><td>Indique si l'item est sélectionné.</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       <p>N/A</p>
@@ -3107,7 +3031,12 @@ la navigation au clavier, et l&#39;accessibilité (via <code>role=&quot;radiogro
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>change</code></td><td><code>CustomEvent&lt;{inner:BnumRadioCheckedChangeEvent, caller: HTMLBnumRadioGroup}&gt;</code></td><td>Lorsque la valeur change</td></tr></tbody>
+    </table>
+  
       
       <h2>Slots</h2>
       
@@ -3118,7 +3047,12 @@ la navigation au clavier, et l&#39;accessibilité (via <code>role=&quot;radiogro
   
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Le nom du groupe de boutons radio. Cet attribut est appliqué à tous les boutons radio enfants pour assurer qu'ils appartiennent au même groupe logique.</td></tr><tr><td><code>data-label</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Le libellé du groupe.</td></tr><tr><td><code>data-hint</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>L'indice ou l'aide pour le groupe.</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       
@@ -3177,8 +3111,8 @@ Cet attribut est appliqué à tous les boutons radio enfants pour assurer qu&#39
       <h1><code>&lt;bnum-hide&gt;</code></h1>
       
       <h2>Description</h2>
-      <p><p>Composant BnumHide
-Permet de cacher son contenu selon des breakpoints définis.</p>
+      <p><p>Composant BnumHide.
+Permet de cacher son contenu selon des points de rupture (breakpoints) définis.</p>
 </p>
       
       <h2>Structure</h2>
@@ -3210,7 +3144,12 @@ Permet de cacher son contenu selon des breakpoints définis.</p>
       <p>N/A</p>
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>breakpoint</code></td><td><code>'phone' | 'small' | 'touch' | 'normal'</code></td><td><code>'touch'</code></td><td>❌</td><td>Le point de rupture à partir duquel cacher l'élément.</td></tr><tr><td><code>mode</code></td><td><code>'up' | 'down'</code></td><td><code>'down'</code></td><td>✅</td><td>Sens du masquage : 'up' pour cacher au-dessus du breakpoint, 'down' en-dessous.</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       <p>N/A</p>
@@ -3405,7 +3344,7 @@ is-selected=&quot;false&quot;
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Événement natif de clic.</td></tr><tr><td><code>bnum-folder:unread-changed</code></td><td><code>UnreadChangedEventDetail</code></td><td>Événement custom pour le changement de non-lu.</td></tr><tr><td><code>bnum-folder:select</code></td><td><code>{ caller: HTMLBnumFolder; innerEvent?: Event }</code></td><td>Événement custom de sélection.</td></tr><tr><td><code>bnum-folder:toggle</code></td><td><code>{ caller: HTMLBnumFolder; innerEvent?: Event; collapsed: boolean }</code></td><td>Événement custom de bascule (plié/déplié).</td></tr></tbody>
+      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lorsque le dossier est cliqué.</td></tr><tr><td><code>bnum-folder:unread-changed</code></td><td><code>UnreadChangedEventDetail</code></td><td>Événement custom pour le changement de non-lu</td></tr><tr><td><code>bnum-folder:select</code></td><td><code>CustomEvent&lt;{ caller: HTMLBnumFolder; innerEvent?: Event }&gt;</code></td><td>Événement custom pour la sélection du dossier</td></tr><tr><td><code>bnum-folder:toggle</code></td><td><code>CustomEvent&lt;{ caller: HTMLBnumFolder; innerEvent?: Event; collapsed: boolean }&gt;</code></td><td>Événement custom pour le pliage ou dépliage du dossier</td></tr></tbody>
     </table>
   
       
@@ -3421,7 +3360,7 @@ is-selected=&quot;false&quot;
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>true)</code></td><td><code>boolean</code></td><td><code>true</code></td><td>❌</td><td>Indique si le dossier est visuellement replié.</td></tr><tr><td><code>true)</code></td><td><code>boolean</code></td><td><code>true</code></td><td>❌</td><td>Indique si le dossier est virtuel.</td></tr><tr><td><code>false)</code></td><td><code>boolean</code></td><td><code>false</code></td><td>❌</td><td>Indique si le dossier est sélectionné.</td></tr><tr><td><code>0)</code></td><td><code>number</code></td><td><code>0</code></td><td>❌</td><td>Nombre d'éléments non lus dans le dossier.</td></tr><tr><td><code>0)</code></td><td><code>number</code></td><td><code>0</code></td><td>❌</td><td>Niveau de profondeur du dossier dans l'arborescence.</td></tr><tr><td><code>/)</code></td><td><code>string</code></td><td><code>/</code></td><td>❌</td><td>Libellé (nom) du dossier.</td></tr><tr><td><code>/)</code></td><td><code>string</code></td><td><code>/</code></td><td>❌</td><td>Nom de l'icône à afficher pour le dossier.</td></tr><tr><td><code>role</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Rôle ARIA pour l'accessibilité. Défini par l'élément.</td></tr></tbody>
+      <tbody><tr><td><code>is-collapsed</code></td><td><code>boolean</code></td><td><code>true</code></td><td>❌</td><td>Indique si le dossier est visuellement replié.</td></tr><tr><td><code>is-virtual</code></td><td><code>boolean</code></td><td><code>true</code></td><td>❌</td><td>Indique si le dossier est virtuel.</td></tr><tr><td><code>is-selected</code></td><td><code>boolean</code></td><td><code>false</code></td><td>❌</td><td>Indique si le dossier est sélectionné.</td></tr><tr><td><code>unread</code></td><td><code>number</code></td><td><code>0</code></td><td>❌</td><td>Nombre d'éléments non lus dans le dossier.</td></tr><tr><td><code>level</code></td><td><code>number</code></td><td><code>0</code></td><td>❌</td><td>Niveau de profondeur du dossier dans l'arborescence.</td></tr><tr><td><code>label</code></td><td><code>string</code></td><td><code>/</code></td><td>❌</td><td>Libellé (nom) du dossier.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>/</code></td><td>❌</td><td>Nom de l'icône à afficher pour le dossier.</td></tr></tbody>
     </table>
   
 
@@ -3467,15 +3406,15 @@ Déclenche l'événement `EVENT_SELECT`.</p>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Write</strong>({
-    attributes = {},
-    children = [],
-  }: { attributes?: Record<string, string>; children?: string[]; }) : <code>string</code></code></h4>
+		attributes = {},
+		children = [],
+	}: { attributes?: Record<string, string>; children?: string[]; }) : <code>string</code></code></h4>
         <p>Génère la chaîne HTML statique pour ce composant (SSR / Helper).</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
-    attributes = {},
-    children = [],
-  }</code>: - Propriétés de construction.</li>
+		attributes = {},
+		children = [],
+	}</code>: - Propriétés de construction.</li>
     </ul>
         <p><strong>Retourne :</strong> Le HTML sous forme de chaîne.</p>
       </div>
@@ -3492,43 +3431,7 @@ Déclenche l'événement `EVENT_SELECT`.</p>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le nom de la balise HTML associée à ce composant.</p>
-</td></tr><tr><td><code>ATTR_TITLE</code></td><td><code>"title"</code></td><td>Oui</td><td><p>Attribut title natif.</p>
-</td></tr><tr><td><code>CLASS_CONTAINER</code></td><td><code>"bal-container"</code></td><td>Oui</td><td><p>Classe du conteneur principal (flex row).</p>
-</td></tr><tr><td><code>CLASS_TITLE</code></td><td><code>"bal-container__title"</code></td><td>Oui</td><td><p>Conteneur gauche regroupant l&#39;icône et le nom.</p>
-</td></tr><tr><td><code>CLASS_TITLE_ICON</code></td><td><code>"bal-container__title__icon"</code></td><td>Oui</td><td><p>Icône principale du dossier (ex: dossier, fichier).</p>
-</td></tr><tr><td><code>CLASS_TITLE_NAME</code></td><td><code>"bal-container__title__name"</code></td><td>Oui</td><td><p>Libellé (nom) du dossier.</p>
-</td></tr><tr><td><code>CLASS_LEFT</code></td><td><code>"bal-container__left"</code></td><td>Oui</td><td><p>Conteneur droit (zone d&#39;actions et métadonnées).</p>
-</td></tr><tr><td><code>CLASS_LEFT_BADGE</code></td><td><code>"bal-container__left__badge"</code></td><td>Oui</td><td><p>Badge de notification (compteur non-lu).</p>
-</td></tr><tr><td><code>CLASS_TOGGLE</code></td><td><code>"bal-container__toggle"</code></td><td>Oui</td><td><p>Bouton de bascule (toggle) pour plier/déplier.</p>
-</td></tr><tr><td><code>CLASS_SUB_FOLDERS</code></td><td><code>"bal-sub-folders"</code></td><td>Oui</td><td><p>Conteneur des enfants (slot).</p>
-</td></tr><tr><td><code>CLASS_FLEX</code></td><td><code>"flex"</code></td><td>Oui</td><td><p>Utilitaire pour l&#39;affichage flexbox.</p>
-</td></tr><tr><td><code>CLASS_IS_CUMULATIVE</code></td><td><code>"is-cumulative"</code></td><td>Oui</td><td><p>Modificateur CSS du badge pour le mode cumulatif (dossier plié).</p>
-</td></tr><tr><td><code>ID_NAME</code></td><td><code>"bal-name"</code></td><td>Oui</td><td><p>ID interne pour l&#39;ancre du nom (a11y/focus).</p>
-</td></tr><tr><td><code>STATE_NO_SUBFOLDERS</code></td><td><code>"no-subfolders"</code></td><td>Oui</td><td><p>État : Dossier feuille (sans enfants).</p>
-</td></tr><tr><td><code>STATE_TRIPLE_DIGIT</code></td><td><code>"triple-digit-unread"</code></td><td>Oui</td><td><p>État : Compteur à 3 chiffres (ou 99+).</p>
-</td></tr><tr><td><code>STATE_DOUBLE_DIGIT</code></td><td><code>"double-digit-unread"</code></td><td>Oui</td><td><p>État : Compteur à 2 chiffres (10-99).</p>
-</td></tr><tr><td><code>STATE_SINGLE_DIGIT</code></td><td><code>"single-digit-unread"</code></td><td>Oui</td><td><p>État : Compteur à 1 chiffre (1-9).</p>
-</td></tr><tr><td><code>STATE_NO_UNREAD</code></td><td><code>"no-unread"</code></td><td>Oui</td><td><p>État : Aucun non-lu.</p>
-</td></tr><tr><td><code>VAL_MIN_UNREAD</code></td><td><code>0</code></td><td>Oui</td><td><p>Valeur min affichage compteur (0).</p>
-</td></tr><tr><td><code>VAL_MAX_UNREAD</code></td><td><code>99</code></td><td>Oui</td><td><p>Valeur max avant troncation (99).</p>
-</td></tr><tr><td><code>VAL_TRUE</code></td><td><code>"true"</code></td><td>Oui</td><td><p>Chaîne &#39;true&#39;.</p>
-</td></tr><tr><td><code>VAL_FALSE</code></td><td><code>"false"</code></td><td>Oui</td><td><p>Chaîne &#39;false&#39;.</p>
-</td></tr><tr><td><code>VAL_99_PLUS</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché au-delà du max (&quot;99+&quot;).</p>
-</td></tr><tr><td><code>VAL_ZERO</code></td><td><code>"0"</code></td><td>Oui</td><td><p>Chaîne &quot;0&quot;.</p>
-</td></tr><tr><td><code>VAL_ROLE_TREEITEM</code></td><td><code>"treeitem"</code></td><td>Oui</td><td><p>Rôle ARIA &#39;treeitem&#39;.</p>
-</td></tr><tr><td><code>ARIA_EXPANDED</code></td><td><code>"aria-expanded"</code></td><td>Oui</td><td><p>Attribut ARIA &#39;aria-expanded&#39;.</p>
-</td></tr><tr><td><code>ARIA_SELECTED</code></td><td><code>"aria-selected"</code></td><td>Oui</td><td><p>Attribut ARIA &#39;aria-selected&#39;.</p>
-</td></tr><tr><td><code>CSS_VAR_LEVEL</code></td><td><code>"--internal-bnum-folder-level"</code></td><td>Oui</td><td><p>Var CSS pour l&#39;indentation (padding-left).</p>
-</td></tr><tr><td><code>ICON_SQUARE</code></td><td><code>"square"</code></td><td>Oui</td><td><p>Icône défaut (carré/dossier).</p>
-</td></tr><tr><td><code>ICON_ARROW_DOWN</code></td><td><code>"keyboard_arrow_down"</code></td><td>Oui</td><td><p>Icône déplié (flèche bas).</p>
-</td></tr><tr><td><code>ICON_ARROW_UP</code></td><td><code>"keyboard_arrow_up"</code></td><td>Oui</td><td><p>Icône plié (flèche haut).</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -4009,18 +3912,18 @@ Remplace le texte ou ajoute un élément HTML comme corps du titre.</p>
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>(text: string | HTMLElement | Text, {
-      icon = null,
-      link = null,
-    }: { icon?: string; link?: string; }) : <code>HTMLBnumCardTitle</code></code></h4>
+			icon = null,
+			link = null,
+		}: { icon?: string; link?: string; }) : <code>HTMLBnumCardTitle</code></code></h4>
         <p>Crée dynamiquement une instance du composant HTMLBnumCardTitle.
 Permet d'initialiser le titre avec un texte, une icône et/ou un lien.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>text</code>: Le contenu du titre (élément, texte ou chaîne)</li>
     
       <li><code>{
-      icon = null,
-      link = null,
-    }</code>: Options pour l'icône et le lien</li>
+			icon = null,
+			link = null,
+		}</code>: Options pour l'icône et le lien</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant configurée</p>
       </div>
@@ -4045,28 +3948,13 @@ Utile pour créer dynamiquement le composant dans une chaîne HTML.</p>
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
       <tbody><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Obtient le nom de l&#39;icône associée au titre de la carte.</p>
-</td></tr><tr><td><code>url</code></td><td><code>string</code></td><td>Non</td><td><p>Obtient l&#39;URL du lien du titre de la carte.</p>
+</td></tr><tr><td><code>url</code></td><td><code>string</code></td><td>Non</td><td><p>URL du lien du titre de la carte.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag HTML du composant.
-Permet d&#39;obtenir le nom du composant pour l&#39;utiliser dans le DOM.</p>
-</td></tr><tr><td><code>SLOT_NAME_ICON</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;icône du titre de la carte.</p>
-</td></tr><tr><td><code>CLASS_LINK</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de la classe au titre de la carte lorsqu&#39;un url est défini</p>
-</td></tr><tr><td><code>STATE_URL</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de l&#39;état lorsque le titre contient un lien.</p>
-</td></tr><tr><td><code>STATE_WITHOUT_URL</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de l&#39;état lorsque le titre ne contient pas de lien.</p>
-</td></tr><tr><td><code>CLASS_ICON_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de la classe pour l&#39;icône du titre de la carte.</p>
-</td></tr><tr><td><code>ID_SLOT_ICON</code></td><td><code>string</code></td><td>Oui</td><td><p>ID du slot pour l&#39;icône du titre de la carte.</p>
-</td></tr><tr><td><code>ID_SLOT_TEXT</code></td><td><code>string</code></td><td>Oui</td><td><p>ID du slot pour le texte du titre de la carte.</p>
-</td></tr><tr><td><code>ID_CUSTOM_BODY</code></td><td><code>string</code></td><td>Oui</td><td><p>ID de l&#39;élément personnalisé pour le corps du titre de la carte.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -4415,14 +4303,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <p>N/A</p>
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag HTML du composant.</p>
-</td></tr><tr><td><code>SYMBOL_RESET</code></td><td><code>typeof HTMLBnumCardList.SYMBOL_RESET</code></td><td>Oui</td><td><p>Symbole utilisé pour réinitialiser la liste.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -4694,7 +4575,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Événement click</td></tr><tr><td><code>bnum-card-item-mail:sender-changed</code></td><td><code>{ caller: HTMLBnumCardItemMail }</code></td><td>Événement déclenché lors du changement de l'expéditeur du mail.</td></tr><tr><td><code>bnum-card-item-mail:subject-changed</code></td><td><code>{ caller: HTMLBnumCardItemMail }</code></td><td>Événement déclenché lors du changement du sujet du mail.</td></tr><tr><td><code>bnum-card-item-mail:date-changed</code></td><td><code>{ caller: HTMLBnumCardItemMail }</code></td><td>Événement déclenché lors du changement de la date du mail.</td></tr></tbody>
+      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lors du clic sur l'item</td></tr><tr><td><code>bnum-card-item-mail:sender-changed</code></td><td><code>CustomElement&lt;{ caller: HTMLBnumCardItemMail }&gt;</code></td><td>Événement déclenché lors du changement de l'expéditeur du mail.</td></tr><tr><td><code>bnum-card-item-mail:subject-changed</code></td><td><code>CustomElement&lt;{ caller: HTMLBnumCardItemMail }&gt;</code></td><td>Événement déclenché lors du changement du sujet du mail.</td></tr><tr><td><code>bnum-card-item-mail:date-changed</code></td><td><code>CustomElement&lt;{ caller: HTMLBnumCardItemMail }&gt;</code></td><td>Événement déclenché lors du changement de la date du mail.</td></tr></tbody>
     </table>
   
       
@@ -4809,8 +4690,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<(e: MouseEvent) => void></code></td><td>Oui</td><td><p>Événement déclenché lors du clic sur l&#39;item.
-Permet d&#39;attacher des gestionnaires personnalisés au clic.</p>
+      <tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur l&#39;item.</p>
 </td></tr><tr><td><code>#_lazyDateOverrideElement</code></td><td><code>HTMLBnumDate</code></td><td>Oui</td><td><p>Retourne l&#39;élément HTMLBnumDate pour l&#39;override de la date.</p>
 <p>Initialise la variable si elle n&#39;a pas encore été initialisée.</p>
 </td></tr><tr><td><code>date</code></td><td><code>Date</code></td><td>Oui</td><td><p>Retourne la date du mail, en tenant compte de l&#39;override si présent.</p>
@@ -4828,31 +4708,7 @@ Permet d&#39;attacher des gestionnaires personnalisés au changement de date.</p
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag HTML du composant.</p>
-</td></tr><tr><td><code>BASE_TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de base pour les enfants du composant.</p>
-<p>En <code>static readonly</code> cette fois pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé</p>
-</td></tr><tr><td><code>ROLE</code></td><td><code>"listitem"</code></td><td>Oui</td><td><p>Rôle du composant</p>
-</td></tr><tr><td><code>SLOT_SENDER_NAME</code></td><td><code>"sender"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;expéditeur.</p>
-</td></tr><tr><td><code>SLOT_SUBJECT_NAME</code></td><td><code>"subject"</code></td><td>Oui</td><td><p>Nom du slot pour le sujet.</p>
-</td></tr><tr><td><code>SLOT_DATE_NAME</code></td><td><code>"date"</code></td><td>Oui</td><td><p>Nom du slot pour la date.</p>
-</td></tr><tr><td><code>PART_SENDER_OVERRIDE</code></td><td><code>"sender-override"</code></td><td>Oui</td><td><p>Nom de la part pour override de l&#39;expéditeur.</p>
-</td></tr><tr><td><code>PART_SUBJECT_OVERRIDE</code></td><td><code>"subject-override"</code></td><td>Oui</td><td><p>Nom de la part pour override du sujet.</p>
-</td></tr><tr><td><code>PART_DATE_OVERRIDE</code></td><td><code>"date-override"</code></td><td>Oui</td><td><p>Nom de la part pour override de la date.</p>
-</td></tr><tr><td><code>CLASS_SENDER</code></td><td><code>"sender"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;expéditeur.</p>
-</td></tr><tr><td><code>CLASS_SUBJECT</code></td><td><code>"subject"</code></td><td>Oui</td><td><p>Classe CSS pour le sujet.</p>
-</td></tr><tr><td><code>CLASS_DATE</code></td><td><code>"date"</code></td><td>Oui</td><td><p>Classe CSS pour la date.</p>
-</td></tr><tr><td><code>CLASS_MAIN_CONTENT</code></td><td><code>"main-content"</code></td><td>Oui</td><td><p>Classe CSS pour le contenu principal.</p>
-</td></tr><tr><td><code>STATE_READ</code></td><td><code>"read"</code></td><td>Oui</td><td><p>Nom de l&#39;état &quot;lu&quot;.</p>
-</td></tr><tr><td><code>TODAY_FORMAT</code></td><td><code>"HH:mm"</code></td><td>Oui</td><td><p>Format d&#39;affichage de la date pour aujourd&#39;hui.</p>
-</td></tr><tr><td><code>OTHER_DAY_FORMAT</code></td><td><code>"dd/MM/yyyy"</code></td><td>Oui</td><td><p>Format d&#39;affichage de la date pour les autres jours.</p>
-</td></tr><tr><td><code>WEEK_FORMAT</code></td><td><code>"E - HH:mm"</code></td><td>Oui</td><td><p>Format d&#39;affichage de la date pour la semaine.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -5331,7 +5187,7 @@ data-location=&quot;A la maison&quot;&gt;
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Événement click</td></tr></tbody>
+      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lors du clic sur l'item</td></tr></tbody>
     </table>
   
       
@@ -5423,13 +5279,13 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> Create</strong>(baseDate: Date, startDate: Date, endDate: Date, {
-      allDay = false,
-      title = null,
-      location = null,
-      action = null,
-      isPrivate = false,
-      mode = null,
-    }: CreateConstructorOptions) : <code>HTMLBnumCardItemAgenda</code></code></h4>
+			allDay = false,
+			title = null,
+			location = null,
+			action = null,
+			isPrivate = false,
+			mode = null,
+		}: import("/opt/bnum/rcube/github/design-system-bnum/components/molecules/card-item-agenda/card-item-agenda.internal/types").CreateConstructorOptions) : <code>HTMLBnumCardItemAgenda</code></code></h4>
         <p>Crée une nouvelle instance du composant agenda avec les paramètres donnés.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>baseDate</code>: Date de base</li>
@@ -5439,26 +5295,26 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <li><code>endDate</code>: Date de fin</li>
     
       <li><code>{
-      allDay = false,
-      title = null,
-      location = null,
-      action = null,
-      isPrivate = false,
-      mode = null,
-    }</code>: Options supplémentaires (allDay, title, location, action)</li>
+			allDay = false,
+			title = null,
+			location = null,
+			action = null,
+			isPrivate = false,
+			mode = null,
+		}</code>: Options supplémentaires (allDay, title, location, action)</li>
     </ul>
         <p><strong>Retourne :</strong> Instance HTMLBnumCardItemAgenda</p>
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> FromEvent</strong>(baseDate: Date, agendaEvent: any, {
-      startDateSelector = null,
-      endDateSelector = null,
-      allDaySelector = null,
-      titleSelector = null,
-      locationSelector = null,
-      action = null,
-    }: FromEventConstructorOptions) : <code>HTMLBnumCardItemAgenda</code></code></h4>
+        <h4><code><strong><em>(static)</em> FromEvent</strong>(baseDate: Date, agendaEvent: import("/opt/bnum/rcube/github/design-system-bnum/components/molecules/card-item-agenda/card-item-agenda.internal/types").AgendaEvent, {
+			startDateSelector = null,
+			endDateSelector = null,
+			allDaySelector = null,
+			titleSelector = null,
+			locationSelector = null,
+			action = null,
+		}: import("/opt/bnum/rcube/github/design-system-bnum/components/molecules/card-item-agenda/card-item-agenda.internal/types").FromEventConstructorOptions) : <code>HTMLBnumCardItemAgenda</code></code></h4>
         <p>Crée une nouvelle instance du composant agenda à partir d'un objet événement.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>baseDate</code>: Date de base</li>
@@ -5466,13 +5322,13 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <li><code>agendaEvent</code>: Objet événement source</li>
     
       <li><code>{
-      startDateSelector = null,
-      endDateSelector = null,
-      allDaySelector = null,
-      titleSelector = null,
-      locationSelector = null,
-      action = null,
-    }</code>: Fonctions de sélection et action personnalisée</li>
+			startDateSelector = null,
+			endDateSelector = null,
+			allDaySelector = null,
+			titleSelector = null,
+			locationSelector = null,
+			action = null,
+		}</code>: Fonctions de sélection et action personnalisée</li>
     </ul>
         <p><strong>Retourne :</strong> Instance HTMLBnumCardItemAgenda</p>
       </div>
@@ -5482,64 +5338,19 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<(e: MouseEvent) => void></code></td><td>Oui</td><td><p>Événement déclenché lors du clic sur l&#39;item.
-Permet d&#39;attacher des gestionnaires personnalisés au clic.</p>
-</td></tr><tr><td><code>onstartdefineaction</code></td><td><code>JsCircularEvent<OnStartDefineActionCallback></code></td><td>Oui</td><td><p>Événement circulaire déclenché lors de la définition de l&#39;action.</p>
-<p>Permet de personnaliser l&#39;action affichée dans la carte agenda.</p>
+      <tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur l&#39;item.</p>
 </td></tr><tr><td><code>isAllDay</code></td><td><code>boolean</code></td><td>Oui</td><td><p>Indique si l&#39;événement dure toute la journée.</p>
 </td></tr><tr><td><code>baseDate</code></td><td><code>Date</code></td><td>Non</td><td><p>Date de base de l&#39;événement (jour affiché).</p>
 </td></tr><tr><td><code>startDate</code></td><td><code>Date</code></td><td>Non</td><td><p>Date de début de l&#39;événement.</p>
 </td></tr><tr><td><code>endDate</code></td><td><code>Date</code></td><td>Non</td><td><p>Date de fin de l&#39;événement.</p>
+</td></tr><tr><td><code>onstartdefineaction</code></td><td><code>JsCircularEvent<import("/opt/bnum/rcube/github/design-system-bnum/components/molecules/card-item-agenda/card-item-agenda.internal/types").OnStartDefineActionCallback></code></td><td>Non</td><td><p>Événement circulaire déclenché lors de la définition de l&#39;action.
+Permet de personnaliser l&#39;action affichée dans la carte agenda.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag HTML du composant.</p>
-</td></tr><tr><td><code>BASE_TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de base pour les enfants du composant.</p>
-<p>En <code>static readonly</code> cette fois pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé</p>
-</td></tr><tr><td><code>ROLE</code></td><td><code>"listitem"</code></td><td>Oui</td><td><p>Rôle du composant</p>
-</td></tr><tr><td><code>DATA_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><p>Clé de donnée pour le titre</p>
-</td></tr><tr><td><code>DATA_LOCATION</code></td><td><code>string</code></td><td>Oui</td><td><p>Clé de donnée pour le lieu</p>
-</td></tr><tr><td><code>FORMAT_DATE_DEFAULT</code></td><td><code>string</code></td><td>Oui</td><td><p>Format par défaut pour la date (ex: 2024-01-01)</p>
-</td></tr><tr><td><code>FORMAT_DATE_TIME_DEFAULT</code></td><td><code>string</code></td><td>Oui</td><td><p>Format par défaut pour la date et l&#39;heure (ex: 2024-01-01 08:00:00)</p>
-</td></tr><tr><td><code>FORMAT_HOUR_DEFAULT</code></td><td><code>string</code></td><td>Oui</td><td><p>Format par défaut pour l&#39;heure (ex: 08:00)</p>
-</td></tr><tr><td><code>FORMAT_HOUR_DIFF_DAY</code></td><td><code>string</code></td><td>Oui</td><td><p>Format pour l&#39;heure si le jour est différent (ex: 20/11)</p>
-</td></tr><tr><td><code>FORMAT_TODAY</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte pour &quot;Aujourd&#39;hui&quot; (localisé)</p>
-</td></tr><tr><td><code>FORMAT_TOMORROW</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte pour &quot;Demain&quot; (localisé)</p>
-</td></tr><tr><td><code>FORMAT_EVENT_DATE</code></td><td><code>string</code></td><td>Oui</td><td><p>Format pour la date d&#39;événement (ex: lundi 20 novembre)</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_DAY</code></td><td><code>"bnum-card-item-agenda-day"</code></td><td>Oui</td><td><p>Classe CSS pour le jour de l&#39;agenda</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_HOUR</code></td><td><code>"bnum-card-item-agenda-hour"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;heure de l&#39;agenda</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_TITLE</code></td><td><code>"bnum-card-item-agenda-title"</code></td><td>Oui</td><td><p>Classe CSS pour le titre de l&#39;agenda</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_LOCATION</code></td><td><code>"bnum-card-item-agenda-location"</code></td><td>Oui</td><td><p>Classe CSS pour le lieu de l&#39;agenda</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_ACTION</code></td><td><code>"bnum-card-item-agenda-action"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;action de l&#39;agenda</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_TITLE_OVERRIDE</code></td><td><code>"bnum-card-item-agenda-title-override"</code></td><td>Oui</td><td><p>Classe CSS pour le titre en override</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_LOCATION_OVERRIDE</code></td><td><code>"bnum-card-item-agenda-location-override"</code></td><td>Oui</td><td><p>Classe CSS pour le lieu en override</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_ACTION_OVERRIDE</code></td><td><code>"bnum-card-item-agenda-action-override"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;action en override</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_HORIZONTAL</code></td><td><code>"bnum-card-item-agenda-horizontal"</code></td><td>Oui</td><td><p>Classe CSS pour la disposition horizontale</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_VERTICAL</code></td><td><code>"bnum-card-item-agenda-vertical"</code></td><td>Oui</td><td><p>Classe CSS pour la disposition verticale</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_ALL_DAY</code></td><td><code>"bnum-card-item-agenda-all-day"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;affichage &quot;toute la journée&quot;</p>
-</td></tr><tr><td><code>CLASS_BNUM_CARD_ITEM_AGENDA_PRIVATE_ICON</code></td><td><code>"bnum-card-item-agenda-private-icon"</code></td><td>Oui</td><td><p>Classe CSS pour l&#39;icône privée</p>
-</td></tr><tr><td><code>SLOT_NAME_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom du slot pour le titre</p>
-</td></tr><tr><td><code>SLOT_NAME_LOCATION</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom du slot pour le lieu</p>
-</td></tr><tr><td><code>SLOT_NAME_ACTION</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;action</p>
-</td></tr><tr><td><code>STATE_NO_LOCATION</code></td><td><code>string</code></td><td>Oui</td><td><p>État CSS pour absence de lieu</p>
-</td></tr><tr><td><code>STATE_ALL_DAY</code></td><td><code>string</code></td><td>Oui</td><td><p>État CSS pour &quot;toute la journée&quot;</p>
-</td></tr><tr><td><code>STATE_PRIVATE</code></td><td><code>string</code></td><td>Oui</td><td><p>État CSS pour événement privé</p>
-</td></tr><tr><td><code>STATE_MODE_PREFIX</code></td><td><code>string</code></td><td>Oui</td><td><p>Préfixe d&#39;état CSS pour le mode</p>
-</td></tr><tr><td><code>STATE_ACTION_DEFINED</code></td><td><code>string</code></td><td>Oui</td><td><p>État CSS lorsque l&#39;action est définie</p>
-</td></tr><tr><td><code>TEXT_ALL_DAY</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché pour &quot;toute la journée&quot; (localisé)</p>
-</td></tr><tr><td><code>ATTRIBUTE_PENDING</code></td><td><code>string</code></td><td>Oui</td><td><p>Attribut d&#39;état interne pour la gestion du rendu différé</p>
-</td></tr><tr><td><code>MODE_DEFAULT</code></td><td><code>string</code></td><td>Oui</td><td><p>Mode par défaut</p>
-</td></tr><tr><td><code>ICON_PRIVATE</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de l&#39;icône pour les événements privés</p>
-</td></tr><tr><td><code>SYMBOL_RESET</code></td><td><code>Symbol</code></td><td>Oui</td><td><p>Symbole pour la réinitialisation interne</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -5591,7 +5402,7 @@ Permet d&#39;attacher des gestionnaires personnalisés au clic.</p>
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Événement click</td></tr></tbody>
+      <tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lors du clic sur l'item</td></tr></tbody>
     </table>
   
       
@@ -5636,24 +5447,13 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<(e: MouseEvent) => void></code></td><td>Oui</td><td><p>Événement déclenché lors du clic sur l&#39;item.
-Permet d&#39;attacher des gestionnaires personnalisés au clic.</p>
+      <tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur l&#39;item.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag du composant.</p>
-</td></tr><tr><td><code>BASE_TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de base pour les enfants du composant.</p>
-<p>En <code>static readonly</code> cette fois pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé</p>
-</td></tr><tr><td><code>ROLE</code></td><td><code>"listitem"</code></td><td>Oui</td><td><p>Rôle du composant</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -5711,7 +5511,12 @@ Permet d&#39;attacher des gestionnaires personnalisés au clic.</p>
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>change</code></td><td><code>CustomEvent&lt;BnumCheckBoxDetail&gt;</code></td><td>Lorsque l'élément change d'état</td></tr></tbody>
+    </table>
+  
       
       <h2>Slots</h2>
       
@@ -5722,7 +5527,12 @@ Permet d&#39;attacher des gestionnaires personnalisés au clic.</p>
   
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>checked</code></td><td><code>boolean</code></td><td><code>false</code></td><td>✅</td><td>Si l'élément est coché ou non</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom de l'élément pour les formulaires</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td><code>'on'</code></td><td>✅</td><td>Valeur de l'élément</td></tr><tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>✅</td><td>Désactive l'élément</td></tr><tr><td><code>required</code></td><td><code>boolean</code></td><td><code>false</code></td><td>✅</td><td>Rend le champ obligatoire</td></tr><tr><td><code>helper</code></td><td><code>boolean</code></td><td><code>false</code></td><td>✅</td><td>Active le mode d'aide visuelle</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       
@@ -5909,7 +5719,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>change</code></td><td><code>CustomEvent&lt;{innerEvent: Event, caller: HTMLBnumSelect}&gt;</code></td><td>Lorsque le select change de valeur.</td></tr></tbody>
+    </table>
+  
       
       <h2>Slots</h2>
       
@@ -5920,7 +5735,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
   
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>no-legend</code></td><td><code>undefined | boolean</code></td><td><code>undefined</code></td><td>✅</td><td>Cache visuellement la légende. (Ne dispence pas d'en mettre une.)</td></tr><tr><td><code>name</code></td><td><code>undefined | string</code></td><td><code>undefined</code></td><td>✅</td><td>Nom de l'élément</td></tr><tr><td><code>data-legend</code></td><td><code>undefined | string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte de la légende. Est écrasé si le slot est défini.</td></tr><tr><td><code>data-hint</code></td><td><code>undefined | string</code></td><td><code>undefined</code></td><td>✅</td><td>Texte additionnel de la légende. Est écrasé si le slot est défini.</td></tr><tr><td><code>data-default-value</code></td><td><code>undefined | string</code></td><td><code>undefined</code></td><td>✅</td><td>Génère une option par défaut avec cette valeur.</td></tr><tr><td><code>data-default-text</code></td><td><code>undefined | string</code></td><td><code>undefined</code></td><td>✅</td><td>Génère une option par défaut avec ce texte.</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       <p>N/A</p>
@@ -6431,7 +6251,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon.prop</code></td><td><code>{ type: string, newValue: boolean | string }</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>{ state: boolean }</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
+      <tbody><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:icon.prop.changed</code></td><td><code>CustomEvent&lt;{ type: string, newValue: boolean | string }&gt;</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>CustomEvent&lt;{ state: boolean }&gt;</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
     </table>
   
       
@@ -6447,7 +6267,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>Optional<ButtonVariation></code></td><td><code>ButtonVariation.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>IconPosition | undefined</code></td><td><code>IconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>HideTextOnLayoutSize | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -6502,7 +6322,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(options: { text?: string; icon?: string; iconPos?: EIconPosition; iconMargin?: string; variation?: EButtonType; rounded?: boolean; loading?: boolean; hideOn?: EHideOn; }) : <code>HTMLBnumButton</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").BnumButtonCreateOptions) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum standard.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>options</code>: Options de configuration du bouton</li>
@@ -6512,16 +6332,16 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> CreateOnlyIcon</strong>(icon: string, {
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
-    }: { variation?: EButtonType; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
+    }: { variation?: any; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum ne contenant qu'une icône.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>icon</code>: Nom de l'icône à afficher</li>
     
       <li><code>{
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
     }</code>: Options de configuration du bouton</li>
@@ -6534,38 +6354,22 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>variation</code></td><td><code>EButtonType</code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
+      <tbody><tr><td><code>variation</code></td><td><code>ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }></code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
 </td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Icône affichée dans le bouton.</p>
-</td></tr><tr><td><code>iconPos</code></td><td><code>EIconPosition</code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
+</td></tr><tr><td><code>iconPos</code></td><td><code>ValueOf<{ readonly LEFT: "left"; readonly RIGHT: "right"; }></code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
 </td></tr><tr><td><code>iconMargin</code></td><td><code>string</code></td><td>Non</td><td><p>Marge appliquée à l&#39;icône.</p>
-</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>EHideOn</code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
+</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>ValueOf<{ readonly SMALL: "small"; readonly TOUCH: "touch"; }></code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
 </td></tr><tr><td><code>onloadingstatechange</code></td><td><code>JsEvent<(state: boolean) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;état de chargement.</p>
 </td></tr><tr><td><code>oniconchange</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;icône.</p>
-</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: "pos" | "margin", newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
-</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ButtonVariation, oldVariation: ButtonVariation) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").IconPropType, newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
+</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>, oldVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>linkedClickEvent</code></td><td><code>JsEvent<(link: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur le bouton.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant bouton.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il contient une icône.</p>
-</td></tr><tr><td><code>STATE_WITHOUT_ICON</code></td><td><code>"without-icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il ne contient pas d&#39;icône.</p>
-</td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
-</td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
-</td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
-</td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
-</td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
-</td></tr><tr><td><code>CLASS_SLOT</code></td><td><code>"slot"</code></td><td>Oui</td><td><p>Classe CSS du slot du bouton.</p>
-</td></tr><tr><td><code>CSS_PROPERTY_ICON_MARGIN</code></td><td><code>"--bnum-button-icon-gap"</code></td><td>Oui</td><td><p>Propriété CSS pour la marge de l&#39;icône.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -6628,7 +6432,12 @@ Mon élément
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>bnum-radio:change</code></td><td><code>CustomEvent&lt;{ inner: BnumRadioCheckedChangeEvent }&gt;</code></td><td>Lorsque l'élément change d'état</td></tr></tbody>
+    </table>
+  
       
       <h2>Slots</h2>
       
@@ -6639,7 +6448,12 @@ Mon élément
   
 
       <h2>Attributs de Données</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Valeur de l'élément</td></tr><tr><td><code>name</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Nom de l'élément, permet de gérer les interactions des radio ayant le même nom</td></tr><tr><td><code>disabled</code></td><td><code>'disabled' | '' | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive l'élément</td></tr><tr><td><code>checked</code></td><td><code>'' | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si l'élément est actif ou non</td></tr><tr><td><code>data-legend</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Label de l'élément. Est écraser si un slot est défini.</td></tr><tr><td><code>data-hint</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Aide supplémentaire pour le label. Est écraser si un slot est défini.</td></tr></tbody>
+    </table>
+  
 
       <h2>Variables CSS</h2>
       
@@ -7161,7 +6975,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon.prop</code></td><td><code>{ type: string, newValue: boolean | string }</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>{ state: boolean }</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
+      <tbody><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:icon.prop.changed</code></td><td><code>CustomEvent&lt;{ type: string, newValue: boolean | string }&gt;</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>CustomEvent&lt;{ state: boolean }&gt;</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
     </table>
   
       
@@ -7177,7 +6991,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>Optional<ButtonVariation></code></td><td><code>ButtonVariation.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>IconPosition | undefined</code></td><td><code>IconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>HideTextOnLayoutSize | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -7232,7 +7046,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(options: { text?: string; icon?: string; iconPos?: EIconPosition; iconMargin?: string; variation?: EButtonType; rounded?: boolean; loading?: boolean; hideOn?: EHideOn; }) : <code>HTMLBnumButton</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").BnumButtonCreateOptions) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum standard.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>options</code>: Options de configuration du bouton</li>
@@ -7242,16 +7056,16 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> CreateOnlyIcon</strong>(icon: string, {
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
-    }: { variation?: EButtonType; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
+    }: { variation?: any; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum ne contenant qu'une icône.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>icon</code>: Nom de l'icône à afficher</li>
     
       <li><code>{
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
     }</code>: Options de configuration du bouton</li>
@@ -7264,38 +7078,22 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>variation</code></td><td><code>EButtonType</code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
+      <tbody><tr><td><code>variation</code></td><td><code>ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }></code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
 </td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Icône affichée dans le bouton.</p>
-</td></tr><tr><td><code>iconPos</code></td><td><code>EIconPosition</code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
+</td></tr><tr><td><code>iconPos</code></td><td><code>ValueOf<{ readonly LEFT: "left"; readonly RIGHT: "right"; }></code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
 </td></tr><tr><td><code>iconMargin</code></td><td><code>string</code></td><td>Non</td><td><p>Marge appliquée à l&#39;icône.</p>
-</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>EHideOn</code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
+</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>ValueOf<{ readonly SMALL: "small"; readonly TOUCH: "touch"; }></code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
 </td></tr><tr><td><code>onloadingstatechange</code></td><td><code>JsEvent<(state: boolean) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;état de chargement.</p>
 </td></tr><tr><td><code>oniconchange</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;icône.</p>
-</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: "pos" | "margin", newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
-</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ButtonVariation, oldVariation: ButtonVariation) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").IconPropType, newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
+</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>, oldVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>linkedClickEvent</code></td><td><code>JsEvent<(link: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur le bouton.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant bouton.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il contient une icône.</p>
-</td></tr><tr><td><code>STATE_WITHOUT_ICON</code></td><td><code>"without-icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il ne contient pas d&#39;icône.</p>
-</td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
-</td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
-</td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
-</td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
-</td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
-</td></tr><tr><td><code>CLASS_SLOT</code></td><td><code>"slot"</code></td><td>Oui</td><td><p>Classe CSS du slot du bouton.</p>
-</td></tr><tr><td><code>CSS_PROPERTY_ICON_MARGIN</code></td><td><code>"--bnum-button-icon-gap"</code></td><td>Oui</td><td><p>Propriété CSS pour la marge de l&#39;icône.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -7580,12 +7378,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      
-    <table>
-      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>load</code></td><td><code>Event</code></td><td>Nom de l'événement déclenché lorsque l'image est chargée avec succès.</td></tr><tr><td><code>error</code></td><td><code>Event</code></td><td>Nom de l'événement déclenché lorsqu'une erreur survient lors du chargement de l'image.</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
       
       <h2>Slots</h2>
       <p>N/A</p>
@@ -7594,7 +7387,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>src</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Utilisé pour définir l'URL de l'image.</td></tr><tr><td><code>alt</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Utilisé pour définir le texte alternatif de l'image. Optionnel, mais recommandé pour l'accessibilité.</td></tr></tbody>
+      <tbody><tr><td><code>src</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Source de l'image</td></tr></tbody>
     </table>
   
 
@@ -7614,7 +7407,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <h3>Méthodes</h3>
       
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(src: string) : <code>default</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(src: string) : <code>HTMLBnumPicture</code></code></h4>
         <p>Crée un nouvel élément BnumHTMLPicture avec la source spécifiée.
 Permet d'instancier facilement le composant avec une image donnée.</p>
         <strong>Paramètres :</strong><ul>
@@ -7628,29 +7421,20 @@ Permet d'instancier facilement le composant avec une image donnée.</p>
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>src</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne l&#39;URL de l&#39;image.
+      <tbody><tr><td><code>src</code></td><td><code>Nullable<string></code></td><td>Oui</td><td><p>Retourne l&#39;URL de l&#39;image.
 Permet d&#39;obtenir la valeur de l&#39;attribut &#39;src&#39;.</p>
-</td></tr><tr><td><code>darkUrl</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne l&#39;URL de l&#39;image en mode sombre.
+</td></tr><tr><td><code>darkUrl</code></td><td><code>Nullable<string></code></td><td>Oui</td><td><p>Retourne l&#39;URL de l&#39;image en mode sombre.
 Génère dynamiquement l&#39;URL pour le mode sombre à partir de l&#39;attribut &#39;src&#39;.</p>
-</td></tr><tr><td><code>picture</code></td><td><code>HTMLImageElement</code></td><td>Oui</td><td><p>Retourne l&#39;élément image HTML associé.
+</td></tr><tr><td><code>picture</code></td><td><code>Nullable<HTMLImageElement></code></td><td>Oui</td><td><p>Retourne l&#39;élément image HTML associé.
 Permet d&#39;accéder directement à l&#39;élément <img> du composant.</p>
+</td></tr><tr><td><code>onimageload</code></td><td><code>JsEvent<ImgLoadedCallback></code></td><td>Non</td><td><p>Evènement lorsque l&#39;image est chargée.</p>
+</td></tr><tr><td><code>onimageerror</code></td><td><code>JsEvent<ImgErrorCallback></code></td><td>Non</td><td><p>Evènement lorsque l&#39;image n&#39;arrive pas à chargée.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le nom de la balise personnalisée associée à ce composant.
-Utilisé pour définir et référencer le composant dans le DOM.</p>
-</td></tr><tr><td><code>STRING_SRC_LIGHT</code></td><td><code>"-light"</code></td><td>Oui</td><td><p>Chaîne de caractères représentant le suffixe pour les images en mode clair.</p>
-</td></tr><tr><td><code>STRING_SRC_DARK</code></td><td><code>"-dark"</code></td><td>Oui</td><td><p>Chaîne de caractères représentant le suffixe pour les images en mode sombre.</p>
-</td></tr><tr><td><code>CSS_VARIABLE_IMAGE_LIGHT</code></td><td><code>"--_image-light"</code></td><td>Oui</td><td><p>Nom de la variable CSS pour l&#39;URL de l&#39;image en mode clair.</p>
-</td></tr><tr><td><code>CSS_VARIABLE_IMAGE_DARK</code></td><td><code>"--_image-dark"</code></td><td>Oui</td><td><p>Nom de la variable CSS pour l&#39;URL de l&#39;image en mode sombre.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -7793,9 +7577,7 @@ Label du champ
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.
-
-Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
     </table>
   
       
@@ -7856,7 +7638,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		text = undefined,
 		icon = undefined,
 		variation = DEFAULT_BUTTON_VARIATION,
-	}: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+	}: { text?: string; icon?: string; variation?: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>; }) : <code>this</code></code></h4>
         <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -7944,60 +7726,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      min,
-      max,
-      hint,
-      success,
-      error,
-      btnText,
-      step,
-    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; min?: number; max?: number; step?: number; }) : <code>HTMLBnumInputTime</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/input/bnum-input.internal/types").BnumInputNumericCreateOptions) : <code>HTMLBnumInputNumber</code></code></h4>
         <p>Crée une instance du composant avec les options fournies.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>label</code>: Texte du label principal.</li>
     
-      <li><code>{
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      min,
-      max,
-      hint,
-      success,
-      error,
-      btnText,
-      step,
-    }</code>: Options d'initialisation (attributs et slots).</li>
+      <li><code>options</code>: Options d'initialisation (attributs et slots).</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant.</p>
       </div>
@@ -8007,55 +7741,15 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
-</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
 </td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr><tr><td><code>TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de l&#39;élément input.
-Dans la classe cette fois si pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
-</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
-</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
-</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
-</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
-</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
-</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
-</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
-</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
-</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
-</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
-</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
-<p>(obi = Only Button Icon)</p>
-</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
-</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
-</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
-</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
-</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
-</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
-</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
-</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
-</td></tr><tr><td><code>TEXT_VALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas de succès de validation.</p>
-</td></tr><tr><td><code>TEXT_INVALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
-</td></tr><tr><td><code>TYPE</code></td><td><code>"time"</code></td><td>Oui</td><td><p>Valeur pour l&#39;attribut type.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -8196,9 +7890,7 @@ Label du champ
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.
-
-Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
     </table>
   
       
@@ -8259,7 +7951,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		text = undefined,
 		icon = undefined,
 		variation = DEFAULT_BUTTON_VARIATION,
-	}: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+	}: { text?: string; icon?: string; variation?: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>; }) : <code>this</code></code></h4>
         <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -8347,54 +8039,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      hint,
-      success,
-      error,
-      btnText,
-    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; }) : <code>HTMLBnumInputText</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, options: BnumInputTextCreateOption) : <code>HTMLBnumInputText</code></code></h4>
         <p>Crée une instance du composant avec les options fournies.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>label</code>: Texte du label principal.</li>
     
-      <li><code>{
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      hint,
-      success,
-      error,
-      btnText,
-    }</code>: Options d'initialisation (attributs et slots).</li>
+      <li><code>options</code>: Options d'initialisation (attributs et slots).</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant.</p>
       </div>
@@ -8404,55 +8054,15 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
-</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
 </td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr><tr><td><code>TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de l&#39;élément input.
-Dans la classe cette fois si pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
-</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
-</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
-</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
-</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
-</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
-</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
-</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
-</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
-</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
-</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
-</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
-<p>(obi = Only Button Icon)</p>
-</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
-</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
-</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
-</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
-</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
-</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
-</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
-</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
-</td></tr><tr><td><code>TEXT_VALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas de succès de validation.</p>
-</td></tr><tr><td><code>TEXT_INVALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
-</td></tr><tr><td><code>TYPE_TEXT</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Valeur &#39;text&#39; pour l&#39;attribut type.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -8594,8 +8204,7 @@ Label du champ
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr><tr><td><code>bnum-input-search:search</code></td><td><code>{ value: string; name: string; caller: HTMLBnumInputSearch }</code></td><td>Événement déclenché au clic par le bouton interne ou à la validation par la touche "Entrée".
-Envoie la valeur actuelle de l'input de recherche.</td></tr><tr><td><code>bnum-input-search:clear</code></td><td><code>{ caller: HTMLBnumInputSearch }</code></td><td>Événement déclenché lors du clic sur le bouton de vidage du champ de recherche.</td></tr></tbody>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr><tr><td><code>bnum-input-search:search</code></td><td><code>CustomEvent&lt;{ value: string; name: string; caller: HTMLBnumInputSearch }&gt;</code></td><td>Événement déclenché au clic par le bouton interne ou à la validation par la touche "Entrée". Envoie la valeur actuelle de l'input de recherche.</td></tr><tr><td><code>bnum-input-search:clear</code></td><td><code>CustomEvent&lt;{ caller: HTMLBnumInputSearch }&gt;</code></td><td>Événement déclenché lors du clic sur le bouton de vidage du champ de recherche.</td></tr></tbody>
     </table>
   
       
@@ -8656,7 +8265,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		text = undefined,
 		icon = undefined,
 		variation = DEFAULT_BUTTON_VARIATION,
-	}: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+	}: { text?: string; icon?: string; variation?: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>; }) : <code>this</code></code></h4>
         <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -8744,48 +8353,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      hint,
-      success,
-      error,
-      btnText,
-    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; }) : <code>HTMLBnumInputSearch</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/input-search/bnum-input-search.internal/types").BnumInputSearchCreateOptions) : <code>HTMLBnumInputSearch</code></code></h4>
         <p>Crée une instance du composant avec les options fournies.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>label</code>: Texte du label principal.</li>
     
-      <li><code>{
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      hint,
-      success,
-      error,
-      btnText,
-    }</code>: Options d'initialisation (attributs et slots).</li>
+      <li><code>options</code>: Options d'initialisation (attributs et slots).</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant.</p>
       </div>
@@ -8803,74 +8376,21 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
         
         
       </div>
-    <hr class="api-separator">
-      <div class="api-method">
-        <h4><code><strong><em>(static)</em> FromInput</strong>(input: HTMLBnumInput) : <code>HTMLBnumInputSearch</code></code></h4>
-        <p>Crée un composant de recherche à partir d'un input existant.</p>
-        <strong>Paramètres :</strong><ul>
-      <li><code>input</code>: Instance de HTMLBnumInput à convertir.</li>
-    </ul>
-        <p><strong>Retourne :</strong> Nouvelle instance de recherche.</p>
-      </div>
     
 
       <h3>Variables d'instance</h3>
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
-</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
 </td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag HTML du composant.</p>
-</td></tr><tr><td><code>TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de l&#39;élément input.
-Dans la classe cette fois si pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
-</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
-</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
-</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
-</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
-</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
-</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
-</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
-</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
-</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
-</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
-</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
-<p>(obi = Only Button Icon)</p>
-</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
-</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
-</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
-</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
-</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
-</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
-</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
-</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
-</td></tr><tr><td><code>TEXT_VALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas de succès de validation.</p>
-</td></tr><tr><td><code>TEXT_INVALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
-</td></tr><tr><td><code>TEXT_SEARCH_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché dans le champ de recherche.</p>
-</td></tr><tr><td><code>BUTTON_ICON</code></td><td><code>"search"</code></td><td>Oui</td><td><p>Icône du bouton de recherche.</p>
-</td></tr><tr><td><code>ID_ACTIONS_CONTAINER</code></td><td><code>"input-search-actions-container"</code></td><td>Oui</td><td><p>ID du conteneur des actions de recherche.</p>
-</td></tr><tr><td><code>ID_CLEAR_BUTTON</code></td><td><code>"input-clear-button"</code></td><td>Oui</td><td><p>ID du bouton pour vider le champ de recherche.</p>
-</td></tr><tr><td><code>SLOT_ACTIONS</code></td><td><code>"actions"</code></td><td>Oui</td><td><p>Nom du slot pour les actions personnalisées.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -9013,9 +8533,7 @@ Label du champ
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.
-
-Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
     </table>
   
       
@@ -9076,7 +8594,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		text = undefined,
 		icon = undefined,
 		variation = DEFAULT_BUTTON_VARIATION,
-	}: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+	}: { text?: string; icon?: string; variation?: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>; }) : <code>this</code></code></h4>
         <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -9164,60 +8682,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      min,
-      max,
-      hint,
-      success,
-      error,
-      btnText,
-      step,
-    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; min?: number; max?: number; step?: number; }) : <code>HTMLBnumInputNumber</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/input/bnum-input.internal/types").BnumInputNumericCreateOptions) : <code>HTMLBnumInputNumber</code></code></h4>
         <p>Crée une instance du composant avec les options fournies.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>label</code>: Texte du label principal.</li>
     
-      <li><code>{
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      min,
-      max,
-      hint,
-      success,
-      error,
-      btnText,
-      step,
-    }</code>: Options d'initialisation (attributs et slots).</li>
+      <li><code>options</code>: Options d'initialisation (attributs et slots).</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant.</p>
       </div>
@@ -9227,55 +8697,15 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
-</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
 </td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr><tr><td><code>TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de l&#39;élément input.
-Dans la classe cette fois si pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
-</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
-</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
-</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
-</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
-</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
-</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
-</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
-</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
-</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
-</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
-</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
-<p>(obi = Only Button Icon)</p>
-</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
-</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
-</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
-</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
-</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
-</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
-</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
-</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
-</td></tr><tr><td><code>TEXT_VALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas de succès de validation.</p>
-</td></tr><tr><td><code>TEXT_INVALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
-</td></tr><tr><td><code>TYPE</code></td><td><code>"number"</code></td><td>Oui</td><td><p>Valeur pour l&#39;attribut type.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -9418,9 +8848,7 @@ Label du champ
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.
-
-Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
     </table>
   
       
@@ -9481,7 +8909,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		text = undefined,
 		icon = undefined,
 		variation = DEFAULT_BUTTON_VARIATION,
-	}: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+	}: { text?: string; icon?: string; variation?: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>; }) : <code>this</code></code></h4>
         <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -9569,60 +8997,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      min,
-      max,
-      hint,
-      success,
-      error,
-      btnText,
-      step,
-    }: { 'data-value'?: string; placeholder?: string; name?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; min?: number; max?: number; step?: number; }) : <code>HTMLBnumInputDate</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/input/bnum-input.internal/types").BnumInputNumericCreateOptions) : <code>HTMLBnumInputDate</code></code></h4>
         <p>Crée une instance du composant avec les options fournies.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>label</code>: Texte du label principal.</li>
     
-      <li><code>{
-      'data-value': dataValue,
-      placeholder,
-      name,
-      disabled,
-      state,
-      button,
-      'button-icon': buttonIcon,
-      icon,
-      required,
-      readonly,
-      pattern,
-      minlength,
-      maxlength,
-      autocomplete,
-      inputmode,
-      spellcheck,
-      min,
-      max,
-      hint,
-      success,
-      error,
-      btnText,
-      step,
-    }</code>: Options d'initialisation (attributs et slots).</li>
+      <li><code>options</code>: Options d'initialisation (attributs et slots).</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant.</p>
       </div>
@@ -9632,55 +9012,15 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
-</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
 </td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr><tr><td><code>TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de l&#39;élément input.
-Dans la classe cette fois si pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
-</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
-</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
-</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
-</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
-</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
-</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
-</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
-</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
-</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
-</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
-</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
-<p>(obi = Only Button Icon)</p>
-</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
-</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
-</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
-</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
-</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
-</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
-</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
-</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
-</td></tr><tr><td><code>TEXT_VALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas de succès de validation.</p>
-</td></tr><tr><td><code>TEXT_INVALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
-</td></tr><tr><td><code>TYPE</code></td><td><code>"date"</code></td><td>Oui</td><td><p>Valeur pour l&#39;attribut type.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -10449,9 +9789,7 @@ Label du champ
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.
-
-Attention ! Vous devez écouter l'événement via la propriété `onButtonClicked` pour que le gestionnaire soit bien attaché.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
+      <tbody><tr><td><code>bnum-input:button.click</code></td><td><code>MouseEvent</code></td><td>Événement déclenché au clic sur le bouton interne.</td></tr><tr><td><code>input</code></td><td><code>InputEvent</code></td><td>Événement déclenché à la saisie dans le champ.</td></tr><tr><td><code>change</code></td><td><code>Event</code></td><td>Événement déclenché au changement de valeur du champ.</td></tr></tbody>
     </table>
   
       
@@ -10512,7 +9850,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 		text = undefined,
 		icon = undefined,
 		variation = DEFAULT_BUTTON_VARIATION,
-	}: { text?: string; icon?: string; variation?: EButtonType; }) : <code>this</code></code></h4>
+	}: { text?: string; icon?: string; variation?: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>; }) : <code>this</code></code></h4>
         <p>Active le bouton interne avec texte, icône et variation éventuels.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>{
@@ -10600,56 +9938,12 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(label: string, {
-			'data-value': dataValue,
-			placeholder,
-			name,
-			type,
-			disabled,
-			state,
-			button,
-			'button-icon': buttonIcon,
-			icon,
-			required,
-			readonly,
-			pattern,
-			minlength,
-			maxlength,
-			autocomplete,
-			inputmode,
-			spellcheck,
-			hint,
-			success,
-			error,
-			btnText,
-		}: { 'data-value'?: string; placeholder?: string; name?: string; type?: string; disabled?: string; state?: string; button?: string; 'button-icon'?: string; icon?: string; required?: string; readonly?: string; pattern?: string; minlength?: string; maxlength?: string; autocomplete?: string; inputmode?: string; spellcheck?: string; hint?: string; success?: string; error?: string; btnText?: string; }) : <code>HTMLBnumInput</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(label: string, options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/input/bnum-input.internal/types").BnumInputCreateOptions) : <code>HTMLBnumInput</code></code></h4>
         <p>Crée une instance du composant avec les options fournies.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>label</code>: Texte du label principal.</li>
     
-      <li><code>{
-			'data-value': dataValue,
-			placeholder,
-			name,
-			type,
-			disabled,
-			state,
-			button,
-			'button-icon': buttonIcon,
-			icon,
-			required,
-			readonly,
-			pattern,
-			minlength,
-			maxlength,
-			autocomplete,
-			inputmode,
-			spellcheck,
-			hint,
-			success,
-			error,
-			btnText,
-		}</code>: Options d'initialisation (attributs et slots).</li>
+      <li><code>options</code>: Options d'initialisation (attributs et slots).</li>
     </ul>
         <p><strong>Retourne :</strong> Instance du composant.</p>
       </div>
@@ -10659,54 +9953,15 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<(clickEvent: MouseEvent) => void></code></td><td>Oui</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
-</td></tr><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+      <tbody><tr><td><code>value</code></td><td><code>string</code></td><td>Non</td><td><p>Valeur courante du champ de saisie.</p>
+</td></tr><tr><td><code>onButtonClicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Permet d&#39;écouter le clic sur le bouton interne.</p>
 </td></tr><tr><td><code>name</code></td><td><code>string</code></td><td>Non</td><td><p>Nom du champ (attribut HTML name).</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr><tr><td><code>TEMPLATE</code></td><td><code>HTMLTemplateElement</code></td><td>Oui</td><td><p>Template de l&#39;élément input.
-Dans la classe cette fois si pour éviter les problèmes de scope.</p>
-</td></tr><tr><td><code>ID_HINT_TEXT</code></td><td><code>"hint-text"</code></td><td>Oui</td><td><p>ID du label principal</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_LABEL</code></td><td><code>"hint-text__label"</code></td><td>Oui</td><td><p>ID du label du champ</p>
-</td></tr><tr><td><code>ID_HINT_TEXT_HINT</code></td><td><code>"hint-text__hint"</code></td><td>Oui</td><td><p>ID du hint</p>
-</td></tr><tr><td><code>ID_INPUT</code></td><td><code>"bnum-input"</code></td><td>Oui</td><td><p>ID de l&#39;input</p>
-</td></tr><tr><td><code>ID_INPUT_BUTTON</code></td><td><code>"input__button"</code></td><td>Oui</td><td><p>ID du bouton</p>
-</td></tr><tr><td><code>ID_STATE_ICON</code></td><td><code>"state__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;état</p>
-</td></tr><tr><td><code>ID_INPUT_ICON</code></td><td><code>"input__icon"</code></td><td>Oui</td><td><p>ID de l&#39;icône d&#39;input</p>
-</td></tr><tr><td><code>ID_SUCCESS_TEXT</code></td><td><code>"success-text"</code></td><td>Oui</td><td><p>ID du texte de succès</p>
-</td></tr><tr><td><code>ID_ERROR_TEXT</code></td><td><code>"error-text"</code></td><td>Oui</td><td><p>ID du texte d&#39;erreur</p>
-</td></tr><tr><td><code>ID_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>ID du conteneur d&#39;état</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_SUCCESS</code></td><td><code>"state__text success"</code></td><td>Oui</td><td><p>Classe CSS pour le texte de succès</p>
-</td></tr><tr><td><code>CLASS_STATE_TEXT_ERROR</code></td><td><code>"state__text error"</code></td><td>Oui</td><td><p>Classe CSS pour le texte d&#39;erreur</p>
-</td></tr><tr><td><code>STATE_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>État de succès.</p>
-</td></tr><tr><td><code>STATE_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>État d&#39;erreur.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État désactivé.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État avec icône.</p>
-</td></tr><tr><td><code>STATE_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>État avec bouton.</p>
-</td></tr><tr><td><code>STATE_OBI</code></td><td><code>"obi"</code></td><td>Oui</td><td><p>État bouton avec icône seulement (sans texte).</p>
-<p>(obi = Only Button Icon)</p>
-</td></tr><tr><td><code>STATE_STATE</code></td><td><code>"state"</code></td><td>Oui</td><td><p>État avec état (success / error).</p>
-</td></tr><tr><td><code>ICON_SUCCESS</code></td><td><code>"check_circle"</code></td><td>Oui</td><td><p>Icône affichée en cas de succès de validation.</p>
-</td></tr><tr><td><code>ICON_ERROR</code></td><td><code>"cancel"</code></td><td>Oui</td><td><p>Icône affichée en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>SLOT_BUTTON</code></td><td><code>"button"</code></td><td>Oui</td><td><p>Nom du slot pour le bouton interne.</p>
-</td></tr><tr><td><code>SLOT_HINT</code></td><td><code>"hint"</code></td><td>Oui</td><td><p>Nom du slot pour l&#39;indice d&#39;utilisation (hint).</p>
-</td></tr><tr><td><code>SLOT_SUCCESS</code></td><td><code>"success"</code></td><td>Oui</td><td><p>Nom du slot pour le message de succès.</p>
-</td></tr><tr><td><code>SLOT_ERROR</code></td><td><code>"error"</code></td><td>Oui</td><td><p>Nom du slot pour le message d&#39;erreur.</p>
-</td></tr><tr><td><code>DEFAULT_INPUT_TYPE</code></td><td><code>"text"</code></td><td>Oui</td><td><p>Type d&#39;input par défaut.</p>
-</td></tr><tr><td><code>DEFAULT_BUTTON_VARIATION</code></td><td><code>EButtonType.PRIMARY</code></td><td>Oui</td><td><p>Variation du bouton par défaut.</p>
-</td></tr><tr><td><code>TEXT_VALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas de succès de validation.</p>
-</td></tr><tr><td><code>TEXT_INVALID_INPUT</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de validation.</p>
-</td></tr><tr><td><code>TEXT_ERROR_FIELD</code></td><td><code>string</code></td><td>Oui</td><td><p>Texte affiché en cas d&#39;erreur de champ.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -10754,12 +10009,7 @@ Dans la classe cette fois si pour éviter les problèmes de scope.</p>
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      
-    <table>
-      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>click</code></td><td><code>{}</code></td><td>Attribut pour définir le gestionnaire de clic</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
       
       <h2>Slots</h2>
       
@@ -10820,14 +10070,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>"bnum-icon-button"</code></td><td>Oui</td><td><p>Tag de l&#39;élément.</p>
-</td></tr><tr><td><code>ID_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Id de l&#39;icône à l&#39;intérieur du bouton</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -10867,7 +10110,12 @@ Le nom peut être défini via le contenu du slot ou via l&#39;attribut <code>dat
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      <p>N/A</p>
+      
+    <table>
+      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
+      <tbody><tr><td><code>custom:element-changed:icon</code></td><td><code>unknown</code></td><td>Déclenché lors du changement d'icône.</td></tr></tbody>
+    </table>
+  
       
       <h2>Slots</h2>
       
@@ -10904,8 +10152,8 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>oniconchanged</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Oui</td><td><p>Événement déclenché lors du changement d&#39;icône. (via la propriété icon)</p>
-</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Obtient le nom de l&#39;icône actuellement affichée.</p>
+      <tbody><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Obtient le nom de l&#39;icône actuellement affichée.</p>
+</td></tr><tr><td><code>oniconchanged</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;icône. (via la propriété icon)</p>
 </td></tr></tbody>
     </table>
   
@@ -10914,8 +10162,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le tag HTML utilisé pour ce composant.</p>
-</td></tr><tr><td><code>EMPTY</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne un élément HTMLBnumIcon vide.</p>
+      <tbody><tr><td><code>EMPTY</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne un élément HTMLBnumIcon vide.</p>
 </td></tr><tr><td><code>HTML_CLASS</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne la classe CSS utilisée pour les icônes Material Symbols.</p>
 </td></tr><tr><td><code>HOME</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne une instance de HTMLBnumIcon avec l&#39;icône &#39;home&#39;.</p>
 </td></tr><tr><td><code>SEARCH</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne une instance de HTMLBnumIcon avec l&#39;icône &#39;search&#39;.</p>
@@ -10928,10 +10175,6 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
 </td></tr><tr><td><code>INFO</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne une instance de HTMLBnumIcon avec l&#39;icône &#39;info&#39;.</p>
 </td></tr><tr><td><code>DELETE</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne une instance de HTMLBnumIcon avec l&#39;icône &#39;delete&#39;.</p>
 </td></tr><tr><td><code>ADD</code></td><td><code>HTMLBnumIcon</code></td><td>Oui</td><td><p>Retourne une instance de HTMLBnumIcon avec l&#39;icône &#39;add&#39;.</p>
-</td></tr><tr><td><code>EVENT_ICON_CHANGED</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de l&#39;événement déclenché lors du changement d&#39;icône.</p>
-</td></tr><tr><td><code>DATA_ICON</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de la donnée pour l&#39;icône.</p>
-</td></tr><tr><td><code>ATTRIBUTE_DATA_ICON</code></td><td><code>string</code></td><td>Oui</td><td><p>Attribut HTML pour définir l&#39;icône.</p>
-</td></tr><tr><td><code>ATTRIBUTE_CLASS</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de l&#39;attribut class.</p>
 </td></tr></tbody>
     </table>
   
@@ -11009,13 +10252,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <p>N/A</p>
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -11161,23 +10398,13 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       <p>N/A</p>-->
       
       <h2>Événements</h2>
-      
-    <table>
-      <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>bnum-date:attribute-updated</code></td><td><code>{ property: string; newValue: string | null; oldValue: string | null }</code></td><td>Événement déclenché lors de la mise à jour d'un attribut</td></tr><tr><td><code>bnum-date:attribute-updated:format</code></td><td><code>{ property: string; newValue: string | null; oldValue: string | null }</code></td><td>Événement déclenché lors de la mise à jour du format de la date</td></tr><tr><td><code>bnum-date:attribute-updated:locale</code></td><td><code>{ property: string; newValue: string | null; oldValue: string | null }</code></td><td>Événement déclenché lors de la mise à jour de la locale</td></tr><tr><td><code>bnum-date:date</code></td><td><code>{ property: string; newValue: Date | null; oldValue: Date | null }</code></td><td>Événement déclenché lors de la mise à jour de la date</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
       
       <h2>Slots</h2>
       <p>N/A</p>
 
       <h2>Attributs de Données</h2>
-      
-    <table>
-      <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>format</code></td><td><code>string</code></td><td><code>'P'</code></td><td>✅</td><td>Le format de sortie.</td></tr><tr><td><code>locale</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>La locale pour le formatage</td></tr><tr><td><code>data-date</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>La date source (prioritaire sur le textContent)</td></tr><tr><td><code>data-start-format</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Le format de parsing si la date source est une chaîne</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Variables CSS</h2>
       <p>N/A</p>
@@ -11242,7 +10469,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(dateInput: string | Date, options: { format?: string; locale?: string; startFormat?: string; }) : <code>HTMLBnumDate</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(dateInput: string | Date, options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/date/bnum-date.internals/types").BnumDateCreateOptions) : <code>HTMLBnumDate</code></code></h4>
         <p>Méthode statique pour la création (non implémentée ici,
 mais suit le pattern de BnumElement).</p>
         <strong>Paramètres :</strong><ul>
@@ -11269,17 +10496,7 @@ Permet de personnaliser le formatage via un listener externe.</p>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Nom de la balise</p>
-</td></tr><tr><td><code>DEFAULT_FORMAT</code></td><td><code>"dd/MM/yyyy HH:mm"</code></td><td>Oui</td><td><p>Valeur par défaut du format</p>
-</td></tr><tr><td><code>DEFAULT_LOCALE</code></td><td><code>"fr"</code></td><td>Oui</td><td><p>Valeur par défaut de la locale</p>
-</td></tr><tr><td><code>STATE_INVALID</code></td><td><code>"invalid"</code></td><td>Oui</td><td><p>État invalide</p>
-</td></tr><tr><td><code>STATE_NOT_READY</code></td><td><code>"not-ready"</code></td><td>Oui</td><td><p>État non prêt</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -11712,7 +10929,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon.prop</code></td><td><code>{ type: string, newValue: boolean | string }</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>{ state: boolean }</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
+      <tbody><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:icon.prop.changed</code></td><td><code>CustomEvent&lt;{ type: string, newValue: boolean | string }&gt;</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>CustomEvent&lt;{ state: boolean }&gt;</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
     </table>
   
       
@@ -11728,7 +10945,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>Optional<ButtonVariation></code></td><td><code>ButtonVariation.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>IconPosition | undefined</code></td><td><code>IconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>HideTextOnLayoutSize | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -11783,7 +11000,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(options: { text?: string; icon?: string; iconPos?: EIconPosition; iconMargin?: string; variation?: EButtonType; rounded?: boolean; loading?: boolean; hideOn?: EHideOn; }) : <code>HTMLBnumButton</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").BnumButtonCreateOptions) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum standard.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>options</code>: Options de configuration du bouton</li>
@@ -11793,16 +11010,16 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> CreateOnlyIcon</strong>(icon: string, {
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
-    }: { variation?: EButtonType; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
+    }: { variation?: any; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum ne contenant qu'une icône.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>icon</code>: Nom de l'icône à afficher</li>
     
       <li><code>{
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
     }</code>: Options de configuration du bouton</li>
@@ -11815,38 +11032,22 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>variation</code></td><td><code>EButtonType</code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
+      <tbody><tr><td><code>variation</code></td><td><code>ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }></code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
 </td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Icône affichée dans le bouton.</p>
-</td></tr><tr><td><code>iconPos</code></td><td><code>EIconPosition</code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
+</td></tr><tr><td><code>iconPos</code></td><td><code>ValueOf<{ readonly LEFT: "left"; readonly RIGHT: "right"; }></code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
 </td></tr><tr><td><code>iconMargin</code></td><td><code>string</code></td><td>Non</td><td><p>Marge appliquée à l&#39;icône.</p>
-</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>EHideOn</code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
+</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>ValueOf<{ readonly SMALL: "small"; readonly TOUCH: "touch"; }></code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
 </td></tr><tr><td><code>onloadingstatechange</code></td><td><code>JsEvent<(state: boolean) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;état de chargement.</p>
 </td></tr><tr><td><code>oniconchange</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;icône.</p>
-</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: "pos" | "margin", newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
-</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ButtonVariation, oldVariation: ButtonVariation) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").IconPropType, newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
+</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>, oldVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>linkedClickEvent</code></td><td><code>JsEvent<(link: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur le bouton.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant bouton.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il contient une icône.</p>
-</td></tr><tr><td><code>STATE_WITHOUT_ICON</code></td><td><code>"without-icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il ne contient pas d&#39;icône.</p>
-</td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
-</td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
-</td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
-</td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
-</td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
-</td></tr><tr><td><code>CLASS_SLOT</code></td><td><code>"slot"</code></td><td>Oui</td><td><p>Classe CSS du slot du bouton.</p>
-</td></tr><tr><td><code>CSS_PROPERTY_ICON_MARGIN</code></td><td><code>"--bnum-button-icon-gap"</code></td><td>Oui</td><td><p>Propriété CSS pour la marge de l&#39;icône.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -12372,7 +11573,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon.prop</code></td><td><code>{ type: string, newValue: boolean | string }</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>{ state: boolean }</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
+      <tbody><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:icon.prop.changed</code></td><td><code>CustomEvent&lt;{ type: string, newValue: boolean | string }&gt;</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>CustomEvent&lt;{ state: boolean }&gt;</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody>
     </table>
   
       
@@ -12388,7 +11589,7 @@ window.dispatchEvent(new Event('resize'));
       
     <table>
       <thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>EButtonType | undefined</code></td><td><code>EButtonType.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>EIconPosition | undefined</code></td><td><code>EIconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>EHideOn | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
+      <tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>Optional<ButtonVariation></code></td><td><code>ButtonVariation.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>IconPosition | undefined</code></td><td><code>IconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>HideTextOnLayoutSize | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody>
     </table>
   
 
@@ -12443,7 +11644,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       </div>
     <hr class="api-separator">
       <div class="api-method">
-        <h4><code><strong><em>(static)</em> Create</strong>(options: { text?: string; icon?: string; iconPos?: EIconPosition; iconMargin?: string; variation?: EButtonType; rounded?: boolean; loading?: boolean; hideOn?: EHideOn; }) : <code>HTMLBnumButton</code></code></h4>
+        <h4><code><strong><em>(static)</em> Create</strong>(options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").BnumButtonCreateOptions) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum standard.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>options</code>: Options de configuration du bouton</li>
@@ -12453,16 +11654,16 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
     <hr class="api-separator">
       <div class="api-method">
         <h4><code><strong><em>(static)</em> CreateOnlyIcon</strong>(icon: string, {
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
-    }: { variation?: EButtonType; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
+    }: { variation?: any; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code></h4>
         <p>Crée un bouton Bnum ne contenant qu'une icône.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>icon</code>: Nom de l'icône à afficher</li>
     
       <li><code>{
-      variation = EButtonType.PRIMARY,
+      variation = ButtonVariation.PRIMARY,
       rounded = false,
       loading = false,
     }</code>: Options de configuration du bouton</li>
@@ -12475,38 +11676,22 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
       
     <table>
       <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>variation</code></td><td><code>EButtonType</code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
+      <tbody><tr><td><code>variation</code></td><td><code>ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }></code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
 </td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Icône affichée dans le bouton.</p>
-</td></tr><tr><td><code>iconPos</code></td><td><code>EIconPosition</code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
+</td></tr><tr><td><code>iconPos</code></td><td><code>ValueOf<{ readonly LEFT: "left"; readonly RIGHT: "right"; }></code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
 </td></tr><tr><td><code>iconMargin</code></td><td><code>string</code></td><td>Non</td><td><p>Marge appliquée à l&#39;icône.</p>
-</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>EHideOn</code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
+</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>ValueOf<{ readonly SMALL: "small"; readonly TOUCH: "touch"; }></code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
 </td></tr><tr><td><code>onloadingstatechange</code></td><td><code>JsEvent<(state: boolean) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;état de chargement.</p>
 </td></tr><tr><td><code>oniconchange</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;icône.</p>
-</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: "pos" | "margin", newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
-</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ButtonVariation, oldVariation: ButtonVariation) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").IconPropType, newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
+</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>, oldVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>linkedClickEvent</code></td><td><code>JsEvent<(link: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur le bouton.</p>
 </td></tr></tbody>
     </table>
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant bouton.</p>
-</td></tr><tr><td><code>STATE_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il contient une icône.</p>
-</td></tr><tr><td><code>STATE_WITHOUT_ICON</code></td><td><code>"without-icon"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il ne contient pas d&#39;icône.</p>
-</td></tr><tr><td><code>STATE_ROUNDED</code></td><td><code>"rounded"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est arrondi.</p>
-</td></tr><tr><td><code>STATE_LOADING</code></td><td><code>"loading"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est en chargement.</p>
-</td></tr><tr><td><code>STATE_DISABLED</code></td><td><code>"disabled"</code></td><td>Oui</td><td><p>État du bouton lorsqu&#39;il est désactivé.</p>
-</td></tr><tr><td><code>DEFAULT_CSS_VAR_ICON_MARGIN</code></td><td><code>"var(--custom-bnum-button-icon-margin, 10px)"</code></td><td>Oui</td><td><p>Valeur par défaut de la marge de l&#39;icône dans le bouton.</p>
-</td></tr><tr><td><code>ICON_PROP_POS</code></td><td><code>"pos"</code></td><td>Oui</td><td><p>Nom de la propriété de l&#39;icône pour la position.</p>
-</td></tr><tr><td><code>CLASS_WRAPPER</code></td><td><code>"wrapper"</code></td><td>Oui</td><td><p>Classe CSS du wrapper du bouton.</p>
-</td></tr><tr><td><code>CLASS_ICON</code></td><td><code>"icon"</code></td><td>Oui</td><td><p>Classe CSS de l&#39;icône du bouton.</p>
-</td></tr><tr><td><code>CLASS_SLOT</code></td><td><code>"slot"</code></td><td>Oui</td><td><p>Classe CSS du slot du bouton.</p>
-</td></tr><tr><td><code>CSS_PROPERTY_ICON_MARGIN</code></td><td><code>"--bnum-button-icon-gap"</code></td><td>Oui</td><td><p>Propriété CSS pour la marge de l&#39;icône.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>
@@ -12606,7 +11791,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
         <h4><code><strong><em>(static)</em> Create</strong>(value: string, {
       circle = false,
       variation = undefined,
-    }: { circle?: boolean; variation?: "primary" | "secondary" | "danger"; }) : <code>HTMLBnumBadge</code></code></h4>
+    }: { circle?: boolean; variation?: BnumBadgeVariation; }) : <code>HTMLBnumBadge</code></code></h4>
         <p>Crée un badge via JavaScript.</p>
         <strong>Paramètres :</strong><ul>
       <li><code>value</code>: Valeur à afficher</li>
@@ -12644,22 +11829,7 @@ Ils s'utilisent via <code>:state(nom-de-l-etat)</code> en CSS ou via <code>eleme
   
 
       <h3>Variables statiques</h3>
-      
-    <table>
-      <thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead>
-      <tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><p>Tag HTML du composant.</p>
-</td></tr><tr><td><code>DATA_VALUE</code></td><td><code>"value"</code></td><td>Oui</td><td><p>Nom de l&#39;attribut pour la valeur du badge.</p>
-</td></tr><tr><td><code>DATA_VARIATION</code></td><td><code>"variation"</code></td><td>Oui</td><td><p>Nom de l&#39;attribut pour la variation du badge.</p>
-</td></tr><tr><td><code>VARIATION_PRIMARY</code></td><td><code>"primary"</code></td><td>Oui</td><td><p>Valeur de variation primaire.</p>
-</td></tr><tr><td><code>VARIATION_SECONDARY</code></td><td><code>"secondary"</code></td><td>Oui</td><td><p>Valeur de variation secondaire.</p>
-</td></tr><tr><td><code>VARIATION_DANGER</code></td><td><code>"danger"</code></td><td>Oui</td><td><p>Valeur de variation danger.</p>
-</td></tr><tr><td><code>STATE_HAS_VALUE</code></td><td><code>"has-value"</code></td><td>Oui</td><td><p>Nom de la classe d&#39;état &quot;a une valeur&quot;.</p>
-</td></tr><tr><td><code>STATE_NO_VALUE</code></td><td><code>"no-value"</code></td><td>Oui</td><td><p>Nom de la classe d&#39;état &quot;pas de valeur&quot;.</p>
-</td></tr><tr><td><code>STATE_IS_CIRCLE</code></td><td><code>"is-circle"</code></td><td>Oui</td><td><p>Nom de la classe d&#39;état &quot;cercle&quot;.</p>
-</td></tr><tr><td><code>STATE_VARIATION_PREFIX</code></td><td><code>"variation-"</code></td><td>Oui</td><td><p>Préfixe de la classe d&#39;état pour la variation.</p>
-</td></tr></tbody>
-    </table>
-  
+      <p>N/A</p>
 
       <h2>Code source</h2>
       <p>

@@ -1,0 +1,459 @@
+
+                <html>
+    <head>
+        <link href="../../global.css" rel="stylesheet">
+        <link href="../../material-symbols.css" rel="stylesheet">
+        <script src="../../ds-bnum.js" defer></script>
+
+        <style>
+            .demo-code,
+            .log-output {
+                max-height: 300px;
+                overflow: auto;
+            }
+
+            .structures {
+                display: flex;
+                flex-direction: row; /* C'est la valeur par défaut, mais explicite ici */
+                flex-wrap: wrap;    /* Permet aux colonnes de passer à la ligne sur petits écrans (optionnel) */
+            }
+
+            .structure-block {
+                /* Chaque colonne prend 50% de la largeur */
+                flex-basis: 50%;
+                
+                /* Alternative : flex: 1 1 50%; (grow, shrink, basis) */
+                /* Ou plus simple si elles doivent grandir/rétrécir pareil : flex: 1; */
+
+                /* Ajout de padding et box-sizing pour une meilleure gestion des espacements */
+                box-sizing: border-box;
+                padding: 10px;
+                max-width:50%;
+            }
+
+            .color-swatch {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border: solid thin black;
+                border-radius: 100%;
+            }
+
+            .story-sidebar {
+                background-color: #2c3054;
+            }
+
+            .story-sidebar a {
+                color: white;
+            }
+            .story-sidebar a:hover {
+                background-color: #484d7a;
+            }
+            .story-sidebar a.active {
+                background-color: #6067a8;
+            }
+
+            .structures bnum-img {
+                max-width: 100px;
+                aspect-ratio: 1;
+            }
+
+html.dark body {
+    background-color: black;
+    color: #ddd;
+}
+
+ html.dark body h1,
+      html.dark body h2,
+      html.dark body h3 {
+        border-bottom-color: #444;
+      }
+
+      .bnum-img-playground-container bnum-img {
+        display: inline-block;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed #ccc;
+        vertical-align: middle;
+        margin-right: 1rem;
+        background-color: #f4f4f4; /* Fond pour voir l'image */
+      }
+
+      html.dark body bnum-img {
+        background-color: #333;
+        border-color: #555;
+      }
+
+      /* Style pour le cas d'erreur */
+      bnum-img[src*='fake-image'] {
+        border-color: red;
+      }
+
+      .bnum-img-playground-container button {
+        padding: 8px 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        border: 1px solid #aaa;
+      }
+
+      html.dark body .bnum-img-playground-container button {
+        background-color: #555;
+        border-color: #888;
+        color: #fff;
+      }
+
+      .bnum-img-playground-container code,
+      .bnum-img-playground-container pre {
+        background-color: #eee;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+
+      html.dark body  code,
+      html.dark body  pre {
+        background-color: #444;
+        color: #ffc;
+      }
+      
+
+      html.dark body  th {
+        background-color: #333;
+        border-color: #555;
+      }
+      html.dark body  td {
+        border-color: #555;
+      }
+
+      .playground[playground] {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .playground[playground]  .playground-tester {
+        flex-basis: 100%;
+        min-height: 80px;
+        padding: 1rem;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .playground[playground]  .playground-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.playground[playground]  .control-group {
+	flex: 1 0 50%;
+	margin-bottom: 10px;
+}
+        </style>
+        
+    <style>/* Styles pour la barre latérale et la recherche */
+.story-sidebar {
+	width: 280px;
+	flex-shrink: 0;
+	border-right: 1px solid #eaeaea;
+	height: 100vh;
+	overflow-y: auto;
+	padding: 1.5rem 1rem;
+	box-sizing: border-box;
+	background-color: #2c3054;
+	color: white;
+}
+
+.sidebar-header {
+	margin-bottom: 1.5rem;
+	position: sticky;
+	top: -1.5rem;
+	background: #2c3054;
+	z-index: 10;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #484d7a;
+}
+
+.search-box {
+	width: 100%;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #484d7a;
+	background: #1e213a;
+	color: white;
+	font-size: 0.9rem;
+	margin-top: 12px;
+	outline: none;
+}
+
+.search-box:focus {
+	border-color: #6067a8;
+	box-shadow: 0 0 0 2px rgba(96, 103, 168, 0.3);
+}
+
+.sidebar-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.sidebar-group {
+	margin-bottom: 1.5rem;
+}
+
+.group-title {
+	display: block;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	color: #a5a9d1;
+	margin-bottom: 0.6rem;
+	padding-left: 8px;
+	font-weight: 800;
+	letter-spacing: 1.2px;
+}
+
+.sidebar-group ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.story-sidebar li a {
+	display: block;
+	padding: 7px 12px;
+	text-decoration: none;
+	color: #cbd5e0;
+	border-radius: 6px;
+	font-weight: 500;
+	font-size: 0.85rem;
+	transition: all 0.2s;
+}
+
+.story-sidebar li a:hover {
+	background: #484d7a;
+	color: white;
+	transform: translateX(4px);
+}
+
+.story-sidebar li a.active {
+	background: #6067a8;
+	color: white;
+	font-weight: 600;
+}
+/* Styles pour le contenu principal des stories */
+.story-main {
+	flex-grow: 1;
+	padding: 2rem;
+	height: 100vh;
+	overflow-y: auto;
+	box-sizing: border-box;
+	background: #f8fafc;
+}
+
+.story-wrapper {
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 2.5rem;
+	max-width: 1100px;
+	background: white;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 2.25rem;
+	margin-top: 0;
+	color: #1e293b;
+	border-bottom: 2px solid #e2e8f0;
+	padding-bottom: 1rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 2.5rem;
+	color: #334155;
+	border-bottom: 1px solid #f1f5f9;
+	padding-bottom: 0.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 2rem;
+	color: #475569;
+}
+
+table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin-bottom: 2rem;
+	font-size: 0.9rem;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+th,
+td {
+	padding: 12px 16px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+	background-color: #f8fafc;
+	font-weight: 600;
+	color: #64748b;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	letter-spacing: 0.05em;
+}
+
+tr:last-child td {
+	border-bottom: none;
+}
+
+code {
+	background-color: #f1f5f9;
+	color: #ef4444;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	font-size: 0.85em;
+}
+
+pre {
+	background-color: #1e293b;
+	border-radius: 8px;
+	padding: 1.25rem;
+	overflow-x: auto;
+	margin: 1.5rem 0;
+}
+
+pre > code {
+	display: block;
+	background: transparent;
+	color: #e2e8f0;
+	padding: 0;
+	font-size: 0.9em;
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+.playground-demo-box {
+	border: 2px dashed #cbd5e0;
+	padding: 2.5rem;
+	border-radius: 12px;
+	margin: 1.5rem 0;
+	background: #fff;
+}
+
+.api-method {
+	padding: 1rem 0;
+}
+
+.api-method h4 {
+	margin: 0 0 0.5rem 0;
+	font-family: monospace;
+	font-size: 1.1em;
+	color: #0f172a;
+}
+
+.api-method h4 em {
+	font-style: normal;
+	font-weight: 400;
+	color: #94a3b8;
+}
+
+.api-separator {
+	border: none;
+	border-top: 1px solid #f1f5f9;
+	margin: 2rem 0;
+}
+
+.color-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+.structures {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+	margin: 1.5rem 0;
+}
+
+.structure-block {
+	border: 1px solid #f1f5f9;
+	padding: 1.5rem;
+	border-radius: 8px;
+	background: #fcfcfc;
+}
+
+.structure-block h4 {
+	margin-top: 0;
+	color: #64748b;
+	font-size: 0.9rem;
+}
+</style></head>
+    <body>
+                <div class="story-container">
+                    <nav class="story-sidebar"><div class="sidebar-header"><h3 style="color:white;margin:0">Composants</h3><input type="text" id="component-search" placeholder="Rechercher... (/)" class="search-box" /></div><ul class="sidebar-list"><li class="sidebar-group"><span class="group-title">atoms</span><ul><li><a href="../atoms/bnum-badge.html" class="" data-name="bnum-badge">bnum-badge</a></li><li><a href="../atoms/bnum-button.html" class="" data-name="bnum-button">bnum-button</a></li><li><a href="../atoms/bnum-danger-button.html" class="" data-name="bnum-danger-button">bnum-danger-button</a></li><li><a href="../atoms/bnum-date.html" class="" data-name="bnum-date">bnum-date</a></li><li><a href="../atoms/bnum-fragment.html" class="" data-name="bnum-fragment">bnum-fragment</a></li><li><a href="../atoms/bnum-helper.html" class="" data-name="bnum-helper">bnum-helper</a></li><li><a href="../atoms/bnum-icon.html" class="" data-name="bnum-icon">bnum-icon</a></li><li><a href="../atoms/bnum-icon-button.html" class="" data-name="bnum-icon-button">bnum-icon-button</a></li><li><a href="../atoms/bnum-img.html" class="" data-name="bnum-img">bnum-img</a></li><li><a href="../atoms/bnum-input.html" class="" data-name="bnum-input">bnum-input</a></li><li><a href="../atoms/bnum-input-date.html" class="" data-name="bnum-input-date">bnum-input-date</a></li><li><a href="../atoms/bnum-input-number.html" class="" data-name="bnum-input-number">bnum-input-number</a></li><li><a href="../atoms/bnum-input-search.html" class="" data-name="bnum-input-search">bnum-input-search</a></li><li><a href="../atoms/bnum-input-text.html" class="" data-name="bnum-input-text">bnum-input-text</a></li><li><a href="../atoms/bnum-input-time.html" class="" data-name="bnum-input-time">bnum-input-time</a></li><li><a href="../atoms/bnum-primary-button.html" class="" data-name="bnum-primary-button">bnum-primary-button</a></li><li><a href="../atoms/bnum-radio.html" class="" data-name="bnum-radio">bnum-radio</a></li><li><a href="../atoms/bnum-secondary-button.html" class="" data-name="bnum-secondary-button">bnum-secondary-button</a></li><li><a href="../atoms/bnum-select.html" class="" data-name="bnum-select">bnum-select</a></li><li><a href="../atoms/bnum-switch.html" class="" data-name="bnum-switch">bnum-switch</a></li></ul></li><li class="sidebar-group"><span class="group-title">molecules</span><ul><li><a href="../molecules/bnum-card-item.html" class="active" data-name="bnum-card-item">bnum-card-item</a></li><li><a href="../molecules/bnum-card-item-agenda.html" class="" data-name="bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="../molecules/bnum-card-item-mail.html" class="" data-name="bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="../molecules/bnum-card-list.html" class="" data-name="bnum-card-list">bnum-card-list</a></li><li><a href="../molecules/bnum-card-title.html" class="" data-name="bnum-card-title">bnum-card-title</a></li><li><a href="../molecules/bnum-folder.html" class="" data-name="bnum-folder">bnum-folder</a></li><li><a href="../molecules/bnum-hide.html" class="" data-name="bnum-hide">bnum-hide</a></li><li><a href="../molecules/bnum-radio-group.html" class="" data-name="bnum-radio-group">bnum-radio-group</a></li><li><a href="../molecules/bnum-segmented-control.html" class="" data-name="bnum-segmented-control">bnum-segmented-control</a></li><li><a href="../molecules/bnum-segmented-item.html" class="" data-name="bnum-segmented-item">bnum-segmented-item</a></li></ul></li><li class="sidebar-group"><span class="group-title">organisms</span><ul><li><a href="../organisms/bnum-card.html" class="" data-name="bnum-card">bnum-card</a></li><li><a href="../organisms/bnum-card-agenda.html" class="" data-name="bnum-card-agenda">bnum-card-agenda</a></li><li><a href="../organisms/bnum-card-email.html" class="" data-name="bnum-card-email">bnum-card-email</a></li><li><a href="../organisms/bnum-folder-list.html" class="" data-name="bnum-folder-list">bnum-folder-list</a></li><li><a href="../organisms/bnum-header.html" class="" data-name="bnum-header">bnum-header</a></li><li><a href="../organisms/bnum-tree.html" class="" data-name="bnum-tree">bnum-tree</a></li></ul></li><li class="sidebar-group"><span class="group-title">template</span><ul><li><a href="../template/bnum-column.html" class="" data-name="bnum-column">bnum-column</a></li></ul></li></ul></nav>
+                    <main class="story-main">
+                        <div class="story-wrapper"><h1><code><bnum-card-item></code></h1><section><h2>Description</h2><div><p>Représente un item d&#39;une carte <code>&lt;bnum-card&gt;</code> qui peut être mis dans un <code>bnum-card-list</code>.</p>
+<p>L&#39;élément est considéré comme un <code>li</code> d&#39;une liste pour des raisons d&#39;accessibilité.</p>
+</div></section><section><h2>Structure</h2><div class="structures"><div class="structure-block"><h4>Item de carte</h4><div><bnum-card-item><p>Contenu de l'item</p></bnum-card-item></div><pre><code>&lt;bnum-card-item&gt;&lt;p&gt;Contenu de l&#039;item&lt;/p&gt;&lt;/bnum-card-item&gt;</code></pre></div><div class="structure-block"><h4>Désactivé</h4><div><bnum-card-item disabled><p>Contenu de l'item</p></bnum-card-item></div><pre><code>&lt;bnum-card-item disabled&gt;&lt;p&gt;Contenu de l&#039;item&lt;/p&gt;&lt;/bnum-card-item&gt;</code></pre></div></div></section><section><h2>Événements</h2><table><thead><tr><th>Nom</th><th>Détail (event.detail)</th><th>Description</th></tr></thead><tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lors du clic sur l'item</td></tr></tbody></table></section><section><h2>Slots</h2><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>Contenu de l'item</td></tr></tbody></table></section><section><h2>Attributs de Données</h2><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>disabled</code></td><td><code>boolean | 'disabled' | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Indique si l'item est désactivé</td></tr></tbody></table></section><section><h2>Variables CSS</h2><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description</th></tr></thead><tbody><tr><td><code>--bnum-card-item-width-percent</code></td><td><code>100%</code>false</td><td>Largeur en pourcentage du composant</td></tr><tr><td><code>--bnum-card-item-width-modifier</code></td><td><code>30px</code>false</td><td>Valeur soustraite à la largeur</td></tr><tr><td><code>--bnum-card-item-background-color</code></td><td><code>var(--bnum-color-surface, #f6f6f7)</code><span class="color-swatch" style="background-color:var(--bnum-color-surface, #f6f6f7)"></span></td><td>Couleur de fond normale</td></tr><tr><td><code>--bnum-card-item-background-color-hover</code></td><td><code>var(--bnum-color-surface-hover, #eaeaea)</code><span class="color-swatch" style="background-color:var(--bnum-color-surface-hover, #eaeaea)"></span></td><td>Couleur de fond au survol</td></tr><tr><td><code>--bnum-card-item-background-color-active</code></td><td><code>var(--bnum-color-surface-active, #dfdfdf)</code><span class="color-swatch" style="background-color:var(--bnum-color-surface-active, #dfdfdf)"></span></td><td>Couleur de fond à l'état actif</td></tr><tr><td><code>--bnum-card-item-cursor</code></td><td><code>pointer</code>false</td><td>Type de curseur</td></tr><tr><td><code>--bnum-card-item-padding</code></td><td><code>15px</code>false</td><td>Espacement interne</td></tr><tr><td><code>--bnum-card-item-display</code></td><td><code>block</code>false</td><td>Type d'affichage</td></tr></tbody></table></section><section><h2>États internes</h2><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>disabled</code></td><td>Actif quand l'item est désactivé</td></tr></tbody></table></section><section><h2>API Publique</h2><h3>Méthodes</h3><p>N/A</p><h3>Variables d'instance</h3><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><span><p>Événement déclenché lors du clic sur l&#39;item.</p>
+</span></td></tr></tbody></table><h3>Variables statiques</h3><p>N/A</p></section><section><h2>Code source</h2><p><a href="https://github.com/votre-projet/tree/main/components/bnum-card-item" target="_blank">Voir le code source sur GitHub (components/bnum-card-item)</a></p></section></div>
+                    </main>
+                </div>
+                <script>/**
+ * Logique client pour la barre de recherche et l'interactivité
+ */
+document.addEventListener('DOMContentLoaded', () => {
+	const searchInput = document.getElementById('component-search');
+	const groups = document.querySelectorAll('.sidebar-group');
+
+	if (searchInput) {
+		searchInput.addEventListener('input', e => {
+			const term = e.target.value.toLowerCase();
+			groups.forEach(group => {
+				let hasVisible = false;
+				const links = group.querySelectorAll('a');
+				links.forEach(link => {
+					const name = (link.getAttribute('data-name') || '').toLowerCase();
+					if (name.includes(term)) {
+						link.parentElement.style.display = '';
+						hasVisible = true;
+					} else {
+						link.parentElement.style.display = 'none';
+					}
+				});
+				group.style.display = hasVisible ? '' : 'none';
+			});
+		});
+
+		// Focus search on '/' key
+		document.addEventListener('keydown', e => {
+			if (e.key === '/' && document.activeElement !== searchInput) {
+				e.preventDefault();
+				searchInput.focus();
+			}
+		});
+	}
+});
+</script>
+                    </body>
+</html>
+
+            

@@ -1,0 +1,842 @@
+
+                <html>
+    <head>
+        <link href="../../global.css" rel="stylesheet">
+        <link href="../../material-symbols.css" rel="stylesheet">
+        <script src="../../ds-bnum.js" defer></script>
+
+        <style>
+            .demo-code,
+            .log-output {
+                max-height: 300px;
+                overflow: auto;
+            }
+
+            .structures {
+                display: flex;
+                flex-direction: row; /* C'est la valeur par défaut, mais explicite ici */
+                flex-wrap: wrap;    /* Permet aux colonnes de passer à la ligne sur petits écrans (optionnel) */
+            }
+
+            .structure-block {
+                /* Chaque colonne prend 50% de la largeur */
+                flex-basis: 50%;
+                
+                /* Alternative : flex: 1 1 50%; (grow, shrink, basis) */
+                /* Ou plus simple si elles doivent grandir/rétrécir pareil : flex: 1; */
+
+                /* Ajout de padding et box-sizing pour une meilleure gestion des espacements */
+                box-sizing: border-box;
+                padding: 10px;
+                max-width:50%;
+            }
+
+            .color-swatch {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border: solid thin black;
+                border-radius: 100%;
+            }
+
+            .story-sidebar {
+                background-color: #2c3054;
+            }
+
+            .story-sidebar a {
+                color: white;
+            }
+            .story-sidebar a:hover {
+                background-color: #484d7a;
+            }
+            .story-sidebar a.active {
+                background-color: #6067a8;
+            }
+
+            .structures bnum-img {
+                max-width: 100px;
+                aspect-ratio: 1;
+            }
+
+html.dark body {
+    background-color: black;
+    color: #ddd;
+}
+
+ html.dark body h1,
+      html.dark body h2,
+      html.dark body h3 {
+        border-bottom-color: #444;
+      }
+
+      .bnum-img-playground-container bnum-img {
+        display: inline-block;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed #ccc;
+        vertical-align: middle;
+        margin-right: 1rem;
+        background-color: #f4f4f4; /* Fond pour voir l'image */
+      }
+
+      html.dark body bnum-img {
+        background-color: #333;
+        border-color: #555;
+      }
+
+      /* Style pour le cas d'erreur */
+      bnum-img[src*='fake-image'] {
+        border-color: red;
+      }
+
+      .bnum-img-playground-container button {
+        padding: 8px 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        border: 1px solid #aaa;
+      }
+
+      html.dark body .bnum-img-playground-container button {
+        background-color: #555;
+        border-color: #888;
+        color: #fff;
+      }
+
+      .bnum-img-playground-container code,
+      .bnum-img-playground-container pre {
+        background-color: #eee;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+
+      html.dark body  code,
+      html.dark body  pre {
+        background-color: #444;
+        color: #ffc;
+      }
+      
+
+      html.dark body  th {
+        background-color: #333;
+        border-color: #555;
+      }
+      html.dark body  td {
+        border-color: #555;
+      }
+
+      .playground[playground] {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .playground[playground]  .playground-tester {
+        flex-basis: 100%;
+        min-height: 80px;
+        padding: 1rem;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .playground[playground]  .playground-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.playground[playground]  .control-group {
+	flex: 1 0 50%;
+	margin-bottom: 10px;
+}
+        </style>
+        
+    <style>/* Styles pour la barre latérale et la recherche */
+.story-sidebar {
+	width: 280px;
+	flex-shrink: 0;
+	border-right: 1px solid #eaeaea;
+	height: 100vh;
+	overflow-y: auto;
+	padding: 1.5rem 1rem;
+	box-sizing: border-box;
+	background-color: #2c3054;
+	color: white;
+}
+
+.sidebar-header {
+	margin-bottom: 1.5rem;
+	position: sticky;
+	top: -1.5rem;
+	background: #2c3054;
+	z-index: 10;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #484d7a;
+}
+
+.search-box {
+	width: 100%;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #484d7a;
+	background: #1e213a;
+	color: white;
+	font-size: 0.9rem;
+	margin-top: 12px;
+	outline: none;
+}
+
+.search-box:focus {
+	border-color: #6067a8;
+	box-shadow: 0 0 0 2px rgba(96, 103, 168, 0.3);
+}
+
+.sidebar-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.sidebar-group {
+	margin-bottom: 1.5rem;
+}
+
+.group-title {
+	display: block;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	color: #a5a9d1;
+	margin-bottom: 0.6rem;
+	padding-left: 8px;
+	font-weight: 800;
+	letter-spacing: 1.2px;
+}
+
+.sidebar-group ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.story-sidebar li a {
+	display: block;
+	padding: 7px 12px;
+	text-decoration: none;
+	color: #cbd5e0;
+	border-radius: 6px;
+	font-weight: 500;
+	font-size: 0.85rem;
+	transition: all 0.2s;
+}
+
+.story-sidebar li a:hover {
+	background: #484d7a;
+	color: white;
+	transform: translateX(4px);
+}
+
+.story-sidebar li a.active {
+	background: #6067a8;
+	color: white;
+	font-weight: 600;
+}
+/* Styles pour le contenu principal des stories */
+.story-main {
+	flex-grow: 1;
+	padding: 2rem;
+	height: 100vh;
+	overflow-y: auto;
+	box-sizing: border-box;
+	background: #f8fafc;
+}
+
+.story-wrapper {
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 2.5rem;
+	max-width: 1100px;
+	background: white;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 2.25rem;
+	margin-top: 0;
+	color: #1e293b;
+	border-bottom: 2px solid #e2e8f0;
+	padding-bottom: 1rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 2.5rem;
+	color: #334155;
+	border-bottom: 1px solid #f1f5f9;
+	padding-bottom: 0.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 2rem;
+	color: #475569;
+}
+
+table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin-bottom: 2rem;
+	font-size: 0.9rem;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+th,
+td {
+	padding: 12px 16px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+	background-color: #f8fafc;
+	font-weight: 600;
+	color: #64748b;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	letter-spacing: 0.05em;
+}
+
+tr:last-child td {
+	border-bottom: none;
+}
+
+code {
+	background-color: #f1f5f9;
+	color: #ef4444;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	font-size: 0.85em;
+}
+
+pre {
+	background-color: #1e293b;
+	border-radius: 8px;
+	padding: 1.25rem;
+	overflow-x: auto;
+	margin: 1.5rem 0;
+}
+
+pre > code {
+	display: block;
+	background: transparent;
+	color: #e2e8f0;
+	padding: 0;
+	font-size: 0.9em;
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+.playground-demo-box {
+	border: 2px dashed #cbd5e0;
+	padding: 2.5rem;
+	border-radius: 12px;
+	margin: 1.5rem 0;
+	background: #fff;
+}
+
+.api-method {
+	padding: 1rem 0;
+}
+
+.api-method h4 {
+	margin: 0 0 0.5rem 0;
+	font-family: monospace;
+	font-size: 1.1em;
+	color: #0f172a;
+}
+
+.api-method h4 em {
+	font-style: normal;
+	font-weight: 400;
+	color: #94a3b8;
+}
+
+.api-separator {
+	border: none;
+	border-top: 1px solid #f1f5f9;
+	margin: 2rem 0;
+}
+
+.color-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+.structures {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+	margin: 1.5rem 0;
+}
+
+.structure-block {
+	border: 1px solid #f1f5f9;
+	padding: 1.5rem;
+	border-radius: 8px;
+	background: #fcfcfc;
+}
+
+.structure-block h4 {
+	margin-top: 0;
+	color: #64748b;
+	font-size: 0.9rem;
+}
+</style></head>
+    <body>
+                <div class="story-container">
+                    <nav class="story-sidebar"><div class="sidebar-header"><h3 style="color:white;margin:0">Composants</h3><input type="text" id="component-search" placeholder="Rechercher... (/)" class="search-box" /></div><ul class="sidebar-list"><li class="sidebar-group"><span class="group-title">atoms</span><ul><li><a href="../atoms/bnum-badge.html" class="" data-name="bnum-badge">bnum-badge</a></li><li><a href="../atoms/bnum-button.html" class="" data-name="bnum-button">bnum-button</a></li><li><a href="../atoms/bnum-danger-button.html" class="" data-name="bnum-danger-button">bnum-danger-button</a></li><li><a href="../atoms/bnum-date.html" class="" data-name="bnum-date">bnum-date</a></li><li><a href="../atoms/bnum-fragment.html" class="" data-name="bnum-fragment">bnum-fragment</a></li><li><a href="../atoms/bnum-helper.html" class="" data-name="bnum-helper">bnum-helper</a></li><li><a href="../atoms/bnum-icon.html" class="" data-name="bnum-icon">bnum-icon</a></li><li><a href="../atoms/bnum-icon-button.html" class="" data-name="bnum-icon-button">bnum-icon-button</a></li><li><a href="../atoms/bnum-img.html" class="" data-name="bnum-img">bnum-img</a></li><li><a href="../atoms/bnum-input.html" class="" data-name="bnum-input">bnum-input</a></li><li><a href="../atoms/bnum-input-date.html" class="" data-name="bnum-input-date">bnum-input-date</a></li><li><a href="../atoms/bnum-input-number.html" class="" data-name="bnum-input-number">bnum-input-number</a></li><li><a href="../atoms/bnum-input-search.html" class="" data-name="bnum-input-search">bnum-input-search</a></li><li><a href="../atoms/bnum-input-text.html" class="" data-name="bnum-input-text">bnum-input-text</a></li><li><a href="../atoms/bnum-input-time.html" class="" data-name="bnum-input-time">bnum-input-time</a></li><li><a href="../atoms/bnum-primary-button.html" class="" data-name="bnum-primary-button">bnum-primary-button</a></li><li><a href="../atoms/bnum-radio.html" class="" data-name="bnum-radio">bnum-radio</a></li><li><a href="../atoms/bnum-secondary-button.html" class="" data-name="bnum-secondary-button">bnum-secondary-button</a></li><li><a href="../atoms/bnum-select.html" class="" data-name="bnum-select">bnum-select</a></li><li><a href="../atoms/bnum-switch.html" class="" data-name="bnum-switch">bnum-switch</a></li></ul></li><li class="sidebar-group"><span class="group-title">molecules</span><ul><li><a href="../molecules/bnum-card-item.html" class="" data-name="bnum-card-item">bnum-card-item</a></li><li><a href="../molecules/bnum-card-item-agenda.html" class="" data-name="bnum-card-item-agenda">bnum-card-item-agenda</a></li><li><a href="../molecules/bnum-card-item-mail.html" class="" data-name="bnum-card-item-mail">bnum-card-item-mail</a></li><li><a href="../molecules/bnum-card-list.html" class="" data-name="bnum-card-list">bnum-card-list</a></li><li><a href="../molecules/bnum-card-title.html" class="active" data-name="bnum-card-title">bnum-card-title</a></li><li><a href="../molecules/bnum-folder.html" class="" data-name="bnum-folder">bnum-folder</a></li><li><a href="../molecules/bnum-hide.html" class="" data-name="bnum-hide">bnum-hide</a></li><li><a href="../molecules/bnum-radio-group.html" class="" data-name="bnum-radio-group">bnum-radio-group</a></li><li><a href="../molecules/bnum-segmented-control.html" class="" data-name="bnum-segmented-control">bnum-segmented-control</a></li><li><a href="../molecules/bnum-segmented-item.html" class="" data-name="bnum-segmented-item">bnum-segmented-item</a></li></ul></li><li class="sidebar-group"><span class="group-title">organisms</span><ul><li><a href="../organisms/bnum-card.html" class="" data-name="bnum-card">bnum-card</a></li><li><a href="../organisms/bnum-card-agenda.html" class="" data-name="bnum-card-agenda">bnum-card-agenda</a></li><li><a href="../organisms/bnum-card-email.html" class="" data-name="bnum-card-email">bnum-card-email</a></li><li><a href="../organisms/bnum-folder-list.html" class="" data-name="bnum-folder-list">bnum-folder-list</a></li><li><a href="../organisms/bnum-header.html" class="" data-name="bnum-header">bnum-header</a></li><li><a href="../organisms/bnum-tree.html" class="" data-name="bnum-tree">bnum-tree</a></li></ul></li><li class="sidebar-group"><span class="group-title">template</span><ul><li><a href="../template/bnum-column.html" class="" data-name="bnum-column">bnum-column</a></li></ul></li></ul></nav>
+                    <main class="story-main">
+                        <div class="story-wrapper"><style>/* Styles "scopés" au conteneur de la story */
+.story-bnum-card-title-container {
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+  line-height: 1.6;
+  margin: auto;
+}
+.story-bnum-card-title-container h1,
+.story-bnum-card-title-container h2,
+.story-bnum-card-title-container h3,
+.story-bnum-card-title-container h4 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  margin-top: 2rem;
+}
+
+/* Styles pour les tableaux de doc */
+.story-bnum-card-title-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+.story-bnum-card-title-container th,
+.story-bnum-card-title-container td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.story-bnum-card-title-container th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+.story-bnum-card-title-container code {
+  background-color: #eee;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-bnum-card-title-container pre > code {
+  display: block;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+/* Styles pour le playground */
+.story-bnum-card-title-container #bnum-card-title-playground-demo {
+  border: 1px dashed #ccc;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.story-bnum-card-title-container #bnum-card-title-playground-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+.story-bnum-card-title-container .control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.story-bnum-card-title-container .control-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4px;
+}
+.story-bnum-card-title-container .control-group input[type='text'] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.story-bnum-card-title-container .control-group button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* Style pour la démo du composant */
+.story-bnum-card-title-container bnum-card-title {
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+}
+
+/* Zone de log */
+.story-bnum-card-title-container #bnum-card-title-log-output {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 4px;
+  min-height: 100px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  margin-top: 1.5rem;
+}
+
+.story-bnum-card-title-container #bnum-card-title-static-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+}
+</style><h1><code><bnum-card-title></code></h1><section><h2>Description</h2><div><p>Composant représentant le titre d&#39;une carte, pouvant inclure une icône et un lien.
+Permet d&#39;afficher un titre enrichi avec une icône et éventuellement un lien cliquable.</p>
+</div></section><section><h2>Structure</h2><div class="structures"><div class="structure-block"><h4>Cas url et icône</h4><div><bnum-card-title data-icon="labs" url="https://example.com">Titre de la carte</bnum-card-title></div><pre><code>&lt;bnum-card-title data-icon=&quot;labs&quot; url=&quot;https://example.com&quot;&gt;Titre de la carte&lt;/bnum-card-title&gt;</code></pre></div><div class="structure-block"><h4>Cas icône uniquement</h4><div><bnum-card-title data-icon="labs">Titre de la carte</bnum-card-title></div><pre><code>&lt;bnum-card-title data-icon=&quot;labs&quot;&gt;Titre de la carte&lt;/bnum-card-title&gt;</code></pre></div><div class="structure-block"><h4>Cas lien uniquement</h4><div><bnum-card-title url="https://example.com">Titre de la carte</bnum-card-title></div><pre><code>&lt;bnum-card-title url=&quot;https://example.com&quot;&gt;Titre de la carte&lt;/bnum-card-title&gt;</code></pre></div><div class="structure-block"><h4>Cas texte seul</h4><div><bnum-card-title>Titre de la carte</bnum-card-title></div><pre><code>&lt;bnum-card-title&gt;Titre de la carte&lt;/bnum-card-title&gt;</code></pre></div><div class="structure-block"><h4>Cas icône via slot</h4><div><bnum-card-title>
+<bnum-icon slot="icon">drive_folder_upload</bnum-icon>
+Titre de la carte
+</bnum-card-title></div><pre><code>&lt;bnum-card-title&gt;
+&lt;bnum-icon slot=&quot;icon&quot;&gt;drive_folder_upload&lt;/bnum-icon&gt;
+Titre de la carte
+&lt;/bnum-card-title&gt;</code></pre></div></div></section><section><h2>Utilisation (Playground)</h2><div class="playground-demo-box">
+<div class="story-bnum-card-title-container">  
+  <div id="bnum-card-title-playground-demo">
+    <bnum-card-title id="bnum-card-title-main-title" data-icon="info"
+      >Titre interactif</bnum-card-title
+    >
+  </div>
+
+  <div id="bnum-card-title-playground-controls">
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-text">Texte (Slot par défaut)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-text"
+        value="Titre interactif"
+        placeholder="Texte du titre..."
+      />
+    </div>
+
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-icon">Icône (Propriété <code>.icon</code>)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-icon"
+        value="info"
+        placeholder="Nom de l'icône (ex: 'home')"
+      />
+      <small>Remplir ceci masque l'icône fournie par le slot "icon".</small>
+    </div>
+
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-url">Lien (Attribut <code>url</code>)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-url"
+        value=""
+        placeholder="ex: '/lien' ou 'https://...'"
+      />
+      <small>Remplir ceci transforme le titre en lien.</small>
+    </div>
+</div>
+
+      <h3>Logs des événements</h3>
+  <p>
+    Affiche les actions du playground et les événements <code>click</code> sur le
+    composant interactif.
+  </p>
+  <pre id="bnum-card-title-log-output" class=".log-output"></pre>
+  </div></div><h3>Code HTML</h3><pre><code class="demo-code">
+&lt;div class=&quot;story-bnum-card-title-container&quot;&gt;  
+  &lt;div id=&quot;bnum-card-title-playground-demo&quot;&gt;
+    &lt;bnum-card-title id=&quot;bnum-card-title-main-title&quot; data-icon=&quot;info&quot;
+      &gt;Titre interactif&lt;/bnum-card-title
+    &gt;
+  &lt;/div&gt;
+
+  &lt;div id=&quot;bnum-card-title-playground-controls&quot;&gt;
+    &lt;div class=&quot;control-group&quot;&gt;
+      &lt;label for=&quot;bnum-card-title-ctrl-text&quot;&gt;Texte (Slot par défaut)&lt;/label&gt;
+      &lt;input
+        type=&quot;text&quot;
+        id=&quot;bnum-card-title-ctrl-text&quot;
+        value=&quot;Titre interactif&quot;
+        placeholder=&quot;Texte du titre...&quot;
+      /&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;control-group&quot;&gt;
+      &lt;label for=&quot;bnum-card-title-ctrl-icon&quot;&gt;Icône (Propriété &lt;code&gt;.icon&lt;/code&gt;)&lt;/label&gt;
+      &lt;input
+        type=&quot;text&quot;
+        id=&quot;bnum-card-title-ctrl-icon&quot;
+        value=&quot;info&quot;
+        placeholder=&quot;Nom de l&#039;icône (ex: &#039;home&#039;)&quot;
+      /&gt;
+      &lt;small&gt;Remplir ceci masque l&#039;icône fournie par le slot &quot;icon&quot;.&lt;/small&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;control-group&quot;&gt;
+      &lt;label for=&quot;bnum-card-title-ctrl-url&quot;&gt;Lien (Attribut &lt;code&gt;url&lt;/code&gt;)&lt;/label&gt;
+      &lt;input
+        type=&quot;text&quot;
+        id=&quot;bnum-card-title-ctrl-url&quot;
+        value=&quot;&quot;
+        placeholder=&quot;ex: &#039;/lien&#039; ou &#039;https://...&#039;&quot;
+      /&gt;
+      &lt;small&gt;Remplir ceci transforme le titre en lien.&lt;/small&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+      &lt;h3&gt;Logs des événements&lt;/h3&gt;
+  &lt;p&gt;
+    Affiche les actions du playground et les événements &lt;code&gt;click&lt;/code&gt; sur le
+    composant interactif.
+  &lt;/p&gt;
+  &lt;pre id=&quot;bnum-card-title-log-output&quot; class=&quot;.log-output&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;</code></pre><h3>Code JS</h3><pre><code class="demo-code">// Ce script est &quot;scopé&quot; au conteneur grâce aux IDs uniques
+(async function () {
+  await new Promise((ok) =&gt; {
+    const interval = setInterval(() =&gt; {
+      if (window.Bnum) {
+        clearInterval(interval);
+        ok();
+      }
+    }, 50);
+  });
+
+  const container = document.querySelector(&#039;.story-bnum-card-title-container&#039;);
+  if (!container) return; // Ne rien faire si le conteneur n&#039;est pas là
+
+  // Utiliser .querySelector depuis le conteneur pour &quot;scoper&quot; la recherche
+  const logOutput = container.querySelector(&#039;#bnum-card-title-log-output&#039;);
+  const mainTitle = container.querySelector(&#039;#bnum-card-title-main-title&#039;);
+  const ctrlText = container.querySelector(&#039;#bnum-card-title-ctrl-text&#039;);
+  const ctrlIcon = container.querySelector(&#039;#bnum-card-title-ctrl-icon&#039;);
+  const ctrlUrl = container.querySelector(&#039;#bnum-card-title-ctrl-url&#039;);
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    if (!logOutput) return;
+    console.log(message); // Log en console
+    logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+    logOutput.scrollTop = logOutput.scrollHeight; // Auto-scroll
+  }
+
+  // Vérifier que tous les éléments existent avant d&#039;attacher les écouteurs
+  if (!logOutput || !mainTitle || !ctrlText || !ctrlIcon || !ctrlUrl) {
+    log(&#039;Erreur: Un ou plusieurs éléments du playground sont manquants.&#039;);
+    return;
+  }
+
+  log(&#039;Page chargée. Attachement des écouteurs...&#039;);
+
+  // --- 1. Contrôles du Playground ---
+
+  // Texte (Slot par défaut)
+  ctrlText.addEventListener(&#039;input&#039;, (e) =&gt; {
+    mainTitle.textContent = e.target.value;
+    log(`Action: Texte (slot) mis à jour : &quot;${e.target.value}&quot;`);
+  });
+
+  // Icône (Propriété .icon)
+  ctrlIcon.addEventListener(&#039;input&#039;, (e) =&gt; {
+    const newIcon = e.target.value.trim() || null;
+    mainTitle.icon = newIcon;
+    log(`Action: Propriété .icon mise à jour : &quot;${newIcon}&quot;`);
+  });
+
+  // URL (Attribut url)
+  ctrlUrl.addEventListener(&#039;input&#039;, (e) =&gt; {
+    const newUrl = e.target.value.trim();
+    if (newUrl) {
+      mainTitle.setAttribute(&#039;url&#039;, newUrl);
+      log(`Action: Attribut [url] mis à jour : &quot;${newUrl}&quot;`);
+    } else {
+      mainTitle.removeAttribute(&#039;url&#039;);
+      log(&#039;Action: Attribut [url] retiré.&#039;);
+    }
+  });
+
+  // --- 2. Écouteur sur le composant ---
+  mainTitle.addEventListener(&#039;click&#039;, (e) =&gt; {
+    log(&#039;🖱️ Événement &quot;click&quot; reçu !&#039;);
+    // Si c&#039;est un lien, on empêche la navigation pour la démo
+    if (mainTitle.hasAttribute(&#039;url&#039;)) {
+      e.preventDefault();
+      log(
+        `   (Navigation vers &quot;${mainTitle.getAttribute(&#039;url&#039;)}&quot; empêchée pour la démo)`,
+      );
+    }
+  });
+})();
+</code></pre><script>// Ce script est "scopé" au conteneur grâce aux IDs uniques
+(async function () {
+  await new Promise((ok) => {
+    const interval = setInterval(() => {
+      if (window.Bnum) {
+        clearInterval(interval);
+        ok();
+      }
+    }, 50);
+  });
+
+  const container = document.querySelector('.story-bnum-card-title-container');
+  if (!container) return; // Ne rien faire si le conteneur n'est pas là
+
+  // Utiliser .querySelector depuis le conteneur pour "scoper" la recherche
+  const logOutput = container.querySelector('#bnum-card-title-log-output');
+  const mainTitle = container.querySelector('#bnum-card-title-main-title');
+  const ctrlText = container.querySelector('#bnum-card-title-ctrl-text');
+  const ctrlIcon = container.querySelector('#bnum-card-title-ctrl-icon');
+  const ctrlUrl = container.querySelector('#bnum-card-title-ctrl-url');
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    if (!logOutput) return;
+    console.log(message); // Log en console
+    logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+    logOutput.scrollTop = logOutput.scrollHeight; // Auto-scroll
+  }
+
+  // Vérifier que tous les éléments existent avant d'attacher les écouteurs
+  if (!logOutput || !mainTitle || !ctrlText || !ctrlIcon || !ctrlUrl) {
+    log('Erreur: Un ou plusieurs éléments du playground sont manquants.');
+    return;
+  }
+
+  log('Page chargée. Attachement des écouteurs...');
+
+  // --- 1. Contrôles du Playground ---
+
+  // Texte (Slot par défaut)
+  ctrlText.addEventListener('input', (e) => {
+    mainTitle.textContent = e.target.value;
+    log(`Action: Texte (slot) mis à jour : "${e.target.value}"`);
+  });
+
+  // Icône (Propriété .icon)
+  ctrlIcon.addEventListener('input', (e) => {
+    const newIcon = e.target.value.trim() || null;
+    mainTitle.icon = newIcon;
+    log(`Action: Propriété .icon mise à jour : "${newIcon}"`);
+  });
+
+  // URL (Attribut url)
+  ctrlUrl.addEventListener('input', (e) => {
+    const newUrl = e.target.value.trim();
+    if (newUrl) {
+      mainTitle.setAttribute('url', newUrl);
+      log(`Action: Attribut [url] mis à jour : "${newUrl}"`);
+    } else {
+      mainTitle.removeAttribute('url');
+      log('Action: Attribut [url] retiré.');
+    }
+  });
+
+  // --- 2. Écouteur sur le composant ---
+  mainTitle.addEventListener('click', (e) => {
+    log('🖱️ Événement "click" reçu !');
+    // Si c'est un lien, on empêche la navigation pour la démo
+    if (mainTitle.hasAttribute('url')) {
+      e.preventDefault();
+      log(
+        `   (Navigation vers "${mainTitle.getAttribute('url')}" empêchée pour la démo)`,
+      );
+    }
+  });
+})();
+</script></section><section><h2>Événements</h2><p>N/A</p></section><section><h2>Slots</h2><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>Titre de la carte (texte ou HTML)</td></tr><tr><td><code>icon</code></td><td>Icône personnalisée à afficher avant le titre. Note: si une icône est définie via l'attribut `data-icon` ou via la propriété `icon`, ce slot sera ignoré.</td></tr></tbody></table></section><section><h2>Attributs de Données</h2><p>N/A</p></section><section><h2>Variables CSS</h2><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description</th></tr></thead><tbody><tr><td><code>--bnum-card-title-display</code></td><td><code>flex</code>false</td><td>Définit le mode d'affichage du titre de la carte.</td></tr><tr><td><code>--bnum-card-title-align-items</code></td><td><code>center</code>false</td><td>Définit l'alignement vertical des éléments dans le titre de la carte.</td></tr><tr><td><code>--bnum-card-title-gap</code></td><td><code>var(--bnum-space-s, 10px)</code>false</td><td>Définit l'espacement entre l'icône et le texte du titre.</td></tr></tbody></table></section><section><h2>États internes</h2><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>url</code></td><td>Actif lorsque le titre contient un lien.</td></tr><tr><td><code>without-url</code></td><td>Actif lorsque le titre ne contient pas de lien.</td></tr></tbody></table></section><section><h2>API Publique</h2><h3>Méthodes</h3><div class="api-method"><h4><code><strong>updateBody</strong>(element: string | HTMLElement | Text, { force = false }: { force?: boolean; }) : HTMLBnumCardTitle</code></h4><p>Met à jour le contenu du titre de la carte.
+Remplace le texte ou ajoute un élément HTML comme corps du titre.</p><ul><li><code>element</code>: Le contenu à insérer (texte, élément ou nœud Text)</li><li><code>{ force = false }</code>: N/A</li></ul><p><strong>Retourne :</strong> Retourne l'instance pour chaînage</p><hr class="api-separator" /></div><div class="api-method"><h4><code><em>(static) </em><strong>Create</strong>(text: string | HTMLElement | Text, {
+      icon = null,
+      link = null,
+    }: { icon?: string; link?: string; }) : HTMLBnumCardTitle</code></h4><p>Crée dynamiquement une instance du composant HTMLBnumCardTitle.
+Permet d'initialiser le titre avec un texte, une icône et/ou un lien.</p><ul><li><code>text</code>: Le contenu du titre (élément, texte ou chaîne)</li><li><code>{
+      icon = null,
+      link = null,
+    }</code>: Options pour l'icône et le lien</li></ul><p><strong>Retourne :</strong> Instance du composant configurée</p><hr class="api-separator" /></div><div class="api-method"><h4><code><em>(static) </em><strong>Generate</strong>(icon: string, text: string, link: string) : string</code></h4><p>Génère le HTML d'un titre de carte avec icône et lien optionnels.
+Utile pour créer dynamiquement le composant dans une chaîne HTML.</p><ul><li><code>icon</code>: Icône à afficher</li><li><code>text</code>: Texte du titre</li><li><code>link</code>: URL du lien</li></ul><p><strong>Retourne :</strong> HTML généré</p><hr class="api-separator" /></div><h3>Variables d'instance</h3><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><span><p>Obtient le nom de l&#39;icône associée au titre de la carte.</p>
+</span></td></tr><tr><td><code>url</code></td><td><code>string</code></td><td>Non</td><td><span><p>Obtient l&#39;URL du lien du titre de la carte.</p>
+</span></td></tr></tbody></table><h3>Variables statiques</h3><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>TAG</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Retourne le tag HTML du composant.
+Permet d&#39;obtenir le nom du composant pour l&#39;utiliser dans le DOM.</p>
+</span></td></tr><tr><td><code>SLOT_NAME_ICON</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Nom du slot pour l&#39;icône du titre de la carte.</p>
+</span></td></tr><tr><td><code>CLASS_LINK</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Nom de la classe au titre de la carte lorsqu&#39;un url est défini</p>
+</span></td></tr><tr><td><code>STATE_URL</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Nom de l&#39;état lorsque le titre contient un lien.</p>
+</span></td></tr><tr><td><code>STATE_WITHOUT_URL</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Nom de l&#39;état lorsque le titre ne contient pas de lien.</p>
+</span></td></tr><tr><td><code>CLASS_ICON_TITLE</code></td><td><code>string</code></td><td>Oui</td><td><span><p>Nom de la classe pour l&#39;icône du titre de la carte.</p>
+</span></td></tr><tr><td><code>ID_SLOT_ICON</code></td><td><code>string</code></td><td>Oui</td><td><span><p>ID du slot pour l&#39;icône du titre de la carte.</p>
+</span></td></tr><tr><td><code>ID_SLOT_TEXT</code></td><td><code>string</code></td><td>Oui</td><td><span><p>ID du slot pour le texte du titre de la carte.</p>
+</span></td></tr><tr><td><code>ID_CUSTOM_BODY</code></td><td><code>string</code></td><td>Oui</td><td><span><p>ID de l&#39;élément personnalisé pour le corps du titre de la carte.</p>
+</span></td></tr></tbody></table></section><section><h2>Code source</h2><p><a href="https://github.com/votre-projet/tree/main/components/bnum-card-title" target="_blank">Voir le code source sur GitHub (components/bnum-card-title)</a></p></section></div>
+                    </main>
+                </div>
+                <script>/**
+ * Logique client pour la barre de recherche et l'interactivité
+ */
+document.addEventListener('DOMContentLoaded', () => {
+	const searchInput = document.getElementById('component-search');
+	const groups = document.querySelectorAll('.sidebar-group');
+
+	if (searchInput) {
+		searchInput.addEventListener('input', e => {
+			const term = e.target.value.toLowerCase();
+			groups.forEach(group => {
+				let hasVisible = false;
+				const links = group.querySelectorAll('a');
+				links.forEach(link => {
+					const name = (link.getAttribute('data-name') || '').toLowerCase();
+					if (name.includes(term)) {
+						link.parentElement.style.display = '';
+						hasVisible = true;
+					} else {
+						link.parentElement.style.display = 'none';
+					}
+				});
+				group.style.display = hasVisible ? '' : 'none';
+			});
+		});
+
+		// Focus search on '/' key
+		document.addEventListener('keydown', e => {
+			if (e.key === '/' && document.activeElement !== searchInput) {
+				e.preventDefault();
+				searchInput.focus();
+			}
+		});
+	}
+});
+</script>
+                    </body>
+</html>
+
+            
