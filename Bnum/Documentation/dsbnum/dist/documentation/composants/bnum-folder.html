@@ -1,0 +1,435 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-folder"><header><h1><code>bnum-folder</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Composant Web Component représentant un dossier dans une structure arborescente.
+Gère l&#39;affichage hiérarchique, les badges de notification (non-lus), la sélection et l&#39;état d&#39;expansion.</p>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Base</h4>
+    <div><bnum-folder
+folder-id="identifiant-unique-du-dossier"
+id="rcmliINBOX"
+label="Dossier Racine"
+unread="5"
+icon="folder"
+level="0"
+is-virtual="false"
+is-collapsed="true"
+is-selected="false"
+>
+</bnum-folder></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-folder</span>
+<span class="token-attr">folder-id</span>=<span class="token-string">&quot;identifiant-unique-du-dossier&quot;</span>
+<span class="token-attr">id</span>=<span class="token-string">&quot;rcmliINBOX&quot;</span>
+<span class="token-attr">label</span>=<span class="token-string">&quot;Dossier Racine&quot;</span>
+<span class="token-attr">unread</span>=<span class="token-string">&quot;5&quot;</span>
+<span class="token-attr">icon</span>=<span class="token-string">&quot;folder&quot;</span>
+<span class="token-attr">level</span>=<span class="token-string">&quot;0&quot;</span>
+<span class="token-attr">is-virtual</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-attr">is-collapsed</span>=<span class="token-string">&quot;true&quot;</span>
+<span class="token-attr">is-selected</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-folder</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec de sous-dossiers</h4>
+    <div><bnum-tree id="rcmliTREE">
+<bnum-folder
+folder-id="identifiant-unique-du-dossier"
+id="rcmliINBOX"
+label="Dossier Racine"
+unread="17"
+icon="folder"
+level="0"
+is-virtual="true"
+is-collapsed="true"
+is-selected="false"
+>
+<bnum-folder
+slot="folders"
+folder-id="identifiant-unique-du-dossier-sub"
+id="rcmliSUBFOLDER"
+label="Dossier enfant"
+unread="17"
+icon="folder"
+level="1"
+is-virtual="false"
+is-collapsed="true"
+is-selected="false"
+>
+</bnum-folder>
+<bnum-folder
+slot="folders"
+folder-id="identifiant-unique-du-dossier-sub2"
+id="rcmliSUBFOLDER"
+label="Dossier enfant 2"
+unread="0"
+icon="folder"
+level="1"
+is-virtual="false"
+is-collapsed="true"
+is-selected="false"
+>
+<bnum-folder
+slot="folders"
+folder-id="identifiant-unique-du-dossier--sub-sub2"
+id="rcmliSUBFOLDERSUB"
+label="Dossier enfant enfant"
+unread="0"
+icon="folder"
+level="2"
+is-virtual="false"
+is-collapsed="true"
+is-selected="false"
+>
+</bnum-folder>
+</bnum-folder>
+</bnum-folder>
+</bnum-tree></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-tree</span> <span class="token-attr">id</span>=<span class="token-string">&quot;rcmliTREE&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-folder</span>
+<span class="token-attr">folder-id</span>=<span class="token-string">&quot;identifiant-unique-du-dossier&quot;</span>
+<span class="token-attr">id</span>=<span class="token-string">&quot;rcmliINBOX&quot;</span>
+<span class="token-attr">label</span>=<span class="token-string">&quot;Dossier Racine&quot;</span>
+<span class="token-attr">unread</span>=<span class="token-string">&quot;17&quot;</span>
+<span class="token-attr">icon</span>=<span class="token-string">&quot;folder&quot;</span>
+<span class="token-attr">level</span>=<span class="token-string">&quot;0&quot;</span>
+<span class="token-attr">is-virtual</span>=<span class="token-string">&quot;true&quot;</span>
+<span class="token-attr">is-collapsed</span>=<span class="token-string">&quot;true&quot;</span>
+<span class="token-attr">is-selected</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-folder</span>
+<span class="token-attr">slot</span>=<span class="token-string">&quot;folders&quot;</span>
+<span class="token-attr">folder-id</span>=<span class="token-string">&quot;identifiant-unique-du-dossier-sub&quot;</span>
+<span class="token-attr">id</span>=<span class="token-string">&quot;rcmliSUBFOLDER&quot;</span>
+<span class="token-attr">label</span>=<span class="token-string">&quot;Dossier enfant&quot;</span>
+<span class="token-attr">unread</span>=<span class="token-string">&quot;17&quot;</span>
+<span class="token-attr">icon</span>=<span class="token-string">&quot;folder&quot;</span>
+<span class="token-attr">level</span>=<span class="token-string">&quot;1&quot;</span>
+<span class="token-attr">is-virtual</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-attr">is-collapsed</span>=<span class="token-string">&quot;true&quot;</span>
+<span class="token-attr">is-selected</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-folder</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-folder</span>
+<span class="token-attr">slot</span>=<span class="token-string">&quot;folders&quot;</span>
+<span class="token-attr">folder-id</span>=<span class="token-string">&quot;identifiant-unique-du-dossier-sub2&quot;</span>
+<span class="token-attr">id</span>=<span class="token-string">&quot;rcmliSUBFOLDER&quot;</span>
+<span class="token-attr">label</span>=<span class="token-string">&quot;Dossier enfant 2&quot;</span>
+<span class="token-attr">unread</span>=<span class="token-string">&quot;0&quot;</span>
+<span class="token-attr">icon</span>=<span class="token-string">&quot;folder&quot;</span>
+<span class="token-attr">level</span>=<span class="token-string">&quot;1&quot;</span>
+<span class="token-attr">is-virtual</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-attr">is-collapsed</span>=<span class="token-string">&quot;true&quot;</span>
+<span class="token-attr">is-selected</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-folder</span>
+<span class="token-attr">slot</span>=<span class="token-string">&quot;folders&quot;</span>
+<span class="token-attr">folder-id</span>=<span class="token-string">&quot;identifiant-unique-du-dossier--sub-sub2&quot;</span>
+<span class="token-attr">id</span>=<span class="token-string">&quot;rcmliSUBFOLDERSUB&quot;</span>
+<span class="token-attr">label</span>=<span class="token-string">&quot;Dossier enfant enfant&quot;</span>
+<span class="token-attr">unread</span>=<span class="token-string">&quot;0&quot;</span>
+<span class="token-attr">icon</span>=<span class="token-string">&quot;folder&quot;</span>
+<span class="token-attr">level</span>=<span class="token-string">&quot;2&quot;</span>
+<span class="token-attr">is-virtual</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-attr">is-collapsed</span>=<span class="token-string">&quot;true&quot;</span>
+<span class="token-attr">is-selected</span>=<span class="token-string">&quot;false&quot;</span>
+<span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-folder</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-folder</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-folder</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-tree</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style="display:none;"><h2>Utilisation</h2><div class="playground-demo-box"><p>Démo non disponible</p></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html"></div><div id="playground-js"><span class="token-comment">// Fichier .playground.js non trouvé</span></div></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><table><thead><tr><th>Nom</th><th>Event</th><th>Description</th></tr></thead><tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lorsque le dossier est cliqué.</td></tr><tr><td><code>bnum-folder:unread-changed</code></td><td><code>UnreadChangedEventDetail</code></td><td>Événement custom pour le changement de non-lu</td></tr><tr><td><code>bnum-folder:select</code></td><td><code>CustomEvent&lt;{ caller: HTMLBnumFolder; innerEvent?: Event }&gt;</code></td><td>Événement custom pour la sélection du dossier</td></tr><tr><td><code>bnum-folder:toggle</code></td><td><code>CustomEvent&lt;{ caller: HTMLBnumFolder; innerEvent?: Event; collapsed: boolean }&gt;</code></td><td>Événement custom pour le pliage ou dépliage du dossier</td></tr></tbody></table></div><h3>Slots</h3><div class="slots table"><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>folders</code></td><td>Slot pour insérer des sous-dossiers (`bnum-folder`).</td></tr></tbody></table></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>is-collapsed</code></td><td><code>boolean</code></td><td><code>true</code></td><td>❌</td><td>Indique si le dossier est visuellement replié.</td></tr><tr><td><code>is-virtual</code></td><td><code>boolean</code></td><td><code>true</code></td><td>❌</td><td>Indique si le dossier est virtuel.</td></tr><tr><td><code>is-selected</code></td><td><code>boolean</code></td><td><code>false</code></td><td>❌</td><td>Indique si le dossier est sélectionné.</td></tr><tr><td><code>unread</code></td><td><code>number</code></td><td><code>0</code></td><td>❌</td><td>Nombre d'éléments non lus dans le dossier.</td></tr><tr><td><code>level</code></td><td><code>number</code></td><td><code>0</code></td><td>❌</td><td>Niveau de profondeur du dossier dans l'arborescence.</td></tr><tr><td><code>label</code></td><td><code>string</code></td><td><code>/</code></td><td>❌</td><td>Libellé (nom) du dossier.</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td><code>/</code></td><td>❌</td><td>Nom de l'icône à afficher pour le dossier.</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--bnum-folder-indentation-base</code></td><td><bnum-fragment><code>0.5em</code></bnum-fragment></td><td>Unité de base pour le calcul du décalage (padding-left) par niveau de profondeur.</td></tr><tr><td><code>--internal-bnum-folder-level</code></td><td><bnum-fragment><code>0</code></bnum-fragment></td><td>Variable interne (pilotée par JS) indiquant le niveau de profondeur actuel.</td></tr><tr><td><code>--bnum-folder-indentation</code></td><td><bnum-fragment><code>Calculated</code></bnum-fragment></td><td>Valeur finale du padding-left (base * level).</td></tr><tr><td><code>--bnum-folder-display</code></td><td><bnum-fragment><code>block</code></bnum-fragment></td><td>Type d'affichage du composant host.</td></tr><tr><td><code>--bnum-folder-width</code></td><td><bnum-fragment><code>100%</code></bnum-fragment></td><td>Largeur du composant host.</td></tr><tr><td><code>--bnum-folder-title-padding</code></td><td><bnum-fragment><code>10px 15px</code></bnum-fragment></td><td>Espacement interne du conteneur flex (Standard : 10px vertical, 15px horizontal).</td></tr><tr><td><code>--bnum-folder-gap</code></td><td><bnum-fragment><code>10px</code></bnum-fragment></td><td>Espace entre l'icône, le titre et les badges.</td></tr><tr><td><code>--bnum-folder-text-ellipisis-max-width</code></td><td><bnum-fragment><code>125px</code></bnum-fragment></td><td>Largeur maximale du libellé avant troncation.</td></tr><tr><td><code>--bnum-folder-icon-color</code></td><td><bnum-fragment><code>inherit</code><span class="color-swatch" style="background-color: inherit;"></span></bnum-fragment></td><td>Couleur de l'icône du dossier.</td></tr><tr><td><code>--bnum-badge-padding</code></td><td><bnum-fragment><code>5px</code></bnum-fragment></td><td>Padding interne pour réduire la taille du badge (calcul de la taille).</td></tr><tr><td><code>--bnum-color-primary-active</code></td><td><bnum-fragment><code>#2e2eff</code><span class="color-swatch" style="background-color: #2e2eff;"></span></bnum-fragment></td><td>Couleur de fond du badge en mode cumulatif (Blue Thunder Active).</td></tr><tr><td><code>--bnum-border-in-column</code></td><td><bnum-fragment><code>solid 1px #ddd</code></bnum-fragment></td><td>Bordure inférieure appliquée aux dossiers de niveau 0.</td></tr><tr><td><code>--bnum-folder-bal-title-padding</code></td><td><bnum-fragment><code>15px 15px</code></bnum-fragment></td><td>Padding spécifique pour les dossiers racines (15px vertical, 15px horizontal).</td></tr><tr><td><code>--bnum-color-list-hover</code></td><td><bnum-fragment><code>#c1c1fb</code><span class="color-swatch" style="background-color: #c1c1fb;"></span></bnum-fragment></td><td>Couleur de fond au survol d'un dossier interactif (Blue List Hover).</td></tr><tr><td><code>--bnum-color-list</code></td><td><bnum-fragment><code>#e3e3fd</code><span class="color-swatch" style="background-color: #e3e3fd;"></span></bnum-fragment></td><td>Couleur de fond d'un dossier sélectionné (Blue List).</td></tr><tr><td><code>--bnum-color-list-drag</code></td><td><bnum-fragment><code>#adadf9</code><span class="color-swatch" style="background-color: #adadf9;"></span></bnum-fragment></td><td>Couleur de fond lors du dragover (Blue List Active).</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>no-subfolders</code></td><td>Indique que le dossier n'a pas de sous-dossiers.</td></tr><tr><td><code>triple-digit-unread</code></td><td>Indique que le compteur de non-lu est à 3 chiffres (99+).</td></tr><tr><td><code>double-digit-unread</code></td><td>Indique que le compteur de non-lu est à 2 chiffres (10-99).</td></tr><tr><td><code>single-digit-unread</code></td><td>Indique que le compteur de non-lu est à 1 chiffre (1-9).</td></tr></tbody></table></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>collapsed</code></td><td><code>boolean</code></td><td>Oui</td><td><p>Indique si le dossier est visuellement replié.</p>
+</td></tr><tr><td><code>classes</code></td><td><code>string[]</code></td><td>Oui</td><td><p>Récupère la liste des classes CSS appliquées à l&#39;élément hôte.</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong>toggle</strong>(innerEvent: Event) : <code>this</code></code><p>Bascule l'état plié/déplié du dossier.
+Met à jour l'attribut DOM et déclenche l'événement `EVENT_TOGGLE`.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>innerEvent</code>: - L'événement déclencheur originel (optionnel).</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>select</strong>(innerEvent: Event) : <code>this</code></code><p>Sélectionne le dossier.
+Déclenche l'événement `EVENT_SELECT`.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>innerEvent</code>: - L'événement déclencheur originel (optionnel).</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Write</strong>({
+		attributes = {},
+		children = [],
+	}: { attributes?: Record<string, string>; children?: string[]; }) : <code>string</code></code><p>Génère la chaîne HTML statique pour ce composant (SSR / Helper).</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>{
+		attributes = {},
+		children = [],
+	}</code>: - Propriétés de construction.</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Le HTML sous forme de chaîne.</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

@@ -1,0 +1,760 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-card-agenda"><header><h1><code>bnum-card-agenda</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Organisme qui permet d&#39;afficher simplement une liste d&#39;évènements dans une carte.</p>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Avec des éléments</h4>
+    <div><bnum-card-agenda>
+<bnum-card-item-agenda
+data-date="2024-01-01"
+data-start-date="2024-01-01 08:00:00"
+data-end-date="2024-01-01 10:00:00"
+data-title="Réunion de projet"
+data-location="Salle de conférence">
+</bnum-card-item-agenda>
+<bnum-card-item-agenda
+data-date="2025-11-20"
+data-start-date="2025-10-20 09:40:00"
+data-end-date="2025-12-20 10:10:00"
+data-title="Réunion de projet"
+data-location="Salle de conférence">
+</bnum-card-item-agenda>
+<bnum-card-item-agenda all-day
+data-date="2025-11-21"
+data-title="Télétravail"
+data-location="A la maison">
+</bnum-card-item-agenda>
+</bnum-card-agenda></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-agenda</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-agenda</span>
+<span class="token-attr">data-date</span>=<span class="token-string">&quot;2024-01-01&quot;</span>
+<span class="token-attr">data-start-date</span>=<span class="token-string">&quot;2024-01-01 08:00:00&quot;</span>
+<span class="token-attr">data-end-date</span>=<span class="token-string">&quot;2024-01-01 10:00:00&quot;</span>
+<span class="token-attr">data-title</span>=<span class="token-string">&quot;Réunion de projet&quot;</span>
+<span class="token-attr">data-location</span>=<span class="token-string">&quot;Salle de conférence&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-agenda</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-agenda</span>
+<span class="token-attr">data-date</span>=<span class="token-string">&quot;2025-11-20&quot;</span>
+<span class="token-attr">data-start-date</span>=<span class="token-string">&quot;2025-10-20 09:40:00&quot;</span>
+<span class="token-attr">data-end-date</span>=<span class="token-string">&quot;2025-12-20 10:10:00&quot;</span>
+<span class="token-attr">data-title</span>=<span class="token-string">&quot;Réunion de projet&quot;</span>
+<span class="token-attr">data-location</span>=<span class="token-string">&quot;Salle de conférence&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-agenda</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-agenda</span> <span class="token-attr">all-day</span>
+<span class="token-attr">data-date</span>=<span class="token-string">&quot;2025-11-21&quot;</span>
+<span class="token-attr">data-title</span>=<span class="token-string">&quot;Télétravail&quot;</span>
+<span class="token-attr">data-location</span>=<span class="token-string">&quot;A la maison&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-agenda</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-agenda</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Sans éléments</h4>
+    <div><bnum-card-agenda>
+</bnum-card-agenda></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-agenda</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-agenda</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec une url</h4>
+    <div><bnum-card-agenda data-url="#">
+</bnum-card-agenda></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-agenda</span> <span class="token-attr">data-url</span>=<span class="token-string">&quot;#&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-agenda</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style=""><h2>Utilisation</h2><div class="playground-demo-box"><div id="bnum-card-agenda-story">
+
+  <div class="demo-container">
+
+  <div id="bnum-card-agenda-story-playground-section">
+    <div id="bnum-card-agenda-story-playground-controls">
+      <div class="control-group">
+        <label>Contrôles d'état (Attributs) :</label>
+        <label>
+          <input type="checkbox" id="bnum-card-agenda-story-ctrl-loading" />
+          <code>[loading]</code>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label>Méthodes JS (Corps) :</label>
+        <bnum-primary-button data-icon="add" id="bnum-card-agenda-story-btn-append-body">Ajouter un évènement</bnum-primary-button>
+        <bnum-primary-button data-icon="clear_all" id="bnum-card-agenda-story-btn-clear-body">Vider</bnum-primary-button>
+      </div>
+    </div>
+
+    <bnum-card-agenda id="bnum-card-agenda-story-card-playground" style="display: block;">
+    </bnum-card-agenda>
+
+    <h4>Logs des événements (sur le Playground)</h4>
+    <pre id="bnum-card-agenda-story-log-output-card" class="log-output"></pre>
+  </div>
+</div>
+</div></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html"><span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story&quot;</span><span class="token-bracket">&gt;</span>
+
+  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;demo-container&quot;</span><span class="token-bracket">&gt;</span>
+
+  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-playground-section&quot;</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-playground-controls&quot;</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">label</span><span class="token-bracket">&gt;</span>Contrôles d&apos;état (Attributs) :<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;checkbox&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-ctrl-loading&quot;</span> <span class="token-bracket">/&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>[loading]<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+      <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">label</span><span class="token-bracket">&gt;</span>Méthodes JS (Corps) :<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-primary-button</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;add&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-btn-append-body&quot;</span><span class="token-bracket">&gt;</span>Ajouter un évènement<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-primary-button</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-primary-button</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;clear_all&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-btn-clear-body&quot;</span><span class="token-bracket">&gt;</span>Vider<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-primary-button</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-agenda</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-card-playground&quot;</span> <span class="token-attr">style</span>=<span class="token-string">&quot;display: block;&quot;</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-agenda</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">h4</span><span class="token-bracket">&gt;</span>Logs des événements (sur le Playground)<span class="token-bracket">&lt;</span><span class="token-tag">/h4</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">pre</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-agenda-story-log-output-card&quot;</span> <span class="token-attr">class</span>=<span class="token-string">&quot;log-output&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/pre</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span></div><div id="playground-js"><span class="token-comment">/* eslint-disable no-inner-declarations */</span>
+<span class="token-comment">/* Le script est maintenant encapsulé.
+      Il utilise <span class="token-string">&apos;DOMContentLoaded&apos;</span> pour s&apos;assurer que le DOM <span class="token-function">principal</span>
+      (injecté par build-stories.js) est prêt.
+    */</span>
+document.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;DOMContentLoaded&apos;</span>, () =&gt; {
+  <span class="token-comment">/* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        <span class="token-function">visible</span> (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d&apos;événements soient attachés.
+      */</span>
+  <span class="token-keyword">const</span> playgroundCard = document.<span class="token-function">getElementById</span>(
+    <span class="token-string">&apos;bnum-card-agenda-story-card-playground&apos;</span>,
+  );
+  <span class="token-keyword">const</span> logOutput = document.<span class="token-function">getElementById</span>(
+    <span class="token-string">&apos;bnum-card-agenda-story-log-output-card&apos;</span>,
+  );
+  <span class="token-keyword">let</span> titleCounter = <span class="token-number">1</span>;
+  <span class="token-keyword">let</span> bodyCounter = <span class="token-number">1</span>;
+
+  <span class="token-comment">/** Fonction helper pour logger dans la page */</span>
+  <span class="token-keyword">function</span> <span class="token-function">log</span>(message) {
+    console.<span class="token-function">log</span>(message); <span class="token-comment">// Log en console</span>
+    <span class="token-keyword">if</span> (logOutput) {
+      logOutput.textContent += <span class="token-string">`[${<span class="token-keyword">new</span> <span class="token-function">Date</span>().<span class="token-function">toLocaleTimeString</span>()}] ${message}\n`</span>;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  <span class="token-comment">/* Nous vérifions si les éléments existent avant d&apos;attacher les listeners,
+        au cas où la story ne serait pas la première à s&apos;afficher.
+      */</span>
+  <span class="token-keyword">const</span> cardClickable = document.<span class="token-function">getElementById</span>(
+    <span class="token-string">&apos;bnum-card-agenda-story-card-clickable&apos;</span>,
+  );
+  <span class="token-keyword">if</span> (cardClickable) {
+    cardClickable.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;bnum-card-agenda:click&apos;</span>, (e) =&gt; {
+      <span class="token-function">log</span>(
+        <span class="token-string">&apos;✅ Événement &quot;bnum-card-agenda:click&quot; reç<span class="token-function">u</span> (sur la carte cliquable)&apos;</span>,
+      );
+    });
+  }
+
+  <span class="token-comment">// --- Contrôles du Playground ---</span>
+  <span class="token-keyword">if</span> (playgroundCard) {
+    <span class="token-function">log</span>(
+      <span class="token-string">&apos;Page chargée. Attachement des écouteurs pour #bnum-card-agenda-story-card-playground...&apos;</span>,
+    );
+
+    <span class="token-comment">// <span class="token-number">1</span>. Contrôles des états</span>
+    <span class="token-keyword">const</span> ctrlClickable = document.<span class="token-function">getElementById</span>(
+      <span class="token-string">&apos;bnum-card-agenda-story-ctrl-clickable&apos;</span>,
+    );
+    <span class="token-keyword">if</span> (ctrlClickable) {
+      ctrlClickable.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+        playgroundCard.clickable = e.target.checked;
+        <span class="token-function">log</span>(<span class="token-string">`Action: .clickable = ${e.target.checked}`</span>);
+      });
+    }
+
+    <span class="token-keyword">const</span> ctrlLoading = document.<span class="token-function">getElementById</span>(
+      <span class="token-string">&apos;bnum-card-agenda-story-ctrl-loading&apos;</span>,
+    );
+    console.<span class="token-function">log</span>(ctrlLoading);
+    <span class="token-keyword">if</span> (ctrlLoading) {
+      console.<span class="token-function">log</span>(ctrlLoading, <span class="token-number">2</span>);
+      ctrlLoading.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+        playgroundCard.loading = e.target.checked;
+        <span class="token-function">log</span>(<span class="token-string">`Action: .loading = ${e.target.checked}`</span>);
+      });
+    }
+
+    <span class="token-comment">// <span class="token-number">2</span>. Écouteurs d&apos;événements sur le Playground</span>
+    playgroundCard.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;bnum-card-agenda:loading&apos;</span>, (e) =&gt; {
+      <span class="token-function">log</span>(
+        `✅ Événement <span class="token-string">&quot;bnum-card-agenda:loading&quot;</span> reçu. Nouvel état: ${
+          e.detail.newValue !== <span class="token-keyword">null</span>
+        }`,
+      );
+    });
+
+    playgroundCard.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;bnum-card-agenda:click&apos;</span>, (e) =&gt; {
+      <span class="token-function">log</span>(<span class="token-string">&apos;✅ Événement &quot;bnum-card-agenda:click&quot; reç<span class="token-function">u</span> (sur le playground)&apos;</span>);
+    });
+
+    <span class="token-comment">// <span class="token-number">3</span>. Contrôles des Méthodes JS</span>
+
+    <span class="token-keyword">const</span> event_subjects = [
+      <span class="token-string">&apos;Réunion de projet&apos;</span>,
+      <span class="token-string">&apos;Déjeuner avec l\&apos;</span>équipe&apos;,
+      <span class="token-string">&apos;Présentation client&apos;</span>,
+      <span class="token-string">&apos;Atelier de brainstorming&apos;</span>,
+      <span class="token-string">&apos;Revue de code&apos;</span>,
+    ];
+
+    <span class="token-keyword">const</span> event_locations = [
+      <span class="token-string">&apos;Salle de conférence A&apos;</span>,
+      <span class="token-string">&apos;Cafétéria&apos;</span>,
+      <span class="token-string">&apos;Bureau du client&apos;</span>,
+      <span class="token-string">&apos;Espace de coworking&apos;</span>,
+      <span class="token-string">&apos;Salle de réunion B&apos;</span>,
+      <span class="token-keyword">null</span>,
+    ];
+
+    <span class="token-keyword">function</span> <span class="token-function">randomDateLast7Days</span>() {
+      <span class="token-keyword">const</span> now = <span class="token-keyword">new</span> <span class="token-function">Date</span>();
+      <span class="token-keyword">const</span> min = <span class="token-keyword">new</span> <span class="token-function">Date</span>();
+      min.<span class="token-function">setDate</span>(now.<span class="token-function">getDate</span>() - <span class="token-number">6</span>);
+      <span class="token-keyword">const</span> minTime = min.<span class="token-function">getTime</span>();
+      <span class="token-keyword">const</span> maxTime = now.<span class="token-function">getTime</span>();
+      <span class="token-comment">// Date alé<span class="token-function">atoire</span> (jour)</span>
+      <span class="token-keyword">const</span> randomTime =
+        Math.<span class="token-function">floor</span>(Math.<span class="token-function">random</span>() * (maxTime - minTime + <span class="token-number">1</span>)) + minTime;
+      <span class="token-keyword">const</span> date = <span class="token-keyword">new</span> <span class="token-function">Date</span>(randomTime);
+      <span class="token-comment">// Horaire alé<span class="token-function">atoire</span> (heures, minutes, secondes)</span>
+      date.<span class="token-function">setHours</span>(Math.<span class="token-function">floor</span>(Math.<span class="token-function">random</span>() * <span class="token-number">24</span>));
+      date.<span class="token-function">setMinutes</span>(Math.<span class="token-function">floor</span>(Math.<span class="token-function">random</span>() * <span class="token-number">60</span>));
+      date.<span class="token-function">setSeconds</span>(Math.<span class="token-function">floor</span>(Math.<span class="token-function">random</span>() * <span class="token-number">60</span>));
+      date.<span class="token-function">setMilliseconds</span>(<span class="token-number">0</span>);
+      <span class="token-keyword">return</span> date;
+    }
+
+    <span class="token-keyword">function</span> <span class="token-function">addRandomHours</span>(date) {
+      <span class="token-keyword">const</span> hoursToAdd = Math.<span class="token-function">floor</span>(Math.<span class="token-function">random</span>() * <span class="token-number">4</span>) + <span class="token-number">1</span>; <span class="token-comment">// <span class="token-number">1</span> à <span class="token-number">4</span> heures</span>
+      <span class="token-keyword">const</span> newDate = <span class="token-keyword">new</span> <span class="token-function">Date</span>(date.<span class="token-function">getTime</span>());
+      newDate.<span class="token-function">setHours</span>(newDate.<span class="token-function">getHours</span>() + hoursToAdd);
+      <span class="token-keyword">return</span> newDate;
+    }
+
+    <span class="token-keyword">function</span> <span class="token-function">randomArrayElement</span>(array) {
+      <span class="token-keyword">return</span> array[Math.<span class="token-function">floor</span>(Math.<span class="token-function">random</span>() * array.length)];
+    }
+
+    <span class="token-keyword">function</span> <span class="token-function">generateCard</span>() {
+      <span class="token-keyword">const</span> start = <span class="token-function">randomDateLast7Days</span>();
+      <span class="token-keyword">const</span> end = <span class="token-function">addRandomHours</span>(start);
+      <span class="token-keyword">const</span> base = <span class="token-keyword">new</span> <span class="token-function">Date</span>(<span class="token-keyword">new</span> <span class="token-function">Date</span>(start).<span class="token-function">setHours</span>(<span class="token-number">0</span>, <span class="token-number">0</span>, <span class="token-number">0</span>, <span class="token-number">0</span>));
+      <span class="token-keyword">const</span> subject = <span class="token-function">randomArrayElement</span>(event_subjects);
+      <span class="token-keyword">const</span> location = <span class="token-function">randomArrayElement</span>(event_locations);
+
+      <span class="token-keyword">return</span> Bnum.HTMLBnumCardItemAgenda.<span class="token-function">Create</span>(base, start, end, {
+        location,
+        title: subject,
+      });
+    }
+    playgroundCard.<span class="token-function">add</span>(<span class="token-function">generateCard</span>());
+
+    document
+      .<span class="token-function">getElementById</span>(<span class="token-string">&apos;bnum-card-agenda-story-btn-clear-body&apos;</span>)
+      ?.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, () =&gt; {
+        <span class="token-function">log</span>(<span class="token-string">&apos;Reset des évènements&apos;</span>);
+        playgroundCard.<span class="token-function">clear</span>();
+        playgroundCard.<span class="token-function">add</span>(<span class="token-function">generateCard</span>());
+        bodyCounter = <span class="token-number">1</span>;
+      });
+
+    document
+      .<span class="token-function">getElementById</span>(<span class="token-string">&apos;bnum-card-agenda-story-btn-append-body&apos;</span>)
+      ?.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, () =&gt; {
+        <span class="token-function">log</span>(<span class="token-string">&apos;Action: Appel de .<span class="token-function">appendToBody</span>()&apos;</span>);
+        <span class="token-keyword">const</span> extraP = <span class="token-function">generateCard</span>();
+        extraP.textContent = <span class="token-string">`Event n°${bodyCounter++} ajouté.`</span>;
+        playgroundCard.<span class="token-function">add</span>(extraP);
+      });
+  } <span class="token-keyword">else</span> {
+    <span class="token-comment">/* Ce log apparaîtra si cette story n&apos;est pas la première active,
+          mais les listeners du script de build-stories.<span class="token-function">js</span> (navigation)
+          fonctionneront toujours.
+        */</span>
+    console.<span class="token-function">log</span>(
+      <span class="token-string">&apos;Script bnum-card-agenda: #bnum-card-agenda-story-card-playground non trouvé au <span class="token-function">DOMContentLoaded</span> (probablement pas la story active).&apos;</span>,
+    );
+  }
+});
+</div><script>/* eslint-disable no-inner-declarations */
+/* Le script est maintenant encapsulé.
+      Il utilise 'DOMContentLoaded' pour s'assurer que le DOM principal
+      (injecté par build-stories.js) est prêt.
+    */
+document.addEventListener('DOMContentLoaded', () => {
+  /* Nous ciblons les éléments par leur ID. 
+        Étant donné que build-stories.js masque les stories non actives,
+        document.getElementById trouvera les éléments de la story *actuellement*
+        visible (ou du moins la première chargée), ce qui est suffisant
+        pour que les écouteurs d'événements soient attachés.
+      */
+  const playgroundCard = document.getElementById(
+    'bnum-card-agenda-story-card-playground',
+  );
+  const logOutput = document.getElementById(
+    'bnum-card-agenda-story-log-output-card',
+  );
+  let titleCounter = 1;
+  let bodyCounter = 1;
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+      logOutput.scrollTop = logOutput.scrollHeight;
+    }
+  }
+
+  /* Nous vérifions si les éléments existent avant d'attacher les listeners,
+        au cas où la story ne serait pas la première à s'afficher.
+      */
+  const cardClickable = document.getElementById(
+    'bnum-card-agenda-story-card-clickable',
+  );
+  if (cardClickable) {
+    cardClickable.addEventListener('bnum-card-agenda:click', (e) => {
+      log(
+        '✅ Événement "bnum-card-agenda:click" reçu (sur la carte cliquable)',
+      );
+    });
+  }
+
+  // --- Contrôles du Playground ---
+  if (playgroundCard) {
+    log(
+      'Page chargée. Attachement des écouteurs pour #bnum-card-agenda-story-card-playground...',
+    );
+
+    // 1. Contrôles des états
+    const ctrlClickable = document.getElementById(
+      'bnum-card-agenda-story-ctrl-clickable',
+    );
+    if (ctrlClickable) {
+      ctrlClickable.addEventListener('change', (e) => {
+        playgroundCard.clickable = e.target.checked;
+        log(`Action: .clickable = ${e.target.checked}`);
+      });
+    }
+
+    const ctrlLoading = document.getElementById(
+      'bnum-card-agenda-story-ctrl-loading',
+    );
+    console.log(ctrlLoading);
+    if (ctrlLoading) {
+      console.log(ctrlLoading, 2);
+      ctrlLoading.addEventListener('change', (e) => {
+        playgroundCard.loading = e.target.checked;
+        log(`Action: .loading = ${e.target.checked}`);
+      });
+    }
+
+    // 2. Écouteurs d'événements sur le Playground
+    playgroundCard.addEventListener('bnum-card-agenda:loading', (e) => {
+      log(
+        `✅ Événement "bnum-card-agenda:loading" reçu. Nouvel état: ${
+          e.detail.newValue !== null
+        }`,
+      );
+    });
+
+    playgroundCard.addEventListener('bnum-card-agenda:click', (e) => {
+      log('✅ Événement "bnum-card-agenda:click" reçu (sur le playground)');
+    });
+
+    // 3. Contrôles des Méthodes JS
+
+    const event_subjects = [
+      'Réunion de projet',
+      'Déjeuner avec l\'équipe',
+      'Présentation client',
+      'Atelier de brainstorming',
+      'Revue de code',
+    ];
+
+    const event_locations = [
+      'Salle de conférence A',
+      'Cafétéria',
+      'Bureau du client',
+      'Espace de coworking',
+      'Salle de réunion B',
+      null,
+    ];
+
+    function randomDateLast7Days() {
+      const now = new Date();
+      const min = new Date();
+      min.setDate(now.getDate() - 6);
+      const minTime = min.getTime();
+      const maxTime = now.getTime();
+      // Date aléatoire (jour)
+      const randomTime =
+        Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+      const date = new Date(randomTime);
+      // Horaire aléatoire (heures, minutes, secondes)
+      date.setHours(Math.floor(Math.random() * 24));
+      date.setMinutes(Math.floor(Math.random() * 60));
+      date.setSeconds(Math.floor(Math.random() * 60));
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    function addRandomHours(date) {
+      const hoursToAdd = Math.floor(Math.random() * 4) + 1; // 1 à 4 heures
+      const newDate = new Date(date.getTime());
+      newDate.setHours(newDate.getHours() + hoursToAdd);
+      return newDate;
+    }
+
+    function randomArrayElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateCard() {
+      const start = randomDateLast7Days();
+      const end = addRandomHours(start);
+      const base = new Date(new Date(start).setHours(0, 0, 0, 0));
+      const subject = randomArrayElement(event_subjects);
+      const location = randomArrayElement(event_locations);
+
+      return Bnum.HTMLBnumCardItemAgenda.Create(base, start, end, {
+        location,
+        title: subject,
+      });
+    }
+    playgroundCard.add(generateCard());
+
+    document
+      .getElementById('bnum-card-agenda-story-btn-clear-body')
+      ?.addEventListener('click', () => {
+        log('Reset des évènements');
+        playgroundCard.clear();
+        playgroundCard.add(generateCard());
+        bodyCounter = 1;
+      });
+
+    document
+      .getElementById('bnum-card-agenda-story-btn-append-body')
+      ?.addEventListener('click', () => {
+        log('Action: Appel de .appendToBody()');
+        const extraP = generateCard();
+        extraP.textContent = `Event n°${bodyCounter++} ajouté.`;
+        playgroundCard.add(extraP);
+      });
+  } else {
+    /* Ce log apparaîtra si cette story n'est pas la première active,
+          mais les listeners du script de build-stories.js (navigation)
+          fonctionneront toujours.
+        */
+    console.log(
+      'Script bnum-card-agenda: #bnum-card-agenda-story-card-playground non trouvé au DOMContentLoaded (probablement pas la story active).',
+    );
+  }
+});
+</script></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><table><thead><tr><th>Nom</th><th>Event</th><th>Description</th></tr></thead><tbody><tr><td><code>bnum-card-agenda:change</code></td><td><code>CustomEvent&lt;HTMLBnumCardItemAgenda[]&gt;</code></td><td>Déclenché lorsque les éléments changent (ajout/suppression).</td></tr></tbody></table></div><h3>Slots</h3><div class="slots table"><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>Contenu des éléments de type HTMLBnumCardItemAgenda.</td></tr></tbody></table></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>data-url</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Ajoute une url au titre. Ne rien mettre pour que l'option "url" du titre ne s'active pas.</td></tr><tr><td><code>loading</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Si présent, affiche le mode loading.</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--bnum-card-agenda</code></td><td><bnum-fragment><code>block</code></bnum-fragment></td><td>Définit le display du composant. Par défaut à "block".</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><p>N/A</p></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>onElementChanged</code></td><td><code>JsEvent<import("/opt/bnum/rcube/github/design-system-bnum/components/organisms/card-agenda/bnum-card-agenda.internal/types").OnElementChangedCallback></code></td><td>Non</td><td><p>Déclenché lorsque les éléments changent (ajout/suppression).</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong>add</strong>(content: HTMLBnumCardItemAgenda[]) : <code>this</code></code><p>Ajoute des éléments.
+
+Note: On ajoute simplement au Light DOM. Le slotchange détectera l'ajout et déclenchera le tri.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>content</code>: Elements à ajouter</li>
+    </ul></bnum-fragment></div><hr class="api-separator"><div class="api-method"><code><strong>clear</strong>() : <code>this</code></code><p>Vide le composant.</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Create</strong>({
+		contents = [],
+		url = EMPTY_STRING,
+	}: { contents?: HTMLBnumCardItemAgenda[]; url?: string; }) : <code>HTMLBnumCardAgenda</code></code><p>Méthode statique pour créer une instance du composant.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>{
+		contents = [],
+		url = EMPTY_STRING,
+	}</code>: Options de création</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Nouvelle node HTMLBnumCardAgenda</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

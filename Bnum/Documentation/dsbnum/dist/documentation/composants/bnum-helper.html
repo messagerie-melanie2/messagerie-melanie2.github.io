@@ -1,0 +1,289 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-helper"><header><h1><code>bnum-helper</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Élément web personnalisé représentant une aide contextuelle avec une icône.</p>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Cas standard</h4>
+    <div><bnum-helper>Ceci est une aide contextuelle.</bnum-helper></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-helper</span><span class="token-bracket">&gt;</span>Ceci est une aide contextuelle.<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-helper</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style="display:none;"><h2>Utilisation</h2><div class="playground-demo-box"><p>Démo non disponible</p></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html"></div><div id="playground-js"><span class="token-comment">// Fichier .playground.js non trouvé</span></div></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><p>N/A</p></div><h3>Slots</h3><div class="slots table"><p>N/A</p></div><h3>Attributs de Données</h3><div class="attributs table"><p>N/A</p></div><h3>Variables CSS</h3><div class="css-vars table"><p>N/A</p></div><h3>Etats</h3><div class="states table"><p>N/A</p></div><h3>Variables d'Instance</h3><div class="api-variables table"><p>N/A</p></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong><em>(static)</em> Create</strong>(title: string) : <code>default</code></code><p>Crée une nouvelle instance de HTMLBnumHelper avec le texte d'aide spécifié.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>title</code>: Texte d'aide à afficher dans l'attribut title.</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Instance du composant.</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

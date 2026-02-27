@@ -1,0 +1,696 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-card-title"><style>/* Styles "scopés" au conteneur de la story */
+.story-bnum-card-title-container {
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+  line-height: 1.6;
+  margin: auto;
+}
+.story-bnum-card-title-container h1,
+.story-bnum-card-title-container h2,
+.story-bnum-card-title-container h3,
+.story-bnum-card-title-container h4 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  margin-top: 2rem;
+}
+
+/* Styles pour les tableaux de doc */
+.story-bnum-card-title-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+.story-bnum-card-title-container th,
+.story-bnum-card-title-container td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.story-bnum-card-title-container th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+.story-bnum-card-title-container code {
+  background-color: #eee;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-bnum-card-title-container pre > code {
+  display: block;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+/* Styles pour le playground */
+.story-bnum-card-title-container #bnum-card-title-playground-demo {
+  border: 1px dashed #ccc;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.story-bnum-card-title-container #bnum-card-title-playground-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+.story-bnum-card-title-container .control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.story-bnum-card-title-container .control-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4px;
+}
+.story-bnum-card-title-container .control-group input[type='text'] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.story-bnum-card-title-container .control-group button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* Style pour la démo du composant */
+.story-bnum-card-title-container bnum-card-title {
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+}
+
+/* Zone de log */
+.story-bnum-card-title-container #bnum-card-title-log-output {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 4px;
+  min-height: 100px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  margin-top: 1.5rem;
+}
+
+.story-bnum-card-title-container #bnum-card-title-static-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+}
+</style><header><h1><code>bnum-card-title</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Composant représentant le titre d&#39;une carte, pouvant inclure une icône et un lien.
+Permet d&#39;afficher un titre enrichi avec une icône et éventuellement un lien cliquable.</p>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Cas url et icône</h4>
+    <div><bnum-card-title data-icon="labs" url="https://example.com">Titre de la carte</bnum-card-title></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-title</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;labs&quot;</span> <span class="token-attr">url</span>=<span class="token-string">&quot;https://example.com&quot;</span><span class="token-bracket">&gt;</span>Titre de la carte<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-title</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Cas icône uniquement</h4>
+    <div><bnum-card-title data-icon="labs">Titre de la carte</bnum-card-title></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-title</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;labs&quot;</span><span class="token-bracket">&gt;</span>Titre de la carte<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-title</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Cas lien uniquement</h4>
+    <div><bnum-card-title url="https://example.com">Titre de la carte</bnum-card-title></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-title</span> <span class="token-attr">url</span>=<span class="token-string">&quot;https://example.com&quot;</span><span class="token-bracket">&gt;</span>Titre de la carte<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-title</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Cas texte seul</h4>
+    <div><bnum-card-title>Titre de la carte</bnum-card-title></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-title</span><span class="token-bracket">&gt;</span>Titre de la carte<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-title</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Cas icône via slot</h4>
+    <div><bnum-card-title>
+<bnum-icon slot="icon">drive_folder_upload</bnum-icon>
+Titre de la carte
+</bnum-card-title></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-title</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;icon&quot;</span><span class="token-bracket">&gt;</span>drive_folder_upload<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon</span><span class="token-bracket">&gt;</span>
+Titre de la carte
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-title</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style=""><h2>Utilisation</h2><div class="playground-demo-box">
+<div class="story-bnum-card-title-container">  
+  <div id="bnum-card-title-playground-demo">
+    <bnum-card-title id="bnum-card-title-main-title" data-icon="info"
+      >Titre interactif</bnum-card-title
+    >
+  </div>
+
+  <div id="bnum-card-title-playground-controls">
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-text">Texte (Slot par défaut)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-text"
+        value="Titre interactif"
+        placeholder="Texte du titre..."
+      />
+    </div>
+
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-icon">Icône (Propriété <code>.icon</code>)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-icon"
+        value="info"
+        placeholder="Nom de l'icône (ex: 'home')"
+      />
+      <small>Remplir ceci masque l'icône fournie par le slot "icon".</small>
+    </div>
+
+    <div class="control-group">
+      <label for="bnum-card-title-ctrl-url">Lien (Attribut <code>url</code>)</label>
+      <input
+        type="text"
+        id="bnum-card-title-ctrl-url"
+        value=""
+        placeholder="ex: '/lien' ou 'https://...'"
+      />
+      <small>Remplir ceci transforme le titre en lien.</small>
+    </div>
+</div>
+
+      <h3>Logs des événements</h3>
+  <p>
+    Affiche les actions du playground et les événements <code>click</code> sur le
+    composant interactif.
+  </p>
+  <pre id="bnum-card-title-log-output" class=".log-output"></pre>
+  </div></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html">
+<span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;story-bnum-card-title-container&quot;</span><span class="token-bracket">&gt;</span>  
+  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-playground-demo&quot;</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-title</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-main-title&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;info&quot;</span>
+      <span class="token-bracket">&gt;</span>Titre interactif<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-title</span>
+    <span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-playground-controls&quot;</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;bnum-card-title-ctrl-text&quot;</span><span class="token-bracket">&gt;</span>Texte (Slot par défaut)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">input</span>
+        <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span>
+        <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-ctrl-text&quot;</span>
+        <span class="token-attr">value</span>=<span class="token-string">&quot;Titre interactif&quot;</span>
+        <span class="token-attr">placeholder</span>=<span class="token-string">&quot;Texte du titre...&quot;</span>
+      <span class="token-bracket">/&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;bnum-card-title-ctrl-icon&quot;</span><span class="token-bracket">&gt;</span>Icône (Propriété <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>.icon<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">input</span>
+        <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span>
+        <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-ctrl-icon&quot;</span>
+        <span class="token-attr">value</span>=<span class="token-string">&quot;info&quot;</span>
+        <span class="token-attr">placeholder</span>=<span class="token-string">&quot;Nom de l&apos;icône (ex: &apos;home&apos;)&quot;</span>
+      <span class="token-bracket">/&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">small</span><span class="token-bracket">&gt;</span>Remplir ceci masque l&apos;icône fournie par le slot &quot;icon&quot;.<span class="token-bracket">&lt;</span><span class="token-tag">/small</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;bnum-card-title-ctrl-url&quot;</span><span class="token-bracket">&gt;</span>Lien (Attribut <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>url<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">input</span>
+        <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span>
+        <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-ctrl-url&quot;</span>
+        <span class="token-attr">value</span>=<span class="token-string">&quot;&quot;</span>
+        <span class="token-attr">placeholder</span>=<span class="token-string">&quot;ex: &apos;/lien&apos; ou &apos;https://...&apos;&quot;</span>
+      <span class="token-bracket">/&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">small</span><span class="token-bracket">&gt;</span>Remplir ceci transforme le titre en lien.<span class="token-bracket">&lt;</span><span class="token-tag">/small</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+      <span class="token-bracket">&lt;</span><span class="token-tag">h3</span><span class="token-bracket">&gt;</span>Logs des événements<span class="token-bracket">&lt;</span><span class="token-tag">/h3</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">p</span><span class="token-bracket">&gt;</span>
+    Affiche les actions du playground et les événements <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>click<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> sur le
+    composant interactif.
+  <span class="token-bracket">&lt;</span><span class="token-tag">/p</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">pre</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-card-title-log-output&quot;</span> <span class="token-attr">class</span>=<span class="token-string">&quot;.log-output&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/pre</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span></div><div id="playground-js"><span class="token-comment">// Ce script est <span class="token-string">&quot;scopé&quot;</span> au conteneur grâce aux IDs uniques</span>
+(async <span class="token-keyword">function</span> () {
+  await <span class="token-keyword">new</span> <span class="token-function">Promise</span>((ok) =&gt; {
+    <span class="token-keyword">const</span> interval = <span class="token-function">setInterval</span>(() =&gt; {
+      <span class="token-keyword">if</span> (window.Bnum) {
+        <span class="token-function">clearInterval</span>(interval);
+        <span class="token-function">ok</span>();
+      }
+    }, <span class="token-number">50</span>);
+  });
+
+  <span class="token-keyword">const</span> container = document.<span class="token-function">querySelector</span>(<span class="token-string">&apos;.story-bnum-card-title-container&apos;</span>);
+  <span class="token-keyword">if</span> (!container) <span class="token-keyword">return</span>; <span class="token-comment">// Ne rien faire si le conteneur n&apos;est pas là</span>
+
+  <span class="token-comment">// Utiliser .querySelector depuis le conteneur pour <span class="token-string">&quot;scoper&quot;</span> la recherche</span>
+  <span class="token-keyword">const</span> logOutput = container.<span class="token-function">querySelector</span>(<span class="token-string">&apos;#bnum-card-title-log-output&apos;</span>);
+  <span class="token-keyword">const</span> mainTitle = container.<span class="token-function">querySelector</span>(<span class="token-string">&apos;#bnum-card-title-main-title&apos;</span>);
+  <span class="token-keyword">const</span> ctrlText = container.<span class="token-function">querySelector</span>(<span class="token-string">&apos;#bnum-card-title-ctrl-text&apos;</span>);
+  <span class="token-keyword">const</span> ctrlIcon = container.<span class="token-function">querySelector</span>(<span class="token-string">&apos;#bnum-card-title-ctrl-icon&apos;</span>);
+  <span class="token-keyword">const</span> ctrlUrl = container.<span class="token-function">querySelector</span>(<span class="token-string">&apos;#bnum-card-title-ctrl-url&apos;</span>);
+
+  <span class="token-comment">/** Fonction helper pour logger dans la page */</span>
+  <span class="token-keyword">function</span> <span class="token-function">log</span>(message) {
+    <span class="token-keyword">if</span> (!logOutput) <span class="token-keyword">return</span>;
+    console.<span class="token-function">log</span>(message); <span class="token-comment">// Log en console</span>
+    logOutput.textContent += <span class="token-string">`[${<span class="token-keyword">new</span> <span class="token-function">Date</span>().<span class="token-function">toLocaleTimeString</span>()}] ${message}\n`</span>;
+    logOutput.scrollTop = logOutput.scrollHeight; <span class="token-comment">// Auto-scroll</span>
+  }
+
+  <span class="token-comment">// Vérifier que tous les éléments existent avant d&apos;attacher les écouteurs</span>
+  <span class="token-keyword">if</span> (!logOutput || !mainTitle || !ctrlText || !ctrlIcon || !ctrlUrl) {
+    <span class="token-function">log</span>(<span class="token-string">&apos;Erreur: Un ou plusieurs éléments du playground sont manquants.&apos;</span>);
+    <span class="token-keyword">return</span>;
+  }
+
+  <span class="token-function">log</span>(<span class="token-string">&apos;Page chargée. Attachement des écouteurs...&apos;</span>);
+
+  <span class="token-comment">// --- <span class="token-number">1</span>. Contrôles du Playground ---</span>
+
+  <span class="token-comment">// <span class="token-function">Texte</span> (Slot par défaut)</span>
+  ctrlText.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (e) =&gt; {
+    mainTitle.textContent = e.target.value;
+    <span class="token-function">log</span>(<span class="token-string">`Action: <span class="token-function">Texte</span> (slot) mis à jour : &quot;${e.target.value}&quot;`</span>);
+  });
+
+  <span class="token-comment">// Icô<span class="token-function">ne</span> (Propriété .icon)</span>
+  ctrlIcon.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (e) =&gt; {
+    <span class="token-keyword">const</span> newIcon = e.target.value.<span class="token-function">trim</span>() || <span class="token-keyword">null</span>;
+    mainTitle.icon = newIcon;
+    <span class="token-function">log</span>(<span class="token-string">`Action: Propriété .icon mise à jour : &quot;${newIcon}&quot;`</span>);
+  });
+
+  <span class="token-comment">// <span class="token-function">URL</span> (Attribut url)</span>
+  ctrlUrl.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (e) =&gt; {
+    <span class="token-keyword">const</span> newUrl = e.target.value.<span class="token-function">trim</span>();
+    <span class="token-keyword">if</span> (newUrl) {
+      mainTitle.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;url&apos;</span>, newUrl);
+      <span class="token-function">log</span>(<span class="token-string">`Action: Attribut [url] mis à jour : &quot;${newUrl}&quot;`</span>);
+    } <span class="token-keyword">else</span> {
+      mainTitle.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;url&apos;</span>);
+      <span class="token-function">log</span>(<span class="token-string">&apos;Action: Attribut [url] retiré.&apos;</span>);
+    }
+  });
+
+  <span class="token-comment">// --- <span class="token-number">2</span>. Écouteur sur le composant ---</span>
+  mainTitle.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, (e) =&gt; {
+    <span class="token-function">log</span>(<span class="token-string">&apos;🖱️ Événement &quot;click&quot; reçu !&apos;</span>);
+    <span class="token-comment">// Si c&apos;est un lien, on empêche la navigation pour la démo</span>
+    <span class="token-keyword">if</span> (mainTitle.<span class="token-function">hasAttribute</span>(<span class="token-string">&apos;url&apos;</span>)) {
+      e.<span class="token-function">preventDefault</span>();
+      <span class="token-function">log</span>(
+        <span class="token-string">`   (Navigation vers &quot;${mainTitle.<span class="token-function">getAttribute</span>(&apos;url&apos;)}&quot; empêchée pour la démo)`</span>,
+      );
+    }
+  });
+})();
+</div><script>// Ce script est "scopé" au conteneur grâce aux IDs uniques
+(async function () {
+  await new Promise((ok) => {
+    const interval = setInterval(() => {
+      if (window.Bnum) {
+        clearInterval(interval);
+        ok();
+      }
+    }, 50);
+  });
+
+  const container = document.querySelector('.story-bnum-card-title-container');
+  if (!container) return; // Ne rien faire si le conteneur n'est pas là
+
+  // Utiliser .querySelector depuis le conteneur pour "scoper" la recherche
+  const logOutput = container.querySelector('#bnum-card-title-log-output');
+  const mainTitle = container.querySelector('#bnum-card-title-main-title');
+  const ctrlText = container.querySelector('#bnum-card-title-ctrl-text');
+  const ctrlIcon = container.querySelector('#bnum-card-title-ctrl-icon');
+  const ctrlUrl = container.querySelector('#bnum-card-title-ctrl-url');
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    if (!logOutput) return;
+    console.log(message); // Log en console
+    logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+    logOutput.scrollTop = logOutput.scrollHeight; // Auto-scroll
+  }
+
+  // Vérifier que tous les éléments existent avant d'attacher les écouteurs
+  if (!logOutput || !mainTitle || !ctrlText || !ctrlIcon || !ctrlUrl) {
+    log('Erreur: Un ou plusieurs éléments du playground sont manquants.');
+    return;
+  }
+
+  log('Page chargée. Attachement des écouteurs...');
+
+  // --- 1. Contrôles du Playground ---
+
+  // Texte (Slot par défaut)
+  ctrlText.addEventListener('input', (e) => {
+    mainTitle.textContent = e.target.value;
+    log(`Action: Texte (slot) mis à jour : "${e.target.value}"`);
+  });
+
+  // Icône (Propriété .icon)
+  ctrlIcon.addEventListener('input', (e) => {
+    const newIcon = e.target.value.trim() || null;
+    mainTitle.icon = newIcon;
+    log(`Action: Propriété .icon mise à jour : "${newIcon}"`);
+  });
+
+  // URL (Attribut url)
+  ctrlUrl.addEventListener('input', (e) => {
+    const newUrl = e.target.value.trim();
+    if (newUrl) {
+      mainTitle.setAttribute('url', newUrl);
+      log(`Action: Attribut [url] mis à jour : "${newUrl}"`);
+    } else {
+      mainTitle.removeAttribute('url');
+      log('Action: Attribut [url] retiré.');
+    }
+  });
+
+  // --- 2. Écouteur sur le composant ---
+  mainTitle.addEventListener('click', (e) => {
+    log('🖱️ Événement "click" reçu !');
+    // Si c'est un lien, on empêche la navigation pour la démo
+    if (mainTitle.hasAttribute('url')) {
+      e.preventDefault();
+      log(
+        `   (Navigation vers "${mainTitle.getAttribute('url')}" empêchée pour la démo)`,
+      );
+    }
+  });
+})();
+</script></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><p>N/A</p></div><h3>Slots</h3><div class="slots table"><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>Titre de la carte (texte ou HTML)</td></tr><tr><td><code>icon</code></td><td>Icône personnalisée à afficher avant le titre. Note: si une icône est définie via l'attribut `data-icon` ou via la propriété `icon`, ce slot sera ignoré.</td></tr></tbody></table></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>url</code></td><td><code>string | null</code></td><td><code>undefined</code></td><td>✅</td><td>URL du lien du titre de la carte</td></tr><tr><td><code>data-icon</code></td><td><code>string | null</code></td><td><code>undefined</code></td><td>✅</td><td>Nom de l'icône (Material Symbols) à afficher avant le titre</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--bnum-card-title-display</code></td><td><bnum-fragment><code>flex</code></bnum-fragment></td><td>Définit le mode d'affichage du titre de la carte.</td></tr><tr><td><code>--bnum-card-title-align-items</code></td><td><bnum-fragment><code>center</code></bnum-fragment></td><td>Définit l'alignement vertical des éléments dans le titre de la carte.</td></tr><tr><td><code>--bnum-card-title-gap</code></td><td><bnum-fragment><code>var(--bnum-space-s, 10px)</code></bnum-fragment></td><td>Définit l'espacement entre l'icône et le texte du titre.</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>url</code></td><td>Actif lorsque le titre contient un lien.</td></tr><tr><td><code>without-url</code></td><td>Actif lorsque le titre ne contient pas de lien.</td></tr></tbody></table></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Obtient le nom de l&#39;icône associée au titre de la carte.</p>
+</td></tr><tr><td><code>url</code></td><td><code>string</code></td><td>Non</td><td><p>URL du lien du titre de la carte.</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong>updateBody</strong>(element: string | HTMLElement | Text, { force = false }: { force?: boolean; }) : <code>HTMLBnumCardTitle</code></code><p>Met à jour le contenu du titre de la carte.
+Remplace le texte ou ajoute un élément HTML comme corps du titre.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>element</code>: Le contenu à insérer (texte, élément ou nœud Text)</li>
+    
+      <li><code>{ force = false }</code>: N/A</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Retourne l'instance pour chaînage</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Create</strong>(text: string | HTMLElement | Text, {
+			icon = null,
+			link = null,
+		}: { icon?: string; link?: string; }) : <code>HTMLBnumCardTitle</code></code><p>Crée dynamiquement une instance du composant HTMLBnumCardTitle.
+Permet d'initialiser le titre avec un texte, une icône et/ou un lien.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>text</code>: Le contenu du titre (élément, texte ou chaîne)</li>
+    
+      <li><code>{
+			icon = null,
+			link = null,
+		}</code>: Options pour l'icône et le lien</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Instance du composant configurée</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Generate</strong>(icon: string, text: string, link: string) : <code>string</code></code><p>Génère le HTML d'un titre de carte avec icône et lien optionnels.
+Utile pour créer dynamiquement le composant dans une chaîne HTML.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Icône à afficher</li>
+    
+      <li><code>text</code>: Texte du titre</li>
+    
+      <li><code>link</code>: URL du lien</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>HTML généré</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

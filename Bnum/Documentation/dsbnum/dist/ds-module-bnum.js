@@ -13162,8 +13162,8 @@ const TEMPLATE$4 = (h("div", { id: "container", children: [h("label", { class: "
  * });
  * ```
  *
- * @fires {CustomEvent} bnum-segmented-control:change - Émis lors de la sélection d'un item. Détail : `{value: string, item: HTMLBnumSegmentedItem, caller: HTMLBnumSegmentedControl}`
- * @fires {CustomEvent} bnum-segmented-control:error - Émis en cas d'erreur interne. Détail : `{error: Error, caller: HTMLBnumSegmentedControl}`
+ * @event {CustomEvent} bnum-segmented-control:change - Émis lors de la sélection d'un item. Détail : `{value: string, item: HTMLBnumSegmentedItem, caller: HTMLBnumSegmentedControl}`
+ * @event {CustomEvent} bnum-segmented-control:error - Émis en cas d'erreur interne. Détail : `{error: Error, caller: HTMLBnumSegmentedControl}`
  *
  * @see {@link HTMLBnumSegmentedItem}
  */
@@ -15467,8 +15467,8 @@ let HTMLBnumColumn = (() => {
 })();
 
 if (typeof window !== 'undefined' && window.DsBnumConfig) {
-    BnumConfig.Initialize(window.DsBnumConfig).tapError((error) => {
-        Log.error('design-system-bnum', 'Erreur lors de l\'initialisation de la configuration globale :', error);
+    BnumConfig.Initialize(window.DsBnumConfig).tapError(error => {
+        Log.error('design-system-bnum', "Erreur lors de l'initialisation de la configuration globale :", error);
     });
 }
 

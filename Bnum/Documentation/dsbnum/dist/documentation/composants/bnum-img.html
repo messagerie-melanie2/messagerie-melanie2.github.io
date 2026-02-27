@@ -1,0 +1,540 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-img"><header><h1><code>bnum-img</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Élément web personnalisé permettant d&#39;afficher une image qui s&#39;adapte automatiquement au mode sombre ou clair de l&#39;interface.</p>
+<p>Le composant utilise des variables CSS pour gérer les différentes versions de l&#39;image en fonction du thème.</p>
+<h2>Attributs</h2>
+<ul>
+<li><code>src</code> : L&#39;URL de l&#39;image à afficher.</li>
+<li><code>alt</code> : Texte alternatif pour l&#39;image.</li>
+</ul>
+<h2>Evènements</h2>
+<ul>
+<li><code>load</code> : Déclenché lorsque l&#39;image est chargée avec succès.</li>
+<li><code>error</code> : Déclenché si une erreur survient lors du chargement de l&#39;image.</li>
+</ul>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Image avec -light dans le nom de fichier</h4>
+    <div><bnum-img src="assets/icon-light.png" alt="Description"></bnum-img></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-img</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/icon-light.png&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Description&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/bnum-img</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Image sans -light dans le nom de fichier</h4>
+    <div><bnum-img src="assets/logo.png" alt="Description"></bnum-img></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-img</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/logo.png&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Description&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/bnum-img</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style=""><h2>Utilisation</h2><div class="playground-demo-box">  <div class="bnum-img-playground-container">
+  <h2 id="test-component">Contrôles</h2>
+    <button id="toggle-dark">
+      Basculer le Thème
+    </button>
+
+    <h2>Utilisation & Scénarios</h2>
+
+    <h3>
+      1. Nommage "light/dark" (<code>icon-light.png</code> &rarr;
+      <code>icon-dark.png</code>)
+    </h3>
+    <p>
+      L'attribut <code>src</code> est
+      <code>./assets/icon-light.png</code>.
+    </p>
+    <bnum-img
+      src="./assets/icon-light.png"
+      alt="Icône light/dark"
+      id="img1"
+    ></bnum-img>
+
+    <h3>
+      2. Nommage standard (<code>logo.png</code> &rarr; <code>logo-dark.png</code>)
+    </h3>
+    <p>
+      L'attribut <code>src</code> est <code>./assets/logo.png</code>.
+    </p>
+    <bnum-img src="./assets/logo.png" alt="Logo standard" id="img2"></bnum-img>
+
+    <h3>3. Cas d'erreur</h3>
+    <p>
+      L'attribut <code>src</code> pointe vers une image inexistante.
+    </p>
+    <bnum-img
+      src="./assets/fake-image.png"
+      alt="Image en erreur"
+      id="imgError"
+    ></bnum-img>
+
+    <h2>Logs des événements</h2>
+    <p>Affiche les événements <code>load</code> et <code>error</code> émis par les composants.</p>
+    <pre id="log-output-3"></pre>
+    </div></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html">  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;bnum-img-playground-container&quot;</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">h2</span> <span class="token-attr">id</span>=<span class="token-string">&quot;test-component&quot;</span><span class="token-bracket">&gt;</span>Contrôles<span class="token-bracket">&lt;</span><span class="token-tag">/h2</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;toggle-dark&quot;</span><span class="token-bracket">&gt;</span>
+      Basculer le Thème
+    <span class="token-bracket">&lt;</span><span class="token-tag">/button</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">h2</span><span class="token-bracket">&gt;</span>Utilisation &amp; Scénarios<span class="token-bracket">&lt;</span><span class="token-tag">/h2</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">h3</span><span class="token-bracket">&gt;</span>
+      1. Nommage &quot;light/dark&quot; (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>icon-light.png<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> &amp;rarr;
+      <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>icon-dark.png<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)
+    <span class="token-bracket">&lt;</span><span class="token-tag">/h3</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">p</span><span class="token-bracket">&gt;</span>
+      L&apos;attribut <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>src<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> est
+      <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>./assets/icon-light.png<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>.
+    <span class="token-bracket">&lt;</span><span class="token-tag">/p</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">bnum-img</span>
+      <span class="token-attr">src</span>=<span class="token-string">&quot;./assets/icon-light.png&quot;</span>
+      <span class="token-attr">alt</span>=<span class="token-string">&quot;Icône light/dark&quot;</span>
+      <span class="token-attr">id</span>=<span class="token-string">&quot;img1&quot;</span>
+    <span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/bnum-img</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">h3</span><span class="token-bracket">&gt;</span>
+      2. Nommage standard (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>logo.png<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> &amp;rarr; <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>logo-dark.png<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)
+    <span class="token-bracket">&lt;</span><span class="token-tag">/h3</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">p</span><span class="token-bracket">&gt;</span>
+      L&apos;attribut <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>src<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> est <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>./assets/logo.png<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>.
+    <span class="token-bracket">&lt;</span><span class="token-tag">/p</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">bnum-img</span> <span class="token-attr">src</span>=<span class="token-string">&quot;./assets/logo.png&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Logo standard&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;img2&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/bnum-img</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">h3</span><span class="token-bracket">&gt;</span>3. Cas d&apos;erreur<span class="token-bracket">&lt;</span><span class="token-tag">/h3</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">p</span><span class="token-bracket">&gt;</span>
+      L&apos;attribut <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>src<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> pointe vers une image inexistante.
+    <span class="token-bracket">&lt;</span><span class="token-tag">/p</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">bnum-img</span>
+      <span class="token-attr">src</span>=<span class="token-string">&quot;./assets/fake-image.png&quot;</span>
+      <span class="token-attr">alt</span>=<span class="token-string">&quot;Image en erreur&quot;</span>
+      <span class="token-attr">id</span>=<span class="token-string">&quot;imgError&quot;</span>
+    <span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/bnum-img</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">h2</span><span class="token-bracket">&gt;</span>Logs des événements<span class="token-bracket">&lt;</span><span class="token-tag">/h2</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">p</span><span class="token-bracket">&gt;</span>Affiche les événements <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>load<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> et <span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>error<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span> émis par les composants.<span class="token-bracket">&lt;</span><span class="token-tag">/p</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">pre</span> <span class="token-attr">id</span>=<span class="token-string">&quot;log-output-3&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/pre</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span></div><div id="playground-js">document.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;DOMContentLoaded&apos;</span>, () =&gt; {
+  <span class="token-keyword">const</span> logOutput = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;log-output-<span class="token-number">3</span>&apos;</span>);
+  <span class="token-keyword">const</span> toggleBtn = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;toggle-dark&apos;</span>);
+
+  <span class="token-comment">/** Fonction helper pour logger dans la page */</span>
+  <span class="token-keyword">function</span> <span class="token-function">log</span>(message) {
+    console.<span class="token-function">log</span>(message); <span class="token-comment">// Log en console</span>
+    <span class="token-comment">// Vérification de sécurité au cas où l<span class="token-string">&apos;élément n&apos;</span>existe pas dans le DOM</span>
+    <span class="token-keyword">if</span> (logOutput) {
+      logOutput.textContent += <span class="token-string">`[${<span class="token-keyword">new</span> <span class="token-function">Date</span>().<span class="token-function">toLocaleTimeString</span>()}] ${message}\n`</span>;
+    }
+  }
+
+  <span class="token-function">log</span>(<span class="token-string">&apos;Page chargée. Attachement des écouteurs...&apos;</span>);
+
+  <span class="token-comment">// <span class="token-number">1</span>. Contrôle du thème de la page</span>
+  <span class="token-keyword">if</span> (toggleBtn) {
+    toggleBtn.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, () =&gt; {
+      document.documentElement.classList.<span class="token-function">toggle</span>(<span class="token-string">&apos;dark&apos;</span>);
+      <span class="token-function">log</span>(
+        `Action: Thème de la page basculé. Classe <span class="token-string">&quot;.dark&quot;</span> ${
+          document.documentElement.classList.<span class="token-function">contains</span>(<span class="token-string">&apos;dark&apos;</span>)
+            ? <span class="token-string">&apos;ajoutée&apos;</span>
+            : <span class="token-string">&apos;retirée&apos;</span>
+        }.`,
+      );
+    });
+  }
+
+  <span class="token-comment">// <span class="token-number">2</span>. Écouteurs d&apos;événements sur les composants bnum-img</span>
+  <span class="token-keyword">const</span> img1 = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;img1&apos;</span>);
+  <span class="token-keyword">const</span> img2 = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;img2&apos;</span>);
+  <span class="token-keyword">const</span> imgError = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;imgError&apos;</span>);
+
+  <span class="token-keyword">if</span> (img1) {
+    <span class="token-comment">// Remplacement de .<span class="token-function">on</span>() par .<span class="token-function">addEventListener</span>()</span>
+    img1.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;load&apos;</span>, (e) =&gt;
+      <span class="token-function">log</span>(<span class="token-string">&apos;✅ <span class="token-function">SUCCESS</span> (img1): Événement &quot;load&quot; reçu.&apos;</span>),
+    );
+    img1.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;error&apos;</span>, (e) =&gt;
+      <span class="token-function">log</span>(
+        <span class="token-string">&apos;❌ <span class="token-function">ERROR</span> (img1): Événement &quot;error&quot; reçu. Vérifiez le chemin &quot;./assets/icon-light.png&quot; (et dark).&apos;</span>,
+      ),
+    );
+  }
+
+  <span class="token-keyword">if</span> (img2) {
+    img2.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;load&apos;</span>, (e) =&gt;
+      <span class="token-function">log</span>(<span class="token-string">&apos;✅ <span class="token-function">SUCCESS</span> (img2): Événement &quot;load&quot; reçu.&apos;</span>),
+    );
+    img2.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;error&apos;</span>, (e) =&gt;
+      <span class="token-function">log</span>(
+        <span class="token-string">&apos;❌ <span class="token-function">ERROR</span> (img2): Événement &quot;error&quot; reçu. Vérifiez le chemin &quot;./assets/logo.svg&quot; (et dark).&apos;</span>,
+      ),
+    );
+  }
+
+  <span class="token-keyword">if</span> (imgError) {
+    imgError.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;load&apos;</span>, (e) =&gt;
+      <span class="token-function">log</span>(
+        <span class="token-string">&apos;⚠️ <span class="token-function">WARN</span> (imgError): Événement &quot;load&quot; reçu. (Ne devrait pas arriver si le fichier n\&apos;</span>existe pas)&apos;,
+      ),
+    );
+    imgError.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;error&apos;</span>, (e) =&gt;
+      <span class="token-function">log</span>(
+        <span class="token-string">&apos;✅ <span class="token-function">SUCCESS</span> (imgError): Événement &quot;error&quot; reçu. (Comportement attendu)&apos;</span>,
+      ),
+    );
+  }
+});
+</div><script>document.addEventListener('DOMContentLoaded', () => {
+  const logOutput = document.getElementById('log-output-3');
+  const toggleBtn = document.getElementById('toggle-dark');
+
+  /** Fonction helper pour logger dans la page */
+  function log(message) {
+    console.log(message); // Log en console
+    // Vérification de sécurité au cas où l'élément n'existe pas dans le DOM
+    if (logOutput) {
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+    }
+  }
+
+  log('Page chargée. Attachement des écouteurs...');
+
+  // 1. Contrôle du thème de la page
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      log(
+        `Action: Thème de la page basculé. Classe ".dark" ${
+          document.documentElement.classList.contains('dark')
+            ? 'ajoutée'
+            : 'retirée'
+        }.`,
+      );
+    });
+  }
+
+  // 2. Écouteurs d'événements sur les composants bnum-img
+  const img1 = document.getElementById('img1');
+  const img2 = document.getElementById('img2');
+  const imgError = document.getElementById('imgError');
+
+  if (img1) {
+    // Remplacement de .on() par .addEventListener()
+    img1.addEventListener('load', (e) =>
+      log('✅ SUCCESS (img1): Événement "load" reçu.'),
+    );
+    img1.addEventListener('error', (e) =>
+      log(
+        '❌ ERROR (img1): Événement "error" reçu. Vérifiez le chemin "./assets/icon-light.png" (et dark).',
+      ),
+    );
+  }
+
+  if (img2) {
+    img2.addEventListener('load', (e) =>
+      log('✅ SUCCESS (img2): Événement "load" reçu.'),
+    );
+    img2.addEventListener('error', (e) =>
+      log(
+        '❌ ERROR (img2): Événement "error" reçu. Vérifiez le chemin "./assets/logo.svg" (et dark).',
+      ),
+    );
+  }
+
+  if (imgError) {
+    imgError.addEventListener('load', (e) =>
+      log(
+        '⚠️ WARN (imgError): Événement "load" reçu. (Ne devrait pas arriver si le fichier n\'existe pas)',
+      ),
+    );
+    imgError.addEventListener('error', (e) =>
+      log(
+        '✅ SUCCESS (imgError): Événement "error" reçu. (Comportement attendu)',
+      ),
+    );
+  }
+});
+</script></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><p>N/A</p></div><h3>Slots</h3><div class="slots table"><p>N/A</p></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>src</code></td><td><code>string</code></td><td><code>undefined</code></td><td>❌</td><td>Source de l'image</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--_image-url</code></td><td><bnum-fragment><code>var(--_image-light)</code></bnum-fragment></td><td>Url de l'image de la balise `img`. Ne pas modifier, sauf lors de la surcharge dans votre système de mode sombre.</td></tr><tr><td><code>--_image-dark</code></td><td><bnum-fragment><code>N/A</code></bnum-fragment></td><td>Variable à assigner à `--_image-url` en mode sombre. Ne pas modifier.</td></tr><tr><td><code>--_image-light</code></td><td><bnum-fragment><code>N/A</code></bnum-fragment></td><td>Ne pas modifier.</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><p>N/A</p></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>src</code></td><td><code>Nullable<string></code></td><td>Oui</td><td><p>Retourne l&#39;URL de l&#39;image.
+Permet d&#39;obtenir la valeur de l&#39;attribut &#39;src&#39;.</p>
+</td></tr><tr><td><code>darkUrl</code></td><td><code>Nullable<string></code></td><td>Oui</td><td><p>Retourne l&#39;URL de l&#39;image en mode sombre.
+Génère dynamiquement l&#39;URL pour le mode sombre à partir de l&#39;attribut &#39;src&#39;.</p>
+</td></tr><tr><td><code>picture</code></td><td><code>Nullable<HTMLImageElement></code></td><td>Oui</td><td><p>Retourne l&#39;élément image HTML associé.
+Permet d&#39;accéder directement à l&#39;élément <img> du composant.</p>
+</td></tr><tr><td><code>onimageload</code></td><td><code>JsEvent<ImgLoadedCallback></code></td><td>Non</td><td><p>Evènement lorsque l&#39;image est chargée.</p>
+</td></tr><tr><td><code>onimageerror</code></td><td><code>JsEvent<ImgErrorCallback></code></td><td>Non</td><td><p>Evènement lorsque l&#39;image n&#39;arrive pas à chargée.</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong><em>(static)</em> Create</strong>(src: string) : <code>HTMLBnumPicture</code></code><p>Crée un nouvel élément BnumHTMLPicture avec la source spécifiée.
+Permet d'instancier facilement le composant avec une image donnée.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>src</code>: - L'URL de l'image à afficher.</li>
+    </ul></bnum-fragment></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

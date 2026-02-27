@@ -1,0 +1,540 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-card-item-mail"><header><h1><code>bnum-card-item-mail</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Composant HTML personnalisé représentant un élément de carte mail.</p>
+<p>Permet d&#39;afficher un sujet, un expéditeur et une date, avec possibilité d&#39;override du contenu par défaut.</p>
+<p>Utilise des slots pour l&#39;intégration dans le Shadow DOM et propose des méthodes pour forcer ou réinitialiser le contenu.</p>
+<p>Note: En passant par <code>data-date</code> ou <code>.updateDate()</code>, le format d&#39;affichage de la date est ajusté selon la logique métier :</p>
+<ul>
+<li>Si la date est aujourd&#39;hui, seule l&#39;heure est affichée (HH:mm).</li>
+<li>Si la date est comprise entre hier et il y a 7 jours, le jour de la semaine et l&#39;heure sont affichés (E - HH:mm).</li>
+<li>Sinon, le format par défaut de HTMLBnumDate est utilisé.</li>
+</ul>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Item de carte mail</h4>
+    <div><bnum-card-item-mail data-date="now">
+<span slot="subject">Sujet par défaut</span>
+<span slot="sender">Expéditeur par défaut</span>
+</bnum-card-item-mail></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-mail</span> <span class="token-attr">data-date</span>=<span class="token-string">&quot;now&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">span</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;subject&quot;</span><span class="token-bracket">&gt;</span>Sujet par défaut<span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">span</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;sender&quot;</span><span class="token-bracket">&gt;</span>Expéditeur par défaut<span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-mail</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Item de carte data</h4>
+    <div><bnum-card-item-mail data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+</bnum-card-item-mail></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-mail</span> <span class="token-attr">data-date</span>=<span class="token-string">&quot;2025-10-31 11:11&quot;</span> <span class="token-attr">data-subject</span>=<span class="token-string">&quot;Sujet ici&quot;</span> <span class="token-attr">data-sender</span>=<span class="token-string">&quot;Expéditeur ici&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-mail</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Item de carte lue</h4>
+    <div><bnum-card-item-mail read data-date="2025-10-31 11:11" data-subject="Sujet ici" data-sender="Expéditeur ici">
+</bnum-card-item-mail></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-mail</span> <span class="token-attr">read</span> <span class="token-attr">data-date</span>=<span class="token-string">&quot;2025-10-31 11:11&quot;</span> <span class="token-attr">data-subject</span>=<span class="token-string">&quot;Sujet ici&quot;</span> <span class="token-attr">data-sender</span>=<span class="token-string">&quot;Expéditeur ici&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-mail</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style=""><h2>Utilisation</h2><div class="playground-demo-box"><div playground class="playground bnum-card-item-mail-playground">
+    <div class="playground-tester">
+        <bnum-card-item-mail class="player" data-sender="John Doe" data-subject="Hello World" data-date="2025-10-31 11:11"></bnum-card-item-mail>
+    </div>
+
+    <div class="playground-controls">
+        <div class="control-group">
+            <label for="ctrl-sender">Expéditeur</label>
+            <input type="text" id="ctrl-sender" value="John Doe" />
+        </div>
+
+        <div class="control-group">
+            <label for="ctrl-subject">Sujet</label>
+            <input type="text" id="ctrl-subject" value="Hello World" />
+        </div>
+
+        <div class="control-group">
+            <label for="ctrl-date">Date</label>
+            <input type="datetime-local" id="ctrl-date" value="2025-10-31T11:11" />
+        </div>
+
+        <div class="control-group">
+            <label for="ctrl-unread">Marquer comme lu</label>
+            <input type="checkbox" id="ctrl-unread" />
+        </div>
+
+        <div class="control-groups">
+            <secondary-button id="btn-reset-sender">Réinitialiser l'expéditeur</secondary-button>
+            <secondary-button id="btn-reset-subject">Réinitialiser le sujet</secondary-button>
+            <secondary-button id="btn-reset-date">Réinitialiser la date</secondary-button>
+        </div>
+    </div>
+
+</div></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html"><span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">playground</span> <span class="token-attr">class</span>=<span class="token-string">&quot;playground bnum-card-item-mail-playground&quot;</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;playground-tester&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-card-item-mail</span> <span class="token-attr">class</span>=<span class="token-string">&quot;player&quot;</span> <span class="token-attr">data-sender</span>=<span class="token-string">&quot;John Doe&quot;</span> <span class="token-attr">data-subject</span>=<span class="token-string">&quot;Hello World&quot;</span> <span class="token-attr">data-date</span>=<span class="token-string">&quot;2025-10-31 11:11&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/bnum-card-item-mail</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;playground-controls&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-sender&quot;</span><span class="token-bracket">&gt;</span>Expéditeur<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-sender&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;John Doe&quot;</span> <span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-subject&quot;</span><span class="token-bracket">&gt;</span>Sujet<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-subject&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;Hello World&quot;</span> <span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-date&quot;</span><span class="token-bracket">&gt;</span>Date<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;datetime-local&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-date&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;2025-10-31T11:11&quot;</span> <span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-unread&quot;</span><span class="token-bracket">&gt;</span>Marquer comme lu<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;checkbox&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-unread&quot;</span> <span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-groups&quot;</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">secondary-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;btn-reset-sender&quot;</span><span class="token-bracket">&gt;</span>Réinitialiser l&apos;expéditeur<span class="token-bracket">&lt;</span><span class="token-tag">/secondary-button</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">secondary-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;btn-reset-subject&quot;</span><span class="token-bracket">&gt;</span>Réinitialiser le sujet<span class="token-bracket">&lt;</span><span class="token-tag">/secondary-button</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">secondary-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;btn-reset-date&quot;</span><span class="token-bracket">&gt;</span>Réinitialiser la date<span class="token-bracket">&lt;</span><span class="token-tag">/secondary-button</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+<span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span></div><div id="playground-js">(() =&gt; {
+  <span class="token-comment">/**
+   * Réinitialise un champ à sa valeur de départ
+   * @param {<span class="token-string">&apos;Sender&apos;</span> | <span class="token-string">&apos;Subject&apos;</span> | <span class="token-string">&apos;Date&apos;</span>} what Champs à réinitialiser
+   * @param {HTMLInputElement} input Input à réinitialiser
+   * @param {<span class="token-keyword">string</span>} value Valeur de départ à rétablir
+   */</span>
+  <span class="token-keyword">function</span> <span class="token-function">reset</span>(what, input, value) {
+    player[<span class="token-string">`reset${what}`</span>]();
+    input.value = value;
+  }
+
+  <span class="token-keyword">const</span> START_SENDER = <span class="token-string">&apos;John Doe&apos;</span>;
+  <span class="token-keyword">const</span> START_SUBJECT = <span class="token-string">&apos;Hello World&apos;</span>;
+  <span class="token-keyword">const</span> START_DATE = <span class="token-string">&apos;<span class="token-number">2025</span>-<span class="token-number">10</span>-31T11:<span class="token-number">11</span>&apos;</span>;
+
+  <span class="token-keyword">const</span> playerSelector = <span class="token-string">&apos;.bnum-card-item-mail-playground .player&apos;</span>;
+  <span class="token-keyword">const</span> idSender = <span class="token-string">&apos;ctrl-sender&apos;</span>;
+  <span class="token-keyword">const</span> idSubject = <span class="token-string">&apos;ctrl-subject&apos;</span>;
+  <span class="token-keyword">const</span> idDate = <span class="token-string">&apos;ctrl-date&apos;</span>;
+  <span class="token-keyword">const</span> idUnread = <span class="token-string">&apos;ctrl-unread&apos;</span>;
+  <span class="token-keyword">const</span> idResetSender = <span class="token-string">&apos;btn-reset-sender&apos;</span>;
+  <span class="token-keyword">const</span> idResetSubject = <span class="token-string">&apos;btn-reset-subject&apos;</span>;
+  <span class="token-keyword">const</span> idResetDate = <span class="token-string">&apos;btn-reset-date&apos;</span>;
+
+  <span class="token-keyword">const</span> player = document.<span class="token-function">querySelector</span>(playerSelector);
+  <span class="token-keyword">const</span> senderInput = document.<span class="token-function">getElementById</span>(idSender);
+  <span class="token-keyword">const</span> subjectInput = document.<span class="token-function">getElementById</span>(idSubject);
+  <span class="token-keyword">const</span> dateInput = document.<span class="token-function">getElementById</span>(idDate);
+  <span class="token-keyword">const</span> unreadInput = document.<span class="token-function">getElementById</span>(idUnread);
+  <span class="token-keyword">const</span> resetSenderBtn = document.<span class="token-function">getElementById</span>(idResetSender);
+  <span class="token-keyword">const</span> resetSubjectBtn = document.<span class="token-function">getElementById</span>(idResetSubject);
+  <span class="token-keyword">const</span> resetDateBtn = document.<span class="token-function">getElementById</span>(idResetDate);
+
+  unreadInput.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, () =&gt; {
+    player.<span class="token-function">toggleAttribute</span>(<span class="token-string">&apos;read&apos;</span>);
+  });
+
+  senderInput.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (event) =&gt; {
+    <span class="token-keyword">const</span> value = event.target.value;
+    player.<span class="token-function">updateSender</span>(value);
+  });
+
+  subjectInput.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (event) =&gt; {
+    <span class="token-keyword">const</span> value = event.target.value;
+    player.<span class="token-function">updateSubject</span>(value);
+  });
+
+  dateInput.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (event) =&gt; {
+    <span class="token-keyword">const</span> value = event.target.value;
+    player.<span class="token-function">updateDate</span>(value);
+  });
+
+  resetSenderBtn.<span class="token-function">addEventListener</span>(
+    <span class="token-string">&apos;click&apos;</span>,
+    reset.<span class="token-function">bind</span>(<span class="token-keyword">null</span>, <span class="token-string">&apos;Sender&apos;</span>, senderInput, START_SENDER),
+  );
+  resetSubjectBtn.<span class="token-function">addEventListener</span>(
+    <span class="token-string">&apos;click&apos;</span>,
+    reset.<span class="token-function">bind</span>(<span class="token-keyword">null</span>, <span class="token-string">&apos;Subject&apos;</span>, subjectInput, START_SUBJECT),
+  );
+  resetDateBtn.<span class="token-function">addEventListener</span>(
+    <span class="token-string">&apos;click&apos;</span>,
+    reset.<span class="token-function">bind</span>(<span class="token-keyword">null</span>, <span class="token-string">&apos;Date&apos;</span>, dateInput, START_DATE),
+  );
+})();
+</div><script>(() => {
+  /**
+   * Réinitialise un champ à sa valeur de départ
+   * @param {'Sender' | 'Subject' | 'Date'} what Champs à réinitialiser
+   * @param {HTMLInputElement} input Input à réinitialiser
+   * @param {string} value Valeur de départ à rétablir
+   */
+  function reset(what, input, value) {
+    player[`reset${what}`]();
+    input.value = value;
+  }
+
+  const START_SENDER = 'John Doe';
+  const START_SUBJECT = 'Hello World';
+  const START_DATE = '2025-10-31T11:11';
+
+  const playerSelector = '.bnum-card-item-mail-playground .player';
+  const idSender = 'ctrl-sender';
+  const idSubject = 'ctrl-subject';
+  const idDate = 'ctrl-date';
+  const idUnread = 'ctrl-unread';
+  const idResetSender = 'btn-reset-sender';
+  const idResetSubject = 'btn-reset-subject';
+  const idResetDate = 'btn-reset-date';
+
+  const player = document.querySelector(playerSelector);
+  const senderInput = document.getElementById(idSender);
+  const subjectInput = document.getElementById(idSubject);
+  const dateInput = document.getElementById(idDate);
+  const unreadInput = document.getElementById(idUnread);
+  const resetSenderBtn = document.getElementById(idResetSender);
+  const resetSubjectBtn = document.getElementById(idResetSubject);
+  const resetDateBtn = document.getElementById(idResetDate);
+
+  unreadInput.addEventListener('change', () => {
+    player.toggleAttribute('read');
+  });
+
+  senderInput.addEventListener('input', (event) => {
+    const value = event.target.value;
+    player.updateSender(value);
+  });
+
+  subjectInput.addEventListener('input', (event) => {
+    const value = event.target.value;
+    player.updateSubject(value);
+  });
+
+  dateInput.addEventListener('input', (event) => {
+    const value = event.target.value;
+    player.updateDate(value);
+  });
+
+  resetSenderBtn.addEventListener(
+    'click',
+    reset.bind(null, 'Sender', senderInput, START_SENDER),
+  );
+  resetSubjectBtn.addEventListener(
+    'click',
+    reset.bind(null, 'Subject', subjectInput, START_SUBJECT),
+  );
+  resetDateBtn.addEventListener(
+    'click',
+    reset.bind(null, 'Date', dateInput, START_DATE),
+  );
+})();
+</script></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><table><thead><tr><th>Nom</th><th>Event</th><th>Description</th></tr></thead><tbody><tr><td><code>click</code></td><td><code>MouseEvent</code></td><td>Déclenché lors du clic sur l'item</td></tr><tr><td><code>bnum-card-item-mail:sender-changed</code></td><td><code>CustomElement&lt;{ caller: HTMLBnumCardItemMail }&gt;</code></td><td>Événement déclenché lors du changement de l'expéditeur du mail.</td></tr><tr><td><code>bnum-card-item-mail:subject-changed</code></td><td><code>CustomElement&lt;{ caller: HTMLBnumCardItemMail }&gt;</code></td><td>Événement déclenché lors du changement du sujet du mail.</td></tr><tr><td><code>bnum-card-item-mail:date-changed</code></td><td><code>CustomElement&lt;{ caller: HTMLBnumCardItemMail }&gt;</code></td><td>Événement déclenché lors du changement de la date du mail.</td></tr></tbody></table></div><h3>Slots</h3><div class="slots table"><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>N'existe pas, si vous mettez du contenu en dehors des slots, ils ne seront pas affichés.</td></tr><tr><td><code>sender</code></td><td>Contenu de l'expéditeur (texte ou HTML).</td></tr><tr><td><code>subject</code></td><td>Contenu du sujet (texte ou HTML).</td></tr><tr><td><code>date</code></td><td>Contenu de la date. /!\ Si vous passez par ce slot, la mécanique de formatage automatique de la date ne s'appliquera pas.</td></tr></tbody></table></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>disabled</code></td><td><code>boolean | 'disabled' | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Indique si l'item est désactivé</td></tr><tr><td><code>data-subject</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Sujet du mail.</td></tr><tr><td><code>data-sender</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Expéditeur du mail.</td></tr><tr><td><code>data-date</code></td><td><code>string</code></td><td><code>undefined</code></td><td>✅</td><td>Date du mail, optionnel, mais conseillé si vous voulez la logique de formatage automatique.</td></tr><tr><td><code>read</code></td><td><code>boolean</code></td><td><code>undefined</code></td><td>✅</td><td>Indique si le mail est lu.</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--bnum-card-item-width-percent</code></td><td><bnum-fragment><code>100%</code></bnum-fragment></td><td>Largeur en pourcentage du composant</td></tr><tr><td><code>--bnum-card-item-width-modifier</code></td><td><bnum-fragment><code>30px</code></bnum-fragment></td><td>Valeur soustraite à la largeur</td></tr><tr><td><code>--bnum-card-item-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-surface, #f6f6f7)</code><span class="color-swatch" style="background-color: var(--bnum-color-surface, #f6f6f7);"></span></bnum-fragment></td><td>Couleur de fond normale</td></tr><tr><td><code>--bnum-card-item-background-color-hover</code></td><td><bnum-fragment><code>var(--bnum-color-surface-hover, #eaeaea)</code><span class="color-swatch" style="background-color: var(--bnum-color-surface-hover, #eaeaea);"></span></bnum-fragment></td><td>Couleur de fond au survol</td></tr><tr><td><code>--bnum-card-item-background-color-active</code></td><td><bnum-fragment><code>var(--bnum-color-surface-active, #dfdfdf)</code><span class="color-swatch" style="background-color: var(--bnum-color-surface-active, #dfdfdf);"></span></bnum-fragment></td><td>Couleur de fond à l'état actif</td></tr><tr><td><code>--bnum-card-item-cursor</code></td><td><bnum-fragment><code>pointer</code></bnum-fragment></td><td>Type de curseur</td></tr><tr><td><code>--bnum-card-item-padding</code></td><td><bnum-fragment><code>15px</code></bnum-fragment></td><td>Espacement interne</td></tr><tr><td><code>--bnum-card-item-display</code></td><td><bnum-fragment><code>block</code></bnum-fragment></td><td>Type d'affichage</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>disabled</code></td><td>Actif quand l'item est désactivé</td></tr><tr><td><code>read</code></td><td>Actif quand le mail est marqué comme lu.</td></tr></tbody></table></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>onitemclicked</code></td><td><code>JsEvent<ClickCallback></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur l&#39;item.</p>
+</td></tr><tr><td><code>#_lazyDateOverrideElement</code></td><td><code>HTMLBnumDate</code></td><td>Oui</td><td><p>Retourne l&#39;élément HTMLBnumDate pour l&#39;override de la date.</p>
+<p>Initialise la variable si elle n&#39;a pas encore été initialisée.</p>
+</td></tr><tr><td><code>date</code></td><td><code>Date</code></td><td>Oui</td><td><p>Retourne la date du mail, en tenant compte de l&#39;override si présent.</p>
+</td></tr><tr><td><code>#_mailSubject</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne le sujet du mail depuis l&#39;attribut data.</p>
+</td></tr><tr><td><code>#_mailDate</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne la date du mail depuis l&#39;attribut data.</p>
+</td></tr><tr><td><code>#_mailSender</code></td><td><code>string</code></td><td>Oui</td><td><p>Retourne l&#39;expéditeur du mail depuis l&#39;attribut data.</p>
+</td></tr><tr><td><code>onsubjectchanged</code></td><td><code>JsEvent<CallbackChangedSimple<HTMLBnumCardItemMail>></code></td><td>Non</td><td><p>Événement déclenché lors du changement du sujet du mail.
+Permet d&#39;attacher des gestionnaires personnalisés au changement de sujet.</p>
+</td></tr><tr><td><code>onsenderchanged</code></td><td><code>JsEvent<CallbackChangedSimple<HTMLBnumCardItemMail>></code></td><td>Non</td><td><p>Événement déclenché lors du changement de l&#39;expéditeur du mail.
+Permet d&#39;attacher des gestionnaires personnalisés au changement d&#39;expéditeur.</p>
+</td></tr><tr><td><code>ondatechanged</code></td><td><code>JsEvent<CallbackChangedSimple<HTMLBnumCardItemMail>></code></td><td>Non</td><td><p>Événement déclenché lors du changement de la date du mail.
+Permet d&#39;attacher des gestionnaires personnalisés au changement de date.</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong>updateSender</strong>(content: string | HTMLElement) : <code>this</code></code><p>Force le contenu de l'expéditeur, en ignorant le slot.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>content</code>: Contenu texte ou HTML à afficher comme expéditeur.</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>resetSender</strong>() : <code>this</code></code><p>Réaffiche le contenu du slot "sender" (annule l'override).</p><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>updateSubject</strong>(content: string | HTMLElement) : <code>this</code></code><p>Force le contenu du sujet, en ignorant le slot.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>content</code>: Contenu texte ou HTML à afficher comme sujet.</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>resetSubject</strong>() : <code>this</code></code><p>Réaffiche le contenu du slot "subject" (annule l'override).</p><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>updateDate</strong>(content: string | HTMLBnumDate | Date) : <code>this</code></code><p>Force le contenu de la date, en ignorant le slot.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>content</code>: Chaîne, Date ou élément HTML à afficher comme date.</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>resetDate</strong>() : <code>this</code></code><p>Réaffiche le contenu du slot "date" (annule l'override).</p><p><strong>Retourne :</strong>L'instance courante pour chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> SetDateLogique</strong>(element: HTMLBnumDate) : <code>void</code></code><p>Applique la logique de formatage de date à un élément HTMLBnumDate.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>element</code>: Élément HTMLBnumDate à configurer.</li>
+    </ul></bnum-fragment></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Create</strong>(subject: string, sender: string, date: string | Date) : <code>HTMLBnumCardItemMail</code></code><p>Crée une nouvelle instance du composant avec les valeurs fournies.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>subject</code>: Sujet du mail.</li>
+    
+      <li><code>sender</code>: Expéditeur du mail.</li>
+    
+      <li><code>date</code>: Date du mail</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Instance HTMLBnumCardItemMail.</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

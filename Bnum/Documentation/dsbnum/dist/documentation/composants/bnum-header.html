@@ -1,0 +1,502 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-header"><header><h1><code>bnum-header</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Composant Header du Bnum</p>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Par défaut</h4>
+    <div><bnum-header>
+<img slot="logo" src="assets/bnumloader.svg" alt="Logo du bnum"/>
+<h1 slot="title">Accueil</h1>
+
+<bnum-secondary-button slot="actions" data-icon="add">Créer</bnum-secondary-button>
+<bnum-icon-button slot="actions">article</bnum-icon-button>
+<bnum-icon-button slot="actions">help</bnum-icon-button>
+<bnum-icon-button slot="actions">settings</bnum-icon-button>
+<bnum-icon-button slot="actions">notifications</bnum-icon-button>
+
+<img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
+</bnum-header></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-header</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">img</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;logo&quot;</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/bnumloader.svg&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Logo du bnum&quot;</span><span class="token-bracket">/&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">h1</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;title&quot;</span><span class="token-bracket">&gt;</span>Accueil<span class="token-bracket">&lt;</span><span class="token-tag">/h1</span><span class="token-bracket">&gt;</span>
+
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-secondary-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;add&quot;</span><span class="token-bracket">&gt;</span>Créer<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-secondary-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>article<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>help<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>settings<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>notifications<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+
+<span class="token-bracket">&lt;</span><span class="token-tag">img</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;avatar&quot;</span> <span class="token-attr">style</span>=<span class="token-string">&quot;border-radius: 100%&quot;</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/avatar.png&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Avatar de remplacement&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/img</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-header</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Avec image de fond</h4>
+    <div><bnum-header data-background="assets/headerbackground.gif">
+<img slot="logo" src="assets/bnumloader.svg" alt="Logo du bnum"/>
+<h1 slot="title">Accueil</h1>
+
+<bnum-secondary-button slot="actions" data-icon="add">Créer</bnum-secondary-button>
+<bnum-icon-button slot="actions">article</bnum-icon-button>
+<bnum-icon-button slot="actions">help</bnum-icon-button>
+<bnum-icon-button slot="actions">settings</bnum-icon-button>
+<bnum-icon-button slot="actions">notifications</bnum-icon-button>
+
+<img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
+</bnum-header></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-header</span> <span class="token-attr">data-background</span>=<span class="token-string">&quot;assets/headerbackground.gif&quot;</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">img</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;logo&quot;</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/bnumloader.svg&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Logo du bnum&quot;</span><span class="token-bracket">/&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">h1</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;title&quot;</span><span class="token-bracket">&gt;</span>Accueil<span class="token-bracket">&lt;</span><span class="token-tag">/h1</span><span class="token-bracket">&gt;</span>
+
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-secondary-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;add&quot;</span><span class="token-bracket">&gt;</span>Créer<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-secondary-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>article<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>help<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>settings<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>notifications<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+
+<span class="token-bracket">&lt;</span><span class="token-tag">img</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;avatar&quot;</span> <span class="token-attr">style</span>=<span class="token-string">&quot;border-radius: 100%&quot;</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/avatar.png&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Avatar de remplacement&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/img</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-header</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style=""><h2>Utilisation</h2><div class="playground-demo-box"><div id="bnum-header-story">
+
+  <div class="demo-container">
+     <bnum-header id="bnum-header-story-card-playground">
+  <img slot="logo" src="assets/bnumloader.svg" alt="Logo du bnum"/>
+  <h1 slot="title">Accueil</h1>
+ 
+   <bnum-secondary-button slot="actions" data-icon="add">Créer</bnum-secondary-button>
+   <bnum-icon-button slot="actions">article</bnum-icon-button>
+   <bnum-icon-button slot="actions">help</bnum-icon-button>
+   <bnum-icon-button slot="actions">settings</bnum-icon-button>
+   <bnum-icon-button slot="actions">notifications</bnum-icon-button>
+ 
+  <img slot="avatar" style="border-radius: 100%" src="assets/avatar.png" alt="Avatar de remplacement"></img>
+ </bnum-header>
+
+  <div id="bnum-header-story-playground-section">
+    <div id="bnum-header-story-playground-controls">
+      <div class="control-group">
+        <label for="bnum-header-story-ctrl-title">Modifier le titre de la page : </label>
+        <br/>
+        <input type="text" id="bnum-header-story-ctrl-title" value="Accueil" />
+      </div>
+
+      <div class="control-group" style="display: flex;gap:15px">
+        <bnum-secondary-button id="bnum-header-story-ctrl-title-no-background" data-icon="delete">Sans image</bnum-secondary-button>
+        <bnum-secondary-button id="bnum-header-story-ctrl-title-white" data-icon="snowing">Image clair</bnum-secondary-button>
+        <bnum-secondary-button id="bnum-header-story-ctrl-title-dark" data-icon="apartment">Image sombre</bnum-secondary-button>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html"><span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story&quot;</span><span class="token-bracket">&gt;</span>
+
+  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;demo-container&quot;</span><span class="token-bracket">&gt;</span>
+     <span class="token-bracket">&lt;</span><span class="token-tag">bnum-header</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-card-playground&quot;</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">img</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;logo&quot;</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/bnumloader.svg&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Logo du bnum&quot;</span><span class="token-bracket">/&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">h1</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;title&quot;</span><span class="token-bracket">&gt;</span>Accueil<span class="token-bracket">&lt;</span><span class="token-tag">/h1</span><span class="token-bracket">&gt;</span>
+ 
+   <span class="token-bracket">&lt;</span><span class="token-tag">bnum-secondary-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;add&quot;</span><span class="token-bracket">&gt;</span>Créer<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-secondary-button</span><span class="token-bracket">&gt;</span>
+   <span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>article<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+   <span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>help<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+   <span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>settings<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+   <span class="token-bracket">&lt;</span><span class="token-tag">bnum-icon-button</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;actions&quot;</span><span class="token-bracket">&gt;</span>notifications<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-icon-button</span><span class="token-bracket">&gt;</span>
+ 
+  <span class="token-bracket">&lt;</span><span class="token-tag">img</span> <span class="token-attr">slot</span>=<span class="token-string">&quot;avatar&quot;</span> <span class="token-attr">style</span>=<span class="token-string">&quot;border-radius: 100%&quot;</span> <span class="token-attr">src</span>=<span class="token-string">&quot;assets/avatar.png&quot;</span> <span class="token-attr">alt</span>=<span class="token-string">&quot;Avatar de remplacement&quot;</span><span class="token-bracket">&gt;</span><span class="token-bracket">&lt;</span><span class="token-tag">/img</span><span class="token-bracket">&gt;</span>
+ <span class="token-bracket">&lt;</span><span class="token-tag">/bnum-header</span><span class="token-bracket">&gt;</span>
+
+  <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-playground-section&quot;</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-playground-controls&quot;</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;bnum-header-story-ctrl-title&quot;</span><span class="token-bracket">&gt;</span>Modifier le titre de la page : <span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">br</span><span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-ctrl-title&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;Accueil&quot;</span> <span class="token-bracket">/&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+      <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span> <span class="token-attr">style</span>=<span class="token-string">&quot;display: flex;gap:15px&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-secondary-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-ctrl-title-no-background&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;delete&quot;</span><span class="token-bracket">&gt;</span>Sans image<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-secondary-button</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-secondary-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-ctrl-title-white&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;snowing&quot;</span><span class="token-bracket">&gt;</span>Image clair<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-secondary-button</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-secondary-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;bnum-header-story-ctrl-title-dark&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;apartment&quot;</span><span class="token-bracket">&gt;</span>Image sombre<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-secondary-button</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+  <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+<span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span></div><div id="playground-js">(() =&gt; {
+  <span class="token-keyword">const</span> header = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;bnum-header-story-card-playground&apos;</span>);
+  <span class="token-keyword">const</span> titleInput = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;bnum-header-story-ctrl-title&apos;</span>);
+  <span class="token-keyword">const</span> btnNoBackground = document.<span class="token-function">getElementById</span>(
+    <span class="token-string">&apos;bnum-header-story-ctrl-title-no-background&apos;</span>,
+  );
+  <span class="token-keyword">const</span> btnWhiteBackground = document.<span class="token-function">getElementById</span>(
+    <span class="token-string">&apos;bnum-header-story-ctrl-title-white&apos;</span>,
+  );
+  <span class="token-keyword">const</span> btnDarkBackground = document.<span class="token-function">getElementById</span>(
+    <span class="token-string">&apos;bnum-header-story-ctrl-title-dark&apos;</span>,
+  );
+
+  btnNoBackground.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>, <span class="token-string">&apos;disabled&apos;</span>);
+
+  <span class="token-comment">// Met à jour le titre de la page dans le header</span>
+  titleInput.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (event) =&gt; {
+    header.<span class="token-function">setPageTitle</span>(event.target.value);
+  });
+
+  btnNoBackground.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, () =&gt; {
+    btnNoBackground.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>, <span class="token-string">&apos;disabled&apos;</span>);
+    btnWhiteBackground.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>);
+    btnDarkBackground.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>);
+
+    header.<span class="token-function">clearBackground</span>();
+  });
+
+  btnWhiteBackground.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, () =&gt; {
+    btnNoBackground.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>);
+    btnWhiteBackground.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>, <span class="token-string">&apos;disabled&apos;</span>);
+    btnDarkBackground.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>);
+
+    header.<span class="token-function">updateBackground</span>(<span class="token-string">&apos;assets/whitebackground.png&apos;</span>);
+  });
+
+  btnDarkBackground.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, () =&gt; {
+    btnNoBackground.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>);
+    btnWhiteBackground.<span class="token-function">removeAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>);
+    btnDarkBackground.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>, <span class="token-string">&apos;disabled&apos;</span>);
+
+    header.<span class="token-function">updateBackground</span>(<span class="token-string">&apos;assets/headerbackground.gif&apos;</span>);
+  });
+})();
+</div><script>(() => {
+  const header = document.getElementById('bnum-header-story-card-playground');
+  const titleInput = document.getElementById('bnum-header-story-ctrl-title');
+  const btnNoBackground = document.getElementById(
+    'bnum-header-story-ctrl-title-no-background',
+  );
+  const btnWhiteBackground = document.getElementById(
+    'bnum-header-story-ctrl-title-white',
+  );
+  const btnDarkBackground = document.getElementById(
+    'bnum-header-story-ctrl-title-dark',
+  );
+
+  btnNoBackground.setAttribute('disabled', 'disabled');
+
+  // Met à jour le titre de la page dans le header
+  titleInput.addEventListener('change', (event) => {
+    header.setPageTitle(event.target.value);
+  });
+
+  btnNoBackground.addEventListener('click', () => {
+    btnNoBackground.setAttribute('disabled', 'disabled');
+    btnWhiteBackground.removeAttribute('disabled');
+    btnDarkBackground.removeAttribute('disabled');
+
+    header.clearBackground();
+  });
+
+  btnWhiteBackground.addEventListener('click', () => {
+    btnNoBackground.removeAttribute('disabled');
+    btnWhiteBackground.setAttribute('disabled', 'disabled');
+    btnDarkBackground.removeAttribute('disabled');
+
+    header.updateBackground('assets/whitebackground.png');
+  });
+
+  btnDarkBackground.addEventListener('click', () => {
+    btnNoBackground.removeAttribute('disabled');
+    btnWhiteBackground.removeAttribute('disabled');
+    btnDarkBackground.setAttribute('disabled', 'disabled');
+
+    header.updateBackground('assets/headerbackground.gif');
+  });
+})();
+</script></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><table><thead><tr><th>Nom</th><th>Event</th><th>Description</th></tr></thead><tbody><tr><td><code>bnum-header:background.changed</code></td><td><code>CustomEvent&lt;{newBackground:Nullable&lt;string&gt;}&gt;</code></td><td>Événement déclenché lorsque l'image de fond change</td></tr></tbody></table></div><h3>Slots</h3><div class="slots table"><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>logo</code></td><td>Slot pour le logo</td></tr><tr><td><code>title</code></td><td>Slot pour le titre</td></tr><tr><td><code>actions</code></td><td>Slot pour les actions</td></tr><tr><td><code>avatar</code></td><td>Slot pour l'avatar</td></tr></tbody></table></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>data-background</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met une image de fond par défaut</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--bnum-header-display</code></td><td><bnum-fragment><code>block</code></bnum-fragment></td><td>Définit le type d'affichage du header</td></tr><tr><td><code>--bnum-header-height</code></td><td><bnum-fragment><code>60px</code></bnum-fragment></td><td>Hauteur du header</td></tr><tr><td><code>--bnum-header-background-color</code></td><td><bnum-fragment><code>#f5f6fa</code><span class="color-swatch" style="background-color: #f5f6fa;"></span></bnum-fragment></td><td>Couleur de fond du header</td></tr><tr><td><code>--bnum-header-border-bottom</code></td><td><bnum-fragment><code>1px solid #e5e7eb</code></bnum-fragment></td><td>Bordure basse du header</td></tr><tr><td><code>--bnum-header-left-gap</code></td><td><bnum-fragment><code>8px</code></bnum-fragment></td><td>Espace à gauche entre les éléments du header</td></tr><tr><td><code>--bnum-header-right-gap</code></td><td><bnum-fragment><code>24px</code></bnum-fragment></td><td>Espace à droite entre les éléments du header</td></tr><tr><td><code>--bnum-header-logo-height</code></td><td><bnum-fragment><code>45px</code></bnum-fragment></td><td>Hauteur du logo dans le header</td></tr><tr><td><code>--bnum-header-background-image</code></td><td><bnum-fragment><code>none</code></bnum-fragment></td><td>Image de fond du header (par défaut aucune)</td></tr><tr><td><code>--bnum-header-with-background-color</code></td><td><bnum-fragment><code>#ffffff</code><span class="color-swatch" style="background-color: #ffffff;"></span></bnum-fragment></td><td>Couleur du texte sur fond personnalisé</td></tr><tr><td><code>--bnum-header-main-action-border-color</code></td><td><bnum-fragment><code>#ffffff</code><span class="color-swatch" style="background-color: #ffffff;"></span></bnum-fragment></td><td>Couleur de la bordure du bouton principal sur fond personnalisé</td></tr><tr><td><code>--bnum-header-main-action-color</code></td><td><bnum-fragment><code>#ffffff</code><span class="color-swatch" style="background-color: #ffffff;"></span></bnum-fragment></td><td>Couleur du texte du bouton principal sur fond personnalisé</td></tr><tr><td><code>--bnum-header-background-button-padding</code></td><td><bnum-fragment><code>5px 3px</code></bnum-fragment></td><td>Padding de l'action principale</td></tr><tr><td><code>--bnum-header-title-margin</code></td><td><bnum-fragment><code>0</code></bnum-fragment></td><td>Marge du titre</td></tr><tr><td><code>--bnum-header-title-font-size</code></td><td><bnum-fragment><code>1.25rem</code></bnum-fragment></td><td>Taille de la police du titre</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>with-background</code></td><td>Actif si une image de fond est définie</td></tr></tbody></table></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>#_backgroundScheduler</code></td><td><code>Scheduler<string></code></td><td>Oui</td><td><p>Scheduler pour la mise à jour de l&#39;image de fond</p>
+</td></tr><tr><td><code>onBackgroundChanged</code></td><td><code>JsEvent<import("/opt/bnum/rcube/github/design-system-bnum/components/organisms/header/bnum-header.internal/types").BackgroundChangedCallback></code></td><td>Non</td><td><p>Evènement du changement d&#39;image de fond</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong>setPageTitle</strong>(content: string | HTMLElement) : <code>this</code></code><p>Change le titre dynamiquement.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>content</code>: - String : Met à jour le H1.
+- HTMLElement : Affiche l'élément dans le conteneur dédié.
+- null : Affiche le slot par défaut.</li>
+    </ul></bnum-fragment></div><hr class="api-separator"><div class="api-method"><code><strong>updateBackground</strong>(urlOrData: string) : <code>this</code></code><p>Met à jour l'image de fond du header.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>urlOrData</code>: Interpréte la valeur comme une URL ou une Data URL.</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'instance courante pour le chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong>clearBackground</strong>() : <code>this</code></code><p>Supprime l'image de fond du header.</p><p><strong>Retourne :</strong>L'instance courante pour le chaînage.</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Create</strong>({
+		background = null,
+	}: HTMLBnumHeaderCreateOption) : <code>HTMLBnumHeader</code></code><p>Génère un nouvel élément HTMLBnumHeader</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>{
+		background = null,
+	}</code>: N/A</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Element créé</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>

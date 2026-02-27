@@ -1,0 +1,698 @@
+<html><head><link href="../../global.min.css" rel="stylesheet"><link href="../../material-symbols.css" rel="stylesheet"><style>:root {
+  --sidebar-background-color: #242424;
+}
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-sidebar {
+  color: white;
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-background-color);
+}
+.story-sidebar-header {
+  position: sticky;
+  top: -16px;
+  background-color: var(--sidebar-background-color);
+  z-index: 1;
+}
+.story-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.story-sidebar #search-components {
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+.story-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.story-sidebar li a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-left: solid thin transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: white;
+}
+.story-sidebar li a:hover {
+  font-weight: bold;
+}
+.story-sidebar li a.active {
+  cursor: default;
+  pointer-events: none;
+  font-weight: bold;
+  border-left-color: white;
+}
+.story-content {
+  flex-grow: 1;
+  padding: 3rem;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
+  font-family: var(--bnum-font-family-primary);
+  color: var(--bnum-text-primary);
+}
+.story-content h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--bnum-text-title-primary);
+  border-bottom: 2px solid var(--bnum-color-primary);
+  padding-bottom: 0.5rem;
+  font-family: var(--bnum-font-family-primary);
+}
+.story-content h1 code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9em;
+}
+.story-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--bnum-text-title-primary);
+  display: flex;
+  align-items: center;
+}
+.story-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--bnum-color-primary);
+  margin-right: 0.75rem;
+}
+.story-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--bnum-text-title-primary);
+}
+.story-content p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 800px;
+}
+.story-content .doc-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-top: 2px solid #ddd;
+}
+.story-content .playground .playground-demo-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+}
+.story-content .playground #playground-tabs {
+  margin-bottom: 0;
+  --bnum-segmented-control-radius: 0;
+}
+.story-content .playground #playground-html,
+.story-content .playground #playground-js {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+  white-space: pre-wrap;
+}
+.story-content .structures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.story-content .structures .structure-block {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+.story-content .structures .structure-block h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--bnum-text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.story-content .structures .structure-block pre {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  border-left: 2px solid var(--bnum-color-primary);
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+.story-content .table {
+  max-height: 250px;
+  overflow-y: auto;
+}
+.story-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  max-height: 350px;
+  overflow-y: auto;
+}
+.story-content table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.story-content table th {
+  background-color: #f6f6f6;
+  color: var(--bnum-text-title-primary);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+}
+.story-content table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.story-content table tr:last-child td {
+  border-bottom: none;
+}
+.story-content table code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #c7254e;
+}
+.story-content code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.story-content pre code {
+  background: transparent;
+  text-wrap: auto;
+  max-height: 230px;
+  overflow-y: auto;
+  display: block;
+}
+.story-content .api-method {
+  padding: 1rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.story-content .api-method:last-child {
+  border-bottom: none;
+}
+.story-content .api-method h4 {
+  margin-top: 0;
+  font-family: monospace;
+  color: var(--bnum-color-primary);
+}
+.story-content .color-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-left: 8px;
+  border-radius: 2px;
+}
+#playground-html,
+#playground-js {
+  height: 250px;
+  overflow: auto;
+}
+.token-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+.token-keyword {
+  color: #569cd6;
+}
+.token-string {
+  color: #ce9178;
+}
+.token-number {
+  color: #b5cea8;
+}
+.token-tag {
+  color: #569cd6;
+}
+.token-attr {
+  color: #9cdcfe;
+}
+.token-bracket {
+  color: #808080;
+}
+.token-function {
+  color: #dcdcaa;
+}
+</style><script src="../../ds-bnum.js" defer></script><script src="js.js" defer></script></head><body><div class="story-container"><nav class="story-sidebar"><div class="story-sidebar-header"><h3>Composants</h3><bnum-input-search id="search-components"></bnum-input-search></div><ul><li><a data-component="bnum-badge" href="bnum-badge.html">badge</a></li><li><a data-component="bnum-button" href="bnum-button.html">button</a></li><li><a data-component="bnum-card" href="bnum-card.html">card</a></li><li><a data-component="bnum-card-agenda" href="bnum-card-agenda.html">card-agenda</a></li><li><a data-component="bnum-card-email" href="bnum-card-email.html">card-email</a></li><li><a data-component="bnum-card-item" href="bnum-card-item.html">card-item</a></li><li><a data-component="bnum-card-item-agenda" href="bnum-card-item-agenda.html">card-item-agenda</a></li><li><a data-component="bnum-card-item-mail" href="bnum-card-item-mail.html">card-item-mail</a></li><li><a data-component="bnum-card-list" href="bnum-card-list.html">card-list</a></li><li><a data-component="bnum-card-title" href="bnum-card-title.html">card-title</a></li><li><a data-component="bnum-column" href="bnum-column.html">column</a></li><li><a data-component="bnum-danger-button" href="bnum-danger-button.html">danger-button</a></li><li><a data-component="bnum-date" href="bnum-date.html">date</a></li><li><a data-component="bnum-folder" href="bnum-folder.html">folder</a></li><li><a data-component="bnum-folder-list" href="bnum-folder-list.html">folder-list</a></li><li><a data-component="bnum-fragment" href="bnum-fragment.html">fragment</a></li><li><a data-component="bnum-header" href="bnum-header.html">header</a></li><li><a data-component="bnum-helper" href="bnum-helper.html">helper</a></li><li><a data-component="bnum-hide" href="bnum-hide.html">hide</a></li><li><a data-component="bnum-icon" href="bnum-icon.html">icon</a></li><li><a data-component="bnum-icon-button" href="bnum-icon-button.html">icon-button</a></li><li><a data-component="bnum-img" href="bnum-img.html">img</a></li><li><a data-component="bnum-input" href="bnum-input.html">input</a></li><li><a data-component="bnum-input-date" href="bnum-input-date.html">input-date</a></li><li><a data-component="bnum-input-number" href="bnum-input-number.html">input-number</a></li><li><a data-component="bnum-input-search" href="bnum-input-search.html">input-search</a></li><li><a data-component="bnum-input-text" href="bnum-input-text.html">input-text</a></li><li><a data-component="bnum-input-time" href="bnum-input-time.html">input-time</a></li><li><a data-component="bnum-primary-button" href="bnum-primary-button.html">primary-button</a></li><li><a data-component="bnum-radio" href="bnum-radio.html">radio</a></li><li><a data-component="bnum-radio-group" href="bnum-radio-group.html">radio-group</a></li><li><a data-component="bnum-secondary-button" href="bnum-secondary-button.html">secondary-button</a></li><li><a data-component="bnum-segmented-control" href="bnum-segmented-control.html">segmented-control</a></li><li><a data-component="bnum-segmented-item" href="bnum-segmented-item.html">segmented-item</a></li><li><a data-component="bnum-select" href="bnum-select.html">select</a></li><li><a data-component="bnum-switch" href="bnum-switch.html">switch</a></li><li><a data-component="bnum-tree" href="bnum-tree.html">tree</a></li></ul></nav></div><main class="story-content"><bnum-fragment id="component-data" data-component="bnum-danger-button"><style>/* Style pour le playground */
+#playground-danger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+#playground-demo-danger {
+  flex-basis: 100%;
+  min-height: 80px;
+  padding: 1rem;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#playground-controls-danger {
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+#playground-danger .control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#playground-danger .control-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4px;
+}
+#playground-danger .control-group input[type='text'] {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+#playground-danger .control-group span {
+  display: block;
+}
+</style><header><h1><code>bnum-danger-button</code></h1></header><section class="doc-section"><h2>Description</h2><p><p>Bouton Bnum de type &quot;Danger&quot;.</p>
+</p></section><section class="doc-section"><h2>Structures</h2><div class="structures">
+      <div class="structure-block">
+    <h4>Cas standard</h4>
+    <div><bnum-danger-button>Texte du bouton</bnum-danger-button></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span><span class="token-bracket">&gt;</span>Texte du bouton<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Bouton avec icône</h4>
+    <div><bnum-danger-button data-icon="home">Texte du bouton</bnum-danger-button></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;home&quot;</span><span class="token-bracket">&gt;</span>Texte du bouton<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Bouton avec une icône à gauche</h4>
+    <div><bnum-danger-button data-icon="home" data-icon-pos="left">Texte du bouton</bnum-danger-button></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;home&quot;</span> <span class="token-attr">data-icon-pos</span>=<span class="token-string">&quot;left&quot;</span><span class="token-bracket">&gt;</span>Texte du bouton<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Bouton en état de chargement</h4>
+    <div><bnum-danger-button loading>Texte du bouton</bnum-danger-button></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span> <span class="token-attr">loading</span><span class="token-bracket">&gt;</span>Texte du bouton<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Bouton arrondi</h4>
+    <div><bnum-danger-button rounded>Texte du bouton</bnum-danger-button></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span> <span class="token-attr">rounded</span><span class="token-bracket">&gt;</span>Texte du bouton<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  
+      <div class="structure-block">
+    <h4>Bouton cachant le texte sur les petits layouts</h4>
+    <div><bnum-danger-button data-hide="small" data-icon="menu">Menu</bnum-danger-button></div><pre><code><span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span> <span class="token-attr">data-hide</span>=<span class="token-string">&quot;small&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;menu&quot;</span><span class="token-bracket">&gt;</span>Menu<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span><span class="token-bracket">&gt;</span></code></pre>
+  </div>
+  </div></section><section class="playground doc-section" style=""><h2>Utilisation</h2><div class="playground-demo-box">    <div id="playground-danger">
+      <div id="playground-demo-danger">
+        <bnum-danger-button id="main-btn-danger" data-icon="rocket_launch"
+          >Mon Bouton</bnum-danger-button
+        >
+      </div>
+
+      <div id="playground-controls-danger">
+        <div class="control-group">
+          <label for="ctrl-text-danger">Texte (Slot)</label>
+          <input type="text" id="ctrl-text-danger" value="Mon Bouton" />
+        </div>
+
+        <div class="control-group">
+          <label for="ctrl-icon-danger">Icône (<code>.icon</code>)</label>
+          <input type="text" id="ctrl-icon-danger" value="rocket_launch" />
+        </div>
+
+        <div class="control-group">
+          <label>Position Icône (<code>.iconPos</code>)</label>
+          <span>
+            <input type="radio" name="icon-pos" value="left" id="p-left-danger" />
+            <label for="p-left-danger">Gauche</label>
+          </span>
+          <span>
+            <input
+              type="radio"
+              name="icon-pos"
+              value="right"
+              id="p-right-danger"
+              checked
+            />
+            <label for="p-right-danger">Droite</label>
+          </span>
+        </div>
+
+        <div class="control-group">
+          <label>États (Attributs)</label>
+          <span>
+            <input type="checkbox" id="ctrl-rounded-danger" />
+            <label for="ctrl-rounded-danger">Arrondi (<code>[rounded]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-loading-danger" />
+            <label for="ctrl-loading-danger">Chargement (<code>[loading]</code>)</label>
+          </span>
+          <span>
+            <input type="checkbox" id="ctrl-disabled-danger" />
+            <label for="ctrl-disabled-danger">Désactivé (<code>[disabled]</code>)</label>
+          </span>
+        </div>
+      </div>
+    </div>
+</div><bnum-segmented-control id="playground-tabs"><bnum-segmented-item slot="items" value="html">HTML</bnum-segmented-item><bnum-segmented-item slot="items" value="js">JS</bnum-segmented-item></bnum-segmented-control><div id="playground-html">    <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;playground-danger&quot;</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;playground-demo-danger&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">bnum-danger-button</span> <span class="token-attr">id</span>=<span class="token-string">&quot;main-btn-danger&quot;</span> <span class="token-attr">data-icon</span>=<span class="token-string">&quot;rocket_launch&quot;</span>
+          <span class="token-bracket">&gt;</span>Mon Bouton<span class="token-bracket">&lt;</span><span class="token-tag">/bnum-danger-button</span>
+        <span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+      <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">id</span>=<span class="token-string">&quot;playground-controls-danger&quot;</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-text-danger&quot;</span><span class="token-bracket">&gt;</span>Texte (Slot)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-text-danger&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;Mon Bouton&quot;</span> <span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-icon-danger&quot;</span><span class="token-bracket">&gt;</span>Icône (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>.icon<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;text&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-icon-danger&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;rocket_launch&quot;</span> <span class="token-bracket">/&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">label</span><span class="token-bracket">&gt;</span>Position Icône (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>.iconPos<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">span</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;radio&quot;</span> <span class="token-attr">name</span>=<span class="token-string">&quot;icon-pos&quot;</span> <span class="token-attr">value</span>=<span class="token-string">&quot;left&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;p-left-danger&quot;</span> <span class="token-bracket">/&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;p-left-danger&quot;</span><span class="token-bracket">&gt;</span>Gauche<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">span</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span>
+              <span class="token-attr">type</span>=<span class="token-string">&quot;radio&quot;</span>
+              <span class="token-attr">name</span>=<span class="token-string">&quot;icon-pos&quot;</span>
+              <span class="token-attr">value</span>=<span class="token-string">&quot;right&quot;</span>
+              <span class="token-attr">id</span>=<span class="token-string">&quot;p-right-danger&quot;</span>
+              <span class="token-attr">checked</span>
+            <span class="token-bracket">/&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;p-right-danger&quot;</span><span class="token-bracket">&gt;</span>Droite<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+
+        <span class="token-bracket">&lt;</span><span class="token-tag">div</span> <span class="token-attr">class</span>=<span class="token-string">&quot;control-group&quot;</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">label</span><span class="token-bracket">&gt;</span>États (Attributs)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">span</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;checkbox&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-rounded-danger&quot;</span> <span class="token-bracket">/&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-rounded-danger&quot;</span><span class="token-bracket">&gt;</span>Arrondi (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>[rounded]<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">span</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;checkbox&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-loading-danger&quot;</span> <span class="token-bracket">/&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-loading-danger&quot;</span><span class="token-bracket">&gt;</span>Chargement (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>[loading]<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">span</span><span class="token-bracket">&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">input</span> <span class="token-attr">type</span>=<span class="token-string">&quot;checkbox&quot;</span> <span class="token-attr">id</span>=<span class="token-string">&quot;ctrl-disabled-danger&quot;</span> <span class="token-bracket">/&gt;</span>
+            <span class="token-bracket">&lt;</span><span class="token-tag">label</span> <span class="token-attr">for</span>=<span class="token-string">&quot;ctrl-disabled-danger&quot;</span><span class="token-bracket">&gt;</span>Désactivé (<span class="token-bracket">&lt;</span><span class="token-tag">code</span><span class="token-bracket">&gt;</span>[disabled]<span class="token-bracket">&lt;</span><span class="token-tag">/code</span><span class="token-bracket">&gt;</span>)<span class="token-bracket">&lt;</span><span class="token-tag">/label</span><span class="token-bracket">&gt;</span>
+          <span class="token-bracket">&lt;</span><span class="token-tag">/span</span><span class="token-bracket">&gt;</span>
+        <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+      <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+    <span class="token-bracket">&lt;</span><span class="token-tag">/div</span><span class="token-bracket">&gt;</span>
+</div><div id="playground-js">document.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;DOMContentLoaded&apos;</span>, () =&gt; {
+  <span class="token-keyword">const</span> namespace = <span class="token-string">&apos;-danger&apos;</span>;
+  <span class="token-keyword">const</span> logOutput = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;log-output-<span class="token-number">1</span>&apos;</span>);
+  <span class="token-keyword">const</span> btn = document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;main-btn&apos;</span> + namespace);
+
+  <span class="token-keyword">function</span> <span class="token-function">log</span>(message) {
+    console.<span class="token-function">log</span>(message);
+    <span class="token-keyword">if</span> (logOutput)
+      logOutput.textContent += <span class="token-string">`[${<span class="token-keyword">new</span> <span class="token-function">Date</span>().<span class="token-function">toLocaleTimeString</span>()}] ${message}\n`</span>;
+  }
+
+  <span class="token-function">log</span>(<span class="token-string">&apos;Page chargée. Attachement des écouteurs...&apos;</span>);
+
+  document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;ctrl-text-danger&apos;</span>).<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (e) =&gt; {
+    btn.textContent = e.target.value;
+  });
+
+  document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;ctrl-icon-danger&apos;</span>).<span class="token-function">addEventListener</span>(<span class="token-string">&apos;input&apos;</span>, (e) =&gt; {
+    btn.icon = e.target.value.<span class="token-function">trim</span>() || <span class="token-keyword">null</span>;
+  });
+
+  document.<span class="token-function">querySelectorAll</span>(<span class="token-string">&apos;input[name=&quot;variation&quot;]&apos;</span>).<span class="token-function">forEach</span>((input) =&gt; {
+    input.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+      <span class="token-keyword">if</span> (e.target.checked) {
+        btn.variation = e.target.value;
+      }
+    });
+  });
+
+  document.<span class="token-function">querySelectorAll</span>(<span class="token-string">&apos;input[name=&quot;icon-pos&quot;]&apos;</span>).<span class="token-function">forEach</span>((input) =&gt; {
+    input.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+      <span class="token-keyword">if</span> (e.target.checked) {
+        btn.iconPos = e.target.value;
+      }
+    });
+  });
+
+  document
+    .<span class="token-function">getElementById</span>(<span class="token-string">&apos;ctrl-rounded-danger&apos;</span>)
+    .<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+      btn.<span class="token-function">toggleAttribute</span>(<span class="token-string">&apos;rounded&apos;</span>, e.target.checked);
+      <span class="token-keyword">if</span> (btn.<span class="token-function">hasAttribute</span>(<span class="token-string">&apos;rounded&apos;</span>)) {
+        btn.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;rounded&apos;</span>, <span class="token-keyword">true</span>);
+      }
+    });
+
+  document
+    .<span class="token-function">getElementById</span>(<span class="token-string">&apos;ctrl-loading-danger&apos;</span>)
+    .<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+      <span class="token-keyword">if</span> (e.target.checked) {
+        btn.<span class="token-function">setLoading</span>();
+      } <span class="token-keyword">else</span> {
+        btn.<span class="token-function">stopLoading</span>();
+      }
+    });
+
+  document
+    .<span class="token-function">getElementById</span>(<span class="token-string">&apos;ctrl-disabled-danger&apos;</span>)
+    .<span class="token-function">addEventListener</span>(<span class="token-string">&apos;change&apos;</span>, (e) =&gt; {
+      btn.<span class="token-function">toggleAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>, e.target.checked);
+      <span class="token-keyword">if</span> (btn.<span class="token-function">hasAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>)) {
+        btn.<span class="token-function">setAttribute</span>(<span class="token-string">&apos;disabled&apos;</span>, <span class="token-keyword">true</span>);
+      }
+    });
+
+  btn.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;elementchanged&apos;</span>, (e) =&gt; {
+    <span class="token-keyword">if</span> (e.detail &amp;&amp; e.detail.property) {
+      <span class="token-function">log</span>(<span class="token-string">&apos;✅ Événement &quot;elementchanged&quot; reçu:&apos;</span>);
+      <span class="token-function">log</span>(<span class="token-string">`   Propriété: ${e.detail.property}`</span>);
+      <span class="token-function">log</span>(<span class="token-string">`   Ancienne valeur: ${e.detail.oldValue}`</span>);
+      <span class="token-function">log</span>(<span class="token-string">`   Nouvelle valeur: ${e.detail.newValue}`</span>);
+    }
+  });
+
+  btn.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;custom:loading&apos;</span>, (e) =&gt; {
+    <span class="token-function">log</span>(<span class="token-string">&apos;✅ Événement &quot;custom:loading&quot; reçu:&apos;</span>);
+    <span class="token-function">log</span>(<span class="token-string">`   État: ${e.detail.state}`</span>);
+  });
+
+  btn.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;click&apos;</span>, (e) =&gt; {
+    <span class="token-function">log</span>(<span class="token-string">&apos;🖱️ Événement &quot;click&quot; reçu !&apos;</span>);
+  });
+
+  <span class="token-keyword">try</span> {
+    <span class="token-keyword">const</span> BnumButtonClass = customElements.<span class="token-keyword">get</span>(<span class="token-string">&apos;bnum-button&apos;</span>);
+    <span class="token-keyword">if</span> (BnumButtonClass) {
+      <span class="token-keyword">const</span> staticIconBtn = BnumButtonClass.<span class="token-function">CreateOnlyIcon</span>(<span class="token-string">&apos;mail&apos;</span>, {
+        variation: <span class="token-string">&apos;secondary&apos;</span>,
+        rounded: <span class="token-keyword">true</span>,
+      });
+      staticIconBtn.title = <span class="token-string">&apos;Créé via CreateOnlyIcon&apos;</span>;
+      document.<span class="token-function">getElementById</span>(<span class="token-string">&apos;<span class="token-keyword">static</span>-icon-only&apos;</span>).<span class="token-function">appendChild</span>(staticIconBtn);
+      <span class="token-function">log</span>(<span class="token-string">&apos;Action: Bouton <span class="token-function">statique</span> (CreateOnlyIcon) ajouté.&apos;</span>);
+    }
+  } <span class="token-keyword">catch</span> (e) {
+    <span class="token-function">log</span>(<span class="token-string">`❌ ERREUR création statique: ${e.message}`</span>);
+  }
+});
+
+window.<span class="token-function">addEventListener</span>(<span class="token-string">&apos;resize&apos;</span>, () =&gt; {
+  <span class="token-keyword">if</span> (window.innerWidth &lt;= <span class="token-number">720</span>) {
+    document.<span class="token-function">querySelector</span>(<span class="token-string">&apos;html&apos;</span>).classList.<span class="token-function">add</span>(<span class="token-string">&apos;layout-small&apos;</span>);
+  } <span class="token-keyword">else</span> {
+    document.<span class="token-function">querySelector</span>(<span class="token-string">&apos;html&apos;</span>).classList.<span class="token-function">remove</span>(<span class="token-string">&apos;layout-small&apos;</span>);
+  }
+});
+window.<span class="token-function">dispatchEvent</span>(<span class="token-keyword">new</span> <span class="token-function">Event</span>(<span class="token-string">&apos;resize&apos;</span>));
+</div><script>document.addEventListener('DOMContentLoaded', () => {
+  const namespace = '-danger';
+  const logOutput = document.getElementById('log-output-1');
+  const btn = document.getElementById('main-btn' + namespace);
+
+  function log(message) {
+    console.log(message);
+    if (logOutput)
+      logOutput.textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+  }
+
+  log('Page chargée. Attachement des écouteurs...');
+
+  document.getElementById('ctrl-text-danger').addEventListener('input', (e) => {
+    btn.textContent = e.target.value;
+  });
+
+  document.getElementById('ctrl-icon-danger').addEventListener('input', (e) => {
+    btn.icon = e.target.value.trim() || null;
+  });
+
+  document.querySelectorAll('input[name="variation"]').forEach((input) => {
+    input.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        btn.variation = e.target.value;
+      }
+    });
+  });
+
+  document.querySelectorAll('input[name="icon-pos"]').forEach((input) => {
+    input.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        btn.iconPos = e.target.value;
+      }
+    });
+  });
+
+  document
+    .getElementById('ctrl-rounded-danger')
+    .addEventListener('change', (e) => {
+      btn.toggleAttribute('rounded', e.target.checked);
+      if (btn.hasAttribute('rounded')) {
+        btn.setAttribute('rounded', true);
+      }
+    });
+
+  document
+    .getElementById('ctrl-loading-danger')
+    .addEventListener('change', (e) => {
+      if (e.target.checked) {
+        btn.setLoading();
+      } else {
+        btn.stopLoading();
+      }
+    });
+
+  document
+    .getElementById('ctrl-disabled-danger')
+    .addEventListener('change', (e) => {
+      btn.toggleAttribute('disabled', e.target.checked);
+      if (btn.hasAttribute('disabled')) {
+        btn.setAttribute('disabled', true);
+      }
+    });
+
+  btn.addEventListener('elementchanged', (e) => {
+    if (e.detail && e.detail.property) {
+      log('✅ Événement "elementchanged" reçu:');
+      log(`   Propriété: ${e.detail.property}`);
+      log(`   Ancienne valeur: ${e.detail.oldValue}`);
+      log(`   Nouvelle valeur: ${e.detail.newValue}`);
+    }
+  });
+
+  btn.addEventListener('custom:loading', (e) => {
+    log('✅ Événement "custom:loading" reçu:');
+    log(`   État: ${e.detail.state}`);
+  });
+
+  btn.addEventListener('click', (e) => {
+    log('🖱️ Événement "click" reçu !');
+  });
+
+  try {
+    const BnumButtonClass = customElements.get('bnum-button');
+    if (BnumButtonClass) {
+      const staticIconBtn = BnumButtonClass.CreateOnlyIcon('mail', {
+        variation: 'secondary',
+        rounded: true,
+      });
+      staticIconBtn.title = 'Créé via CreateOnlyIcon';
+      document.getElementById('static-icon-only').appendChild(staticIconBtn);
+      log('Action: Bouton statique (CreateOnlyIcon) ajouté.');
+    }
+  } catch (e) {
+    log(`❌ ERREUR création statique: ${e.message}`);
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth <= 720) {
+    document.querySelector('html').classList.add('layout-small');
+  } else {
+    document.querySelector('html').classList.remove('layout-small');
+  }
+});
+window.dispatchEvent(new Event('resize'));
+</script></section><section class="doc-section"><h2>API Publique</h2><h3>Événements</h3><div class="events table"><table><thead><tr><th>Nom</th><th>Event</th><th>Description</th></tr></thead><tbody><tr><td><code>custom:element-changed.variation</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement de variation du bouton.</td></tr><tr><td><code>custom:element-changed.icon</code></td><td><code>ElementChangedEvent</code></td><td>Événement déclenché lors du changement d'icône.</td></tr><tr><td><code>custom:icon.prop.changed</code></td><td><code>CustomEvent&lt;{ type: string, newValue: boolean | string }&gt;</code></td><td>Événement déclenché lors du changement de propriété de l'icône.</td></tr><tr><td><code>custom:loading</code></td><td><code>CustomEvent&lt;{ state: boolean }&gt;</code></td><td>Événement déclenché lors du changement d'état de chargement.</td></tr></tbody></table></div><h3>Slots</h3><div class="slots table"><table><thead><tr><th>Nom</th><th>Description</th></tr></thead><tbody><tr><td><code>(default)</code></td><td>Contenu du bouton (texte, HTML, etc.)</td></tr></tbody></table></div><h3>Attributs de Données</h3><div class="attributs table"><table><thead><tr><th>Attribut</th><th>Type</th><th>Défaut</th><th>Optionnel ?</th><th>Description</th></tr></thead><tbody><tr><td><code>rounded</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Rend le bouton arrondi</td></tr><tr><td><code>loading</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Met le bouton en état de chargement et le désactive</td></tr><tr><td><code>disabled</code></td><td><code>boolean | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Désactive le bouton</td></tr><tr><td><code>data-variation</code></td><td><code>Optional<ButtonVariation></code></td><td><code>ButtonVariation.PRIMARY</code></td><td>✅</td><td>Variation du bouton (primary, secondary, etc.)</td></tr><tr><td><code>data-icon</code></td><td><code>string | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Icône affichée dans le bouton</td></tr><tr><td><code>data-icon-pos</code></td><td><code>IconPosition | undefined</code></td><td><code>IconPosition.RIGHT</code></td><td>✅</td><td>Position de l'icône (gauche ou droite)</td></tr><tr><td><code>data-icon-margin</code></td><td><code>string | undefined</code></td><td><code>var（--custom-bnum-button-icon-margin, 10px）</code></td><td>✅</td><td>Marge de l'icône (gauche, droite)</td></tr><tr><td><code>data-hide</code></td><td><code>HideTextOnLayoutSize | undefined</code></td><td><code>undefined</code></td><td>✅</td><td>Taille de layout pour cacher le texte</td></tr></tbody></table></div><h3>Variables CSS</h3><div class="css-vars table"><table><thead><tr><th>Variable</th><th>Défaut</th><th>Description (Défaut)</th></tr></thead><tbody><tr><td><code>--bnum-button-display</code></td><td><bnum-fragment><code>inline-block</code></bnum-fragment></td><td>Définit le type d'affichage du bouton</td></tr><tr><td><code>--bnum-button-padding</code></td><td><bnum-fragment><code>6px 10px</code></bnum-fragment></td><td>Définit le padding interne du bouton</td></tr><tr><td><code>--bnum-button-border-radius</code></td><td><bnum-fragment><code>0</code></bnum-fragment></td><td>Définit l'arrondi des coins du bouton</td></tr><tr><td><code>--bnum-button-cursor</code></td><td><bnum-fragment><code>pointer</code></bnum-fragment></td><td>Définit le curseur de la souris au survol du bouton</td></tr><tr><td><code>--bnum-button-rounded-border-radius</code></td><td><bnum-fragment><code>5px</code></bnum-fragment></td><td>Arrondi des coins pour le bouton arrondi</td></tr><tr><td><code>--bnum-button-without-icon-padding-top</code></td><td><bnum-fragment><code>7.5px</code></bnum-fragment></td><td>Padding top si le bouton n'a pas d'icône</td></tr><tr><td><code>--bnum-button-without-icon-padding-bottom</code></td><td><bnum-fragment><code>7.5px</code></bnum-fragment></td><td>Padding bottom si le bouton n'a pas d'icône</td></tr><tr><td><code>--bnum-button-primary-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary);"></span></bnum-fragment></td><td>Couleur de fond du bouton (état primaire)</td></tr><tr><td><code>--bnum-button-primary-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-primary)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-primary);"></span></bnum-fragment></td><td>Couleur du texte du bouton (état primaire)</td></tr><tr><td><code>--bnum-button-primary-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-primary-border-color)</code></bnum-fragment></td><td>Bordure du bouton (état primaire)</td></tr><tr><td><code>--bnum-button-primary-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary);"></span></bnum-fragment></td><td>Couleur de la bordure (état primaire)</td></tr><tr><td><code>--bnum-button-primary-hover-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary-hover)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary-hover);"></span></bnum-fragment></td><td>Couleur de fond au survol (état primaire)</td></tr><tr><td><code>--bnum-button-primary-hover-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-primary-hover)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-primary-hover);"></span></bnum-fragment></td><td>Couleur du texte au survol (état primaire)</td></tr><tr><td><code>--bnum-button-primary-hover-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-primary-hover-border-color)</code></bnum-fragment></td><td>Bordure au survol (état primaire)</td></tr><tr><td><code>--bnum-button-primary-hover-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary-hover)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary-hover);"></span></bnum-fragment></td><td>Couleur de la bordure au survol (état primaire)</td></tr><tr><td><code>--bnum-button-primary-active-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary-active)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary-active);"></span></bnum-fragment></td><td>Couleur de fond lors du clic (état primaire)</td></tr><tr><td><code>--bnum-button-primary-active-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-primary-active)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-primary-active);"></span></bnum-fragment></td><td>Couleur du texte lors du clic (état primaire)</td></tr><tr><td><code>--bnum-button-primary-active-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-primary-active-border-color)</code></bnum-fragment></td><td>Bordure lors du clic (état primaire)</td></tr><tr><td><code>--bnum-button-primary-active-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary-active)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary-active);"></span></bnum-fragment></td><td>Couleur de la bordure lors du clic (état primaire)</td></tr><tr><td><code>--bnum-button-secondary-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-secondary)</code><span class="color-swatch" style="background-color: var(--bnum-color-secondary);"></span></bnum-fragment></td><td>Couleur de fond (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-secondary)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-secondary);"></span></bnum-fragment></td><td>Couleur du texte (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-secondary-border-color)</code></bnum-fragment></td><td>Bordure (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary);"></span></bnum-fragment></td><td>Couleur de la bordure (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-hover-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-secondary-hover)</code><span class="color-swatch" style="background-color: var(--bnum-color-secondary-hover);"></span></bnum-fragment></td><td>Couleur de fond au survol (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-hover-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-secondary-hover)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-secondary-hover);"></span></bnum-fragment></td><td>Couleur du texte au survol (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-hover-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-secondary-hover-border-color)</code></bnum-fragment></td><td>Bordure au survol (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-hover-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary);"></span></bnum-fragment></td><td>Couleur de la bordure au survol (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-active-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-secondary-active)</code><span class="color-swatch" style="background-color: var(--bnum-color-secondary-active);"></span></bnum-fragment></td><td>Couleur de fond lors du clic (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-active-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-secondary-active)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-secondary-active);"></span></bnum-fragment></td><td>Couleur du texte lors du clic (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-active-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-secondary-active-border-color)</code></bnum-fragment></td><td>Bordure lors du clic (état secondaire)</td></tr><tr><td><code>--bnum-button-secondary-active-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-primary)</code><span class="color-swatch" style="background-color: var(--bnum-color-primary);"></span></bnum-fragment></td><td>Couleur de la bordure lors du clic (état secondaire)</td></tr><tr><td><code>--bnum-button-danger-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-danger)</code><span class="color-swatch" style="background-color: var(--bnum-color-danger);"></span></bnum-fragment></td><td>Couleur de fond (état danger)</td></tr><tr><td><code>--bnum-button-danger-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-danger)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-danger);"></span></bnum-fragment></td><td>Couleur du texte (état danger)</td></tr><tr><td><code>--bnum-button-danger-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-danger-border-color)</code></bnum-fragment></td><td>Bordure (état danger)</td></tr><tr><td><code>--bnum-button-danger-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-danger)</code><span class="color-swatch" style="background-color: var(--bnum-color-danger);"></span></bnum-fragment></td><td>Couleur de la bordure (état danger)</td></tr><tr><td><code>--bnum-button-danger-hover-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-danger-hover)</code><span class="color-swatch" style="background-color: var(--bnum-color-danger-hover);"></span></bnum-fragment></td><td>Couleur de fond au survol (état danger)</td></tr><tr><td><code>--bnum-button-danger-hover-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-danger-hover)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-danger-hover);"></span></bnum-fragment></td><td>Couleur du texte au survol (état danger)</td></tr><tr><td><code>--bnum-button-danger-hover-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-danger-hover-border-color)</code></bnum-fragment></td><td>Bordure au survol (état danger)</td></tr><tr><td><code>--bnum-button-danger-hover-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-danger-hover)</code><span class="color-swatch" style="background-color: var(--bnum-color-danger-hover);"></span></bnum-fragment></td><td>Couleur de la bordure au survol (état danger)</td></tr><tr><td><code>--bnum-button-danger-active-background-color</code></td><td><bnum-fragment><code>var(--bnum-color-danger-active)</code><span class="color-swatch" style="background-color: var(--bnum-color-danger-active);"></span></bnum-fragment></td><td>Couleur de fond lors du clic (état danger)</td></tr><tr><td><code>--bnum-button-danger-active-text-color</code></td><td><bnum-fragment><code>var(--bnum-text-on-danger-active)</code><span class="color-swatch" style="background-color: var(--bnum-text-on-danger-active);"></span></bnum-fragment></td><td>Couleur du texte lors du clic (état danger)</td></tr><tr><td><code>--bnum-button-danger-active-border</code></td><td><bnum-fragment><code>solid thin var(--bnum-button-danger-active-border-color)</code></bnum-fragment></td><td>Bordure lors du clic (état danger)</td></tr><tr><td><code>--bnum-button-danger-active-border-color</code></td><td><bnum-fragment><code>var(--bnum-color-danger-active)</code><span class="color-swatch" style="background-color: var(--bnum-color-danger-active);"></span></bnum-fragment></td><td>Couleur de la bordure lors du clic (état danger)</td></tr><tr><td><code>--bnum-button-disabled-opacity</code></td><td><bnum-fragment><code>0.6</code></bnum-fragment></td><td>Opacité du bouton désactivé</td></tr><tr><td><code>--bnum-button-disabled-pointer-events</code></td><td><bnum-fragment><code>none</code></bnum-fragment></td><td>Gestion des événements souris pour le bouton désactivé</td></tr><tr><td><code>--bnum-button-wrapper-display</code></td><td><bnum-fragment><code>flex</code></bnum-fragment></td><td>Type d'affichage du wrapper interne</td></tr><tr><td><code>--bnum-button-wrapper-align-items</code></td><td><bnum-fragment><code>center</code></bnum-fragment></td><td>Alignement vertical du contenu du wrapper</td></tr><tr><td><code>--bnum-button-icon-display</code></td><td><bnum-fragment><code>flex</code></bnum-fragment></td><td>Type d'affichage de l'icône</td></tr><tr><td><code>--bnum-button-loader-display</code></td><td><bnum-fragment><code>flex</code></bnum-fragment></td><td>Type d'affichage du loader</td></tr><tr><td><code>--bnum-button-spin-duration</code></td><td><bnum-fragment><code>0.75s</code></bnum-fragment></td><td>Durée de l'animation de spin</td></tr><tr><td><code>--bnum-button-spin-timing</code></td><td><bnum-fragment><code>linear</code></bnum-fragment></td><td>Fonction de timing de l'animation de spin</td></tr><tr><td><code>--bnum-button-spin-iteration</code></td><td><bnum-fragment><code>infinite</code></bnum-fragment></td><td>Nombre d'itérations de l'animation de spin</td></tr><tr><td><code>--bnum-button-margin-bottom-text-correction</code></td><td><bnum-fragment><code>-3px</code></bnum-fragment></td><td>Correction basse du texte</td></tr></tbody></table></div><h3>Etats</h3><div class="states table"><table><thead><tr><th>Nom de l'État</th><th>Description</th></tr></thead><tbody><tr><td><code>loading</code></td><td>Actif si le bouton est en état de chargement</td></tr><tr><td><code>rounded</code></td><td>Actif si le bouton est arrondi</td></tr><tr><td><code>disabled</code></td><td>Actif si le bouton est désactivé</td></tr><tr><td><code>icon</code></td><td>Actif si le bouton contient une icône</td></tr><tr><td><code>without-icon</code></td><td>Actif si le bouton ne contient pas d'icône</td></tr><tr><td><code>icon-pos-left</code></td><td>Actif si l'icône est positionnée à gauche</td></tr><tr><td><code>icon-pos-right</code></td><td>Actif si l'icône est positionnée à droite</td></tr><tr><td><code>hide-text-on-small</code></td><td>Actif si le texte est caché sur les petits layouts</td></tr><tr><td><code>hide-text-on-touch</code></td><td>Actif si le texte est caché sur les layouts tactiles</td></tr><tr><td><code>primary</code></td><td>Actif si le bouton est de type primaire</td></tr><tr><td><code>secondary</code></td><td>Actif si le bouton est de type secondaire</td></tr><tr><td><code>tertiary</code></td><td>Actif si le bouton est de type tertiaire</td></tr><tr><td><code>danger</code></td><td>Actif si le bouton est de type danger</td></tr></tbody></table></div><h3>Variables d'Instance</h3><div class="api-variables table"><table><thead><tr><th>Propriété</th><th>Type</th><th>Lecture seule</th><th>Description</th></tr></thead><tbody><tr><td><code>variation</code></td><td><code>ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }></code></td><td>Non</td><td><p>Variation du bouton (primary, secondary, etc.).</p>
+</td></tr><tr><td><code>icon</code></td><td><code>string</code></td><td>Non</td><td><p>Icône affichée dans le bouton.</p>
+</td></tr><tr><td><code>iconPos</code></td><td><code>ValueOf<{ readonly LEFT: "left"; readonly RIGHT: "right"; }></code></td><td>Non</td><td><p>Position de l&#39;icône (gauche ou droite).</p>
+</td></tr><tr><td><code>iconMargin</code></td><td><code>string</code></td><td>Non</td><td><p>Marge appliquée à l&#39;icône.</p>
+</td></tr><tr><td><code>hideTextOnLayoutSize</code></td><td><code>ValueOf<{ readonly SMALL: "small"; readonly TOUCH: "touch"; }></code></td><td>Oui</td><td><p>Taille de layout sur laquelle le texte doit être caché.</p>
+</td></tr><tr><td><code>onloadingstatechange</code></td><td><code>JsEvent<(state: boolean) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;état de chargement.</p>
+</td></tr><tr><td><code>oniconchange</code></td><td><code>JsEvent<(newIcon: string, oldIcon: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement d&#39;icône.</p>
+</td></tr><tr><td><code>oniconpropchange</code></td><td><code>JsEvent<(type: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").IconPropType, newValue: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de propriété de l&#39;icône.</p>
+</td></tr><tr><td><code>onvariationchange</code></td><td><code>JsEvent<(newVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>, oldVariation: ValueOf<{ readonly PRIMARY: "primary"; readonly SECONDARY: "secondary"; readonly TERTIARY: "tertiary"; readonly DANGER: "danger"; }>) => void></code></td><td>Non</td><td><p>Événement déclenché lors du changement de variation du bouton.</p>
+</td></tr><tr><td><code>linkedClickEvent</code></td><td><code>JsEvent<(link: string) => void></code></td><td>Non</td><td><p>Événement déclenché lors du clic sur le bouton.</p>
+</td></tr></tbody></table></div><h3>Méthodes</h3><div class="api-methods"><div class="api-method"><code><strong>setLoading</strong>() : <code>this</code></code><p>Met le bouton en état de chargement.</p><p><strong>Retourne :</strong>L'instance du bouton</p></div><hr class="api-separator"><div class="api-method"><code><strong>stopLoading</strong>() : <code>this</code></code><p>Arrête l'état de chargement du bouton.</p><p><strong>Retourne :</strong>L'instance du bouton</p></div><hr class="api-separator"><div class="api-method"><code><strong>toggleLoading</strong>() : <code>this</code></code><p>Bascule l'état de chargement du bouton.</p><p><strong>Retourne :</strong>L'instance du bouton</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> ToButton</strong>(element: T) : <code>T</code></code><p>Transforme un élément en bouton accessible (role, tabindex, etc.).</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>element</code>: Élément HTML à transformer</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>L'élément modifié</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> Create</strong>(options: import("/opt/bnum/rcube/github/design-system-bnum/components/atoms/button/bnum-button.internal/types").BnumButtonCreateOptions) : <code>HTMLBnumButton</code></code><p>Crée un bouton Bnum standard.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>options</code>: Options de configuration du bouton</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Instance du bouton créé</p></div><hr class="api-separator"><div class="api-method"><code><strong><em>(static)</em> CreateOnlyIcon</strong>(icon: string, {
+      variation = ButtonVariation.PRIMARY,
+      rounded = false,
+      loading = false,
+    }: { variation?: any; rounded?: boolean; loading?: boolean; }) : <code>HTMLBnumButton</code></code><p>Crée un bouton Bnum ne contenant qu'une icône.</p><bnum-fragment><strong>Paramètres :</strong><ul>
+      <li><code>icon</code>: Nom de l'icône à afficher</li>
+    
+      <li><code>{
+      variation = ButtonVariation.PRIMARY,
+      rounded = false,
+      loading = false,
+    }</code>: Options de configuration du bouton</li>
+    </ul></bnum-fragment><p><strong>Retourne :</strong>Instance du bouton créé</p></div></div><h3>Variables statiques</h3><div class="api-statics"><p>N/A</p></div></section></bnum-fragment></main></body><footer></footer></html>
