@@ -8,6 +8,7 @@ La messagerie Mél est une intégration de plusieurs logiciels open-source, perm
 Voici les différentes documentations.   
 
 - [La documentation Javascript](https://messagerie-melanie2.github.io/Bnum/Documentation/jsDoc/)
+- [Documentation du Design System Bnum](https://messagerie-melanie2.github.io/Bnum/Documentation/dsbnum/dist/documentation/composants/index.html)
 - [Anatomie d'un plugin php](https://messagerie-melanie2.github.io/Bnum/Documentation/plugin_php)
 - [Anatomie d'un module javascript](https://messagerie-melanie2.github.io/Bnum/Documentation/module_js)
 - [Fonctions utiles](https://github.com/messagerie-melanie2/Roundcube-plugins-Mel/wiki/Fonctions-utiles-Javascript)
