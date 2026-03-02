@@ -64,6 +64,24 @@
 				link.style.display = 'none';
 			}
 		});
+
+		for (const detail of document.querySelectorAll('details')) {
+			let hasVisible = false;
+			for (const link of detail.querySelectorAll('a')) {
+				if (link.style.display !== 'none') {
+					hasVisible = true;
+					break;
+				}
+			}
+
+			if (hasVisible) {
+				detail.open = true;
+				detail.style.display = null;
+			} else {
+				detail.style.display = 'none';
+				detail.open = false;
+			}
+		}
 	}
 
 	function listenerSearch() {

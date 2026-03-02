@@ -3823,6 +3823,8 @@ var Bnum = (function (exports) {
      * Composant bouton principal de la bibliothèque Bnum.
      * Gère les variations, l'icône, l'état de chargement, etc.
      *
+     * @category Buttons
+     *
      * @structure Bouton primaire
      * <bnum-button data-variation="primary">Texte du bouton</bnum-button>
      *
@@ -3994,7 +3996,7 @@ var Bnum = (function (exports) {
                 __esDecorate(this, null, _linkedClickEvent_decorators, { kind: "accessor", name: "linkedClickEvent", static: false, private: false, access: { has: obj => "linkedClickEvent" in obj, get: obj => obj.linkedClickEvent, set: (obj, value) => { obj.linkedClickEvent = value; } }, metadata: _metadata }, _linkedClickEvent_initializers, _linkedClickEvent_extraInitializers);
                 __esDecorate(this, _private__onLinkedClick_descriptor = { value: __setFunctionName(function (click) {
                         // Si c'est un id unique
-                        var elementToClick = document.getElementById(click);
+                        const elementToClick = document.getElementById(click);
                         if (elementToClick)
                             elementToClick.click();
                         else {
@@ -4003,7 +4005,7 @@ var Bnum = (function (exports) {
                             if (elements)
                                 elements.click();
                             else
-                                throw new Error('L\'attribut \'click\' ne référence aucun élément.');
+                                throw new Error("L'attribut 'click' ne référence aucun élément.");
                         }
                     }, "#_onLinkedClick") }, _private__onLinkedClick_decorators, { kind: "method", name: "#_onLinkedClick", static: false, private: true, access: { has: obj => #_onLinkedClick in obj, get: obj => obj.#_onLinkedClick }, metadata: _metadata }, null, _instanceExtraInitializers);
                 __esDecorate(this, _private__onLoadingChange_descriptor = { value: __setFunctionName(function (state) {
@@ -4432,6 +4434,8 @@ var Bnum = (function (exports) {
 
     /**
      * Bouton Bnum de type "Danger".
+     *
+     * @category Buttons
      *
      * @structure Cas standard
      * <bnum-danger-button>Texte du bouton</bnum-danger-button>
@@ -5244,6 +5248,8 @@ var Bnum = (function (exports) {
     /**
      * Button contenant une icône.
      *
+     * @category Buttons
+     *
      * @structure Button Icon
      * <bnum-icon-button>home</bnum-icon-button>
      *
@@ -5354,7 +5360,7 @@ var Bnum = (function (exports) {
                     if (val && REG_XSS_SAFE.test(val)) {
                         this.#_linkedClickEvent.add('click', (click) => {
                             // Si c'est un id unique
-                            var elementToClick = document.getElementById(click);
+                            const elementToClick = document.getElementById(click);
                             if (elementToClick)
                                 elementToClick.click();
                             else {
@@ -5498,6 +5504,8 @@ var Bnum = (function (exports) {
     /**
      * Composant Input du design system Bnum.
      * Permet de gérer un champ de saisie enrichi avec gestion d'états, d'icônes, de bouton et d'accessibilité.
+     *
+     * @category Input
      *
      * @structure Sans rien
      * <bnum-input></bnum-input>
@@ -6262,6 +6270,8 @@ var Bnum = (function (exports) {
     /**
      * Input nombre.
      *
+     * @category Input
+     *
      * @structure Sans rien
      * <bnum-input-number></bnum-input-number>
      *
@@ -6355,7 +6365,7 @@ var Bnum = (function (exports) {
              *@inheritdoc
              */
             static _p_observedAttributes() {
-                return super._p_observedAttributes().filter((x) => x !== ATTRIBUTE_TYPE);
+                return super._p_observedAttributes().filter(x => x !== ATTRIBUTE_TYPE);
             }
             /**
              * Crée une instance du composant avec les options fournies.
@@ -6380,6 +6390,8 @@ var Bnum = (function (exports) {
     const TYPE$1 = 'date';
     /**
      * Input de date.
+     *
+     * @category Input
      *
      * @structure Sans rien
      * <bnum-input-date></bnum-input-date>
@@ -6480,7 +6492,7 @@ var Bnum = (function (exports) {
              *@inheritdoc
              */
             static _p_observedAttributes() {
-                return super._p_observedAttributes().filter((x) => x !== ATTRIBUTE_TYPE);
+                return super._p_observedAttributes().filter(x => x !== ATTRIBUTE_TYPE);
             }
             /**
              * Crée une instance du composant avec les options fournies.
@@ -6571,6 +6583,8 @@ var Bnum = (function (exports) {
      * Composant d'input de recherche.
      *
      * Utilise le composant de base `bnum-input` avec des configurations spécifiques pour la recherche.
+     *
+     * @category Input
      *
      * @structure Basique
      * <bnum-input-search>Label de recherche</bnum-input-search>
@@ -6746,7 +6760,7 @@ var Bnum = (function (exports) {
              * @inheritdoc
              */
             static _p_observedAttributes() {
-                return super._p_observedAttributes().filter((x) => {
+                return super._p_observedAttributes().filter(x => {
                     switch (x) {
                         case ATTRIBUTE_TYPE:
                         case ATTRIBUTE_BUTTON:
@@ -6777,6 +6791,8 @@ var Bnum = (function (exports) {
     const TYPE_TEXT = 'text';
     /**
      * Input texte.
+     *
+     * @category Input
      *
      * @structure Sans rien
      * <bnum-input-text></bnum-input-text>
@@ -6868,7 +6884,7 @@ var Bnum = (function (exports) {
              *@inheritdoc
              */
             static _p_observedAttributes() {
-                return super._p_observedAttributes().filter((x) => x !== ATTRIBUTE_TYPE);
+                return super._p_observedAttributes().filter(x => x !== ATTRIBUTE_TYPE);
             }
             /**
              * Crée une instance du composant avec les options fournies.
@@ -6890,6 +6906,8 @@ var Bnum = (function (exports) {
     const TYPE = 'time';
     /**
      * Input de temps.
+     *
+     * @category Input
      *
      * @structure Sans rien
      * <bnum-input-time></bnum-input-time>
@@ -6987,7 +7005,7 @@ var Bnum = (function (exports) {
              *@inheritdoc
              */
             static _p_observedAttributes() {
-                return super._p_observedAttributes().filter((x) => x !== ATTRIBUTE_TYPE);
+                return super._p_observedAttributes().filter(x => x !== ATTRIBUTE_TYPE);
             }
             /**
              * Crée une instance du composant avec les options fournies.
@@ -7008,6 +7026,8 @@ var Bnum = (function (exports) {
 
     /**
      * Bouton Bnum de type "Primary".
+     *
+     * @category Buttons
      *
      * @structure Cas standard
      * <bnum-primary-button>Texte du bouton</bnum-primary-button>
@@ -7189,6 +7209,8 @@ var Bnum = (function (exports) {
     //#region Utilities
     /**
      * Vérifie si une valeur est null ou undefined.
+     *
+     * @category Input
      *
      * @template T - Le type de la valeur à vérifier
      * @param newVal - La valeur à tester
@@ -7863,6 +7885,8 @@ var Bnum = (function (exports) {
     /**
      * Bouton Bnum de type "Secondary".
      *
+     * @category Buttons
+     *
      * @structure Cas standard
      * <bnum-secondary-button>Texte du bouton</bnum-secondary-button>
      *
@@ -7970,6 +7994,9 @@ var Bnum = (function (exports) {
     const TEMPLATE$b = (h("div", { class: "bnum-select__container", children: [h("label", { id: "select-label", class: "bnum-select__container__label label-container", for: "select", children: [h("span", { class: "bnum-select__container__label--legend label-container--label", children: h("slot", { name: "label" }) }), h("span", { class: "bnum-select__container__label--hint label-container--hint", children: h("slot", { name: "hint" }) })] }), h("div", { class: "select-container", children: [h("select", { id: "select", class: "bnum-select__container__select input-like" }), h(HTMLBnumIcon, { "data-icon": "keyboard_arrow_down", class: "icon-arrow-down" })] })] }));
     //#endregion Global Constants
     /**
+     *
+     * @category Input
+     *
      * @structure Defaut
      * <bnum-select>
      *   <span slot="label">Un select</span>
@@ -8096,7 +8123,7 @@ var Bnum = (function (exports) {
                 __esDecorate(this, null, _name_decorators, { kind: "accessor", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
                 __esDecorate(this, null, _noLegend_decorators, { kind: "accessor", name: "noLegend", static: false, private: false, access: { has: obj => "noLegend" in obj, get: obj => obj.noLegend, set: (obj, value) => { obj.noLegend = value; } }, metadata: _metadata }, _noLegend_initializers, _noLegend_extraInitializers);
                 __esDecorate(this, _private__obserse_descriptor = { value: __setFunctionName(function (mutations) {
-                        const hasOptionMutation = mutations.some((m) => Array.from(m.addedNodes).some((n) => n instanceof HTMLOptionElement || n instanceof HTMLOptGroupElement));
+                        const hasOptionMutation = mutations.some(m => Array.from(m.addedNodes).some(n => n instanceof HTMLOptionElement || n instanceof HTMLOptGroupElement));
                         if (hasOptionMutation) {
                             this.#_scheduleMoveOptions();
                         }
@@ -8219,8 +8246,8 @@ var Bnum = (function (exports) {
             constructor() {
                 super();
                 __runInitializers(this, _noLegend_extraInitializers);
-                this.#_tryInitValue({ ignoreSelectedValue: true }).tapError((error) => {
-                    Log.error('HTMLBnumSelectElement', 'Impossible d\'initialiser la valeur par défaut !', error);
+                this.#_tryInitValue({ ignoreSelectedValue: true }).tapError(error => {
+                    Log.error('HTMLBnumSelectElement', "Impossible d'initialiser la valeur par défaut !", error);
                 });
             }
             /**
@@ -8266,8 +8293,8 @@ var Bnum = (function (exports) {
                             Log.warn('HTMLBnumSelect', 'Vous devez mettre un libellé !');
                         }
                     },
-                    Err: (error) => {
-                        Log.error('HTMLBnumSelect', 'Impossible d\'initialiser la valeur du select !', error, this);
+                    Err: error => {
+                        Log.error('HTMLBnumSelect', "Impossible d'initialiser la valeur du select !", error, this);
                     },
                 });
             }
@@ -8562,6 +8589,8 @@ var Bnum = (function (exports) {
     //#endregion Template
     /**
      * Composant personnalisé représentant un checkbox avec support de formulaire.
+     *
+     * @category Input
      *
      * @remarks
      * Ce composant Web étend {@link BnumElementInternal} et fournit un checkbox personnalisé
@@ -9482,6 +9511,8 @@ var Bnum = (function (exports) {
      *
      * L'élément est considéré comme un `li` d'une liste pour des raisons d'accessibilité.
      *
+     * @category Card
+     *
      * @structure Item de carte
      * <bnum-card-item><p>Contenu de l'item</p></bnum-card-item>
      *
@@ -9660,6 +9691,8 @@ var Bnum = (function (exports) {
     //#endregion Template
     /**
      * Item de carte agenda
+     *
+     * @category Card
      *
      * @structure Initalisation basique
      * <bnum-card-item-agenda
@@ -10460,6 +10493,8 @@ var Bnum = (function (exports) {
      * - Si la date est comprise entre hier et il y a 7 jours, le jour de la semaine et l'heure sont affichés (E - HH:mm).
      * - Sinon, le format par défaut de HTMLBnumDate est utilisé.
      *
+     * @category Card
+     *
      * @structure Item de carte mail
      * <bnum-card-item-mail data-date="now">
      * <span slot="subject">Sujet par défaut</span>
@@ -10904,7 +10939,10 @@ var Bnum = (function (exports) {
     //#endregion Global Constants
     /**
      * Composant liste de cartes Bnum.
+     *
      * Permet d'afficher une liste d'éléments de type carte.
+     *
+     * @category Card
      *
      * @structure Default
      * <bnum-card-list>
@@ -11057,7 +11095,10 @@ var Bnum = (function (exports) {
     //#endregion Template
     /**
      * Composant représentant le titre d'une carte, pouvant inclure une icône et un lien.
+     *
      * Permet d'afficher un titre enrichi avec une icône et éventuellement un lien cliquable.
+     *
+     * @category Card
      *
      * @structure Cas url et icône
      * <bnum-card-title data-icon="labs" url="https://example.com">Titre de la carte</bnum-card-title>
@@ -11297,6 +11338,8 @@ var Bnum = (function (exports) {
     /**
      * Représente un élément personnalisé de type liste de dossiers (Folder List) pour l'interface Bnum.
      * Cet élément utilise le tag HTML défini par `TAG_FOLDER_LIST` et est rendu dans le Light DOM (pas de Shadow DOM).
+     *
+     * @category Group
      */
     let HTMLBnumFolderList = (() => {
         let _classDecorators = [Define({ tag: TAG_FOLDER_LIST }), Light()];
@@ -12079,6 +12122,8 @@ var Bnum = (function (exports) {
      * Ce composant représente un groupe de boutons radio. Il gère la sélection unique parmi ses enfants `bnum-radio`,
      * la navigation au clavier, et l'accessibilité (via `role="radiogroup"`).
      *
+     * @category Group
+     *
      * @structure Structure de base
      * <bnum-radio-group id="groupe1" name="choix" data-label="Faites un choix" data-hint="Indice !">
      *   <bnum-radio value="1">Choix 1</bnum-radio>
@@ -12639,8 +12684,12 @@ var Bnum = (function (exports) {
     const TEMPLATE$5 = (h("div", { class: "segmented-item__container", id: ID_CONTAINER, children: [h(HTMLBnumIcon, { class: "segmented-item__container__icon", id: ID_ICON }), h("span", { class: "segmented-item__container__label", id: ID_LABEL, children: h("slot", {}) })] }));
     //#endregion Template
     /**
+     *
      * Composant représentant un item individuel au sein d'un contrôle segmenté.
-     * * @structure Defaut
+     *
+     * @category SegmentedControl
+     *
+     * @structure Defaut
      * <bnum-segmented-item value="item1" data-icon="home">Item 1</bnum-segmented-item>
      *
      * @structure Selected
@@ -12857,12 +12906,12 @@ var Bnum = (function (exports) {
             _p_buildDOM() {
                 this.#_updateDom().match({
                     Ok: () => this.#_setListeners(),
-                    Err: (error) => this.#_dispatchError(error),
+                    Err: error => this.#_dispatchError(error),
                 });
             }
             /** Gère la mise à jour des attributs. */
             _p_update(_, __, ___) {
-                this.#_updateDom().tapError((error) => this.#_dispatchError(error));
+                this.#_updateDom().tapError(error => this.#_dispatchError(error));
             }
             //#endregion Lifecycle
             //#region Public Methods
@@ -12880,7 +12929,7 @@ var Bnum = (function (exports) {
              * @param state État à vérifier.
              */
             is(state) {
-                var result;
+                let result;
                 switch (state) {
                     case States.SELECTED:
                         result = this.hasAttribute(ATTR_SELECTED$1);
@@ -13115,6 +13164,8 @@ var Bnum = (function (exports) {
     //#endregion Template
     /**
      * Élément de contrôle segmenté (groupe de boutons radio).
+     *
+     * @category SegmentedControl
      *
      * @structure Sans icône
      * <bnum-segmented-control>
@@ -13643,6 +13694,8 @@ var Bnum = (function (exports) {
      * - bnum-card:loading : Déclenché lorsque l'état de chargement de la carte change.
      * - bnum-card:click : Déclenché lorsqu'un clic est effectué sur une carte cliquable.
      *
+     * @category Card
+     *
      * @structure Cas standard
      * <bnum-card>
      * <span slot="title">Titre de la carte</span>
@@ -14155,6 +14208,8 @@ var Bnum = (function (exports) {
     /**
      * Organisme qui permet d'afficher simplement une liste d'évènements dans une carte.
      *
+     * @category Card
+     *
      * @structure Avec des éléments
      * <bnum-card-agenda>
      * <bnum-card-item-agenda
@@ -14448,6 +14503,8 @@ var Bnum = (function (exports) {
     //#endregion Template
     /**
      * Organisme qui permet d'afficher simplement une liste de mails dans une carte.
+     *
+     * @category Card
      *
      * @structure Avec des éléments
      * <bnum-card-email>
@@ -14966,6 +15023,8 @@ var Bnum = (function (exports) {
     //#endregion Global Constants
     /**
      * Webcomposant représentant un arbre.
+     *
+     * @category Group
      */
     let HTMLBnumTree = (() => {
         let _classDecorators = [Define({ tag: TAG_TREE }), Light()];
