@@ -55,6 +55,7 @@
   --bnum-color-input-border: #3a3a3a;
   /* Bordure des champs input */
   --bnum-color-left-column: #f6f6f6;
+  --bnum-color-middle-column: #ffffff;
   /* Les items d'une liste ont forcément un fond transparent, 
      donc on se base sur le classique pour le selected,
      sur le hover pour le hover
@@ -70,6 +71,9 @@
   --bnum-main-nav-color-hover: #474747;
   --bnum-main-nav-color-active: #5b5b5b;
   --bnum-header-color: #ffffff;
+  --bnum-scrollbar-handler-color: #a7a7a7;
+  --bnum-scrollbar-background-color: #f6f6f6;
+  --bnum-scrollbar-width: thin;
   /* Texte */
   --bnum-text-primary: #3a3a3a;
   /* Texte principal */
@@ -120,7 +124,7 @@
   --bnum-font-size-title-m: 4rem;
   --bnum-font-size-title-s: 3.5rem;
   --bnum-font-size-title-xs: 3rem;
-  --bnum-font-badge-s: 0.5625rem;
+  --bnum-font-badge-s: 0.675rem;
   --bnum-body-font-size: var(--bnum-font-size-m, 1rem);
   /* Line heights */
   --bnum-font-height-h1: 48px;
@@ -230,11 +234,11 @@ html.dark-mode-custom:root {
   --bnum-color-danger: #ff5655;
   --bnum-color-danger-hover: #ff8c8c;
   --bnum-color-danger-active: #ffa6a6;
-  --bnum-color-background: #161616;
+  --bnum-color-background: #242424;
   /* Le fond de la page */
-  --bnum-color-surface: var(--bnum-color-background);
-  --bnum-color-surface-hover: #343434;
-  --bnum-color-surface-active: #474747;
+  --bnum-color-surface: #1e1e1e;
+  --bnum-color-surface-hover: #3f3f3f;
+  --bnum-color-surface-active: #525252;
   --bnum-header-color: #161616;
   /* Le fond des surfaces */
   --bnum-color-border: #353535;
@@ -249,6 +253,7 @@ html.dark-mode-custom:root {
   --bnum-color-input-border: #cecece;
   /* Bordure des champs input */
   --bnum-color-left-column: #161616;
+  --bnum-color-middle-column: #3a3a3a;
   /* Les items d'une liste ont forcément un fond transparent, 
      donc on se base sur le classique pour le selected,
      sur le hover pour le hover
@@ -257,9 +262,12 @@ html.dark-mode-custom:root {
   --bnum-color-list: #474747;
   --bnum-color-list-hover: #343434;
   --bnum-color-list-drag: #343434;
-  --bnum-main-nav-color: #242424;
-  --bnum-main-nav-color-hover: #474747;
-  --bnum-main-nav-color-active: #5b5b5b;
+  --bnum-main-nav-color: #161616;
+  --bnum-main-nav-color-hover: #343434;
+  --bnum-main-nav-color-active: #474747;
+  --bnum-scrollbar-handler-color: #bababa;
+  --bnum-scrollbar-background-color: #717171;
+  --bnum-scrollbar-width: thin;
   /* Texte */
   --bnum-text-primary: #cecece;
   /* Texte principal */
@@ -287,14 +295,15 @@ html.dark-mode-custom:root {
   --bnum-semantic-success: #36b37e;
   /* Vert "TES" */
   --_border: var(--bnum-border-style-default) var(--bnum-border-width-s) var(--bnum-color-border);
-  --bnum-border-on-surface-top: var(--_border);
-  --bnum-border-on-surface-left: var(--_border);
-  --bnum-border-on-surface-right: var(--_border);
   --bnum-button-secondary-background-color: var(--bnum-color-background);
   --_image-url: var(--_image-dark);
 }
 .hidden {
   display: none;
+}
+* {
+  scrollbar-color: var(--bnum-scrollbar-handler-color) var(--bnum-scrollbar-background-color) !important;
+  scrollbar-width: var(--bnum-scrollbar-width) !important;
 }
 html.layout-small,
 html.layout-phone,
@@ -368,7 +377,7 @@ h6.no-margin {
 iframe {
   border: var(--bnum-iframe-border, none);
 }
-.ds-block {
+scrollba .ds-block {
   display: block;
   width: 100%;
   flex: 1;
@@ -1163,7 +1172,7 @@ bnum-hide {
   --_bdsli-alt-bg: var(--bnum-color-list-alt);
   --_bdsli-idle-bg: var(--bnum-list-item-bg-color, var(--bnum-color-list-idle, transparent));
   --_bdsli-hover-bg: var(--bnum-list-item-bg-color-hover, var(--bnum-color-list-hover, transparent));
-  --_bdsli-active-bg: var(--bnum-list-item-bg-color-active, var(--bnum-color-list-drag, transparent));
+  --_bdsli-active-bg: var(--bnum-list-item-bg-color-active, var(--bnum-color-list, transparent));
   background-color: var(--_bdsli-background-color, var(--_bdsli-idle-bg));
   color: var(--_bdsli-color, var(--_bdsli-idle));
 }
@@ -1176,7 +1185,7 @@ bnum-hide {
 }
 .bds-list-item.unread,
 .bds-list-table tr.unread {
-  --_bdsli-background-color: var(--_bdsli-alt-bg);
+  --_bdsli-background-color: var(--_bdsli-background-color, var(--_bdsli-idle-bg));
   --_bdsli-color: var(--_bdsli-alt);
 }
 .bds-list-item:hover,
@@ -1232,9 +1241,6 @@ bnum-hide {
   --_bdsli-active-bg: var(--_bdsli-hover-bg);
   --_bdsli-alt-bg: var(--_bdsli-hover-bg);
 }
-.bds-list-table.--no-rc tr td {
-  background-color: transparent !important;
-}
 .popover {
   --_idle-background: var(--nav-button-background, transparent);
   --_idle-color: var(--nav-button-color, var(--bnum-body-text-color, var(--bnum-text-primary)));
@@ -1286,4 +1292,40 @@ bnum-hide {
 }
 .popover .menu li a[aria-haspopup]::after {
   color: var(--_idle-color);
+}
+/* Règle de base commune */
+ul.treelist {
+  --_trl-idle-background-color: var(--treelist-idle-bg-color, var(--bnum-color-list-idle, transparent));
+  --_trl-idle-background-color-hover: var(--bnum-color-list-hover, #c1c1fb);
+  --_trl-idle-background-color-active: var(--bnum-color-list-alt-active, #cfcfcf);
+  --_trl-idle-background-color-selected: var(--bnum-color-list, #e3e3fd);
+}
+ul.treelist li[aria-level='1'] {
+  border-bottom: var(--bnum-border-in-column);
+}
+ul.treelist li[aria-level='1'] > a,
+ul.treelist li[aria-level='1'] > div {
+  font-weight: var(--treelist-main-li-font-weight, var(--bnum-font-weight-bold, bold));
+}
+ul.treelist li:last-of-type {
+  border-bottom: none;
+  --bnum-border-in-column: none;
+}
+ul.treelist li > a,
+ul.treelist li > div {
+  background-color: var(--_trl-idle-background-color) !important;
+}
+ul.treelist li > a:active,
+ul.treelist li > div:active {
+  background-color: var(--_trl-idle-background-color-active) !important;
+}
+ul.treelist li:hover:not(:has(li:hover)) > a,
+ul.treelist li:hover:not(:has(li:hover)) > div {
+  background-color: var(--_trl-idle-background-color-hover) !important;
+}
+ul.treelist li.selected > a,
+ul.treelist li.selected > div {
+  background-color: var(--_trl-idle-background-color-selected) !important;
+  --_trl-idle-background-color-hover: var(--_trl-idle-background-color-selected);
+  --calendar-list-item-selected-background-color: var(--_trl-idle-background-color-selected);
 }

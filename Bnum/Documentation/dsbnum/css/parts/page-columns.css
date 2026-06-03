@@ -25,12 +25,17 @@
 /* Nuances de gris */
 /* Danger */
 /* Warnings */
+:root {
+  --header-heights: 60px;
+}
 #layout-sidebar {
   --layout-sidebar-background-color: var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6));
   --layout-sidebar-text-color: var(--bnum-layout-sidebar-color, var(--bnum-text-primary, #3a3a3a));
   --mail-header-layout-list-background-color: var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6));
   background-color: var(--layout-sidebar-background-color, var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6)));
   color: var(--layout-sidebar-text-color, var(--bnum-layout-sidebar-color, var(--bnum-text-primary, #3a3a3a)));
+  --rc-header-color: var(--layout-sidebar-text-color, var(--bnum-layout-sidebar-color, var(--bnum-text-primary, #3a3a3a)));
+  --rc-header-background-color: var(--layout-sidebar-background-color, var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6)));
   border-right: var(--bnum-border-column);
 }
 #layout-sidebar .header {
@@ -39,14 +44,19 @@
   --mail-header-layout-list-background-color: var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6));
   background-color: var(--layout-sidebar-background-color, var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6)));
   color: var(--layout-sidebar-text-color, var(--bnum-layout-sidebar-color, var(--bnum-text-primary, #3a3a3a)));
-  padding: var(--layout-sidebar-header-padding, 12px 16px 12px 16px);
+  --rc-header-color: var(--layout-sidebar-text-color, var(--bnum-layout-sidebar-color, var(--bnum-text-primary, #3a3a3a)));
+  --rc-header-background-color: var(--layout-sidebar-background-color, var(--bnum-layout-sidebar-bg, var(--bnum-color-left-column, #f6f6f6)));
+  padding: var(--layout-sidebar-header-padding, 12px 8px 12px 16px);
   margin: 0;
   display: flex;
   align-items: center;
   align-content: center;
   justify-content: space-between;
-  height: 60px;
+  height: var(--header-heights);
+  min-height: var(--header-heights);
   border-bottom: var(--bnum-border-column);
+  --rc-header-border-bottom: var(--bnum-border-column);
+  --secondary-text-color: var(--bnum-body-text-color, var(--bnum-text-primary));
 }
 #layout-sidebar .old-header {
   width: 100%;
@@ -70,6 +80,7 @@ html.layout-large .task-mail bnum-column#layout-sidebar > .header,
 html.layout-large .task-mail bnum-column-sidebar#layout-sidebar > .header,
 html.layout-large .task-mail #layout-sidebar > .header {
   display: flex;
+  gap: 8px;
   margin: 0;
 }
 .task-mail #layout-sidebar {
@@ -108,10 +119,6 @@ html.layout-large .task-mail #layout-sidebar > .header {
 }
 .nav-button a:not(.disabled):focus,
 .bds-nav-button:not(.disabled):focus {
-  outline-color: #0a76f6;
-  outline-offset: 2px;
-  outline-style: solid;
-  outline-width: 2px;
   background-color: var(--_focus-background);
   color: var(--_focus-color);
   --layout-list-header-background-hover-color: var(--_focus-background);
@@ -139,20 +146,29 @@ html.layout-large .task-mail #layout-sidebar > .header {
 #layout-list > .header > .old-header,
 #layout-content,
 #layout-content > .header {
+  --_layout-list-color: var(--bnum-layout-list-background-color, var(--bnum-color-middle-column, #ffffff));
+  --_message-list-border-color: var(--bnum-message-list-unread-border-left, var(--bnum-color-primary, #000091));
+  background-color: var(--_layout-list-color);
+  --layout-list-background-color: var(--_layout-list-color);
+  --message-list-unread-border-left: var(--_message-list-border-color);
   --_color: var(--layout-list-header-color, var(--bnum-body-text-color, var(--bnum-text-primary)));
   --_background: var(--layout-list-header-background, var(--bnum-header-color, var(--bnum-color-background, #ffffff)));
   color: var(--_color);
   background-color: var(--_background);
+  --rc-header-color: var(--_color);
+  --rc-header-background-color: var(--_background);
   --secondary-text-color: var(--_color);
   --layout-content-header-text-color: var(--_color);
   --mail-header-button-color: var(--_color);
   --layout-list-header-background-color: var(--_background);
   --layout-content-header-background-color: var(--_background);
+  --addressbook-list-pagenav-background-color: var(--layout-sidebar-text-color, var(--bnum-layout-sidebar-color, var(--bnum-text-primary, #3a3a3a)));
 }
 #layout-list > .header,
 #layout-content > .header {
   height: 60px;
   border-bottom: var(--bnum-border-column);
+  --rc-header-border-bottom: var(--bnum-border-column);
   box-sizing: border-box;
 }
 #layout-list > .header > .old-header {
@@ -187,10 +203,6 @@ html.layout-large .task-mail #layout-sidebar > .header {
   color: var(--_active-color);
 }
 #layout-list > .header > .old-header a:not(.disabled):focus {
-  outline-color: #0a76f6;
-  outline-offset: 2px;
-  outline-style: solid;
-  outline-width: 2px;
   background-color: var(--_focus-background);
   color: var(--_focus-color);
   --layout-list-header-background-hover-color: var(--_focus-background);
@@ -234,10 +246,6 @@ html.layout-large .task-mail #layout-sidebar > .header {
   color: var(--_active-color);
 }
 #layout-content > .header a:not(.disabled):focus {
-  outline-color: #0a76f6;
-  outline-offset: 2px;
-  outline-style: solid;
-  outline-width: 2px;
   background-color: var(--_focus-background);
   color: var(--_focus-color);
   --layout-list-header-background-hover-color: var(--_focus-background);
@@ -289,10 +297,6 @@ html.layout-small div.header {
   color: var(--_active-color);
 }
 .footer a:not(.disabled):focus {
-  outline-color: #0a76f6;
-  outline-offset: 2px;
-  outline-style: solid;
-  outline-width: 2px;
   background-color: var(--_focus-background);
   color: var(--_focus-color);
   --layout-list-header-background-hover-color: var(--_focus-background);
