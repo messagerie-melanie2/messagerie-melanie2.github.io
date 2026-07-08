@@ -554,6 +554,59 @@ const EMPTY_STRING = '';
  * Cela permet d'améliorer la visualisation du code, dans le même esprit que {@link EMPTY_STRING}
  */
 const SPACE = ' ';
+// ============================================================
+// NOMBRES NON SIGNÉS (UINT)
+// ============================================================
+/**
+ * Zéro non signé — {@link uint} `0`.
+ * @group Uint
+ */
+const UI_ZERO = 0;
+
+/**
+ * Convertit un nombre en entier typé.
+ * @param n Nombre à convertir
+ * @returns La valeur convertie en `int`
+ * @throws Erreur si la valeur n'est pas un entier
+ */
+function toInt(n) {
+    if (!Number.isInteger(n))
+        throw new Error(`${n} is not an integer`);
+    return n;
+}
+/**
+ * Convertit un nombre en entier non signé typé.
+ * @param n Nombre à convertir
+ * @returns La valeur convertie en `uint`
+ * @throws Erreur si la valeur n'est pas un entier positif
+ */
+function toUint(n) {
+    if (!Number.isInteger(n) || n < 0)
+        throw new Error(`${n} is not a positive integer`);
+    return n;
+}
+/**
+ * Convertit un nombre en nombre flottant typé.
+ * @param n Nombre à convertir
+ * @returns La valeur convertie en `float`
+ * @throws Erreur si la valeur n'est pas un nombre fini
+ */
+function toFloat(n) {
+    if (!isFinite(n))
+        throw new Error(`${n} is not a float`);
+    return n;
+}
+/**
+ * Convertit un nombre en nombre flottant non signé typé.
+ * @param n Nombre à convertir
+ * @returns La valeur convertie en `ufloat`
+ * @throws Erreur si la valeur n'est pas un nombre fini positif
+ */
+function toUfloat(n) {
+    if (!isFinite(n) || n < 0)
+        throw new Error(`${n} is not a positive float`);
+    return n;
+}
 
 /**
  * Vérifie si une valeur inconnue est une chaîne de caractères non vide.
@@ -647,8 +700,176 @@ function capitalizeLine(line) {
     return line.split(SPACE).map(capitalize).join(SPACE);
 }
 
-var css_248z$s = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
-var style$p = css_248z$s;
+/**
+ * Usine générique pour créer des proxies de nombres typés avec système de cache intégré.
+ *
+ * Chaque accès à une propriété numérique sur le proxy retourné (ex. `proxy[42]`) :
+ * 1. Consulte d'abord le cache interne pour un accès en O(1) ;
+ * 2. Ignore silencieusement les propriétés non numériques (ex. `toString`, `Symbol`) ;
+ * 3. Valide et convertit la valeur via `validator`, puis la mémorise dans le cache.
+ *
+ * @template T - Le type brandé produit par le validateur (ex. `uint`, `float`).
+ *
+ * @param validator    - Fonction de conversion et de validation d'un nombre brut vers `T`.
+ *                       Doit lever une erreur si la valeur est hors domaine.
+ * @param prefillCache - Dictionnaire optionnel de valeurs pré-calculées pour les cas les
+ *                       plus fréquents, afin d'éviter tout appel à `validator` sur ces
+ *                       entrées. Par défaut : objet vide.
+ *
+ * @returns Un `Record<number, T>` implémenté par un `Proxy` qui valide à la demande
+ *          et met en cache chaque résultat.
+ *
+ * @example
+ * ```typescript
+ * const MyUint = createBrandedProxy<uint>(toUint, { 0: 0 as uint });
+ * const zero = MyUint[0];  // servi depuis le cache pré-rempli
+ * const cent = MyUint[100]; // validé par toUint puis mis en cache
+ * ```
+ */
+function createBrandedProxy(validator, prefillCache = {}) {
+    return new Proxy(prefillCache, {
+        get: (target, prop) => {
+            // 1. Lecture ultra-rapide depuis le cache
+            if (prop in target)
+                return target[prop];
+            // 2. Sécurité : on ignore les appels de propriétés non numériques (ex: toString)
+            const val = Number(prop);
+            if (isNaN(val))
+                return undefined;
+            // 3. Validation et mise en cache
+            const brandedValue = validator(val);
+            target[val] = brandedValue;
+            return brandedValue;
+        }
+    });
+}
+// ============================================================
+// INSTANCIATION DES PROXYS
+// ============================================================
+/**
+ * Proxy de conversion vers le type {@link uint} (entier non signé).
+ *
+ * Intercepte tout accès numérique et retourne la valeur correspondante
+ * validée par {@link toUint}. Les valeurs `0`, `1` et `2` sont pré-cachées.
+ *
+ * @example
+ * ```typescript
+ * const n = Uint[255]; // uint
+ * ```
+ */
+const Uint = createBrandedProxy(toUint, { 0: 0, 1: 1, 2: 2 });
+/**
+ * Proxy de conversion vers le type {@link int} (entier signé).
+ *
+ * Intercepte tout accès numérique et retourne la valeur correspondante
+ * validée par {@link toInt}. Les valeurs `-1`, `0` et `1` sont pré-cachées.
+ *
+ * @example
+ * ```typescript
+ * const n = Int[-42]; // int
+ * ```
+ */
+createBrandedProxy(toInt, { 0: 0, 1: 1, '-1': -1 });
+/**
+ * Proxy de conversion vers le type {@link float} (flottant signé).
+ *
+ * Intercepte tout accès numérique et retourne la valeur correspondante
+ * validée par {@link toFloat}. Les valeurs `0` et `1` sont pré-cachées.
+ *
+ * @example
+ * ```typescript
+ * const n = Float[3.14]; // float
+ * ```
+ */
+createBrandedProxy(toFloat, { 0: 0, 1: 1 });
+/**
+ * Proxy de conversion vers le type {@link ufloat} (flottant non signé).
+ *
+ * Intercepte tout accès numérique et retourne la valeur correspondante
+ * validée par {@link toUfloat}. Les valeurs `0` et `1` sont pré-cachées.
+ *
+ * @example
+ * ```typescript
+ * const n = Ufloat[0.75]; // ufloat
+ * ```
+ */
+createBrandedProxy(toUfloat, { 0: 0, 1: 1 });
+
+/**
+ * Suspend l'exécution d'une fonction `async` pendant la durée spécifiée.
+ *
+ * @param ms - Durée de la pause en millisecondes.
+ * @returns Une `Promise` qui se résout après `ms` millisecondes.
+ *
+ * @example
+ * ```ts
+ * await sleep(toUint(500)); // attend 500ms
+ * ```
+ *
+ */
+function sleep(ms) {
+    return new Promise((ok) => setTimeout(ok, ms));
+}
+/**
+ * Tente d'exécuter `fn` jusqu'à `attempts` fois en cas d'échec.
+ *
+ * Entre chaque tentative, attend `delay` millisecondes. Si toutes les
+ * tentatives échouent, l'erreur de la dernière tentative est propagée.
+ * L'exécution peut être annulée à tout moment via un `AbortSignal`.
+ *
+ * @typeParam T - Type de la valeur retournée par `fn` en cas de succès.
+ * @param fn - Fonction asynchrone à exécuter, pouvant être réessayée.
+ * @param attempts - Nombre maximum de tentatives (entier non signé).
+ * @param delay - Délai en millisecondes entre chaque tentative (entier non signé).
+ * @param signal - Signal d'annulation optionnel. Si déclenché avant une tentative,
+ *                 lève immédiatement une `Error('retry aborted')`.
+ * @returns Une `Promise` résolvant avec la valeur de `fn` dès qu'une tentative réussit.
+ * @throws L'erreur de la dernière tentative si toutes ont échoué.
+ * @throws `Error('retry aborted')` si le signal est annulé avant une tentative.
+ *
+ * @example
+ * ```ts
+ * const data = await retry(
+ *   () => fetch('/api/data').then(r => r.json()),
+ *   toUint(3),    // 3 tentatives maximum
+ *   toUint(500),  // 500ms entre chaque tentative
+ * );
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Avec annulation
+ * const controller = new AbortController();
+ * setTimeout(() => controller.abort(), 2000);
+ *
+ * const data = await retry(
+ *   () => fetchSomething(),
+ *   toUint(5),
+ *   toUint(300),
+ *   controller.signal,
+ * );
+ * ```
+ *
+ */
+async function retry(fn, attempts, delay, signal) {
+    let trys = UI_ZERO;
+    while (true) {
+        if (signal?.aborted)
+            throw new Error("retry aborted");
+        try {
+            return await fn();
+        }
+        catch (error) {
+            ++trys;
+            if (trys >= attempts)
+                throw error;
+        }
+        await sleep(delay);
+    }
+}
+
+var css_248z$t = ":host([block]){display:block;flex:1;width:100%}:host(.flex){display:flex}:host(.center){align-items:center;justify-content:center;text-align:center}";
+var style$q = css_248z$t;
 
 class BnumDOM {
     /**
@@ -773,6 +994,7 @@ class BnumElement extends HTMLElement {
     #_updateScheduled = false;
     /** Indique si le composant a déjà été chargé une première fois. */
     #firstLoad = false;
+    #_slotsLoaded = null;
     _p_styleElement = null;
     /**
      * Retourne la liste des attributs observés par le composant.
@@ -795,6 +1017,9 @@ class BnumElement extends HTMLElement {
      */
     get alreadyLoaded() {
         return this.#firstLoad;
+    }
+    get #_slots() {
+        return (this.#_slotsLoaded ??= {});
     }
     /**
      * Constructeur du composant.
@@ -897,6 +1122,7 @@ class BnumElement extends HTMLElement {
             this._p_buildDOM(BnumDOM.from(container));
         }
         this._p_attach();
+        this.#_loadSlots();
         this.#firstLoad = true;
     }
     // ======================
@@ -1147,6 +1373,48 @@ class BnumElement extends HTMLElement {
     // === Private helpers ==
     // ======================
     //#region private
+    /**
+     * Lock un slot après utilisation, pour éviter qu'il soit déclanché après coups.
+     * @param slot Slot à lock
+     */
+    #_lockSlot(slot) {
+        const lock = () => {
+            const name = slot.getAttribute('name') || 'null';
+            if (this.#_slots[name] !== true) {
+                this.#_slots[name] = true;
+            }
+        };
+        if (navigator.userAgent.includes('Firefox')) {
+            requestAnimationFrame(lock);
+        }
+        else {
+            queueMicrotask(() => requestAnimationFrame(() => requestAnimationFrame(lock)));
+        }
+    }
+    /**
+     * Charge les slots.
+     *
+     * Utile si on doit attendre un comptage des enfants ou non.
+     * @private
+     */
+    #_loadSlots() {
+        if (!this._p_isShadowElement())
+            return;
+        const slots = this.shadowRoot?.querySelectorAll?.('slot');
+        if (!slots)
+            return;
+        for (const slot of slots) {
+            this._p_slotInit(slot);
+            slot.addEventListener('slotchange', function (currentSlot) {
+                const name = currentSlot.getAttribute('name') || 'null';
+                if (this.#_slots[name] !== true) {
+                    this._p_slotConnected(currentSlot);
+                    this.#_slots[name] = true;
+                }
+            }.bind(this, slot));
+            this.#_lockSlot(slot);
+        }
+    }
     /**
      * Récupère une donnée interne ou depuis un attribut data-*.
      * @param name Nom de la donnée.
@@ -1470,6 +1738,24 @@ class BnumElement extends HTMLElement {
      */
     _p_attach() { }
     /**
+     * Hook appelé après le rendu des composants.
+     *
+     * Initialise les slots qui on besoins d'éléments enfants pour fonctionner correctement.
+     * @param slot Slot qui est initialisé
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _p_slotInit(slot) { }
+    /**
+     * Hook appelé après le rendu des composants.
+     *
+     * Lorsque le slot est chargé en composant.
+     *
+     * /!\ Si le slot était vide au départ, puis modifié, cette fonction sera appelé.
+     * @param slot Slot qui est corrigé
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _p_slotConnected(slot) { }
+    /**
      * Hook appelé avant le déchargement du composant.
      * À surcharger dans les classes dérivées.
      */
@@ -1551,7 +1837,7 @@ class BnumElement extends HTMLElement {
 /**
  * Style commun à tous les BnumElement.
  */
-const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(style$p);
+const BASE_STYLE = BnumElement.ConstructCSSStyleSheet(style$q);
 
 class RotomecaCookies {
     /**
@@ -2685,8 +2971,8 @@ class SchedulerArray {
     }
 }
 
-var css_248z$r = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
-var style$o = css_248z$r;
+var css_248z$s = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{border-radius:var(--bnum-badge-border-radius,100px);display:var(--bnum-badge-display,inline-block);padding:var(--bnum-badge-padding,var(--bnum-space-xs,5px))}:host(:state(is-circle)){aspect-ratio:1;border-radius:var(--bnum-badge-circle-border-radius,100%)}:host(:state(is-circle)) span{align-items:center;display:flex;height:100%;justify-content:center}:host(:state(variation-primary)){background-color:var(--bnum-badge-primary-color,var(--bnum-color-primary,#000091));color:var(--bnum-badge-primary-text-color,var(--bnum-text-on-primary,#f5f5fe))}:host(:state(variation-secondary)){background-color:var(--bnum-badge-secondary-color,var(--bnum-color-secondary,#3a3a3a));color:var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-secondary)){border:var(--bnum-badge-type,solid) var(--bnum-badge-size,thin) var(--bnum-badge-secondary-text-color,var(--bnum-text-on-secondary,#fff))}:host(:state(variation-danger)){background-color:var(--bnum-badge-danger-color,var(--bnum-color-danger,#ce0500));color:var(--bnum-badge-danger-text-color,var(--bnum-text-on-danger,#f5f5fe))}";
+var style$p = css_248z$s;
 
 /**
  * Décorateur de classe pour définir un Web Component.
@@ -3099,6 +3385,7 @@ const TAG_PRIMARY = `${TAG_PREFIX}-primary-button`;
 const TAG_SECONDARY = `${TAG_PREFIX}-secondary-button`;
 const TAG_TERTIARY = `${TAG_PREFIX}-tertiary-button`;
 const TAG_DANGER = `${TAG_PREFIX}-danger-button`;
+const TAG_TOGGLE_BUTTON = `${TAG_PREFIX}-toggle-button`;
 const TAG_CARD_TITLE = `${TAG_PREFIX}-card-title`;
 const TAG_CARD = `${TAG_PREFIX}-card`;
 const TAG_CARD_EMAIL = `${TAG_PREFIX}-card-email`;
@@ -3190,7 +3477,7 @@ const STATE_VARIATION_PREFIX = 'variation-';
  */
 let HTMLBnumBadge = (() => {
     let _classDecorators = [Define({
-            styles: style$o,
+            styles: style$p,
             tag: TAG_BADGE,
         }), UpdateAll()];
     let _classDescriptor;
@@ -3309,6 +3596,10 @@ let HTMLBnumBadge = (() => {
             this._p_addState(`${STATE_VARIATION_PREFIX}${this.variation}`);
         }
         //#endregion Private Methods
+        forceValue(value) {
+            this.#_value = value;
+            this.#_update(true);
+        }
         //#region Static Methods
         /**
          * Attributs observés pour ce composant.
@@ -3660,11 +3951,11 @@ function OnIconChangeInitializer(event, self) {
     });
 }
 
-var css_248z$q = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
-var symbols = css_248z$q;
+var css_248z$r = "@font-face{font-family:Material Symbols Outlined;font-style:normal;font-weight:200;src:url(fonts/material-symbol-v2.woff2) format(\"woff2\")}.material-symbols-outlined{word-wrap:normal;-moz-font-feature-settings:\"liga\";-moz-osx-font-smoothing:grayscale;direction:ltr;display:inline-block;font-family:Material Symbols Outlined;font-size:24px;font-style:normal;font-weight:400;letter-spacing:normal;line-height:1;text-transform:none;white-space:nowrap}";
+var symbols = css_248z$r;
 
-var css_248z$p = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,200),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));line-height:var(--bnum-icon-line-height,1);width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
-var style$n = css_248z$p;
+var css_248z$q = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{font-size:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));font-variation-settings:\"FILL\" var(--bnum-icon-fill,0),\"wght\" var(--bnum-icon-weight,300),\"GRAD\" var(--bnum-icon-grad,0),\"opsz\" var(--bnum-icon-opsz,24);font-weight:var(--bnum-icon-font-weight,var(--bnum-font-weight-normal,normal));height:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem));line-height:var(--bnum-icon-line-height,1);width:var(--bnum-icon-font-size,var(--bnum-font-size-xxl,1.5rem))}:host(:state(loading)){opacity:0}";
+var style$o = css_248z$q;
 
 /**
  * Classe CSS utilisée pour les icônes Material Symbols.
@@ -3674,7 +3965,7 @@ const ICON_CLASS = 'material-symbols-outlined';
  * Feuille de style CSS pour les icônes Material Symbols.
  */
 const SYMBOLS = BnumElement.ConstructCSSStyleSheet(symbols.replaceAll(`.${ICON_CLASS}`, ':host'));
-const STYLE = BnumElement.ConstructCSSStyleSheet(style$n);
+const STYLE = BnumElement.ConstructCSSStyleSheet(style$o);
 /**
  * Composant personnalisé "bnum-icon" pour afficher une icône Material Symbol.
  *
@@ -3938,8 +4229,8 @@ let HTMLBnumIcon = (() => {
     return HTMLBnumIcon = _classThis;
 })();
 
-var css_248z$o = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-font-size-xl);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:var(--bnum-button-font-weight,center);height:var(--bnum-button-height,-moz-fit-content);height:var(--bnum-button-height,fit-content);line-height:1.5rem;padding:var(--bnum-button-padding,.5rem 1rem);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:var(--bnum-button-justify-content,center)}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(tertiary)){background-color:var(--bnum-button-tertiary-background-color,var(--bnum-color-tertiary));border:var(--bnum-button-tertiary-border,solid thin var(--bnum-button-tertiary-border-color,transparent));color:var(--bnum-button-tertiary-text-color,var(--bnum-text-on-tertiary))}:host(:state(tertiary):hover){background-color:var(--bnum-button-tertiary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-tertiary-hover-border,solid thin var(--bnum-button-tertiary-hover-border-color,transparent));color:var(--bnum-button-tertiary-hover-text-color,var(--bnum-text-on-tertiary-hover))}:host(:state(tertiary):active){background-color:var(--bnum-button-tertiary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-tertiary-active-border,solid thin var(--bnum-button-tertiary-active-border-color,transparent));color:var(--bnum-button-tertiary-active-text-color,var(--bnum-text-on-tertiary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}:host(:state(tertiary)){--bnum-button-justify-content:start;--bnum-button-font-weight:500;transition:none}";
-var style$m = css_248z$o;
+var css_248z$p = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--bnum-icon-font-size:var(--bnum-font-size-xl);border-radius:var(--bnum-button-border-radius,0);cursor:var(--bnum-button-cursor,pointer);display:var(--bnum-button-display,inline-block);font-weight:var(--bnum-button-font-weight,600);height:var(--bnum-button-height,-moz-fit-content);height:var(--bnum-button-height,fit-content);line-height:1.5rem;padding:var(--bnum-button-padding,.5rem 1rem);transition:background-color .2s ease,color .2s ease;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:state(rounded)){border-radius:var(--bnum-button-rounded-border-radius,5px)}:host(:state(without-icon)){padding-bottom:var(--bnum-button-without-icon-padding-bottom,7.5px);padding-top:var(--bnum-button-without-icon-padding-top,7.5px)}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}:host(:state(loading)){cursor:progress}:host(:state(icon)){--bnum-button-icon-gap:var(--custom-bnum-button-icon-margin,var(--bnum-space-s,10px))}:host(:state(icon))>.wrapper{align-items:center;display:flex;flex-direction:row;gap:var(--bnum-button-icon-gap);justify-content:var(--bnum-button-justify-content,center)}:host(:state(icon-pos-left)) .wrapper{flex-direction:row-reverse}:host(:focus-visible){outline:2px solid #0969da;outline-offset:2px}:host>.wrapper{align-items:var(--bnum-button-wrapper-align-items,center);display:var(--bnum-button-wrapper-display,flex)}:host bnum-icon.icon{display:var(--bnum-button-icon-display,flex)}:host bnum-icon.icon.hidden{display:none}:host bnum-icon.loader{display:var(--bnum-button-loader-display,flex)}:host(:is(:state(loading):state(without-icon-loading))) slot{display:none}@keyframes spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .loader,:host .spin,:host(:state(loading)) .icon{animation:spin var(--bnum-button-spin-duration,.75s) var(--bnum-button-spin-timing,linear) var(--bnum-button-spin-iteration,infinite)}:host(:state(hide-text-on-small)) .slot,:host(:state(hide-text-on-touch)) .slot{display:var(--size-display-state,inline-block)}:host(:state(hide-text-on-small)) .icon,:host(:state(hide-text-on-touch)) .icon{margin-left:var(--size-margin-left-state,var(--custom-button-icon-margin-left))!important;margin-right:var(--size-margin-right-state,var(--custom-button-icon-margin-right))!important}:host .hidden,:host [hidden]{display:none!important}:host(:state(primary)){background-color:var(--bnum-button-primary-background-color,var(--bnum-color-primary));border:var(--bnum-button-primary-border,solid thin var(--bnum-button-primary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-primary-text-color,var(--bnum-text-on-primary))}:host(:state(primary):hover){background-color:var(--bnum-button-primary-hover-background-color,var(--bnum-color-primary-hover));border:var(--bnum-button-primary-hover-border,solid thin var(--bnum-button-primary-hover-border-color,var(--bnum-color-primary-hover)));color:var(--bnum-button-primary-hover-text-color,var(--bnum-text-on-primary-hover))}:host(:state(primary):active){background-color:var(--bnum-button-primary-active-background-color,var(--bnum-color-primary-active));border:var(--bnum-button-primary-active-border,solid thin var(--bnum-button-primary-active-border-color,var(--bnum-color-primary-active)));color:var(--bnum-button-primary-active-text-color,var(--bnum-text-on-primary-active))}:host(:state(secondary)){background-color:var(--bnum-button-secondary-background-color,var(--bnum-color-secondary));border:var(--bnum-button-secondary-border,solid thin var(--bnum-button-secondary-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-text-color,var(--bnum-text-on-secondary))}:host(:state(secondary):hover){background-color:var(--bnum-button-secondary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-secondary-hover-border,solid thin var(--bnum-button-secondary-hover-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-hover-text-color,var(--bnum-text-on-secondary-hover))}:host(:state(secondary):active){background-color:var(--bnum-button-secondary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-secondary-active-border,solid thin var(--bnum-button-secondary-active-border-color,var(--bnum-color-primary)));color:var(--bnum-button-secondary-active-text-color,var(--bnum-text-on-secondary-active))}:host(:state(tertiary)){background-color:var(--bnum-button-tertiary-background-color,var(--bnum-color-tertiary));border:var(--bnum-button-tertiary-border,solid thin var(--bnum-button-tertiary-border-color,transparent));color:var(--bnum-button-tertiary-text-color,var(--bnum-text-on-tertiary))}:host(:state(tertiary):hover){background-color:var(--bnum-button-tertiary-hover-background-color,var(--bnum-color-secondary-hover));border:var(--bnum-button-tertiary-hover-border,solid thin var(--bnum-button-tertiary-hover-border-color,transparent));color:var(--bnum-button-tertiary-hover-text-color,var(--bnum-text-on-tertiary-hover))}:host(:state(tertiary):active){background-color:var(--bnum-button-tertiary-active-background-color,var(--bnum-color-secondary-active));border:var(--bnum-button-tertiary-active-border,solid thin var(--bnum-button-tertiary-active-border-color,transparent));color:var(--bnum-button-tertiary-active-text-color,var(--bnum-text-on-tertiary-active))}:host(:state(danger)){background-color:var(--bnum-button-danger-background-color,var(--bnum-color-danger));border:var(--bnum-button-danger-border,solid thin var(--bnum-button-danger-border-color,var(--bnum-color-danger)));color:var(--bnum-button-danger-text-color,var(--bnum-text-on-danger))}:host(:state(danger):hover){background-color:var(--bnum-button-danger-hover-background-color,var(--bnum-color-danger-hover));border:var(--bnum-button-danger-hover-border,solid thin var(--bnum-button-danger-hover-border-color,var(--bnum-color-danger-hover)));color:var(--bnum-button-danger-hover-text-color,var(--bnum-text-on-danger-hover))}:host(:state(danger):active){background-color:var(--bnum-button-danger-active-background-color,var(--bnum-color-danger-active));border:var(--bnum-button-danger-active-border,solid thin var(--bnum-button-danger-active-border-color,var(--bnum-color-danger-active)));color:var(--bnum-button-danger-active-text-color,var(--bnum-text-on-danger-active))}:host(:state(tertiary)){--bnum-button-justify-content:start;--bnum-button-font-weight:600;transition:none}";
+var style$n = css_248z$p;
 
 // core/decorators/ui.ts
 function UI(selectorMap, options) {
@@ -4119,7 +4410,7 @@ let HTMLBnumButton = (() => {
     let _classDecorators = [Define({
             tag: TAG_BUTTON,
             template: TEMPLATE$g,
-            styles: style$m,
+            styles: style$n,
         })];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -5355,8 +5646,8 @@ function OnLinkedClickEventInitializer(event, instance) {
     });
 }
 
-var css_248z$n = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
-var style$l = css_248z$n;
+var css_248z$o = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{cursor:pointer;font-variation-settings:\"wght\" 400;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}:host(:hover){--bnum-icon-fill:1}:host(:active){--bnum-icon-fill:1;--bnum-icon-weight:700;--bnum-icon-grad:200;--bnum-icon-opsz:20}:host(:disabled),:host([disabled]){cursor:not-allowed;opacity:var(--bnum-button-disabled-opacity,.6);pointer-events:var(--bnum-button-disabled-pointer-events,none)}";
+var style$m = css_248z$o;
 
 //#region Global Constants
 const ID_ICON$1 = 'icon';
@@ -5379,7 +5670,7 @@ const TEMPLATE$f = (h(HTMLBnumIcon, { id: ID_ICON$1, children: h("slot", {}) }))
  * @slot (default) - Contenu de l'icône (nom de l'icône à afficher)
  */
 let HTMLBnumButtonIcon = (() => {
-    let _classDecorators = [Define({ styles: style$l, tag: TAG_ICON_BUTTON, template: TEMPLATE$f }), Observe('click')];
+    let _classDecorators = [Define({ styles: style$m, tag: TAG_ICON_BUTTON, template: TEMPLATE$f }), Observe('click')];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
@@ -5523,8 +5814,8 @@ let HTMLBnumButtonIcon = (() => {
     return HTMLBnumButtonIcon = _classThis;
 })();
 
-var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host .state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) .addons .addon__inner{flex:1}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:var(--bnum-color-primary,#000091)}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0;display:flex}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}";
-var style$k = css_248z$m;
+var css_248z$n = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host .addons__inner{position:relative;width:100%}:host #input__button,:host #input__icon,:host .state{display:none}:host(:disabled),:host(:state(disabled)){cursor:not-allowed;opacity:.6;pointer-events:none}:host(:state(button)) .addons{display:flex;gap:0}:host(:state(button)) .addons .addon__inner{flex:1}:host(:state(button)) input{border-top-right-radius:0}:host(:state(button)) #input__button,:host(:state(button)) input{--bnum-input-line-color:var(--bnum-color-primary,#000091)}:host(:state(button)) #input__button{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:0;display:block;height:auto}:host(:state(button):state(obi)) #input__button{--bnum-button-icon-gap:0;display:flex}:host(:state(icon)) #input__icon{display:block;position:absolute;right:var(--bnum-input-icon-right,10px);top:var(--bnum-input-icon-top,10px)}:host(:state(state):state(success)) #input__button,:host(:state(state):state(success)) input{--bnum-input-line-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(error)) #input__button,:host(:state(state):state(error)) input{--bnum-input-line-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}";
+var style$l = css_248z$n;
 
 const ID_INPUT$1 = 'bnum-input';
 const ID_HINT_TEXT = 'hint-text';
@@ -5592,11 +5883,11 @@ function OnButtonClickedInitializer(event, instance) {
     });
 }
 
-var css_248z$l = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:var(--bnum-input-gap,0.5rem);display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--bnum-input-container-margin-bottom,var(--internal-gap,.5rem))}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
-var base = css_248z$l;
+var css_248z$m = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.label-container{--internal-gap:var(--bnum-input-gap,0.5rem);display:flex;flex-direction:column;gap:var(--internal-gap,.5rem);margin-bottom:var(--bnum-input-container-margin-bottom,var(--internal-gap,.5rem))}.label-container--label{font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-label-size,var(--bnum-font-size-m));line-height:var(--bnum-font-label-line-height,var(--bnum-font-height-text-m))}.label-container--hint{color:var(--bnum-input-hint-text-color,var(--bnum-text-hint,#666));font-family:var(--bnum-font-family-primary);font-size:var(--bnum-font-hint-size,var(--bnum-font-size-xs));line-height:var(--bnum-font-hint-line-height,var(--bnum-font-height-text-xs))}.input-like{background-color:var(--bnum-input-background-color,var(--bnum-color-input,#eee));border:none;border-radius:.25rem .25rem 0 0;box-shadow:var(--bnum-input-box-shadow,inset 0 -2px 0 0 var(--bnum-input-line-color,var(--bnum-color-input-border,#3a3a3a)));color:var(--bnum-input-color,var(--bnum-text-on-input,#666));display:block;font-size:1rem;line-height:1.5rem;padding:.5rem 1rem;width:100%}";
+var base = css_248z$m;
 
-var css_248z$k = ":host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) .state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) .state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) .hint-label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .hint-label,:host(:state(state):state(success)) .state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .hint-label,:host(:state(state):state(error)) .state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
-var styleStates = css_248z$k;
+var css_248z$l = ":host(:state(state)){border-left:2px solid var(--internal-border-color);display:block;padding-left:10px}:host(:state(state)) .state{align-items:center;color:var(--internal-color);display:flex;font-size:.75rem;margin-top:1rem}:host(:state(state)) .state bnum-icon{--bnum-icon-font-size:1rem;margin-right:5px}:host(:state(state)) .hint-label{color:var(--internal-color)}:host(:state(state)) .error,:host(:state(state)) .success{display:none;margin-bottom:-4px}:host(:state(state):state(success)){--internal-border-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .hint-label,:host(:state(state):state(success)) .state{--internal-color:var(--bnum-input-state-success-color,var(--bnum-semantic-success,#36b37e))}:host(:state(state):state(success)) .success{display:block}:host(:state(state):state(error)){--internal-border-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .hint-label,:host(:state(state):state(error)) .state{--internal-color:var(--bnum-input-state-error-color,var(--bnum-semantic-danger,#de350b))}:host(:state(state):state(error)) .error{display:block}";
+var styleStates = css_248z$l;
 
 const INPUT_BASE_STYLE = BnumElementInternal.ConstructCSSStyleSheet(base);
 const INPUT_STYLE_STATES = BnumElementInternal.ConstructCSSStyleSheet(styleStates);
@@ -5737,7 +6028,7 @@ let HTMLBnumInput = (() => {
             tag: TAG_INPUT,
             // eslint-disable-next-line no-restricted-syntax
             template: Render(),
-            styles: [INPUT_BASE_STYLE, INPUT_STYLE_STATES, style$k],
+            styles: [INPUT_BASE_STYLE, INPUT_STYLE_STATES, style$l],
         }), Observe(OBSERVED_ATTRIBUTES)];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -6383,10 +6674,10 @@ let HTMLBnumInput = (() => {
     return _classThis;
 })();
 
-var css_248z$j = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
-var style$j = css_248z$j;
+var css_248z$k = ":host(:state(icon)) #input__icon{--bnum-input-icon-right:var(--bnum-input-number-icon-right,40px)}";
+var style$k = css_248z$k;
 
-const SHEET$3 = HTMLBnumInput.ConstructCSSStyleSheet(style$j);
+const SHEET$3 = HTMLBnumInput.ConstructCSSStyleSheet(style$k);
 const TYPE$2 = 'number';
 /**
  * Input nombre.
@@ -6632,8 +6923,8 @@ let HTMLBnumInputDate = (() => {
     return _classThis;
 })();
 
-var css_248z$i = ":host .container{position:relative}:host #input-search-actions-container{display:flex;position:absolute;right:50px;top:5px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
-var style$i = css_248z$i;
+var css_248z$j = ":host .container{position:relative}:host #input-search-actions-container{display:flex;position:absolute;right:50px;top:5px}:host #input-search-actions-container #input-clear-button{display:none}:host(:state(value)) #input-search-actions-container #input-clear-button{display:inline-block}";
+var style$j = css_248z$j;
 
 const ID_ACTIONS_CONTAINER = 'input-search-actions-container';
 const ID_CLEAR_BUTTON = 'input-clear-button';
@@ -6697,8 +6988,18 @@ function Listen(eventName, { selector = null } = {}) {
     };
 }
 
-const SHEET$2 = HTMLBnumInput.ConstructCSSStyleSheet(style$i);
+/** Feuille de style CSS compilée spécifique au composant `bnum-input-search`. */
+const SHEET$2 = HTMLBnumInput.ConstructCSSStyleSheet(style$j);
 //#region Template
+/**
+ * Fragment HTML du conteneur d'actions injecté dans le slot du composant parent.
+ *
+ * @remarks
+ * Contient le bouton de vidage ({@link HTMLBnumButtonIcon}) et un slot nommé
+ * `actions` permettant d'y injecter des contrôles personnalisés.
+ *
+ * @internal
+ */
 const TEMPLATE$e = (h("div", { id: ID_ACTIONS_CONTAINER, part: ID_ACTIONS_CONTAINER, children: [h(HTMLBnumButtonIcon, { id: ID_CLEAR_BUTTON, children: "close" }), h("slot", { name: SLOT_ACTIONS })] }));
 //#endregion Template
 /**
@@ -6752,6 +7053,10 @@ let HTMLBnumInputSearch = (() => {
     let _private__ui_initializers = [];
     let _private__ui_extraInitializers = [];
     let _private__ui_descriptor;
+    let _private__lightUi_decorators;
+    let _private__lightUi_initializers = [];
+    let _private__lightUi_extraInitializers = [];
+    let _private__lightUi_descriptor;
     let _onclear_decorators;
     let _onclear_initializers = [];
     let _onclear_extraInitializers = [];
@@ -6766,13 +7071,16 @@ let HTMLBnumInputSearch = (() => {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
             _private__ui_decorators = [UI({
                     emptyButton: `#${ID_ACTIONS_CONTAINER} ${HTMLBnumButtonIcon.TAG}`,
+                    searchButton: `#${ID_INPUT_BUTTON}`,
                 })];
+            _private__lightUi_decorators = [UI({ searchButton: `#${ID_INPUT_BUTTON}` }, { shadowRoot: false })];
             _onclear_decorators = [Listener()];
             __p_preload_decorators = [SetAttr(ATTRIBUTE_BUTTON_ICON, 'search'), InitAttr(ATTRIBUTE_PLACEHOLDER, BnumConfig.Get('local_keys')?.search_field || 'Rechercher')];
             __p_inputValueChangedCallback_decorators = [Autobind, Risky()];
             __triggerEventSearch_decorators = [Autobind, Fire(EVENT_SEARCH)];
             _private__onKeyDown_decorators = [Listen('keydown')];
             __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+            __esDecorate(this, _private__lightUi_descriptor = { get: __setFunctionName(function () { return this.#_lightUi_accessor_storage; }, "#_lightUi", "get"), set: __setFunctionName(function (value) { this.#_lightUi_accessor_storage = value; }, "#_lightUi", "set") }, _private__lightUi_decorators, { kind: "accessor", name: "#_lightUi", static: false, private: true, access: { has: obj => #_lightUi in obj, get: obj => obj.#_lightUi, set: (obj, value) => { obj.#_lightUi = value; } }, metadata: _metadata }, _private__lightUi_initializers, _private__lightUi_extraInitializers);
             __esDecorate(this, null, _onclear_decorators, { kind: "accessor", name: "onclear", static: false, private: false, access: { has: obj => "onclear" in obj, get: obj => obj.onclear, set: (obj, value) => { obj.onclear = value; } }, metadata: _metadata }, _onclear_initializers, _onclear_extraInitializers);
             __esDecorate(this, null, __p_preload_decorators, { kind: "method", name: "_p_preload", static: false, private: false, access: { has: obj => "_p_preload" in obj, get: obj => obj._p_preload }, metadata: _metadata }, null, _instanceExtraInitializers);
             __esDecorate(this, null, __p_inputValueChangedCallback_decorators, { kind: "method", name: "_p_inputValueChangedCallback", static: false, private: false, access: { has: obj => "_p_inputValueChangedCallback" in obj, get: obj => obj._p_inputValueChangedCallback }, metadata: _metadata }, null, _instanceExtraInitializers);
@@ -6794,9 +7102,46 @@ let HTMLBnumInputSearch = (() => {
         }
         #_ui_accessor_storage = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _private__ui_initializers, void 0));
         //#region Private fields
+        /**
+         * Références aux éléments du shadow DOM du composant.
+         *
+         * @remarks
+         * Contient le bouton de vidage (`emptyButton`) et le bouton de recherche (`searchButton`).
+         * Utilisé lorsque le composant est rendu en mode shadow DOM.
+         *
+         * @see {@link HTMLBnumInputSearch.#_lightUi}
+         * @internal
+         */
         get #_ui() { return _private__ui_descriptor.get.call(this); }
         set #_ui(value) { return _private__ui_descriptor.set.call(this, value); }
-        #onclear_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _onclear_initializers, void 0));
+        #_lightUi_accessor_storage = (__runInitializers(this, _private__ui_extraInitializers), __runInitializers(this, _private__lightUi_initializers, void 0));
+        /**
+         * Références aux éléments du DOM léger (hors shadow root) du composant.
+         *
+         * @remarks
+         * Utilisé uniquement lorsque le composant n'est pas rendu comme un élément shadow.
+         *
+         * @see {@link HTMLBnumInputSearch.#_ui}
+         * @internal
+         */
+        get #_lightUi() { return _private__lightUi_descriptor.get.call(this); }
+        set #_lightUi(value) { return _private__lightUi_descriptor.set.call(this, value); }
+        /**
+         * Retourne le bouton de recherche actif selon le mode de rendu du composant.
+         *
+         * @remarks
+         * Délègue vers {@link HTMLBnumInputSearch.#_ui} en mode shadow DOM,
+         * ou vers {@link HTMLBnumInputSearch.#_lightUi} en mode light DOM.
+         *
+         * @returns Le bouton de recherche courant.
+         * @internal
+         */
+        get #_searchButton() {
+            return this._p_isShadowElement()
+                ? this.#_ui.searchButton
+                : this.#_lightUi.searchButton;
+        }
+        #onclear_accessor_storage = (__runInitializers(this, _private__lightUi_extraInitializers), __runInitializers(this, _onclear_initializers, void 0));
         //#endregion Private fields
         /**
          * Événement déclenché lors du clic sur le bouton de vidage du champ de recherche.
@@ -6811,6 +7156,13 @@ let HTMLBnumInputSearch = (() => {
             super();
             __runInitializers(this, _onclear_extraInitializers);
         }
+        /**
+         * Retourne les feuilles de style appliquées au composant,
+         * en ajoutant {@link SHEET} à celles héritées du composant parent.
+         *
+         * @returns Tableau de feuilles de style CSS à appliquer au shadow DOM.
+         * @internal
+         */
         _p_getStylesheets() {
             return [...super._p_getStylesheets(), SHEET$2];
         }
@@ -6819,6 +7171,19 @@ let HTMLBnumInputSearch = (() => {
          * Définit le placeholder et l'icône du bouton si non présents.
          */
         _p_preload() { }
+        /**
+         * Construit le DOM du composant et attache le comportement du bouton de vidage.
+         *
+         * @remarks
+         * Si des abonnés sont enregistrés sur {@link HTMLBnumInputSearch.onclear}, ils sont invoqués
+         * en premier. Un abonné peut annuler le comportement par défaut via `ignoreOriginal`,
+         * ou planifier une action complémentaire via la propriété `after`.
+         *
+         * En l'absence d'interception, le comportement par défaut vide la valeur de l'input,
+         * déclenche le recalcul de l'état et émet l'événement `bnum-input-search:clear`.
+         *
+         * @internal
+         */
         _p_buildDOM() {
             super._p_buildDOM();
             this.#_ui.emptyButton.addEventListener('click', () => {
@@ -6857,6 +7222,18 @@ let HTMLBnumInputSearch = (() => {
             this.onButtonClicked.add(EVENT_DEFAULT, this._triggerEventSearch);
             this.#_onKeyDown();
         }
+        /**
+         * Gère le changement de valeur de l'input.
+         *
+         * @remarks
+         * Supprime temporairement puis restaure les attributs liés au bouton afin de
+         * préserver la configuration propre à l'input de recherche, quelle que soit
+         * la logique appliquée par la classe parente.
+         *
+         * @param e - Événement ayant déclenché le changement de valeur.
+         * @returns Résultat de l'opération de mise à jour.
+         * @internal
+         */
         _p_inputValueChangedCallback(e) {
             this.removeAttribute(ATTRIBUTE_BUTTON);
             this.setAttribute(ATTRIBUTE_BUTTON_ICON, BUTTON_ICON);
@@ -6879,22 +7256,93 @@ let HTMLBnumInputSearch = (() => {
          * Désactive le bouton de recherche.
          */
         disableSearchButton() {
-            (this._p_isShadowElement() === false ? this : this.shadowRoot)
-                .querySelector(`#${ID_INPUT_BUTTON}`)
-                ?.setAttribute(ATTRIBUTE_DISABLED$1, ATTRIBUTE_DISABLED$1);
+            this.#_searchButton?.setAttribute?.(ATTRIBUTE_DISABLED$1, ATTRIBUTE_DISABLED$1);
             return this;
         }
         /**
          * Active le bouton de recherche.
          */
         enableSearchButton() {
-            (this._p_isShadowElement() === false ? this : this.shadowRoot)
-                .querySelector(`#${ID_INPUT_BUTTON}`)
-                ?.removeAttribute(ATTRIBUTE_DISABLED$1);
+            this.#_searchButton?.removeAttribute?.(ATTRIBUTE_DISABLED$1);
             return this;
+        }
+        /**
+         * Active l'état de chargement sur le composant.
+         *
+         * @remarks
+         * Désactive l'input et affiche l'indicateur de chargement sur le bouton de recherche.
+         * Appeler {@link HTMLBnumInputSearch.stopLoading} pour revenir à l'état initial.
+         *
+         * @returns L'instance courante pour le chaînage.
+         *
+         * @example
+         * const search = document.querySelector('bnum-input-search');
+         * search.setLoading();
+         * await fetchResults();
+         * search.stopLoading();
+         */
+        setLoading() {
+            return this.#_disable().#_setSearchButtonLoading();
+        }
+        /**
+         * Désactive l'état de chargement sur le composant.
+         *
+         * @remarks
+         * Réactive l'input et masque l'indicateur de chargement du bouton de recherche.
+         * À utiliser après {@link HTMLBnumInputSearch.setLoading}.
+         *
+         * @returns L'instance courante pour le chaînage.
+         *
+         * @example
+         * const search = document.querySelector('bnum-input-search');
+         * search.setLoading();
+         * await fetchResults();
+         * search.stopLoading();
+         */
+        stopLoading() {
+            return this.#_enable().#_unsetSearchButtonLoading();
         }
         //#endregion Public Methods
         //#region Private Methods
+        /**
+         * Désactive le composant en posant l'attribut `disabled`.
+         *
+         * @returns L'instance courante pour le chaînage.
+         * @internal
+         */
+        #_disable() {
+            return this.attr('disabled', 'disabled');
+        }
+        /**
+         * Active l'indicateur de chargement sur le bouton de recherche.
+         *
+         * @returns L'instance courante pour le chaînage.
+         * @internal
+         */
+        #_setSearchButtonLoading() {
+            this.#_searchButton?.setLoading?.();
+            return this;
+        }
+        /**
+         * Réactive le composant en retirant l'attribut `disabled`.
+         *
+         * @returns L'instance courante pour le chaînage.
+         * @internal
+         */
+        #_enable() {
+            this.removeAttribute('disabled');
+            return this;
+        }
+        /**
+         * Désactive l'indicateur de chargement sur le bouton de recherche.
+         *
+         * @returns L'instance courante pour le chaînage.
+         * @internal
+         */
+        #_unsetSearchButtonLoading() {
+            this.#_searchButton?.stopLoading?.();
+            return this;
+        }
         /**
          * Déclenche l'événement de recherche avec la valeur actuelle de l'input.
          * @private
@@ -6906,6 +7354,17 @@ let HTMLBnumInputSearch = (() => {
                 caller: this,
             };
         }
+        /**
+         * Gestionnaire de l'événement `keydown` sur l'input.
+         *
+         * @remarks
+         * Bloque la propagation des frappes simples (sans modificateur `Ctrl`, `Alt` ou `Meta`)
+         * afin d'éviter les conflits avec les raccourcis clavier de l'application hôte.
+         * Déclenche la recherche à l'appui de la touche `Entrée`.
+         *
+         * @returns Fonction de rappel pour l'événement `keydown`.
+         * @internal
+         */
         get #_onKeyDown() { return _private__onKeyDown_descriptor.value; }
         //#endregion Private Methods
         //#region Static Methods
@@ -7173,6 +7632,272 @@ let HTMLBnumInputTime = (() => {
                 ...options,
             };
             return super.Create(label, finalOptions);
+        }
+    });
+    return _classThis;
+})();
+
+var css_248z$i = ":host(:state(not-empty)){display:contents}";
+var style$i = css_248z$i;
+
+/**
+ * Composant de substitution transparent qui se comporte comme un `<span>` vide
+ * lorsqu'aucun nœud ne lui est assigné, ou comme un conteneur natif dès qu'un
+ * nœud est présent.
+ *
+ * @remarks
+ * Le contenu est isolé dans un shadow DOM en mode ouvert.
+ * À la déconnexion, le shadow DOM est intentionnellement préservé afin de
+ * permettre une restauration automatique lors d'une reconnexion au document.
+ *
+ * @example Assignation programmatique
+ * ```typescript
+ * const placeholder = document.querySelector('bnum-placeholder') as HTMLBnumPlaceholder;
+ * const div = document.createElement('div');
+ * div.textContent = 'Contenu dynamique';
+ * placeholder.set(div);
+ * ```
+ *
+ * @example Réinitialisation complète
+ * ```typescript
+ * placeholder.clear();
+ * console.log(placeholder.isEmpty); // true
+ * ```
+ */
+let HTMLBnumPlaceholder = (() => {
+    let _classDecorators = [Define({
+            tag: 'bnum-placeholder',
+            styles: style$i,
+        })];
+    let _classDescriptor;
+    let _classExtraInitializers = [];
+    let _classThis;
+    let _classSuper = BnumElementInternal;
+    (class extends _classSuper {
+        static { _classThis = this; }
+        static {
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            __runInitializers(_classThis, _classExtraInitializers);
+        }
+        //#region Private Fields
+        /**
+         * Nœud DOM actuellement contenu dans le composant.
+         * Vaut `null` ou `undefined` lorsque le composant est vide.
+         *
+         * @internal
+         */
+        #_data;
+        //#endregion Private Fields
+        //#region Getters/Setters
+        /**
+         * Indique si le composant est actuellement vide.
+         *
+         * @returns `true` si aucun nœud n'est assigné, `false` sinon.
+         */
+        get isEmpty() {
+            return !this.#_data;
+        }
+        //#endregion Getters/Setters
+        //#region Lifecycle
+        constructor() {
+            super();
+        }
+        /**
+         * Appelé automatiquement lors de l'insertion du composant dans le DOM.
+         *
+         * @remarks
+         * Priorité d'initialisation :
+         * 1. Si le shadow DOM contient déjà un nœud, il est enregistré tel quel.
+         * 2. Sinon, si le DOM léger contient un nœud enfant, il est déplacé dans
+         *    le shadow DOM via {@link set}.
+         *
+         * @override
+         */
+        connectedCallback() {
+            super.connectedCallback();
+            const root = this.#_getOrCreateShadow();
+            if (root.firstElementChild)
+                this.#_setElementWithState(root.firstElementChild);
+            else if (this.firstElementChild)
+                this.set(this.firstElementChild);
+        }
+        /**
+         * Appelé par le `disconnectedCallback` de la classe parente lors du retrait
+         * du composant du DOM.
+         *
+         * @remarks
+         * Réinitialise la référence interne et l'état du composant, mais
+         * **préserve le contenu du shadow DOM** pour permettre une restauration
+         * transparente lors d'une reconnexion ultérieure.
+         *
+         * Comportement comparé à {@link clear} :
+         * | Opération        | `_p_detach` | `clear` |
+         * |------------------|:-----------:|:-------:|
+         * | Référence interne | ✅ reset   | ✅ reset |
+         * | État `not-empty`  | ✅ reset   | ✅ reset |
+         * | Shadow DOM        | ❌ préservé | ✅ vidé  |
+         *
+         * @override
+         */
+        _p_detach() {
+            super._p_detach();
+            this.#_clearData().#_removeState();
+        }
+        //#endregion Lifecycle
+        //#region Public Methods
+        /**
+         * Retourne le nœud DOM actuellement stocké dans le composant.
+         *
+         * @returns Le nœud assigné, ou `null`/`undefined` si le composant est vide.
+         */
+        get() {
+            return this.#_data;
+        }
+        /**
+         * Assigne un nœud au composant et l'insère dans le shadow DOM.
+         *
+         * @remarks
+         * L'opération est sans effet si le composant contient déjà un nœud.
+         * Pour remplacer le contenu existant, appeler {@link clear} au préalable.
+         *
+         * @param element - Nœud DOM à insérer dans le composant.
+         * @returns `true` si le nœud a été inséré, `false` si le composant était
+         *          déjà occupé.
+         */
+        set(element) {
+            if (!this.isEmpty)
+                return false;
+            const node = this.#_setElementWithState(element);
+            this.#_getOrCreateShadow().appendChild(node);
+            return true;
+        }
+        /**
+         * Réinitialise complètement le composant : efface la référence interne,
+         * vide le shadow DOM et retire l'état `not-empty`.
+         *
+         * @remarks
+         * Voir {@link _p_detach} pour la différence de comportement lors d'une
+         * déconnexion du DOM.
+         *
+         * @returns L'instance courante pour permettre le chaînage.
+         */
+        clear() {
+            return this.#_clearData().#_clearShadowroot().#_removeState();
+        }
+        //#endregion Public Methods
+        //#region Private Methods
+        /**
+         * Récupère le shadow root existant ou en crée un nouveau en mode ouvert.
+         *
+         * @returns Le shadow root du composant.
+         * @internal
+         */
+        #_getOrCreateShadow() {
+            let root;
+            if (!this.shadowRoot)
+                root = this.attachShadow({ mode: 'open' });
+            else
+                root = this.shadowRoot;
+            return root;
+        }
+        /**
+         * Assigne le nœud fourni à {@link #_data} et le retourne.
+         *
+         * @param element - Nœud à stocker.
+         * @returns Le nœud stocké.
+         * @internal
+         */
+        #_setElement(element) {
+            this.#_data = element;
+            return this.#_data;
+        }
+        /**
+         * Active l'état `not-empty` sur le composant.
+         *
+         * @returns L'instance courante pour permettre le chaînage.
+         * @internal
+         */
+        #_setState() {
+            return this._p_addState('not-empty');
+        }
+        /**
+         * Active l'état `not-empty` puis enregistre le nœud fourni.
+         *
+         * @param element - Nœud à stocker.
+         * @returns Le nœud stocké.
+         * @internal
+         */
+        #_setElementWithState(element) {
+            return this.#_setState().#_setElement(element);
+        }
+        /**
+         * Réinitialise {@link #_data} à `null`.
+         *
+         * @returns L'instance courante pour permettre le chaînage.
+         * @internal
+         */
+        #_clearData() {
+            this.#_data = null;
+            return this;
+        }
+        /**
+         * Vide le contenu du shadow DOM.
+         *
+         * @returns L'instance courante pour permettre le chaînage.
+         * @internal
+         */
+        #_clearShadowroot() {
+            this.#_getOrCreateShadow().innerHTML = EMPTY_STRING;
+            return this;
+        }
+        /**
+         * Supprime l'état `not-empty` du composant.
+         *
+         * @returns L'instance courante pour permettre le chaînage.
+         * @internal
+         */
+        #_removeState() {
+            return this._p_removeState('not-empty');
+        }
+        //#endregion Private Methods
+        /**
+         * Crée et retourne une nouvelle instance de {@link HTMLBnumPlaceholder}
+         * via `document.createElement`.
+         *
+         * @remarks
+         * Méthode de fabrique statique à privilégier sur l'instanciation directe.
+         * Si `node` est fourni, il est injecté dans le DOM léger avant la connexion
+         * au document — {@link connectedCallback} se chargera de le transférer
+         * automatiquement dans le shadow DOM.
+         *
+         * @param node - Nœud DOM initial à insérer dans le composant. Ignoré si
+         *               `null` ou `undefined`.
+         * @returns Une nouvelle instance de {@link HTMLBnumPlaceholder}, prête à
+         *          être insérée dans le DOM.
+         *
+         * @example Création sans contenu
+         * ```typescript
+         * const placeholder = HTMLBnumPlaceholder.Create();
+         * document.body.appendChild(placeholder);
+         * ```
+         *
+         * @example Création avec un nœud initial
+         * ```typescript
+         * const div = document.createElement('div');
+         * div.textContent = 'Contenu initial';
+         *
+         * const placeholder = HTMLBnumPlaceholder.Create(div);
+         * document.body.appendChild(placeholder);
+         * ```
+         */
+        static Create(node) {
+            const created = document.createElement(this.TAG);
+            if (node)
+                created.appendChild(node);
+            return created;
         }
     });
     return _classThis;
@@ -9706,6 +10431,190 @@ let HTMLBnumTertiaryButton = (() => {
     return _classThis;
 })();
 
+// --- Attributes ---
+const ATTR_PRESSED = 'pressed';
+// --- States (Internal/CSS) ---
+const STATE_PRESSED = 'pressed';
+// --- Events ---
+const EVENT_PRESSED = 'pressed'; // Suffix, voir ElementChangedEvent
+
+function OnPressedChangeInitializer(event, instance) {
+    event.push((newValue, oldValue) => {
+        instance.dispatchEvent(new ElementChangedEvent(EVENT_PRESSED, newValue, oldValue, instance));
+    });
+}
+
+/**
+ * Bouton Bnum à bascule (pressed / unpressed), utilisé pour représenter un état
+ * binaire actionnable au clic (ex : favori, filtre actif, option activée).
+ *
+ * Hérite de {@link HTMLBnumButton} : variation, icône, état de chargement,
+ * arrondi et désactivation se gèrent exactement comme sur un bouton standard.
+ * L'aspect visuel de l'état "pressed" (icône, classe, couleur, etc.) est laissé
+ * aux composants consommateurs, via l'état CSS `pressed` ou l'événement
+ * `onpressedchange`.
+ *
+ * @category Buttons
+ *
+ * @structure Cas standard
+ * <bnum-toggle-button>Suivre</bnum-toggle-button>
+ *
+ * @structure Bouton initialement enfoncé
+ * <bnum-toggle-button pressed>Suivre</bnum-toggle-button>
+ *
+ * @structure Bouton à bascule avec variation
+ * <bnum-toggle-button data-variation="secondary">Suivre</bnum-toggle-button>
+ *
+ * @structure Bouton à bascule avec icône
+ * <bnum-toggle-button data-icon="star">Favori</bnum-toggle-button>
+ *
+ * @state pressed - Actif lorsque le bouton est dans l'état "enfoncé"
+ *
+ * @attr {boolean | undefined} (optional) pressed - État "enfoncé" du bouton
+ *
+ * @event {ElementChangedEvent<boolean, boolean, HTMLBnumToggleButton>} custom:element-changed.pressed - Déclenché lors du changement de l'état "pressed".
+ */
+let HTMLBnumToggleButton = (() => {
+    let _classDecorators = [Define({
+            tag: TAG_TOGGLE_BUTTON,
+        })];
+    let _classDescriptor;
+    let _classExtraInitializers = [];
+    let _classThis;
+    let _classSuper = HTMLBnumButton;
+    let _instanceExtraInitializers = [];
+    let _pressed_decorators;
+    let _pressed_initializers = [];
+    let _pressed_extraInitializers = [];
+    let _onpressedchange_decorators;
+    let _onpressedchange_initializers = [];
+    let _onpressedchange_extraInitializers = [];
+    let __onClick_decorators;
+    (class extends _classSuper {
+        static { _classThis = this; }
+        static {
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+            _pressed_decorators = [Attr(ATTR_PRESSED)];
+            _onpressedchange_decorators = [Listener(OnPressedChangeInitializer, { lazy: false })];
+            __onClick_decorators = [Autobind];
+            __esDecorate(this, null, _pressed_decorators, { kind: "accessor", name: "pressed", static: false, private: false, access: { has: obj => "pressed" in obj, get: obj => obj.pressed, set: (obj, value) => { obj.pressed = value; } }, metadata: _metadata }, _pressed_initializers, _pressed_extraInitializers);
+            __esDecorate(this, null, _onpressedchange_decorators, { kind: "accessor", name: "onpressedchange", static: false, private: false, access: { has: obj => "onpressedchange" in obj, get: obj => obj.onpressedchange, set: (obj, value) => { obj.onpressedchange = value; } }, metadata: _metadata }, _onpressedchange_initializers, _onpressedchange_extraInitializers);
+            __esDecorate(this, null, __onClick_decorators, { kind: "method", name: "_onClick", static: false, private: false, access: { has: obj => "_onClick" in obj, get: obj => obj._onClick }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            __runInitializers(_classThis, _classExtraInitializers);
+        }
+        //#region Private fields
+        #_lastPressed = (__runInitializers(this, _instanceExtraInitializers), false);
+        #pressed_accessor_storage = __runInitializers(this, _pressed_initializers, void 0);
+        //#endregion Private fields
+        //#region Getter/setter
+        /**
+         * État "enfoncé" du bouton.
+         */
+        get pressed() { return this.#pressed_accessor_storage; }
+        set pressed(value) { this.#pressed_accessor_storage = value; }
+        #onpressedchange_accessor_storage = (__runInitializers(this, _pressed_extraInitializers), __runInitializers(this, _onpressedchange_initializers, void 0));
+        /**
+         * Événement déclenché lors du changement de l'état "pressed".
+         */
+        get onpressedchange() { return this.#onpressedchange_accessor_storage; }
+        set onpressedchange(value) { this.#onpressedchange_accessor_storage = value; }
+        //#endregion Getter/setter
+        //#region Lifecycle
+        constructor() {
+            super();
+            __runInitializers(this, _onpressedchange_extraInitializers);
+        }
+        _p_buildDOM() {
+            super._p_buildDOM();
+            this.addEventListener('click', this._onClick);
+            this.#_lastPressed = this.pressed;
+            this.#_syncPressedState();
+        }
+        _p_update() {
+            super._p_update();
+            this.#_syncPressedState();
+            const newPressed = this.pressed;
+            if (newPressed !== this.#_lastPressed) {
+                const oldPressed = this.#_lastPressed;
+                this.#_lastPressed = newPressed;
+                this.onpressedchange.call(newPressed, oldPressed);
+            }
+        }
+        //#endregion Lifecycle
+        //#region Private methods
+        /**
+         * Synchronise l'état CSS (`:state(pressed)`) et l'accessibilité (`aria-pressed`)
+         * avec l'attribut `pressed`.
+         */
+        #_syncPressedState() {
+            if (this.pressed)
+                this._p_addState(STATE_PRESSED);
+            else
+                this._p_removeState(STATE_PRESSED);
+            this._p_internal.ariaPressed = String(this.pressed);
+        }
+        /**
+         * Bascule l'état "pressed" au clic, sauf si le bouton est désactivé ou en chargement.
+         */
+        _onClick() {
+            if (this.#_isInteractionBlocked())
+                return;
+            this.togglePressed();
+        }
+        /**
+         * Indique si le bouton ne doit pas réagir au clic (désactivé ou en chargement).
+         */
+        #_isInteractionBlocked() {
+            return (this.#_toBool(this.getAttribute(ATTR_DISABLED$1)) ||
+                this.#_toBool(this.getAttribute(ATTR_LOADING)));
+        }
+        /**
+         * Normalise une valeur d'attribut en booléen (présent et différent de `"false"`).
+         */
+        #_toBool(value) {
+            return value !== null && value !== 'false';
+        }
+        //#endregion Private methods
+        //#region Public methods
+        /**
+         * Met le bouton dans l'état "enfoncé".
+         * @returns L'instance du bouton
+         */
+        press() {
+            this.pressed = true;
+            return this;
+        }
+        /**
+         * Retire l'état "enfoncé" du bouton.
+         * @returns L'instance du bouton
+         */
+        unpress() {
+            this.pressed = false;
+            return this;
+        }
+        /**
+         * Bascule l'état "enfoncé" du bouton.
+         * @returns L'instance du bouton
+         */
+        togglePressed() {
+            this.pressed = !this.pressed;
+            return this;
+        }
+        //#endregion Public methods
+        //#region Static methods
+        /**
+         * Retourne la liste des attributs observés par le composant.
+         */
+        static _p_observedAttributes() {
+            return [...super._p_observedAttributes(), ATTR_PRESSED];
+        }
+    });
+    return _classThis;
+})();
+
 var css_248z$e = ":host #action{display:none}:host(:state(action)) #action,:host(:state(forced)) #action{display:block}:host(:state(action)) #avatar,:host(:state(forced)) #avatar{display:none}";
 var style$e = css_248z$e;
 
@@ -11681,8 +12590,7 @@ let HTMLBnumCardTitle = (() => {
     let _url_decorators;
     let _url_initializers = [];
     let _url_extraInitializers = [];
-    let _private__updateDOM_decorators;
-    let _private__updateDOM_descriptor;
+    let __updateDOM_decorators;
     var HTMLBnumCardTitle = class extends _classSuper {
         static { _classThis = this; }
         static {
@@ -11696,41 +12604,11 @@ let HTMLBnumCardTitle = (() => {
                 })];
             _onurlclick_decorators = [Listener()];
             _url_decorators = [Attr()];
-            _private__updateDOM_decorators = [Schedule()];
+            __updateDOM_decorators = [Schedule()];
             __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
             __esDecorate(this, null, _onurlclick_decorators, { kind: "accessor", name: "onurlclick", static: false, private: false, access: { has: obj => "onurlclick" in obj, get: obj => obj.onurlclick, set: (obj, value) => { obj.onurlclick = value; } }, metadata: _metadata }, _onurlclick_initializers, _onurlclick_extraInitializers);
             __esDecorate(this, null, _url_decorators, { kind: "accessor", name: "url", static: false, private: false, access: { has: obj => "url" in obj, get: obj => obj.url, set: (obj, value) => { obj.url = value; } }, metadata: _metadata }, _url_initializers, _url_extraInitializers);
-            __esDecorate(this, _private__updateDOM_descriptor = { value: __setFunctionName(function () {
-                    const url = this.url;
-                    const icon = this.icon;
-                    this._p_clearStates();
-                    if (icon) {
-                        this.#_ui.icon.icon = icon;
-                        this.#_ui.icon.hidden = false;
-                        this.#_ui.slotIcon.hidden = true;
-                    }
-                    else
-                        this.#_ui.icon.hidden = true;
-                    if (url) {
-                        this.#_ui.link.href = url;
-                        this._p_addState(STATE_URL);
-                        this.#_ui.link.removeAttribute('role');
-                        this.#_ui.link.removeAttribute('aria-disabled');
-                        if (!this.#_initUrlListener) {
-                            this.#_ui.link.addEventListener('click', (e) => {
-                                this.trigger('bnum-card-title:url.click', { inner: e }, { bubbles: e.bubbles, cancelable: e.cancelable });
-                            });
-                            this.addEventListener('bnum-card-title:url.click', (e) => {
-                                this.onurlclick.call(e);
-                            });
-                            this.#_initUrlListener = true;
-                        }
-                    }
-                    else {
-                        this.#_ui.link.removeAttribute('href');
-                        this._p_addState(STATE_WITHOUT_URL);
-                    }
-                }, "#_updateDOM") }, _private__updateDOM_decorators, { kind: "method", name: "#_updateDOM", static: false, private: true, access: { has: obj => #_updateDOM in obj, get: obj => obj.#_updateDOM }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, __updateDOM_decorators, { kind: "method", name: "_updateDOM", static: false, private: false, access: { has: obj => "_updateDOM" in obj, get: obj => obj._updateDOM }, metadata: _metadata }, null, _instanceExtraInitializers);
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             HTMLBnumCardTitle = _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -11768,7 +12646,7 @@ let HTMLBnumCardTitle = (() => {
          */
         set icon(v) {
             if (this.alreadyLoaded) {
-                this._p_setData(ATTRIBUTE_DATA_ICON, v).#_updateDOM();
+                this._p_setData(ATTRIBUTE_DATA_ICON, v)._updateDOM();
             }
             else {
                 const fromAttribute = true;
@@ -11791,7 +12669,7 @@ let HTMLBnumCardTitle = (() => {
          * Ajoute l'icône, le texte et le lien selon les propriétés définies.
          */
         _p_buildDOM() {
-            this.#_updateDOM();
+            this._updateDOM();
             if (this.#_initBody) {
                 this.#_updateBody(this.#_initBody);
                 this.#_initBody = null;
@@ -11803,7 +12681,7 @@ let HTMLBnumCardTitle = (() => {
          */
         _p_update() {
             if (this.alreadyLoaded)
-                this.#_updateDOM();
+                this._updateDOM();
         }
         //#endregion Lifecycle
         //#region Private methods
@@ -11812,7 +12690,37 @@ let HTMLBnumCardTitle = (() => {
          * Affiche ou masque l'icône et met à jour le lien si nécessaire.
          * @private
          */
-        get #_updateDOM() { return _private__updateDOM_descriptor.value; }
+        _updateDOM() {
+            const url = this.url;
+            const icon = this.icon;
+            this._p_clearStates();
+            if (icon) {
+                this.#_ui.icon.icon = icon;
+                this.#_ui.icon.hidden = false;
+                this.#_ui.slotIcon.hidden = true;
+            }
+            else
+                this.#_ui.icon.hidden = true;
+            if (url) {
+                this.#_ui.link.href = url;
+                this._p_addState(STATE_URL);
+                this.#_ui.link.removeAttribute('role');
+                this.#_ui.link.removeAttribute('aria-disabled');
+                if (!this.#_initUrlListener) {
+                    this.#_ui.link.addEventListener('click', e => {
+                        this.trigger('bnum-card-title:url.click', { inner: e }, { bubbles: e.bubbles, cancelable: e.cancelable });
+                    });
+                    this.addEventListener('bnum-card-title:url.click', e => {
+                        this.onurlclick.call(e);
+                    });
+                    this.#_initUrlListener = true;
+                }
+            }
+            else {
+                this.#_ui.link.removeAttribute('href');
+                this._p_addState(STATE_WITHOUT_URL);
+            }
+        }
         /**
          * Met à jour le corps du titre de la carte.
          * @param element Elément HTML, texte ou nœud Text à insérer dans le titre
@@ -11943,7 +12851,7 @@ let HTMLBnumFolderList = (() => {
     return HTMLBnumFolderList = _classThis;
 })();
 
-var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_local-indent:calc(var(--bnum-folder-indentation-base, 0.5em)*var(--internal-bnum-folder-level, 0));display:var(--bnum-folder-display,block);padding-left:var(--bnum-folder-indentation,var(--_local-indent));width:var(--bnum-folder-width,100%)}:host .bal-container{display:flex;justify-content:space-between;padding:var(--bnum-folder-title-padding,10px 15px);transition:background-color .2s ease}:host .bal-container__left,:host .bal-container__title{align-content:center;align-items:center;display:flex;gap:var(--bnum-folder-gap,var(--bnum-space-s,10px))}:host .bal-container__title__name{text-wrap:nowrap;max-width:var(--bnum-folder-text-ellipisis-max-width,125px);overflow:hidden;pointer-events:none;text-overflow:ellipsis}:host .bal-container__title__icon{--bnum-icon-weight:var(--bnum-folder-icon-weight,300);--bnum-icon-opsz:var(--bnum-folder-icon-opsz,24);color:var(--bnum-folder-icon-color,inherit);flex-shrink:0}:host bnum-badge{font-size:12px;font-weight:700;height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);transition:all .2s ease;width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host bnum-badge:state(no-value){display:none}:host([level=\"0\"]){border-bottom:var(--bnum-border-in-column)}:host([level=\"0\"]) .bal-container{font-weight:var(--bnum-font-weight-bold,bold);padding:var(--bnum-folder-bal-title-padding,15px 15px)}:host([level=\"0\"]) .bal-container__title{width:calc(100% - 55px)}:host([level=\"0\"]) .bal-container__title__name{text-wrap:nowrap;max-width:none;overflow:hidden;text-overflow:ellipsis}:host([level=\"0\"]) .bal-container__title__icon{display:none}:host([level=\"0\"]) .bal-container__left{justify-content:flex-end}:host(:state(no-subfolders)) .bal-container__toggle{display:none}:host(:state(double-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.675rem)}:host(:state(triple-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.675rem);height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host([is-collapsed=true]) .bal-sub-folders{display:none}:host([is-virtual=false]){cursor:pointer}:host([is-virtual=false]) .bal-container__title__name{pointer-events:all}:host([is-virtual=false]) .bal-container:hover{background-color:var(--bnum-color-list-hover)}:host(:focus),:host(:focus-visible){outline:none}:host([is-selected=true]) .bal-container{background-color:var(--bnum-color-list);cursor:default}:host([is-selected=true]) .bal-container:hover{background-color:var(--bnum-color-list)}:host(.dragover) .bal-container{background-color:var(--bnum-color-list-drag)}";
+var css_248z$8 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{--_local-indent:calc(var(--bnum-folder-indentation-base, 0.5em)*var(--internal-bnum-folder-level, 0));display:var(--bnum-folder-display,block);padding-left:var(--bnum-folder-indentation,var(--_local-indent));width:var(--bnum-folder-width,100%)}:host .bal-container{display:flex;justify-content:space-between;padding:var(--bnum-folder-title-padding,10px 15px);transition:background-color .2s ease}:host .bal-container__left,:host .bal-container__title{align-content:center;align-items:center;display:flex;gap:var(--bnum-folder-gap,var(--bnum-space-s,10px))}:host .bal-container__title{width:calc(100% - 55px)}:host .bal-container__title__name{text-wrap:nowrap;max-width:none;overflow:hidden;text-overflow:ellipsis}:host .bal-container__title__icon{--bnum-icon-weight:var(--bnum-folder-icon-weight,300);--bnum-icon-opsz:var(--bnum-folder-icon-opsz,24);color:var(--bnum-folder-icon-color,inherit);flex-shrink:0}:host bnum-badge{font-size:12px;font-weight:700;height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);transition:all .2s ease;width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host bnum-badge:state(no-value){display:none}:host([level=\"0\"]){border-bottom:var(--bnum-border-in-column)}:host([level=\"0\"]) .bal-container{font-weight:var(--bnum-font-weight-bold,bold);padding:var(--bnum-folder-bal-title-padding,15px 15px)}:host([level=\"0\"]) .bal-container__title__icon{display:none}:host([level=\"0\"]) .bal-container__left{justify-content:flex-end}:host(:state(no-subfolders)) .bal-container__toggle{display:none}:host(:state(double-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.675rem)}:host(:state(triple-digit-unread)) bnum-badge{font-size:var(--bnum-font-badge-s,.675rem);height:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2);width:calc(18px - var(--bnum-badge-padding, var(--bnum-space-xs, 5px))*2)}:host([is-collapsed=true]) .bal-sub-folders{display:none}:host([is-virtual=false]){cursor:pointer}:host([is-virtual=false]) .bal-container__title__name{pointer-events:all}:host([is-virtual=false]) .bal-container:hover{background-color:var(--bnum-color-list-hover)}:host(:focus),:host(:focus-visible){outline:none}:host([is-selected=true]) .bal-container{background-color:var(--bnum-color-list-active);cursor:default}:host([is-selected=true]) .bal-container:hover{background-color:var(--bnum-color-list-active)}:host(.dragover) .bal-container{background-color:var(--bnum-color-list-drag)}";
 var style$8 = css_248z$8;
 
 //type: consts
@@ -12113,6 +13021,7 @@ let HTMLBnumFolder = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     let _classSuper = BnumElementInternal;
+    let _instanceExtraInitializers = [];
     let ___decorators;
     let ___initializers = [];
     let ___extraInitializers = [];
@@ -12120,6 +13029,7 @@ let HTMLBnumFolder = (() => {
     let _private__ui_initializers = [];
     let _private__ui_extraInitializers = [];
     let _private__ui_descriptor;
+    let _setUnreadValue_decorators;
     var HTMLBnumFolder = class extends _classSuper {
         static { _classThis = this; }
         static {
@@ -12132,7 +13042,9 @@ let HTMLBnumFolder = (() => {
                     badge: `.${CLASS_LEFT_BADGE}`,
                     container: `.${CLASS_CONTAINER}`,
                 })];
+            _setUnreadValue_decorators = [Schedule()];
             __esDecorate(this, _private__ui_descriptor = { get: __setFunctionName(function () { return this.#_ui_accessor_storage; }, "#_ui", "get"), set: __setFunctionName(function (value) { this.#_ui_accessor_storage = value; }, "#_ui", "set") }, _private__ui_decorators, { kind: "accessor", name: "#_ui", static: false, private: true, access: { has: obj => #_ui in obj, get: obj => obj.#_ui, set: (obj, value) => { obj.#_ui = value; } }, metadata: _metadata }, _private__ui_initializers, _private__ui_extraInitializers);
+            __esDecorate(this, null, _setUnreadValue_decorators, { kind: "method", name: "setUnreadValue", static: false, private: false, access: { has: obj => "setUnreadValue" in obj, get: obj => obj.setUnreadValue }, metadata: _metadata }, null, _instanceExtraInitializers);
             __esDecorate(null, null, ___decorators, { kind: "field", name: "_", static: false, private: false, access: { has: obj => "_" in obj, get: obj => obj._, set: (obj, value) => { obj._ = value; } }, metadata: _metadata }, ___initializers, ___extraInitializers);
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             HTMLBnumFolder = _classThis = _classDescriptor.value;
@@ -12145,7 +13057,7 @@ let HTMLBnumFolder = (() => {
          * @private
          * @type {number}
          */
-        #_selfUnread = 0;
+        #_selfUnread = (__runInitializers(this, _instanceExtraInitializers), 0);
         //#endregion Private fields
         //#region Getters/Setters
         /** Référence à la classe HTMLBnumFolder */
@@ -12203,12 +13115,6 @@ let HTMLBnumFolder = (() => {
          */
         _p_attach() {
             super._p_attach();
-            if (this.childElementCount === 0) {
-                this._p_addState(STATE_NO_SUBFOLDERS);
-            }
-            else {
-                this.addEventListener(EVENT_UNREAD_CHANGED, this.#_onChildUnreadChanged.bind(this));
-            }
             if (this.hasAttribute(ATTR_IS_COLLAPSED) === false) {
                 this.setAttribute(ATTR_IS_COLLAPSED, VAL_TRUE);
             }
@@ -12223,6 +13129,28 @@ let HTMLBnumFolder = (() => {
                 .#_updateUnread(this.attr(ATTR_UNREAD)
                 ? +this.attr(ATTR_UNREAD)
                 : VAL_MIN_UNREAD);
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_slotInit(slot) {
+            switch (slot.getAttribute('name')) {
+                case 'folders':
+                    this._p_addState(STATE_NO_SUBFOLDERS);
+                    break;
+            }
+        }
+        /**
+         * @inheritdoc
+         */
+        _p_slotConnected(slot) {
+            switch (slot.getAttribute('name')) {
+                case 'folders':
+                    if (slot.assignedElements().length > 0) {
+                        this._p_removeState(STATE_NO_SUBFOLDERS).addEventListener(EVENT_UNREAD_CHANGED, this.#_onChildUnreadChanged.bind(this));
+                    }
+                    break;
+            }
         }
         /**
          * Gère la mise à jour des attributs observés.
@@ -12349,8 +13277,13 @@ let HTMLBnumFolder = (() => {
                 text = value.toString();
                 state = value > 9 ? STATE_DOUBLE_DIGIT : STATE_SINGLE_DIGIT;
             }
-            if (badge.value !== text)
-                badge.value = text;
+            badge.forceValue(text);
+            this._p_removeStates([
+                STATE_NO_UNREAD,
+                STATE_TRIPLE_DIGIT,
+                STATE_DOUBLE_DIGIT,
+                STATE_SINGLE_DIGIT,
+            ]);
             this._p_addState(state);
             const isCumulative = value !== this.#_selfUnread && isCollapsed;
             if (badge.classList.contains(CLASS_IS_CUMULATIVE) !== isCumulative) {
@@ -12467,6 +13400,15 @@ let HTMLBnumFolder = (() => {
                 caller: this,
             });
             return this;
+        }
+        /**
+         * Force la maj des non-lus.
+         *
+         * La maj sera effectivement uniquement au prochain redraw.
+         * @param value Nouveau non-lus
+         */
+        setUnreadValue(value) {
+            this.#_updateUnread(value);
         }
         //#endregion Public methods
         //#region Static methods
@@ -13833,10 +14775,8 @@ let HTMLBnumSegmentedControl = (() => {
     let _private__handleKeyboardNavigation_descriptor;
     let _private__onItemSelected_decorators;
     let _private__onItemSelected_descriptor;
-    let _private__onItemSelectedAction_decorators;
-    let _private__onItemSelectedAction_descriptor;
-    let _private__onError_decorators;
-    let _private__onError_descriptor;
+    let __onItemSelectedAction_decorators;
+    let __onError_decorators;
     (class extends _classSuper {
         static { _classThis = this; }
         static {
@@ -13847,8 +14787,8 @@ let HTMLBnumSegmentedControl = (() => {
             _private__onItemSelected_decorators = [Listen(HTMLBnumSegmentedItem.Events.SELECTED, {
                     selector: TAG_SEGMENTED_ITEM,
                 })];
-            _private__onItemSelectedAction_decorators = [Fire(EVENT_CHANGE)];
-            _private__onError_decorators = [Fire(EVENT_ERROR)];
+            __onItemSelectedAction_decorators = [Fire(EVENT_CHANGE)];
+            __onError_decorators = [Fire(EVENT_ERROR)];
             __esDecorate(this, _private__legend_descriptor = { get: __setFunctionName(function () { return this.#_legend_accessor_storage; }, "#_legend", "get"), set: __setFunctionName(function (value) { this.#_legend_accessor_storage = value; }, "#_legend", "set") }, _private__legend_decorators, { kind: "accessor", name: "#_legend", static: false, private: true, access: { has: obj => #_legend in obj, get: obj => obj.#_legend, set: (obj, value) => { obj.#_legend = value; } }, metadata: _metadata }, _private__legend_initializers, _private__legend_extraInitializers);
             __esDecorate(this, null, __p_buildDOM_decorators, { kind: "method", name: "_p_buildDOM", static: false, private: false, access: { has: obj => "_p_buildDOM" in obj, get: obj => obj._p_buildDOM }, metadata: _metadata }, null, _instanceExtraInitializers);
             __esDecorate(this, _private__handleKeyboardNavigation_descriptor = { value: __setFunctionName(function () {
@@ -13883,22 +14823,10 @@ let HTMLBnumSegmentedControl = (() => {
                     };
                 }, "#_handleKeyboardNavigation") }, _private__handleKeyboardNavigation_decorators, { kind: "method", name: "#_handleKeyboardNavigation", static: false, private: true, access: { has: obj => #_handleKeyboardNavigation in obj, get: obj => obj.#_handleKeyboardNavigation }, metadata: _metadata }, null, _instanceExtraInitializers);
             __esDecorate(this, _private__onItemSelected_descriptor = { value: __setFunctionName(function () {
-                    return this.#_onItemSelectedAction;
+                    return this._onItemSelectedAction;
                 }, "#_onItemSelected") }, _private__onItemSelected_decorators, { kind: "method", name: "#_onItemSelected", static: false, private: true, access: { has: obj => #_onItemSelected in obj, get: obj => obj.#_onItemSelected }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, _private__onItemSelectedAction_descriptor = { value: __setFunctionName(function (e) {
-                    const { target } = e.detail;
-                    if (!target) {
-                        this.#_onError(new Error("Élément cible manquant dans l'événement sélectionné."));
-                        return;
-                    }
-                    this.#_unselectAllItems();
-                    this.#_selectItem(target);
-                    return { value: target?.value, item: target, caller: this };
-                }, "#_onItemSelectedAction") }, _private__onItemSelectedAction_decorators, { kind: "method", name: "#_onItemSelectedAction", static: false, private: true, access: { has: obj => #_onItemSelectedAction in obj, get: obj => obj.#_onItemSelectedAction }, metadata: _metadata }, null, _instanceExtraInitializers);
-            __esDecorate(this, _private__onError_descriptor = { value: __setFunctionName(function (error) {
-                    Log.error('HTMLBnumSegmentedControl', 'Une erreur est survenue', error);
-                    return { error, caller: this };
-                }, "#_onError") }, _private__onError_decorators, { kind: "method", name: "#_onError", static: false, private: true, access: { has: obj => #_onError in obj, get: obj => obj.#_onError }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, __onItemSelectedAction_decorators, { kind: "method", name: "_onItemSelectedAction", static: false, private: false, access: { has: obj => "_onItemSelectedAction" in obj, get: obj => obj._onItemSelectedAction }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, __onError_decorators, { kind: "method", name: "_onError", static: false, private: false, access: { has: obj => "_onError" in obj, get: obj => obj._onError }, metadata: _metadata }, null, _instanceExtraInitializers);
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -14082,7 +15010,16 @@ let HTMLBnumSegmentedControl = (() => {
          * });
          * ```
          */
-        get #_onItemSelectedAction() { return _private__onItemSelectedAction_descriptor.value; }
+        _onItemSelectedAction(e) {
+            const { target } = e.detail;
+            if (!target) {
+                this._onError(new Error("Élément cible manquant dans l'événement sélectionné."));
+                return;
+            }
+            this.#_unselectAllItems();
+            this.#_selectItem(target);
+            return { value: target?.value, item: target, caller: this };
+        }
         /**
          * Traite les erreurs internes du composant.
          *
@@ -14105,7 +15042,10 @@ let HTMLBnumSegmentedControl = (() => {
          * });
          * ```
          */
-        get #_onError() { return _private__onError_descriptor.value; }
+        _onError(error) {
+            Log.error('HTMLBnumSegmentedControl', 'Une erreur est survenue', error);
+            return { error, caller: this };
+        }
         /**
          * Désélectionne tous les items du contrôle segmenté.
          *
@@ -14213,7 +15153,7 @@ function removeButtonRole(element) {
     return element;
 }
 
-var css_248z$4 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-card-border-bottom,var(--bnum-border-on-surface-bottom,solid 4px #000091));border-left:var(--bnum-card-border-left,var(--bnum-border-on-surface-left,none));border-right:var(--bnum-card-border-right,var(--bnum-border-on-surface-right,none));border-top:var(--bnum-card-border-top,var(--bnum-border-on-surface-top,none));display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
+var css_248z$4 = "@keyframes rotate360{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}:host{background-color:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));border-bottom:var(--bnum-card-border-bottom,var(--bnum-border-on-surface-bottom,solid 4px #000091));border-left:var(--bnum-card-border-left,var(--bnum-border-on-surface-left,none));border-right:var(--bnum-card-border-right,var(--bnum-border-on-surface-right,none));border-top:var(--bnum-card-border-top,var(--bnum-border-on-surface-top,none));display:var(--bnum-card-display,block);height:var(--bnum-card-height,auto);overflow-y:auto;padding:var(--bnum-card-padding,var(--bnum-space-m,15px));position:relative;width:var(--bnum-card-width,auto)}:host .card-loading{display:none}:host(:state(clickable)){cursor:var(--bnum-card-clickable-cursor,pointer)}:host(:hover:state(clickable)){background-color:var(--bnum-card-background-color-hover,var(--bnum-color-surface-hover,#dfdfdf))}:host(:active:state(clickable)){background-color:var(--bnum-card-background-color-active,var(--bnum-color-surface-active,#cfcfcf))}:host(:state(loading)){--bnum-card-background-color-hover:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));--bnum-card-background-color-active:var(--bnum-card-background-color,var(--bnum-color-surface,#f6f6f6));opacity:.8;pointer-events:none}:host(:state(loading)) .card-loading{align-items:center;display:flex;inset:0;justify-content:center;position:absolute;z-index:10}:host(:state(loading)) .card-loading .loader{animation:var(--bnum-card-loader-animation-rotate360,var(--bnum-animation-rotate360,rotate360 1s linear infinite))}:host(:state(loading)) .card-body slot{visibility:hidden}";
 var style$4 = css_248z$4;
 
 //type: class
@@ -16209,18 +17149,37 @@ let HTMLBnumColumn = (() => {
         //#endregion Getters/Setters
         //#region LifeCycle
         /**
-         * Constructeur de la colonne Bnum.
-         */
-        constructor() {
-            super();
-        }
-        /**
          * Logique de rendu Light DOM
          * On récupère les enfants existants et on les réorganise.
          * @param container Le conteneur dans lequel injecter le DOM reconstruit
          * @protected
          */
         _p_buildDOM(container) {
+            if (this.childNodes.length === 0) {
+                retry(async () => {
+                    if (this.childNodes.length === 0)
+                        throw new Error('No children yet');
+                    this.#_buildDOM(container);
+                }, Uint[5], Uint[100]).catch(() => {
+                    if (!this.data('tempted')) {
+                        this.data('tempted', 'ok');
+                        setTimeout(() => this._p_buildDOM(container), 500);
+                    }
+                    else {
+                        console.error('### Impossible de mettre en place le composant !', this, container);
+                    }
+                });
+                return;
+            }
+            this.#_buildDOM(container);
+        }
+        /**
+         * Logique de rendu Light DOM
+         * On récupère les enfants existants et on les réorganise.
+         * @param container Le conteneur dans lequel injecter le DOM reconstruit
+         * @private
+         */
+        #_buildDOM(container) {
             // Sauvegarde des enfants actuels
             const originalChildren = Array.from(this.childNodes);
             // Fragment temporaire pour construire le DOM avant injection
@@ -16302,7 +17261,7 @@ let HTMLBnumColumn = (() => {
         //#region Méthodes privées
         /**
          * Traite un élément enfant : supprime l'attribut slot, ajoute les classes CSS nécessaires,
-         * et gère la rétrocompatibilité des classes "header".
+         * et gère la rétrocompati<zbilité des classes "header".
          * @param {HTMLElement} element L'élément à traiter
          * @param {string} specificClass Classe CSS spécifique à ajouter
          * @private
@@ -16326,5 +17285,5 @@ if (typeof window !== 'undefined' && window.DsBnumConfig) {
     });
 }
 
-export { BREAKPOINTS, BnumElement, BnumRadioCheckedChangeEvent, ButtonVariation, ColumnSlot, BnumConfig as Config, RotomecaCssProperty as DsCssProperty, RotomecaCssRule as DsCssRule, RotomecaDocument as DsDocument, HTMLBnumAvatarAction, HTMLBnumBadge, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumColumn, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumFolder, HTMLBnumFolderList, HTMLBnumFragment, HTMLBnumHeader, HTMLBnumHide, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPrimaryButton, HTMLBnumRadio, HTMLBnumRadioGroup, HTMLBnumSecondaryButton, HTMLBnumSegmentedControl, HTMLBnumSegmentedItem, HTMLBnumSelect, HTMLBnumSwitch, HTMLBnumTertiaryButton, HTMLBnumTree, HideTextOnLayoutSize, INPUT_BASE_STYLE, INPUT_STYLE_STATES, IconPosition, MODES };
+export { BREAKPOINTS, BnumElement, BnumRadioCheckedChangeEvent, ButtonVariation, ColumnSlot, BnumConfig as Config, RotomecaCssProperty as DsCssProperty, RotomecaCssRule as DsCssRule, RotomecaDocument as DsDocument, HTMLBnumAvatarAction, HTMLBnumBadge, HTMLBnumButton, HTMLBnumButtonIcon, HTMLBnumCardAgenda, HTMLBnumCardElement, HTMLBnumCardEmail, HTMLBnumCardItem, HTMLBnumCardItemAgenda, HTMLBnumCardItemMail, HTMLBnumCardList, HTMLBnumCardTitle, HTMLBnumColumn, HTMLBnumDangerButton, HTMLBnumDate, HTMLBnumFolder, HTMLBnumFolderList, HTMLBnumFragment, HTMLBnumHeader, HTMLBnumHide, HTMLBnumIcon, HTMLBnumInput, HTMLBnumInputDate, HTMLBnumInputNumber, HTMLBnumInputSearch, HTMLBnumInputText, HTMLBnumInputTime, HTMLBnumPlaceholder, HTMLBnumPrimaryButton, HTMLBnumRadio, HTMLBnumRadioGroup, HTMLBnumSecondaryButton, HTMLBnumSegmentedControl, HTMLBnumSegmentedItem, HTMLBnumSelect, HTMLBnumSwitch, HTMLBnumTertiaryButton, HTMLBnumToggleButton, HTMLBnumTree, HideTextOnLayoutSize, INPUT_BASE_STYLE, INPUT_STYLE_STATES, IconPosition, MODES };
 //# sourceMappingURL=ds-module-bnum.js.map

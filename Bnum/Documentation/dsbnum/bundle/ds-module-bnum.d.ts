@@ -745,6 +745,22 @@ export declare abstract class BnumElement extends HTMLElement {
 	 */
 	protected _p_attach(): void;
 	/**
+	 * Hook appelé après le rendu des composants.
+	 *
+	 * Initialise les slots qui on besoins d'éléments enfants pour fonctionner correctement.
+	 * @param slot Slot qui est initialisé
+	 */
+	protected _p_slotInit(slot: HTMLSlotElement): void;
+	/**
+	 * Hook appelé après le rendu des composants.
+	 *
+	 * Lorsque le slot est chargé en composant.
+	 *
+	 * /!\ Si le slot était vide au départ, puis modifié, cette fonction sera appelé.
+	 * @param slot Slot qui est corrigé
+	 */
+	protected _p_slotConnected(slot: HTMLSlotElement): void;
+	/**
 	 * Hook appelé avant le déchargement du composant.
 	 * À surcharger dans les classes dérivées.
 	 */
@@ -1203,6 +1219,7 @@ export declare class HTMLBnumBadge extends BnumElementInternal {
 	 * Met à jour le composant lors d'un changement d'attribut.
 	 */
 	protected _p_update(): void | Nullable<"break">;
+	forceValue(value: string): void;
 	/**
 	 * Attributs observés pour ce composant.
 	 */
@@ -2301,10 +2318,28 @@ export declare class HTMLBnumInputNumber extends HTMLBnumInput {
 	static get AdditionnalStylesheet(): CSSStyleSheet;
 }
 export type BnumInputSearchCreateOptions = Omit<BnumInputNumericCreateOptions, "button" | "button-icon" | "step" | "min" | "max">;
+/**
+ * Paramètres transmis lors du déclenchement de l'événement {@link HTMLBnumInputSearch.onclear}.
+ *
+ * @remarks
+ * Permet aux abonnés d'intercepter et de modifier le comportement de vidage par défaut du composant.
+ * En positionnant `ignoreOriginal` à `true`, l'abonné prend entièrement la main sur l'action de vidage.
+ * La propriété `after` permet d'exécuter une fonction de rappel à l'issue du traitement par défaut,
+ * sans nécessiter de le remplacer.
+ *
+ * @see {@link HTMLBnumInputSearch.onclear}
+ */
 export type OnClearEventArgs = {
+	/** Instance du composant ayant déclenché l'événement. */
 	caller: HTMLBnumInputSearch;
+	/**
+	 * Si `true`, le comportement de vidage d'origine est ignoré.
+	 * L'abonné est alors responsable de l'intégralité de l'action.
+	 */
 	ignoreOriginal: boolean;
+	/** Référence en lecture seule à la fonction de rappel de changement de valeur de l'input. */
 	inputValueChangedFunction: Readonly<(e: Event) => ATresult<void>>;
+	/** Fonction optionnelle exécutée après le comportement de vidage par défaut. */
 	after?: Nullable<() => void>;
 };
 /**
@@ -2356,18 +2391,50 @@ export declare class HTMLBnumInputSearch extends HTMLBnumInput {
 	 * Constructeur du composant de recherche.
 	 */
 	constructor();
+	/**
+	 * Retourne les feuilles de style appliquées au composant,
+	 * en ajoutant {@link SHEET} à celles héritées du composant parent.
+	 *
+	 * @returns Tableau de feuilles de style CSS à appliquer au shadow DOM.
+	 * @internal
+	 */
 	protected _p_getStylesheets(): CSSStyleSheet[];
 	/**
 	 * Précharge les attributs spécifiques à l'input de recherche.
 	 * Définit le placeholder et l'icône du bouton si non présents.
 	 */
 	protected _p_preload(): void;
+	/**
+	 * Construit le DOM du composant et attache le comportement du bouton de vidage.
+	 *
+	 * @remarks
+	 * Si des abonnés sont enregistrés sur {@link HTMLBnumInputSearch.onclear}, ils sont invoqués
+	 * en premier. Un abonné peut annuler le comportement par défaut via `ignoreOriginal`,
+	 * ou planifier une action complémentaire via la propriété `after`.
+	 *
+	 * En l'absence d'interception, le comportement par défaut vide la valeur de l'input,
+	 * déclenche le recalcul de l'état et émet l'événement `bnum-input-search:clear`.
+	 *
+	 * @internal
+	 */
 	protected _p_buildDOM(): void;
 	/**
 	 * Attache les événements nécessaires au composant.
 	 * Supprime les attributs inutiles et gère les événements de recherche.
 	 */
 	protected _p_attach(): void;
+	/**
+	 * Gère le changement de valeur de l'input.
+	 *
+	 * @remarks
+	 * Supprime temporairement puis restaure les attributs liés au bouton afin de
+	 * préserver la configuration propre à l'input de recherche, quelle que soit
+	 * la logique appliquée par la classe parente.
+	 *
+	 * @param e - Événement ayant déclenché le changement de valeur.
+	 * @returns Résultat de l'opération de mise à jour.
+	 * @internal
+	 */
 	protected _p_inputValueChangedCallback(e: Event): ATresult<void>;
 	/**
 	 * Nettoie les attributs après le rendu du composant.
@@ -2381,6 +2448,38 @@ export declare class HTMLBnumInputSearch extends HTMLBnumInput {
 	 * Active le bouton de recherche.
 	 */
 	enableSearchButton(): this;
+	/**
+	 * Active l'état de chargement sur le composant.
+	 *
+	 * @remarks
+	 * Désactive l'input et affiche l'indicateur de chargement sur le bouton de recherche.
+	 * Appeler {@link HTMLBnumInputSearch.stopLoading} pour revenir à l'état initial.
+	 *
+	 * @returns L'instance courante pour le chaînage.
+	 *
+	 * @example
+	 * const search = document.querySelector('bnum-input-search');
+	 * search.setLoading();
+	 * await fetchResults();
+	 * search.stopLoading();
+	 */
+	setLoading(): this;
+	/**
+	 * Désactive l'état de chargement sur le composant.
+	 *
+	 * @remarks
+	 * Réactive l'input et masque l'indicateur de chargement du bouton de recherche.
+	 * À utiliser après {@link HTMLBnumInputSearch.setLoading}.
+	 *
+	 * @returns L'instance courante pour le chaînage.
+	 *
+	 * @example
+	 * const search = document.querySelector('bnum-input-search');
+	 * search.setLoading();
+	 * await fetchResults();
+	 * search.stopLoading();
+	 */
+	stopLoading(): this;
 	/**
 	 * Déclenche l'événement de recherche avec la valeur actuelle de l'input.
 	 * @private
@@ -2565,6 +2664,131 @@ export declare class HTMLBnumInputTime extends HTMLBnumInput {
 	 * @returns {HTMLBnumInputTime} Instance du composant.
 	 */
 	static Create(label: string, options?: BnumInputNumericCreateOptions): HTMLBnumInputNumber;
+}
+/**
+ * Composant de substitution transparent qui se comporte comme un `<span>` vide
+ * lorsqu'aucun nœud ne lui est assigné, ou comme un conteneur natif dès qu'un
+ * nœud est présent.
+ *
+ * @remarks
+ * Le contenu est isolé dans un shadow DOM en mode ouvert.
+ * À la déconnexion, le shadow DOM est intentionnellement préservé afin de
+ * permettre une restauration automatique lors d'une reconnexion au document.
+ *
+ * @example Assignation programmatique
+ * ```typescript
+ * const placeholder = document.querySelector('bnum-placeholder') as HTMLBnumPlaceholder;
+ * const div = document.createElement('div');
+ * div.textContent = 'Contenu dynamique';
+ * placeholder.set(div);
+ * ```
+ *
+ * @example Réinitialisation complète
+ * ```typescript
+ * placeholder.clear();
+ * console.log(placeholder.isEmpty); // true
+ * ```
+ */
+export declare class HTMLBnumPlaceholder extends BnumElementInternal {
+	#private;
+	/**
+	 * Indique si le composant est actuellement vide.
+	 *
+	 * @returns `true` si aucun nœud n'est assigné, `false` sinon.
+	 */
+	get isEmpty(): boolean;
+	constructor();
+	/**
+	 * Appelé automatiquement lors de l'insertion du composant dans le DOM.
+	 *
+	 * @remarks
+	 * Priorité d'initialisation :
+	 * 1. Si le shadow DOM contient déjà un nœud, il est enregistré tel quel.
+	 * 2. Sinon, si le DOM léger contient un nœud enfant, il est déplacé dans
+	 *    le shadow DOM via {@link set}.
+	 *
+	 * @override
+	 */
+	connectedCallback(): void;
+	/**
+	 * Appelé par le `disconnectedCallback` de la classe parente lors du retrait
+	 * du composant du DOM.
+	 *
+	 * @remarks
+	 * Réinitialise la référence interne et l'état du composant, mais
+	 * **préserve le contenu du shadow DOM** pour permettre une restauration
+	 * transparente lors d'une reconnexion ultérieure.
+	 *
+	 * Comportement comparé à {@link clear} :
+	 * | Opération        | `_p_detach` | `clear` |
+	 * |------------------|:-----------:|:-------:|
+	 * | Référence interne | ✅ reset   | ✅ reset |
+	 * | État `not-empty`  | ✅ reset   | ✅ reset |
+	 * | Shadow DOM        | ❌ préservé | ✅ vidé  |
+	 *
+	 * @override
+	 */
+	protected _p_detach(): void;
+	/**
+	 * Retourne le nœud DOM actuellement stocké dans le composant.
+	 *
+	 * @returns Le nœud assigné, ou `null`/`undefined` si le composant est vide.
+	 */
+	get(): MayBe<Node>;
+	/**
+	 * Assigne un nœud au composant et l'insère dans le shadow DOM.
+	 *
+	 * @remarks
+	 * L'opération est sans effet si le composant contient déjà un nœud.
+	 * Pour remplacer le contenu existant, appeler {@link clear} au préalable.
+	 *
+	 * @param element - Nœud DOM à insérer dans le composant.
+	 * @returns `true` si le nœud a été inséré, `false` si le composant était
+	 *          déjà occupé.
+	 */
+	set(element: Node): boolean;
+	/**
+	 * Réinitialise complètement le composant : efface la référence interne,
+	 * vide le shadow DOM et retire l'état `not-empty`.
+	 *
+	 * @remarks
+	 * Voir {@link _p_detach} pour la différence de comportement lors d'une
+	 * déconnexion du DOM.
+	 *
+	 * @returns L'instance courante pour permettre le chaînage.
+	 */
+	clear(): this;
+	/**
+	 * Crée et retourne une nouvelle instance de {@link HTMLBnumPlaceholder}
+	 * via `document.createElement`.
+	 *
+	 * @remarks
+	 * Méthode de fabrique statique à privilégier sur l'instanciation directe.
+	 * Si `node` est fourni, il est injecté dans le DOM léger avant la connexion
+	 * au document — {@link connectedCallback} se chargera de le transférer
+	 * automatiquement dans le shadow DOM.
+	 *
+	 * @param node - Nœud DOM initial à insérer dans le composant. Ignoré si
+	 *               `null` ou `undefined`.
+	 * @returns Une nouvelle instance de {@link HTMLBnumPlaceholder}, prête à
+	 *          être insérée dans le DOM.
+	 *
+	 * @example Création sans contenu
+	 * ```typescript
+	 * const placeholder = HTMLBnumPlaceholder.Create();
+	 * document.body.appendChild(placeholder);
+	 * ```
+	 *
+	 * @example Création avec un nœud initial
+	 * ```typescript
+	 * const div = document.createElement('div');
+	 * div.textContent = 'Contenu initial';
+	 *
+	 * const placeholder = HTMLBnumPlaceholder.Create(div);
+	 * document.body.appendChild(placeholder);
+	 * ```
+	 */
+	static Create(node?: MayBe<Node>): HTMLBnumPlaceholder;
 }
 /**
  * Bouton Bnum de type "Primary".
@@ -3350,6 +3574,77 @@ export declare class HTMLBnumSwitch extends BnumElementInternal {
  */
 export declare class HTMLBnumTertiaryButton extends HTMLBnumButton {
 	constructor();
+}
+/**
+ * Événement déclenché lors du changement de l'état "pressed" du bouton.
+ */
+export type PressedChangedEvent = JsEvent<(pressed: boolean, oldPressed: boolean) => void>;
+/**
+ * Bouton Bnum à bascule (pressed / unpressed), utilisé pour représenter un état
+ * binaire actionnable au clic (ex : favori, filtre actif, option activée).
+ *
+ * Hérite de {@link HTMLBnumButton} : variation, icône, état de chargement,
+ * arrondi et désactivation se gèrent exactement comme sur un bouton standard.
+ * L'aspect visuel de l'état "pressed" (icône, classe, couleur, etc.) est laissé
+ * aux composants consommateurs, via l'état CSS `pressed` ou l'événement
+ * `onpressedchange`.
+ *
+ * @category Buttons
+ *
+ * @structure Cas standard
+ * <bnum-toggle-button>Suivre</bnum-toggle-button>
+ *
+ * @structure Bouton initialement enfoncé
+ * <bnum-toggle-button pressed>Suivre</bnum-toggle-button>
+ *
+ * @structure Bouton à bascule avec variation
+ * <bnum-toggle-button data-variation="secondary">Suivre</bnum-toggle-button>
+ *
+ * @structure Bouton à bascule avec icône
+ * <bnum-toggle-button data-icon="star">Favori</bnum-toggle-button>
+ *
+ * @state pressed - Actif lorsque le bouton est dans l'état "enfoncé"
+ *
+ * @attr {boolean | undefined} (optional) pressed - État "enfoncé" du bouton
+ *
+ * @event {ElementChangedEvent<boolean, boolean, HTMLBnumToggleButton>} custom:element-changed.pressed - Déclenché lors du changement de l'état "pressed".
+ */
+export declare class HTMLBnumToggleButton extends HTMLBnumButton {
+	#private;
+	/**
+	 * État "enfoncé" du bouton.
+	 */
+	accessor pressed: boolean;
+	/**
+	 * Événement déclenché lors du changement de l'état "pressed".
+	 */
+	accessor onpressedchange: PressedChangedEvent;
+	constructor();
+	protected _p_buildDOM(): void;
+	protected _p_update(): void;
+	/**
+	 * Bascule l'état "pressed" au clic, sauf si le bouton est désactivé ou en chargement.
+	 */
+	private _onClick;
+	/**
+	 * Met le bouton dans l'état "enfoncé".
+	 * @returns L'instance du bouton
+	 */
+	press(): this;
+	/**
+	 * Retire l'état "enfoncé" du bouton.
+	 * @returns L'instance du bouton
+	 */
+	unpress(): this;
+	/**
+	 * Bascule l'état "enfoncé" du bouton.
+	 * @returns L'instance du bouton
+	 */
+	togglePressed(): this;
+	/**
+	 * Retourne la liste des attributs observés par le composant.
+	 */
+	static _p_observedAttributes(): string[];
 }
 /**
  * Type de marque (*branded type*) garantissant qu'un `symbol` représente bien un état de {@link HTMLBnumAvatarAction}.
@@ -4154,6 +4449,12 @@ export declare class HTMLBnumCardTitle extends BnumElementInternal {
 	 */
 	protected _p_update(): void;
 	/**
+	 * Met à jour le DOM du composant selon les propriétés actuelles.
+	 * Affiche ou masque l'icône et met à jour le lien si nécessaire.
+	 * @private
+	 */
+	private _updateDOM;
+	/**
 	 * Met à jour le contenu du titre de la carte.
 	 * Remplace le texte ou ajoute un élément HTML comme corps du titre.
 	 * @param {HTMLElement | string | Text} element Le contenu à insérer (texte, élément ou nœud Text)
@@ -4330,6 +4631,14 @@ export declare class HTMLBnumFolder extends BnumElementInternal {
 	 */
 	protected _p_attach(): void;
 	/**
+	 * @inheritdoc
+	 */
+	protected _p_slotInit(slot: HTMLSlotElement): void;
+	/**
+	 * @inheritdoc
+	 */
+	protected _p_slotConnected(slot: HTMLSlotElement): void;
+	/**
 	 * Gère la mise à jour des attributs observés.
 	 * @protected
 	 * @param {string} name - Nom de l'attribut modifié.
@@ -4354,6 +4663,13 @@ export declare class HTMLBnumFolder extends BnumElementInternal {
 	 * @returns {this} L'instance courante pour chaînage.
 	 */
 	select(innerEvent?: Event): this;
+	/**
+	 * Force la maj des non-lus.
+	 *
+	 * La maj sera effectivement uniquement au prochain redraw.
+	 * @param value Nouveau non-lus
+	 */
+	setUnreadValue(value: number): void;
 	/**
 	 * Génère la chaîne HTML statique pour ce composant (SSR / Helper).
 	 * @static
@@ -4808,6 +5124,57 @@ export declare class HTMLBnumSegmentedControl extends BnumElementInternal {
 	 * @decorator `@SetAttr('role', 'radiogroup')`
 	 */
 	protected _p_buildDOM(): void;
+	/**
+	 * Traite la sélection d'un item du contrôle segmenté.
+	 *
+	 * @description
+	 * Désélectionne tous les items existants et sélectionne le nouvel item.
+	 * Émet l'événement `bnum-segmented-control:change` avec les détails.
+	 *
+	 * @remarks
+	 * - Valide que la cible de l'événement existe
+	 * - Lève une erreur si la cible est manquante
+	 * - Garantit qu'un seul item est sélectionné à la fois
+	 *
+	 * @private
+	 * @decorator `@Fire('bnum-segmented-control:change')`
+	 * @param e - Événement de sélection d'item depuis `HTMLBnumSegmentedItem`.
+	 * @returns Détails de l'événement émis : `{value: string, item: HTMLBnumSegmentedItem, caller: HTMLBnumSegmentedControl}`
+	 *
+	 * @fires bnum-segmented-control:change
+	 *
+	 * @example
+	 * ```typescript
+	 * control.addEventListener('bnum-segmented-control:change', (e) => {
+	 *   console.log('Item sélectionné:', e.detail.item);
+	 *   console.log('Valeur:', e.detail.value);
+	 * });
+	 * ```
+	 */
+	private _onItemSelectedAction;
+	/**
+	 * Traite les erreurs internes du composant.
+	 *
+	 * @remarks
+	 * - Enregistre l'erreur dans les logs
+	 * - Émet l'événement `bnum-segmented-control:error`
+	 * - Peut être déclenché lors de la sélection d'items invalides
+	 *
+	 * @private
+	 * @decorator `@Fire('bnum-segmented-control:error')`
+	 * @param error - L'erreur survenue.
+	 * @returns Détails de l'événement d'erreur : `{error: Error, caller: HTMLBnumSegmentedControl}`
+	 *
+	 * @fires bnum-segmented-control:error
+	 *
+	 * @example
+	 * ```typescript
+	 * control.addEventListener('bnum-segmented-control:error', (e) => {
+	 *   console.error('Erreur dans le contrôle:', e.detail.error);
+	 * });
+	 * ```
+	 */
+	private _onError;
 	/**
 	 * Crée un nouveau contrôle segmenté avec une légende.
 	 *
@@ -5492,10 +5859,6 @@ export declare class HTMLBnumColumn extends BnumElement {
 	 * Utile pour le CSS qui va définir la largeur
 	 */
 	get type(): string;
-	/**
-	 * Constructeur de la colonne Bnum.
-	 */
-	constructor();
 	/**
 	 * Logique de rendu Light DOM
 	 * On récupère les enfants existants et on les réorganise.
