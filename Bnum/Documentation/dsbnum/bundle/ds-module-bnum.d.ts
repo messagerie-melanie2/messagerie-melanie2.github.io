@@ -3580,6 +3580,13 @@ export declare class HTMLBnumTertiaryButton extends HTMLBnumButton {
  */
 export type PressedChangedEvent = JsEvent<(pressed: boolean, oldPressed: boolean) => void>;
 /**
+ * Options de création d'un bouton à bascule Bnum.
+ */
+export type BnumToggleButtonCreateOptions = BnumButtonCreateOptions & {
+	/** État "enfoncé" initial du bouton. */
+	pressed?: boolean;
+};
+/**
  * Bouton Bnum à bascule (pressed / unpressed), utilisé pour représenter un état
  * binaire actionnable au clic (ex : favori, filtre actif, option activée).
  *
@@ -3645,6 +3652,13 @@ export declare class HTMLBnumToggleButton extends HTMLBnumButton {
 	 * Retourne la liste des attributs observés par le composant.
 	 */
 	static _p_observedAttributes(): string[];
+	/**
+	 * Crée un bouton à bascule Bnum avec les options spécifiées.
+	 * @static
+	 * @param options Options de configuration du bouton (dont l'état initial `pressed`)
+	 * @returns Instance du bouton créé
+	 */
+	static Create(options?: Optional<BnumToggleButtonCreateOptions>): HTMLBnumToggleButton;
 }
 /**
  * Type de marque (*branded type*) garantissant qu'un `symbol` représente bien un état de {@link HTMLBnumAvatarAction}.

@@ -10611,6 +10611,18 @@ let HTMLBnumToggleButton = (() => {
         static _p_observedAttributes() {
             return [...super._p_observedAttributes(), ATTR_PRESSED];
         }
+        /**
+         * Crée un bouton à bascule Bnum avec les options spécifiées.
+         * @static
+         * @param options Options de configuration du bouton (dont l'état initial `pressed`)
+         * @returns Instance du bouton créé
+         */
+        static Create(options) {
+            const node = super.Create(options);
+            if (options?.pressed)
+                node.pressed = true;
+            return node;
+        }
     });
     return _classThis;
 })();
